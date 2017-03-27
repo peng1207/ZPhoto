@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		145CB29182DB4F0AAA9938A5 /* Pods_ZPhoto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */; };
+		26291E7D822E5F0FB9210A4D /* Pods_ZPhotoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */; };
 		9E7226701E8972B4001BB9A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */; };
 		9E7226721E8972B4001BB9A9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7226711E8972B4001BB9A9 /* ViewController.swift */; };
 		9E7226751E8972B4001BB9A9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E7226731E8972B4001BB9A9 /* Main.storyboard */; };
@@ -14,6 +16,7 @@
 		9E72267A1E8972B4001BB9A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E7226781E8972B4001BB9A9 /* LaunchScreen.storyboard */; };
 		9E7226851E8972B4001BB9A9 /* ZPhotoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7226841E8972B4001BB9A9 /* ZPhotoTests.swift */; };
 		9E7226901E8972B4001BB9A9 /* ZPhotoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E72268F1E8972B4001BB9A9 /* ZPhotoUITests.swift */; };
+		F0E618971AA6A17A4645133C /* Pods_ZPhotoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +37,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		07BA85C69A0AADC582A26091 /* Pods-ZPhotoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhotoUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		37B2953C120C1B91174FA422 /* Pods-ZPhoto.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.debug.xcconfig"; sourceTree = "<group>"; };
+		3C693C2DF867F8838AC46338 /* Pods-ZPhotoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9E72266C1E8972B4001BB9A9 /* ZPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9E7226711E8972B4001BB9A9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +54,11 @@
 		9E72268B1E8972B4001BB9A9 /* ZPhotoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZPhotoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E72268F1E8972B4001BB9A9 /* ZPhotoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPhotoUITests.swift; sourceTree = "<group>"; };
 		9E7226911E8972B4001BB9A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.release.xcconfig"; sourceTree = "<group>"; };
+		B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhotoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhoto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C51E104DB0F1870B26D77C6B /* Pods-ZPhotoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoTests/Pods-ZPhotoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F183CFE9FF0D101A7BFCC189 /* Pods-ZPhotoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoTests/Pods-ZPhotoTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				145CB29182DB4F0AAA9938A5 /* Pods_ZPhoto.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0E618971AA6A17A4645133C /* Pods_ZPhotoTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,12 +82,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26291E7D822E5F0FB9210A4D /* Pods_ZPhotoUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		051695CC9F95289890C70E0D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */,
+				B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */,
+				1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		515535839BB56DA87DC4E087 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				37B2953C120C1B91174FA422 /* Pods-ZPhoto.debug.xcconfig */,
+				A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */,
+				C51E104DB0F1870B26D77C6B /* Pods-ZPhotoTests.debug.xcconfig */,
+				F183CFE9FF0D101A7BFCC189 /* Pods-ZPhotoTests.release.xcconfig */,
+				07BA85C69A0AADC582A26091 /* Pods-ZPhotoUITests.debug.xcconfig */,
+				3C693C2DF867F8838AC46338 /* Pods-ZPhotoUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		9E7226631E8972B4001BB9A9 = {
 			isa = PBXGroup;
 			children = (
@@ -81,6 +119,8 @@
 				9E7226831E8972B4001BB9A9 /* ZPhotoTests */,
 				9E72268E1E8972B4001BB9A9 /* ZPhotoUITests */,
 				9E72266D1E8972B4001BB9A9 /* Products */,
+				515535839BB56DA87DC4E087 /* Pods */,
+				051695CC9F95289890C70E0D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -132,9 +172,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9E7226941E8972B4001BB9A9 /* Build configuration list for PBXNativeTarget "ZPhoto" */;
 			buildPhases = (
+				D6FBFBD3C126356C121E9D4F /* [CP] Check Pods Manifest.lock */,
 				9E7226681E8972B4001BB9A9 /* Sources */,
 				9E7226691E8972B4001BB9A9 /* Frameworks */,
 				9E72266A1E8972B4001BB9A9 /* Resources */,
+				AB8869EF72E19E634CA5AC30 /* [CP] Embed Pods Frameworks */,
+				10B959C903C1040CA4BA59A7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -149,9 +192,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9E7226971E8972B4001BB9A9 /* Build configuration list for PBXNativeTarget "ZPhotoTests" */;
 			buildPhases = (
+				336C98C50F29C1E0EEFDBE9C /* [CP] Check Pods Manifest.lock */,
 				9E72267C1E8972B4001BB9A9 /* Sources */,
 				9E72267D1E8972B4001BB9A9 /* Frameworks */,
 				9E72267E1E8972B4001BB9A9 /* Resources */,
+				9CA014F25D585D3EBC367E7B /* [CP] Embed Pods Frameworks */,
+				3BD35525EA9B792869201208 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -167,9 +213,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9E72269A1E8972B4001BB9A9 /* Build configuration list for PBXNativeTarget "ZPhotoUITests" */;
 			buildPhases = (
+				A6C6DFDEC4510FF0DE551740 /* [CP] Check Pods Manifest.lock */,
 				9E7226871E8972B4001BB9A9 /* Sources */,
 				9E7226881E8972B4001BB9A9 /* Frameworks */,
 				9E7226891E8972B4001BB9A9 /* Resources */,
+				3B68F6E261EA93F76BFFA20F /* [CP] Embed Pods Frameworks */,
+				564E913EB10CDB51E84F8AD2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -254,6 +303,144 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		10B959C903C1040CA4BA59A7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		336C98C50F29C1E0EEFDBE9C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		3B68F6E261EA93F76BFFA20F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3BD35525EA9B792869201208 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhotoTests/Pods-ZPhotoTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		564E913EB10CDB51E84F8AD2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9CA014F25D585D3EBC367E7B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhotoTests/Pods-ZPhotoTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A6C6DFDEC4510FF0DE551740 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AB8869EF72E19E634CA5AC30 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D6FBFBD3C126356C121E9D4F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9E7226681E8972B4001BB9A9 /* Sources */ = {
@@ -409,12 +596,14 @@
 		};
 		9E7226951E8972B4001BB9A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 37B2953C120C1B91174FA422 /* Pods-ZPhoto.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: shupeng Technology Park Xili private quarters (595W5226P2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: shupeng Technology Park Xili private quarters (595W5226P2)";
 				DEVELOPMENT_TEAM = 2X8ED8ZMS2;
 				INFOPLIST_FILE = ZPhoto/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangshp.ZPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -426,12 +615,14 @@
 		};
 		9E7226961E8972B4001BB9A9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: shupeng Technology Park Xili private quarters (2X8ED8ZMS2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: shupeng Technology Park Xili private quarters (2X8ED8ZMS2)";
 				DEVELOPMENT_TEAM = 2X8ED8ZMS2;
 				INFOPLIST_FILE = ZPhoto/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangshp.ZPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -443,6 +634,7 @@
 		};
 		9E7226981E8972B4001BB9A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C51E104DB0F1870B26D77C6B /* Pods-ZPhotoTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -457,6 +649,7 @@
 		};
 		9E7226991E8972B4001BB9A9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F183CFE9FF0D101A7BFCC189 /* Pods-ZPhotoTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -471,6 +664,7 @@
 		};
 		9E72269B1E8972B4001BB9A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07BA85C69A0AADC582A26091 /* Pods-ZPhotoUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = ZPhotoUITests/Info.plist;
@@ -484,6 +678,7 @@
 		};
 		9E72269C1E8972B4001BB9A9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3C693C2DF867F8838AC46338 /* Pods-ZPhotoUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = ZPhotoUITests/Info.plist;
