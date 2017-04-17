@@ -12,7 +12,7 @@ import AVKit
 
 
 
-class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate{
+class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate,CAAnimationDelegate{
     //视频捕获会话。它是input和output的桥梁。它协调着intput到output的数据传输
     fileprivate let captureSession = AVCaptureSession()
     fileprivate let devices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
@@ -33,6 +33,7 @@ class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate{
     var videoLayer : AVCaptureVideoPreviewLayer?
     // 放大最大的倍数
     var maxZoomActore :CGFloat = 5.00
+    var minZoomActore : CGFloat = 1.00
     
     var startRecording : Bool = false
     
@@ -48,7 +49,6 @@ class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate{
     // 设置视频的初始化
     fileprivate func setupRecord(){
         self.setCaptureInpunt(postion: .back)
-        self.captureSession.addOutput(self.fileOutput)
         videoLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
         
         self.captureSession.startRunning()
@@ -67,6 +67,10 @@ class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate{
         if self.captureSession.canAddInput(audioInput) {
             self.captureSession.addInput(audioInput)
         }
+        if self.captureSession.canAddOutput(self.fileOutput){
+            self.captureSession.addOutput(self.fileOutput)
+        }
+        
         self.captureSession.commitConfiguration()
     }
     
@@ -131,38 +135,76 @@ class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate{
         let postion = currentDevice?.position
         fileOutput.stopRecording()
         self.setCaptureInpunt(postion: postion == .back ? .front : .back)
+         self.sp_changeCameraAnimate()
         if startRecording  {
             self.sp_startRecord()
         }
+    }
+    
+    func sp_changeCameraAnimate(){
+        let changeAnimate = CATransition()
+        changeAnimate.delegate = self
+        changeAnimate.duration = 0.4
+        changeAnimate.type = "oglFlip"
+        changeAnimate.subtype = kCATransitionFromRight
+        videoLayer?.add(changeAnimate, forKey: "changeAnimate")
+    }
+     func animationDidStart(_ anim: CAAnimation) {
         
     }
     // 放大
-    func sp_zoomIn(){
+    func sp_zoomIn(scale : CGFloat = 1.0){
+        
         if let zoomFactor = self.currentDevice?.videoZoomFactor{
+            SPLog("\(zoomFactor)")
             if zoomFactor < maxZoomActore {
-                let newZoomFactor = min(zoomFactor + 1.0, maxZoomActore)
+                let newZoomFactor = min(zoomFactor + scale, maxZoomActore)
                 // 请求锁定设备
                 try! currentDevice?.lockForConfiguration()
                 // 平滑放大
-                currentDevice?.ramp(toVideoZoomFactor: newZoomFactor, withRate: 1.0)
+                currentDevice?.ramp(toVideoZoomFactor: newZoomFactor, withRate: 2.0)
                 // 释放设备
                 currentDevice?.unlockForConfiguration()
             }
         }
     }
     //缩小
-    func sp_zoomOut() {
+    func sp_zoomOut(scale : CGFloat = 1.0) {
         if let zoomFactor = currentDevice?.videoZoomFactor {
-            if zoomFactor > 1.0 {
-                let newZoomFactor = max(zoomFactor - 1.0, 1.0)
+            SPLog("\(zoomFactor)")
+            if zoomFactor > minZoomActore {
+                let newZoomFactor = max(zoomFactor - scale, minZoomActore)
                 // 请求锁定设备
                 try! currentDevice?.lockForConfiguration()
                 // 平滑放大
-                currentDevice?.ramp(toVideoZoomFactor: newZoomFactor, withRate: 1.0)
+                currentDevice?.ramp(toVideoZoomFactor: newZoomFactor, withRate: 2.0)
                 // 释放设备
                 currentDevice?.unlockForConfiguration()
+            }
+        }
+    }
+    func sp_flashlight(){
+        if self.currentDevice?.position == AVCaptureDevicePosition.front {
+         return
+        }
+        if self.currentDevice?.torchMode == AVCaptureTorchMode.off {
+            do {
+             try currentDevice?.lockForConfiguration()
+            }catch _{
+             
+            }
+            currentDevice?.torchMode = AVCaptureTorchMode.on
+            currentDevice?.flashMode = AVCaptureFlashMode.on
+            currentDevice?.unlockForConfiguration()
+        }else{
+            do {
+                try currentDevice?.lockForConfiguration()
+            }catch _{
                 
             }
+            currentDevice?.torchMode = AVCaptureTorchMode.off
+            currentDevice?.flashMode = AVCaptureFlashMode.off
+            currentDevice?.unlockForConfiguration()
         }
     }
     

@@ -53,8 +53,10 @@ fileprivate class SPRecordVideoRootVC: UIViewController {
         view.backgroundColor = UIColor.clear
         return view
     }()
-    fileprivate var changeButton : UIButton!
     
+    fileprivate var changeButton : UIButton!
+    fileprivate var pinchGesture : UIPinchGestureRecognizer!
+    fileprivate var lastScale : CGFloat = 1.00
     
     lazy fileprivate var videoManager : SPRecordVideoManager! = {
         let manager = SPRecordVideoManager()
@@ -64,13 +66,13 @@ fileprivate class SPRecordVideoRootVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-       
         self.videoManager.videoLayer?.frame = self.view.frame
      
         self.view.layer.addSublayer(self.videoManager.videoLayer!)
         self.setupUI()
         self.addChangeButton()
         self.addactionToButton()
+        self.addPinchGeusture()
         // Do any additional setup after loading the view.
     }
    
@@ -115,6 +117,28 @@ extension SPRecordVideoRootVC {
     @objc fileprivate func clickChangeAction(){
         self.dealButtonClickAction(clickType: .change, button: changeButton)
     }
+    // 添加缩放手势
+    fileprivate func addPinchGeusture(){
+        pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(sender:)))
+        self.view.addGestureRecognizer(pinchGesture)
+    }
+    @objc fileprivate func pinchAction(sender : UIPinchGestureRecognizer) {
+        if sender.state == UIGestureRecognizerState.ended {
+            lastScale = 1.0
+            return
+        }
+         let scale = 1.0 - (lastScale - sender.scale)
+        if lastScale >= sender.scale {
+            SPLog("缩小")
+            videoManager.sp_zoomOut(scale: 0.1)
+        }else{
+            SPLog("放大")
+            videoManager.sp_zoomIn(scale:0.1)
+        }
+        SPLog("\(scale)----\(lastScale)----\(sender.velocity)")
+        lastScale = sender.scale
+        
+    }
     
     fileprivate func dealButtonClickAction(clickType : ButtonClickType,button:UIButton){
         switch clickType {
@@ -132,6 +156,7 @@ extension SPRecordVideoRootVC {
             button.isSelected = !button.isSelected
         case .flash:
              SPLog("点击闪光灯")
+            self.videoManager.sp_flashlight()
         case .change:
              SPLog("点击切换镜头")
             self.videoManager.sp_changeVideoDevice()
