@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		145CB29182DB4F0AAA9938A5 /* Pods_ZPhoto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */; };
 		26291E7D822E5F0FB9210A4D /* Pods_ZPhotoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */; };
+		9E1A4E211E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1A4E201E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift */; };
+		9E1A4E231E9A823F00FEF8B7 /* SPVideoHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1A4E221E9A823F00FEF8B7 /* SPVideoHelp.swift */; };
+		9E1A4E271E9A891F00FEF8B7 /* SPPublicHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1A4E261E9A891F00FEF8B7 /* SPPublicHeader.swift */; };
 		9E7226701E8972B4001BB9A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */; };
-		9E7226721E8972B4001BB9A9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7226711E8972B4001BB9A9 /* ViewController.swift */; };
-		9E7226751E8972B4001BB9A9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E7226731E8972B4001BB9A9 /* Main.storyboard */; };
 		9E7226771E8972B4001BB9A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E7226761E8972B4001BB9A9 /* Assets.xcassets */; };
-		9E72267A1E8972B4001BB9A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E7226781E8972B4001BB9A9 /* LaunchScreen.storyboard */; };
 		9E7226851E8972B4001BB9A9 /* ZPhotoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7226841E8972B4001BB9A9 /* ZPhotoTests.swift */; };
 		9E7226901E8972B4001BB9A9 /* ZPhotoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E72268F1E8972B4001BB9A9 /* ZPhotoUITests.swift */; };
+		9EFACEE01E988C0400D11F18 /* SPRecordVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFACEDF1E988C0300D11F18 /* SPRecordVideoVC.swift */; };
 		F0E618971AA6A17A4645133C /* Pods_ZPhotoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -41,12 +42,12 @@
 		1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhotoUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		37B2953C120C1B91174FA422 /* Pods-ZPhoto.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.debug.xcconfig"; sourceTree = "<group>"; };
 		3C693C2DF867F8838AC46338 /* Pods-ZPhotoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests.release.xcconfig"; sourceTree = "<group>"; };
+		9E1A4E201E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPRecordVideoManager.swift; sourceTree = "<group>"; };
+		9E1A4E221E9A823F00FEF8B7 /* SPVideoHelp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoHelp.swift; sourceTree = "<group>"; };
+		9E1A4E261E9A891F00FEF8B7 /* SPPublicHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPublicHeader.swift; sourceTree = "<group>"; };
 		9E72266C1E8972B4001BB9A9 /* ZPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9E7226711E8972B4001BB9A9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		9E7226741E8972B4001BB9A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9E7226761E8972B4001BB9A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		9E7226791E8972B4001BB9A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9E72267B1E8972B4001BB9A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E7226801E8972B4001BB9A9 /* ZPhotoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZPhotoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E7226841E8972B4001BB9A9 /* ZPhotoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPhotoTests.swift; sourceTree = "<group>"; };
@@ -54,6 +55,7 @@
 		9E72268B1E8972B4001BB9A9 /* ZPhotoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZPhotoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E72268F1E8972B4001BB9A9 /* ZPhotoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPhotoUITests.swift; sourceTree = "<group>"; };
 		9E7226911E8972B4001BB9A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9EFACEDF1E988C0300D11F18 /* SPRecordVideoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPRecordVideoVC.swift; sourceTree = "<group>"; };
 		A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.release.xcconfig"; sourceTree = "<group>"; };
 		B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhotoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhoto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,6 +114,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		9E1A4E241E9A88C300FEF8B7 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				9E1A4E261E9A891F00FEF8B7 /* SPPublicHeader.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
 		9E7226631E8972B4001BB9A9 = {
 			isa = PBXGroup;
 			children = (
@@ -137,11 +147,10 @@
 		9E72266E1E8972B4001BB9A9 /* ZPhoto */ = {
 			isa = PBXGroup;
 			children = (
+				9E1A4E241E9A88C300FEF8B7 /* Utility */,
+				9EFACEDE1E988BC600D11F18 /* Video */,
 				9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */,
-				9E7226711E8972B4001BB9A9 /* ViewController.swift */,
-				9E7226731E8972B4001BB9A9 /* Main.storyboard */,
 				9E7226761E8972B4001BB9A9 /* Assets.xcassets */,
-				9E7226781E8972B4001BB9A9 /* LaunchScreen.storyboard */,
 				9E72267B1E8972B4001BB9A9 /* Info.plist */,
 			);
 			path = ZPhoto;
@@ -163,6 +172,16 @@
 				9E7226911E8972B4001BB9A9 /* Info.plist */,
 			);
 			path = ZPhotoUITests;
+			sourceTree = "<group>";
+		};
+		9EFACEDE1E988BC600D11F18 /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				9EFACEDF1E988C0300D11F18 /* SPRecordVideoVC.swift */,
+				9E1A4E201E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift */,
+				9E1A4E221E9A823F00FEF8B7 /* SPVideoHelp.swift */,
+			);
+			path = Video;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,6 +255,7 @@
 		9E7226641E8972B4001BB9A9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = SP;
 				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = huangshupeng;
@@ -282,9 +302,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E72267A1E8972B4001BB9A9 /* LaunchScreen.storyboard in Resources */,
 				9E7226771E8972B4001BB9A9 /* Assets.xcassets in Resources */,
-				9E7226751E8972B4001BB9A9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,7 +465,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E7226721E8972B4001BB9A9 /* ViewController.swift in Sources */,
+				9E1A4E271E9A891F00FEF8B7 /* SPPublicHeader.swift in Sources */,
+				9EFACEE01E988C0400D11F18 /* SPRecordVideoVC.swift in Sources */,
+				9E1A4E211E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift in Sources */,
+				9E1A4E231E9A823F00FEF8B7 /* SPVideoHelp.swift in Sources */,
 				9E7226701E8972B4001BB9A9 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -482,25 +503,6 @@
 			targetProxy = 9E72268C1E8972B4001BB9A9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		9E7226731E8972B4001BB9A9 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9E7226741E8972B4001BB9A9 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		9E7226781E8972B4001BB9A9 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9E7226791E8972B4001BB9A9 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		9E7226921E8972B4001BB9A9 /* Debug */ = {
@@ -599,6 +601,7 @@
 			baseConfigurationReference = 37B2953C120C1B91174FA422 /* Pods-ZPhoto.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: shupeng Technology Park Xili private quarters (595W5226P2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: shupeng Technology Park Xili private quarters (595W5226P2)";
 				DEVELOPMENT_TEAM = 2X8ED8ZMS2;
@@ -607,8 +610,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangshp.ZPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c552065a-49f5-4f97-9c01-b28b34eebabb";
-				PROVISIONING_PROFILE_SPECIFIER = ZPhotoDevelopment;
+				PROVISIONING_PROFILE = "0ee2f46b-79fe-4033-9e7f-3c87a2e6e0ce";
+				PROVISIONING_PROFILE_SPECIFIER = ZPhotoDeve;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -618,6 +621,7 @@
 			baseConfigurationReference = A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: shupeng Technology Park Xili private quarters (2X8ED8ZMS2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: shupeng Technology Park Xili private quarters (2X8ED8ZMS2)";
 				DEVELOPMENT_TEAM = 2X8ED8ZMS2;
@@ -626,7 +630,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangshp.ZPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e3f33554-2352-4901-8f91-f5f643016c55";
+				PROVISIONING_PROFILE = "d7d6598e-74fb-4914-8fd3-96fea2d0c871";
 				PROVISIONING_PROFILE_SPECIFIER = ZPhotoAdHoc;
 				SWIFT_VERSION = 3.0;
 			};
