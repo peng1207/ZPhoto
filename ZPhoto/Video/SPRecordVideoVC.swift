@@ -65,6 +65,9 @@ fileprivate class SPRecordVideoRootVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // UI适配
+        self.edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
+
         self.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         self.videoManager.videoLayer?.frame = self.view.frame
      
@@ -75,7 +78,6 @@ fileprivate class SPRecordVideoRootVC: UIViewController {
         self.addPinchGeusture()
         // Do any additional setup after loading the view.
     }
-   
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -95,7 +97,7 @@ extension SPRecordVideoRootVC {
     }
     // 添加切换按钮
     func addChangeButton (){
-        changeButton = SPRecordVideoView.setupButton(title: "切换", fontsize: 14)
+        changeButton = SPRecordVideoView.setupButton(title: "切换",selectTitle: nil, fontsize: 14)
         changeButton.frame = CGRect(x: 0, y: 0, width: 80, height: 40)
         changeButton.addTarget(self, action: #selector(clickChangeAction), for: .touchUpInside)
         let rightItem = UIBarButtonItem(customView: changeButton)
@@ -144,6 +146,7 @@ extension SPRecordVideoRootVC {
         switch clickType {
         case .cance:
             SPLog("点击取消")
+            self.dismiss(animated: true, completion: nil)
         case .done:
          
             if button.isSelected {
@@ -156,6 +159,7 @@ extension SPRecordVideoRootVC {
             button.isSelected = !button.isSelected
         case .flash:
              SPLog("点击闪光灯")
+            button.isSelected = !button.isSelected
             self.videoManager.sp_flashlight()
         case .change:
              SPLog("点击切换镜头")
@@ -170,21 +174,24 @@ extension SPRecordVideoRootVC {
 class SPRecordVideoView: UIView {
     
     lazy var canceButton : UIButton! = {
-        return SPRecordVideoView.setupButton(title: "取消", fontsize: 14)
+        return SPRecordVideoView.setupButton(title: "cance",selectTitle: nil, fontsize: 14)
     }()
     lazy var recordButton : UIButton! = {
-        return SPRecordVideoView.setupButton(title: "录制", fontsize: 14)
+        return SPRecordVideoView.setupButton(title: "start",selectTitle: "end", fontsize: 14)
     }()
     lazy var flashLampButton : UIButton! = {
-        return SPRecordVideoView.setupButton(title: "闪关灯", fontsize: 14)
+        return SPRecordVideoView.setupButton(title: "on",selectTitle: "off", fontsize: 14)
     }()
     var buttonClickBlock : ButtonClickBlock?
     
     
-    class func setupButton (title:String ,fontsize:CGFloat) -> UIButton {
+    class func setupButton (title:String,selectTitle:String?,fontsize:CGFloat) -> UIButton {
         let button = UIButton(type: .custom)
         button.backgroundColor = UIColor.white.withAlphaComponent(0.3)
         button.setTitle(title, for: .normal)
+        if let select = selectTitle {
+            button.setTitle(select, for: .selected)
+        }
         button.titleLabel?.font = fontSize(fontSize: fontsize)
         button.setTitleColor(UIColor.black.withAlphaComponent(0.5), for: .normal)
         button.layer.cornerRadius = 40.0 / 2.0

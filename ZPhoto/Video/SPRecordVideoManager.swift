@@ -40,7 +40,7 @@ class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate,CAAnim
     var isStop  = false
     
     
-    static let kVideoDirectory = "\(kDocumentsPath)/video"
+    
     
     override init() {
         super.init()
@@ -119,17 +119,14 @@ class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate,CAAnim
     // 保存视频
     fileprivate func sp_saveVideo(){
         do {
-            try FileManager.default.createDirectory(atPath: SPRecordVideoManager.kVideoDirectory, withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.createDirectory(atPath: SPVideoHelp.kVideoDirectory, withIntermediateDirectories: true, attributes: nil)
         } catch _{
             
         }
-        
-        SPVideoHelp.mergeVideos(videoAsset: self.videoAssets, outputPath: "\(SPRecordVideoManager.kVideoDirectory)/\(getVideoName())") {
-            
+        SPVideoHelp.mergeVideos(videoAsset: self.videoAssets, outputPath: "\(SPVideoHelp.kVideoDirectory)/\(getVideoName())") {
+            SPVideoHelp.sendNotification(notificationName: kVideoChangeNotification)
         }
     }
-    
-    
     // 切换镜头
     func sp_changeVideoDevice(){
         let postion = currentDevice?.position

@@ -32,19 +32,19 @@ func fontSize(fontSize: CGFloat) -> UIFont{
  主线程
  */
 func dispatchMainQueue(complete:@escaping ()->Void){
-    DispatchQueue.main.async {
-        complete()
-    }
- 
+    DispatchQueue.main.async(execute: {
+         complete()
+    })
 }
 /**
  多线程
  */
 func dispatchAsync(complete:@escaping ()->Void){
-   let queue = DispatchQueue(label: "com.hsp.queue")
-    queue.async {
+    
+    DispatchQueue.global().async {
         complete()
     }
+    
 }
 /**
  延时操作
