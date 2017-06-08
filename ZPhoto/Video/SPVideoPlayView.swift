@@ -14,17 +14,14 @@ class SPVideoPlayView : UIView{
     
     fileprivate var videoPlayer : AVPlayer?
     fileprivate var videoPlayerItem : AVPlayerItem?
-    fileprivate var playButton : UIButton!
-    fileprivate var timeLabel: UILabel!
-    fileprivate var progress : UIProgressView!
-    
+    fileprivate var buttonView :SPVideoPlayButtonView?
     var videoModel : SPVideoModel? {
         didSet{
             videoPlayerItem = AVPlayerItem(asset: (videoModel?.asset)!)
             videoPlayer = AVPlayer(playerItem: videoPlayerItem)
             let layer = self.layer as! AVPlayerLayer
             layer.player = videoPlayer
-             layer.videoGravity = AVLayerVideoGravityResize
+            layer.videoGravity = AVLayerVideoGravityResize
         }
     }
     override init(frame: CGRect) {
@@ -46,4 +43,23 @@ fileprivate extension SPVideoPlayView {
     fileprivate func setupUI(){
     
     }
+}
+class SPVideoPlayButtonView : UIView{
+     fileprivate var playButton : UIButton!
+    fileprivate var timeLabel: UILabel!
+    fileprivate var progress : UIProgressView!
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setupUI()
+    }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    /**< 创建UI */
+    fileprivate func setupUI(){
+        self.view.addsubView(playButton)
+        self.view.addsubView(timeLabel)
+        self.view.addsubView(progress)
+    }
+    
 }
