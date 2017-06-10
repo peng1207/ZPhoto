@@ -57,9 +57,9 @@ class SPVideoPlayButtonView : UIView{
     }
     /**< 创建UI */
     fileprivate func setupUI(){
-        self.view.addsubView(playButton)
-        self.view.addsubView(timeLabel)
-        self.view.addsubView(progress)
+        self.addSubview(playButton)
+        self.addSubview(timeLabel)
+        self.addSubview(progress)
     }
     
 }

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import AVFoundation
-import SnapKit
+
 
 class SPVideoPlayVC : UIViewController {
     var videoModel : SPVideoModel?
