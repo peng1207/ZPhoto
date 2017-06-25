@@ -63,24 +63,6 @@ class SPVideoCollectionFlowLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         
         let array = super.layoutAttributesForElements(in: rect)
-        
-//        //可见矩阵
-//        let visiableRect = CGRect(x: self.collectionView!.contentOffset.x, y: self.collectionView!.contentOffset.y, width: self.collectionView!.frame.width, height: self.collectionView!.frame.height)
-//        //获得collectionVIew中央的X值(即显示在屏幕中央的X)
-//        let centerX = self.collectionView!.contentOffset.x + self.collectionView!.frame.size.width * 0.5;
-//        SPLog(visiableRect)
-//        SPLog(centerX)
-//        for attributes in array! {
-//            //如果不在屏幕上，直接跳过
-//            
-//            if !visiableRect.intersects(attributes.frame) {
-//                 attributes.transform = CGAffineTransform(rotationAngle: -5 * CGFloat(M_PI / 180))
-//                continue
-//            }
-//            SPLog("在屏幕中\(attributes)")
-//           
-//        }
-        
         return array
     }
     

@@ -36,7 +36,7 @@ class SPVideoListVC: UINavigationController {
     }
 }
 // MARK: -- 视频列表
-fileprivate class SPVideoListRootVC : UIViewController {
+fileprivate class SPVideoListRootVC : SPBaseVC {
     
     fileprivate lazy var videoCollectionView : UICollectionView = {
         let layout = SPVideoCollectionFlowLayout()
@@ -48,9 +48,6 @@ fileprivate class SPVideoListRootVC : UIViewController {
     fileprivate var videoDataArray : Array<SPVideoModel>? = nil
     
     override func viewDidLoad() {
-        // UI适配
-      self.edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
-       
         self.setupUI()
         self.videoData()
         self.sendNotification()
@@ -114,9 +111,10 @@ extension SPVideoListRootVC : UICollectionViewDelegate,UICollectionViewDataSourc
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let videoPlayVC = SPVideoPlayVC()
+        let videoPlayVC = SPVideoEditVC()
         videoPlayVC.videoModel = self.videoDataArray?[indexPath.row]
-        self.present(videoPlayVC, animated: true, completion: nil)
+//        self.present(videoPlayVC, animated: true, completion: nil)
+        self.navigationController?.pushViewController(videoPlayVC, animated: true)
     }
     
 }

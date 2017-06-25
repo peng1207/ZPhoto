@@ -81,8 +81,6 @@ class SPVideoHelp: NSObject {
             }
              return  true
         }
-        
-       
         return fileSorted
     }
     /**< 发送通知 */

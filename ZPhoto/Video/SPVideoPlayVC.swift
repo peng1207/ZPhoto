@@ -11,23 +11,21 @@ import UIKit
 import AVFoundation
 
 
-class SPVideoPlayVC : UIViewController {
+class SPVideoPlayVC : SPBaseVC {
     var videoModel : SPVideoModel?
     
     lazy var videoPlayView : SPVideoPlayView? = {
         let playView = SPVideoPlayView()
         return playView
     }()
-    
-    
     lazy fileprivate var closeBtn : UIButton! = {
         let button = UIButton(type: .custom)
         button.setTitle("X", for: .normal)
-        button.setTitleColor(UIColor.red, for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
         button.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         button.frame = CGRect(x: 10, y: 20, width: 40, height: 40)
         button.layer.cornerRadius = 20
-        button.clipsToBounds = true
+        button.clipsToBounds = true 
         return button
     }()
     
@@ -36,7 +34,13 @@ class SPVideoPlayVC : UIViewController {
         super.viewDidLoad()
         self.setupUI()
     }
-    
+    deinit {
+        self.removeAllView()
+    }
+    fileprivate func removeAllView(){
+        videoPlayView?.stopTime()
+         videoPlayView = nil
+    }
 }
 // MARK: -- UI
 extension SPVideoPlayVC {
@@ -53,14 +57,6 @@ extension SPVideoPlayVC {
             maker.top.left.right.bottom.equalTo(self.view).offset(0)
         })
         self.videoPlayView?.videoModel = videoModel
-    
-//        let playeritem = AVPlayerItem(asset: (videoModel?.asset)!)
-//        videoPlayer = AVPlayer(playerItem: playeritem)
-//        let playerLayer = AVPlayerLayer(player: videoPlayer)
-//        playerLayer.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height)
-//        playerLayer.videoGravity = AVLayerVideoGravityResizeAspect
-//        self.view.layer.addSublayer(playerLayer)
-//        videoPlayer?.play()
     }
     private func setupCloseBtn(){
         self.view.addSubview(closeBtn)
@@ -71,5 +67,6 @@ extension SPVideoPlayVC {
 extension SPVideoPlayVC{
     @objc func closeAction(){
         self.dismiss(animated: true, completion: nil)
+        self.removeAllView()
     }
 }

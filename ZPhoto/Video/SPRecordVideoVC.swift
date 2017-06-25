@@ -47,7 +47,7 @@ class SPRecordVideoVC: UINavigationController {
     
 }
 
-fileprivate class SPRecordVideoRootVC: UIViewController {
+fileprivate class SPRecordVideoRootVC: SPBaseVC {
     lazy fileprivate var recordVideoView : SPRecordVideoView! = {
         let view = SPRecordVideoView()
         view.backgroundColor = UIColor.clear
@@ -65,9 +65,7 @@ fileprivate class SPRecordVideoRootVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // UI适配
-        self.edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
-
+        
         self.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         self.videoManager.videoLayer?.frame = self.view.frame
      
