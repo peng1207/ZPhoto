@@ -18,7 +18,7 @@ class  SPVideoEditVC : SPBaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+      SPLog(SPVideoHelp.images(asset: videoModel?.asset))
         
         self.view.addSubview(scheduleView)
         scheduleView.snp.makeConstraints { (maker) in

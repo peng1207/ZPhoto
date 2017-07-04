@@ -39,7 +39,7 @@ class SPVideoHelp: NSObject {
             duration += asset.duration.seconds
             insertTime = CMTimeAdd(insertTime, asset.duration)
         }
-         // 旋转视图图像，防止90度颠倒
+        // 旋转视图图像，防止90度颠倒
         firstTrack.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
         let videoPath = URL(fileURLWithPath: outputPath)
         let exporter = AVAssetExportSession(asset: compostition, presetName: AVAssetExportPresetHighestQuality)!
@@ -49,7 +49,7 @@ class SPVideoHelp: NSObject {
         exporter.exportAsynchronously(completionHandler: {
             exportSuuccess()
         })
-      
+        
     }
     /**< 根据assesst和time 获取对应的图片 */
     class func thumbnailImageTo(assesst: AVAsset,time : CMTime) -> UIImage?{
@@ -75,16 +75,44 @@ class SPVideoHelp: NSObject {
     /**< 根据目录获取该目录下所有的文件 并排序*/
     class func getfile(forDirectory:String) -> [String]?{
         let fileArray = try! FileManager.default.contentsOfDirectory(atPath: forDirectory)
-         let fileSorted = fileArray.sorted { (file1 : String, file2 : String) -> Bool in
+        let fileSorted = fileArray.sorted { (file1 : String, file2 : String) -> Bool in
             if file1.compare(file2) == ComparisonResult.orderedAscending {
                 return false
             }
-             return  true
+            return  true
         }
         return fileSorted
     }
     /**< 发送通知 */
     class func sendNotification(notificationName:String) {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: notificationName), object: nil)
+    }
+    /**< 根据AVAsset 获取图片数组(默认为每一秒 若传入小于等于0 则为0.01)*/
+    class func images(asset:AVAsset?,second:Float64 = 1.0) -> [UIImage]! {
+        var secondDurr = second
+        if secondDurr <= 0 {
+            secondDurr = 0.01
+        }
+        // 获取视频秒数
+        let assetSecond = CMTimeGetSeconds(asset!.duration)
+        // 开始秒数
+        var startSecond = 0.00
+        var imageArray = [UIImage]()
+        while  startSecond <= assetSecond {
+            let thumbnailImage = self.thumbnailImageTo(assesst: asset!, time: CMTimeMakeWithSeconds(startSecond, 60))
+            if let image = thumbnailImage {
+                imageArray.append(image)
+            }
+            if startSecond < assetSecond {
+                startSecond = startSecond + secondDurr
+                if startSecond > assetSecond {
+                    startSecond = assetSecond
+                }
+            }else{
+                startSecond = startSecond + secondDurr
+            }
+            
+        }
+        return imageArray
     }
 }

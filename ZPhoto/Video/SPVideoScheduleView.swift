@@ -125,6 +125,7 @@ extension SPVideoScheduleView {
         if panGesture.state == .began {
             lastright_X = 0
         }
+        SPLog(  panGesture.location(in: self))
         let point = panGesture.translation(in: panGesture.view)
         var x = point.x - lastright_X
         x =  -(self.sp_width() - self.rightPanView.sp_MaxX()) + x
