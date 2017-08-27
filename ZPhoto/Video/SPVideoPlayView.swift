@@ -84,18 +84,18 @@ extension SPVideoPlayView {
     }
     /**< 滑块值改变的方法 */
     @objc fileprivate func change(silder:UISlider) {
-        let seconds  = silder.value
-        if seconds == 0.00000{
-            videoPlayer?.seek(to: kCMTimeZero, completionHandler: { [weak self](finish : Bool) in
-                self?.videoPlayer?.play()
-            })
-        }
+//        let seconds  = silder.value
+//        if seconds == 0.00000{
+//            videoPlayer?.seek(to: kCMTimeZero, completionHandler: { [weak self](finish : Bool) in
+//                self?.videoPlayer?.play()
+//            })
+//        }
          canRun = false
     }
     /**< 滑块滑动结束 */
     @objc fileprivate func changeEnd(silder:UISlider){
         let seconds  = silder.value
-        let targetTime : CMTime = CMTimeMakeWithSeconds(Float64(seconds), 1)
+        let targetTime : CMTime = CMTimeMakeWithSeconds(Float64(seconds), 60)
         videoPlayer?.seek(to: targetTime, completionHandler: { [weak self] (finish : Bool) in
             if self?.videoPlayer?.rate == 0{
                 self?.videoPlayer?.play()

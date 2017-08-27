@@ -66,7 +66,8 @@ extension SPVideoPlayVC {
 // MARK: -- action
 extension SPVideoPlayVC{
     @objc func closeAction(){
-        self.dismiss(animated: true, completion: nil)
-        self.removeAllView()
+        self.dismiss(animated: true) {
+              self.removeAllView()
+        }
     }
 }

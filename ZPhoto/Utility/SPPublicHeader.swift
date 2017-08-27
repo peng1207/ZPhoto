@@ -61,7 +61,7 @@ func  dispatchAfter(time:UInt64,complete:@escaping ()->Void){
 func SPLog<T>(_ message:T,file:String = #file,function:String = #function,line:Int=#line){
     #if DEBUG
         let fileName = (file as NSString).lastPathComponent
-        print("\(fileName):\(line)\(function) | \(message)")
+        print("\(NSDate())---\(fileName):\(line)---\(function) | \(message)")
     #endif
 
 }

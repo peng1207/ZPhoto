@@ -29,18 +29,14 @@ class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate,CAAnim
     var appendix: Int32 = 1
     //每秒帧数
     var framesPerSecond:Int32 = 30
-    
     var videoLayer : AVCaptureVideoPreviewLayer?
     // 放大最大的倍数
     var maxZoomActore :CGFloat = 5.00
     var minZoomActore : CGFloat = 1.00
-    
+    // 开始录制
     var startRecording : Bool = false
-    
+    // 是否停止
     var isStop  = false
-    
-    
-    
     
     override init() {
         super.init()
@@ -54,7 +50,7 @@ class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate,CAAnim
         self.captureSession.startRunning()
     }
     fileprivate func setCaptureInpunt(postion : AVCaptureDevicePosition){
-         self .getVideoDevice(postion: postion)
+         self.getVideoDevice(postion: postion)
         let videoInput = try! AVCaptureDeviceInput(device: self.currentDevice)
         let audioInput = try! AVCaptureDeviceInput(device: self.audioDevice)
         self.captureSession.beginConfiguration()
@@ -86,12 +82,6 @@ class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate,CAAnim
             self.currentDevice = currDevice
         }
     }
-    // 获取视频的名称
-    fileprivate func getVideoName() -> String {
-        let date = NSDate()
-        return "video_\(Int(date.timeIntervalSince1970)).mov"
-    }
-    
     // 开始录制
     func sp_startRecord(){
         startRecording = true
@@ -100,14 +90,7 @@ class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate,CAAnim
         appendix += 1
         let outputURL = URL(fileURLWithPath: outputFilePath)
         
-        let fileManager = FileManager.default
-        if fileManager.fileExists(atPath: outputFilePath) {
-            do {
-                try fileManager.removeItem(atPath: outputFilePath)
-            } catch _ {
-                
-            }
-        }
+        FileManager.remove(path: outputFilePath)
         fileOutput.startRecording(toOutputFileURL: outputURL, recordingDelegate: self)
     }
     // 停止录制
@@ -118,12 +101,8 @@ class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate,CAAnim
     }
     // 保存视频
     fileprivate func sp_saveVideo(){
-        do {
-            try FileManager.default.createDirectory(atPath: SPVideoHelp.kVideoDirectory, withIntermediateDirectories: true, attributes: nil)
-        } catch _{
-            
-        }
-        SPVideoHelp.mergeVideos(videoAsset: self.videoAssets, outputPath: "\(SPVideoHelp.kVideoDirectory)/\(getVideoName())") {
+        FileManager.directory(createPath: SPVideoHelp.kVideoDirectory)
+        SPVideoHelp.mergeVideos(videoAsset: self.videoAssets, outputPath: "\(SPVideoHelp.kVideoDirectory)/\(SPVideoHelp.getVideoName())") {
             SPVideoHelp.sendNotification(notificationName: kVideoChangeNotification)
         }
     }
@@ -180,6 +159,7 @@ class SPRecordVideoManager: NSObject,AVCaptureFileOutputRecordingDelegate,CAAnim
             }
         }
     }
+    // MARK: -- 闪光灯设置
     func sp_flashlight(){
         if self.currentDevice?.position == AVCaptureDevicePosition.front {
          return

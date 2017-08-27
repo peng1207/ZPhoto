@@ -18,6 +18,8 @@
 		9E205ED71EEEC3B600AB18C3 /* SPVideoEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E205ED61EEEC3B600AB18C3 /* SPVideoEditVC.swift */; };
 		9E205ED91EF0323600AB18C3 /* SPVideoScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E205ED81EF0323600AB18C3 /* SPVideoScheduleView.swift */; };
 		9E205EDB1EFFCF3800AB18C3 /* SPBaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E205EDA1EFFCF3800AB18C3 /* SPBaseVC.swift */; };
+		9E251CD51F48243400D95C4E /* FileManager+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E251CD41F48243400D95C4E /* FileManager+extension.swift */; };
+		9E251CD71F4C791700D95C4E /* CIFilter+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E251CD61F4C791700D95C4E /* CIFilter+extension.swift */; };
 		9E47CC3D1EFFDBC1000362CC /* UIView+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E47CC3C1EFFDBC1000362CC /* UIView+extension.swift */; };
 		9E7226701E8972B4001BB9A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */; };
 		9E7226771E8972B4001BB9A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E7226761E8972B4001BB9A9 /* Assets.xcassets */; };
@@ -61,6 +63,8 @@
 		9E205ED61EEEC3B600AB18C3 /* SPVideoEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoEditVC.swift; sourceTree = "<group>"; };
 		9E205ED81EF0323600AB18C3 /* SPVideoScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoScheduleView.swift; sourceTree = "<group>"; };
 		9E205EDA1EFFCF3800AB18C3 /* SPBaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBaseVC.swift; sourceTree = "<group>"; };
+		9E251CD41F48243400D95C4E /* FileManager+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+extension.swift"; sourceTree = "<group>"; };
+		9E251CD61F4C791700D95C4E /* CIFilter+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CIFilter+extension.swift"; sourceTree = "<group>"; };
 		9E47CC3C1EFFDBC1000362CC /* UIView+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+extension.swift"; sourceTree = "<group>"; };
 		9E72266C1E8972B4001BB9A9 /* ZPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -141,6 +145,8 @@
 				9EAB5AAE1EED6C7900605945 /* UIImageManager.swift */,
 				9E205EDA1EFFCF3800AB18C3 /* SPBaseVC.swift */,
 				9E47CC3C1EFFDBC1000362CC /* UIView+extension.swift */,
+				9E251CD41F48243400D95C4E /* FileManager+extension.swift */,
+				9E251CD61F4C791700D95C4E /* CIFilter+extension.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -504,11 +510,13 @@
 				9E1A4E271E9A891F00FEF8B7 /* SPPublicHeader.swift in Sources */,
 				9E0654D01EE29B6E0035189B /* SPVideoPlayVC.swift in Sources */,
 				9EFACEE01E988C0400D11F18 /* SPRecordVideoVC.swift in Sources */,
+				9E251CD51F48243400D95C4E /* FileManager+extension.swift in Sources */,
 				9E1A4E211E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift in Sources */,
 				9E1A4E231E9A823F00FEF8B7 /* SPVideoHelp.swift in Sources */,
 				9E7226701E8972B4001BB9A9 /* AppDelegate.swift in Sources */,
 				9E205ED91EF0323600AB18C3 /* SPVideoScheduleView.swift in Sources */,
 				9E0654D21EE3D2B00035189B /* SPVideoPlayView.swift in Sources */,
+				9E251CD71F4C791700D95C4E /* CIFilter+extension.swift in Sources */,
 				9E205ED71EEEC3B600AB18C3 /* SPVideoEditVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

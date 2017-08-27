@@ -14,8 +14,16 @@ typealias ExportSuccess = ()-> Void
 let kVideoChangeNotification : String = "VideoChangeNotification"
 
 class SPVideoHelp: NSObject {
-    
+    // 保存视频的位置目录
     static let kVideoDirectory = "\(kDocumentsPath)/video"
+    // 保存视频的临时位置目录
+    static let kVideoTempDirectory = "\(kTmpPath)/video"
+    
+    // 获取视频的名称
+     class func getVideoName() -> String {
+        let date = NSDate()
+        return "video_\(Int(date.timeIntervalSince1970)).mov"
+    }
     
     // 合并视频片段
     class func mergeVideos(videoAsset : [AVAsset],outputPath:String,exportSuuccess:@escaping ExportSuccess) {
@@ -114,5 +122,41 @@ class SPVideoHelp: NSObject {
             
         }
         return imageArray
+    }
+    /**< 剪切视频 timeRange 剪切的位置  */
+    class func shear(asset:AVAsset,timeRange: CMTimeRange,completionHandler:@escaping (_ outUrl:URL)->Void) ->  Void{
+        let compostion  = AVMutableComposition()
+        let videoTrack = compostion.addMutableTrack(withMediaType: AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
+        let audioTrack = compostion.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
+        do {
+             try videoTrack.insertTimeRange(timeRange, of: asset.tracks(withMediaType: AVMediaTypeVideo)[0], at: kCMTimeZero)
+        }catch _ {
+            
+        }
+        do {
+            try audioTrack.insertTimeRange(timeRange, of: asset.tracks(withMediaType: AVMediaTypeAudio)[0], at: kCMTimeZero)
+        }catch _ {
+            
+        }
+        videoTrack.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
+        
+        FileManager.directory(createPath: kVideoTempDirectory)
+        
+       let exportUrl = URL(fileURLWithPath: "\(kVideoTempDirectory)/\(getVideoName())")
+        
+        let exportSession = AVAssetExportSession(asset: compostion, presetName: AVAssetExportPresetHighestQuality)!
+        exportSession.outputFileType = AVFileTypeQuickTimeMovie
+        exportSession.shouldOptimizeForNetworkUse = true
+        exportSession.outputURL = exportUrl
+        exportSession.exportAsynchronously(completionHandler: {
+            completionHandler(exportUrl)
+        })
+     var writerInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: nil)
+        
+        
+   let pixelBufferWriter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: writerInput, sourcePixelBufferAttributes: nil)
+ 
+//        AVAssetReader
+      
     }
 }
