@@ -7,13 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		145CB29182DB4F0AAA9938A5 /* Pods_ZPhoto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */; };
+		26291E7D822E5F0FB9210A4D /* Pods_ZPhotoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */; };
+		9E0654CE1EDF24A90035189B /* SPVideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0654CD1EDF24A90035189B /* SPVideoModel.swift */; };
+		9E0654D01EE29B6E0035189B /* SPVideoPlayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0654CF1EE29B6E0035189B /* SPVideoPlayVC.swift */; };
+		9E0654D21EE3D2B00035189B /* SPVideoPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0654D11EE3D2B00035189B /* SPVideoPlayView.swift */; };
+		9E1A4E211E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1A4E201E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift */; };
+		9E1A4E231E9A823F00FEF8B7 /* SPVideoHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1A4E221E9A823F00FEF8B7 /* SPVideoHelp.swift */; };
+		9E1A4E271E9A891F00FEF8B7 /* SPPublicHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1A4E261E9A891F00FEF8B7 /* SPPublicHeader.swift */; };
+		9E205ED71EEEC3B600AB18C3 /* SPVideoEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E205ED61EEEC3B600AB18C3 /* SPVideoEditVC.swift */; };
+		9E205ED91EF0323600AB18C3 /* SPVideoScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E205ED81EF0323600AB18C3 /* SPVideoScheduleView.swift */; };
+		9E205EDB1EFFCF3800AB18C3 /* SPBaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E205EDA1EFFCF3800AB18C3 /* SPBaseVC.swift */; };
+		9E251CD51F48243400D95C4E /* FileManager+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E251CD41F48243400D95C4E /* FileManager+extension.swift */; };
+		9E251CD71F4C791700D95C4E /* CIFilter+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E251CD61F4C791700D95C4E /* CIFilter+extension.swift */; };
+		9E47CC3D1EFFDBC1000362CC /* UIView+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E47CC3C1EFFDBC1000362CC /* UIView+extension.swift */; };
 		9E7226701E8972B4001BB9A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */; };
-		9E7226721E8972B4001BB9A9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7226711E8972B4001BB9A9 /* ViewController.swift */; };
-		9E7226751E8972B4001BB9A9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E7226731E8972B4001BB9A9 /* Main.storyboard */; };
 		9E7226771E8972B4001BB9A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E7226761E8972B4001BB9A9 /* Assets.xcassets */; };
-		9E72267A1E8972B4001BB9A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E7226781E8972B4001BB9A9 /* LaunchScreen.storyboard */; };
 		9E7226851E8972B4001BB9A9 /* ZPhotoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7226841E8972B4001BB9A9 /* ZPhotoTests.swift */; };
 		9E7226901E8972B4001BB9A9 /* ZPhotoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E72268F1E8972B4001BB9A9 /* ZPhotoUITests.swift */; };
+		9E9D8D561ED47C1F00522BCA /* SPVideoListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9D8D551ED47C1F00522BCA /* SPVideoListVC.swift */; };
+		9E9D8D581ED47E2600522BCA /* SPVideoCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9D8D571ED47E2600522BCA /* SPVideoCollectionCell.swift */; };
+		9EAB5AAF1EED6C7900605945 /* UIImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB5AAE1EED6C7900605945 /* UIImageManager.swift */; };
+		9EFACEE01E988C0400D11F18 /* SPRecordVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFACEDF1E988C0300D11F18 /* SPRecordVideoVC.swift */; };
+		F0E618971AA6A17A4645133C /* Pods_ZPhotoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,12 +50,25 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		07BA85C69A0AADC582A26091 /* Pods-ZPhotoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhotoUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		37B2953C120C1B91174FA422 /* Pods-ZPhoto.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.debug.xcconfig"; sourceTree = "<group>"; };
+		3C693C2DF867F8838AC46338 /* Pods-ZPhotoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests.release.xcconfig"; sourceTree = "<group>"; };
+		9E0654CD1EDF24A90035189B /* SPVideoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoModel.swift; sourceTree = "<group>"; };
+		9E0654CF1EE29B6E0035189B /* SPVideoPlayVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoPlayVC.swift; sourceTree = "<group>"; };
+		9E0654D11EE3D2B00035189B /* SPVideoPlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoPlayView.swift; sourceTree = "<group>"; };
+		9E1A4E201E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPRecordVideoManager.swift; sourceTree = "<group>"; };
+		9E1A4E221E9A823F00FEF8B7 /* SPVideoHelp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoHelp.swift; sourceTree = "<group>"; };
+		9E1A4E261E9A891F00FEF8B7 /* SPPublicHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPublicHeader.swift; sourceTree = "<group>"; };
+		9E205ED61EEEC3B600AB18C3 /* SPVideoEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoEditVC.swift; sourceTree = "<group>"; };
+		9E205ED81EF0323600AB18C3 /* SPVideoScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoScheduleView.swift; sourceTree = "<group>"; };
+		9E205EDA1EFFCF3800AB18C3 /* SPBaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBaseVC.swift; sourceTree = "<group>"; };
+		9E251CD41F48243400D95C4E /* FileManager+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+extension.swift"; sourceTree = "<group>"; };
+		9E251CD61F4C791700D95C4E /* CIFilter+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CIFilter+extension.swift"; sourceTree = "<group>"; };
+		9E47CC3C1EFFDBC1000362CC /* UIView+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+extension.swift"; sourceTree = "<group>"; };
 		9E72266C1E8972B4001BB9A9 /* ZPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9E7226711E8972B4001BB9A9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		9E7226741E8972B4001BB9A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9E7226761E8972B4001BB9A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		9E7226791E8972B4001BB9A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9E72267B1E8972B4001BB9A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E7226801E8972B4001BB9A9 /* ZPhotoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZPhotoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E7226841E8972B4001BB9A9 /* ZPhotoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPhotoTests.swift; sourceTree = "<group>"; };
@@ -47,6 +76,15 @@
 		9E72268B1E8972B4001BB9A9 /* ZPhotoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZPhotoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E72268F1E8972B4001BB9A9 /* ZPhotoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPhotoUITests.swift; sourceTree = "<group>"; };
 		9E7226911E8972B4001BB9A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9E9D8D551ED47C1F00522BCA /* SPVideoListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoListVC.swift; sourceTree = "<group>"; };
+		9E9D8D571ED47E2600522BCA /* SPVideoCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoCollectionCell.swift; sourceTree = "<group>"; };
+		9EAB5AAE1EED6C7900605945 /* UIImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageManager.swift; sourceTree = "<group>"; };
+		9EFACEDF1E988C0300D11F18 /* SPRecordVideoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPRecordVideoVC.swift; sourceTree = "<group>"; };
+		A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.release.xcconfig"; sourceTree = "<group>"; };
+		B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhotoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhoto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C51E104DB0F1870B26D77C6B /* Pods-ZPhotoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoTests/Pods-ZPhotoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F183CFE9FF0D101A7BFCC189 /* Pods-ZPhotoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoTests/Pods-ZPhotoTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				145CB29182DB4F0AAA9938A5 /* Pods_ZPhoto.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0E618971AA6A17A4645133C /* Pods_ZPhotoTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,12 +108,49 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26291E7D822E5F0FB9210A4D /* Pods_ZPhotoUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		051695CC9F95289890C70E0D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */,
+				B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */,
+				1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		515535839BB56DA87DC4E087 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				37B2953C120C1B91174FA422 /* Pods-ZPhoto.debug.xcconfig */,
+				A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */,
+				C51E104DB0F1870B26D77C6B /* Pods-ZPhotoTests.debug.xcconfig */,
+				F183CFE9FF0D101A7BFCC189 /* Pods-ZPhotoTests.release.xcconfig */,
+				07BA85C69A0AADC582A26091 /* Pods-ZPhotoUITests.debug.xcconfig */,
+				3C693C2DF867F8838AC46338 /* Pods-ZPhotoUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		9E1A4E241E9A88C300FEF8B7 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				9E1A4E261E9A891F00FEF8B7 /* SPPublicHeader.swift */,
+				9EAB5AAE1EED6C7900605945 /* UIImageManager.swift */,
+				9E205EDA1EFFCF3800AB18C3 /* SPBaseVC.swift */,
+				9E47CC3C1EFFDBC1000362CC /* UIView+extension.swift */,
+				9E251CD41F48243400D95C4E /* FileManager+extension.swift */,
+				9E251CD61F4C791700D95C4E /* CIFilter+extension.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
 		9E7226631E8972B4001BB9A9 = {
 			isa = PBXGroup;
 			children = (
@@ -81,6 +158,8 @@
 				9E7226831E8972B4001BB9A9 /* ZPhotoTests */,
 				9E72268E1E8972B4001BB9A9 /* ZPhotoUITests */,
 				9E72266D1E8972B4001BB9A9 /* Products */,
+				515535839BB56DA87DC4E087 /* Pods */,
+				051695CC9F95289890C70E0D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -97,11 +176,10 @@
 		9E72266E1E8972B4001BB9A9 /* ZPhoto */ = {
 			isa = PBXGroup;
 			children = (
+				9E1A4E241E9A88C300FEF8B7 /* Utility */,
+				9EFACEDE1E988BC600D11F18 /* Video */,
 				9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */,
-				9E7226711E8972B4001BB9A9 /* ViewController.swift */,
-				9E7226731E8972B4001BB9A9 /* Main.storyboard */,
 				9E7226761E8972B4001BB9A9 /* Assets.xcassets */,
-				9E7226781E8972B4001BB9A9 /* LaunchScreen.storyboard */,
 				9E72267B1E8972B4001BB9A9 /* Info.plist */,
 			);
 			path = ZPhoto;
@@ -125,6 +203,23 @@
 			path = ZPhotoUITests;
 			sourceTree = "<group>";
 		};
+		9EFACEDE1E988BC600D11F18 /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				9EFACEDF1E988C0300D11F18 /* SPRecordVideoVC.swift */,
+				9E1A4E201E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift */,
+				9E1A4E221E9A823F00FEF8B7 /* SPVideoHelp.swift */,
+				9E9D8D551ED47C1F00522BCA /* SPVideoListVC.swift */,
+				9E9D8D571ED47E2600522BCA /* SPVideoCollectionCell.swift */,
+				9E0654CD1EDF24A90035189B /* SPVideoModel.swift */,
+				9E0654CF1EE29B6E0035189B /* SPVideoPlayVC.swift */,
+				9E0654D11EE3D2B00035189B /* SPVideoPlayView.swift */,
+				9E205ED61EEEC3B600AB18C3 /* SPVideoEditVC.swift */,
+				9E205ED81EF0323600AB18C3 /* SPVideoScheduleView.swift */,
+			);
+			path = Video;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -132,9 +227,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9E7226941E8972B4001BB9A9 /* Build configuration list for PBXNativeTarget "ZPhoto" */;
 			buildPhases = (
+				D6FBFBD3C126356C121E9D4F /* [CP] Check Pods Manifest.lock */,
 				9E7226681E8972B4001BB9A9 /* Sources */,
 				9E7226691E8972B4001BB9A9 /* Frameworks */,
 				9E72266A1E8972B4001BB9A9 /* Resources */,
+				AB8869EF72E19E634CA5AC30 /* [CP] Embed Pods Frameworks */,
+				10B959C903C1040CA4BA59A7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -149,9 +247,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9E7226971E8972B4001BB9A9 /* Build configuration list for PBXNativeTarget "ZPhotoTests" */;
 			buildPhases = (
+				336C98C50F29C1E0EEFDBE9C /* [CP] Check Pods Manifest.lock */,
 				9E72267C1E8972B4001BB9A9 /* Sources */,
 				9E72267D1E8972B4001BB9A9 /* Frameworks */,
 				9E72267E1E8972B4001BB9A9 /* Resources */,
+				9CA014F25D585D3EBC367E7B /* [CP] Embed Pods Frameworks */,
+				3BD35525EA9B792869201208 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -167,9 +268,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9E72269A1E8972B4001BB9A9 /* Build configuration list for PBXNativeTarget "ZPhotoUITests" */;
 			buildPhases = (
+				A6C6DFDEC4510FF0DE551740 /* [CP] Check Pods Manifest.lock */,
 				9E7226871E8972B4001BB9A9 /* Sources */,
 				9E7226881E8972B4001BB9A9 /* Frameworks */,
 				9E7226891E8972B4001BB9A9 /* Resources */,
+				3B68F6E261EA93F76BFFA20F /* [CP] Embed Pods Frameworks */,
+				564E913EB10CDB51E84F8AD2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -187,6 +291,7 @@
 		9E7226641E8972B4001BB9A9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = SP;
 				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = huangshupeng;
@@ -233,9 +338,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E72267A1E8972B4001BB9A9 /* LaunchScreen.storyboard in Resources */,
 				9E7226771E8972B4001BB9A9 /* Assets.xcassets in Resources */,
-				9E7226751E8972B4001BB9A9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,13 +358,166 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		10B959C903C1040CA4BA59A7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		336C98C50F29C1E0EEFDBE9C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		3B68F6E261EA93F76BFFA20F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3BD35525EA9B792869201208 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhotoTests/Pods-ZPhotoTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		564E913EB10CDB51E84F8AD2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9CA014F25D585D3EBC367E7B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhotoTests/Pods-ZPhotoTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A6C6DFDEC4510FF0DE551740 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AB8869EF72E19E634CA5AC30 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D6FBFBD3C126356C121E9D4F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		9E7226681E8972B4001BB9A9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E7226721E8972B4001BB9A9 /* ViewController.swift in Sources */,
+				9E47CC3D1EFFDBC1000362CC /* UIView+extension.swift in Sources */,
+				9E205EDB1EFFCF3800AB18C3 /* SPBaseVC.swift in Sources */,
+				9EAB5AAF1EED6C7900605945 /* UIImageManager.swift in Sources */,
+				9E0654CE1EDF24A90035189B /* SPVideoModel.swift in Sources */,
+				9E9D8D561ED47C1F00522BCA /* SPVideoListVC.swift in Sources */,
+				9E9D8D581ED47E2600522BCA /* SPVideoCollectionCell.swift in Sources */,
+				9E1A4E271E9A891F00FEF8B7 /* SPPublicHeader.swift in Sources */,
+				9E0654D01EE29B6E0035189B /* SPVideoPlayVC.swift in Sources */,
+				9EFACEE01E988C0400D11F18 /* SPRecordVideoVC.swift in Sources */,
+				9E251CD51F48243400D95C4E /* FileManager+extension.swift in Sources */,
+				9E1A4E211E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift in Sources */,
+				9E1A4E231E9A823F00FEF8B7 /* SPVideoHelp.swift in Sources */,
 				9E7226701E8972B4001BB9A9 /* AppDelegate.swift in Sources */,
+				9E205ED91EF0323600AB18C3 /* SPVideoScheduleView.swift in Sources */,
+				9E0654D21EE3D2B00035189B /* SPVideoPlayView.swift in Sources */,
+				9E251CD71F4C791700D95C4E /* CIFilter+extension.swift in Sources */,
+				9E205ED71EEEC3B600AB18C3 /* SPVideoEditVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,25 +551,6 @@
 			targetProxy = 9E72268C1E8972B4001BB9A9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		9E7226731E8972B4001BB9A9 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9E7226741E8972B4001BB9A9 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		9E7226781E8972B4001BB9A9 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9E7226791E8972B4001BB9A9 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		9E7226921E8972B4001BB9A9 /* Debug */ = {
@@ -409,33 +646,39 @@
 		};
 		9E7226951E8972B4001BB9A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 37B2953C120C1B91174FA422 /* Pods-ZPhoto.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: shupeng Technology Park Xili private quarters (595W5226P2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: shupeng Technology Park Xili private quarters (595W5226P2)";
 				DEVELOPMENT_TEAM = 2X8ED8ZMS2;
 				INFOPLIST_FILE = ZPhoto/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangshp.ZPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c552065a-49f5-4f97-9c01-b28b34eebabb";
-				PROVISIONING_PROFILE_SPECIFIER = ZPhotoDevelopment;
+				PROVISIONING_PROFILE = "0ee2f46b-79fe-4033-9e7f-3c87a2e6e0ce";
+				PROVISIONING_PROFILE_SPECIFIER = ZPhotoDeve;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		9E7226961E8972B4001BB9A9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: shupeng Technology Park Xili private quarters (2X8ED8ZMS2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: shupeng Technology Park Xili private quarters (2X8ED8ZMS2)";
 				DEVELOPMENT_TEAM = 2X8ED8ZMS2;
 				INFOPLIST_FILE = ZPhoto/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangshp.ZPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e3f33554-2352-4901-8f91-f5f643016c55";
+				PROVISIONING_PROFILE = "d7d6598e-74fb-4914-8fd3-96fea2d0c871";
 				PROVISIONING_PROFILE_SPECIFIER = ZPhotoAdHoc;
 				SWIFT_VERSION = 3.0;
 			};
@@ -443,6 +686,7 @@
 		};
 		9E7226981E8972B4001BB9A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C51E104DB0F1870B26D77C6B /* Pods-ZPhotoTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -457,6 +701,7 @@
 		};
 		9E7226991E8972B4001BB9A9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F183CFE9FF0D101A7BFCC189 /* Pods-ZPhotoTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -471,6 +716,7 @@
 		};
 		9E72269B1E8972B4001BB9A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07BA85C69A0AADC582A26091 /* Pods-ZPhotoUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = ZPhotoUITests/Info.plist;
@@ -484,6 +730,7 @@
 		};
 		9E72269C1E8972B4001BB9A9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3C693C2DF867F8838AC46338 /* Pods-ZPhotoUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = ZPhotoUITests/Info.plist;
