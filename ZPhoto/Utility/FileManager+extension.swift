@@ -15,8 +15,8 @@ extension FileManager{
     class func directory(createPath:String){
         do{
             try FileManager.default.createDirectory(atPath: createPath, withIntermediateDirectories: true, attributes: nil)
-        }catch _{
-            
+        }catch{
+            SPLog("creat directory is  \(error)")
         }
     }
     /**< 删除文件 */
@@ -26,8 +26,8 @@ extension FileManager{
             if fileManager.fileExists(atPath: path) {
                 do {
                     try fileManager.removeItem(atPath: path)
-                }catch _{
-                    
+                }catch {
+                     SPLog("delete file is  \(error)")
                 }
             }
         }

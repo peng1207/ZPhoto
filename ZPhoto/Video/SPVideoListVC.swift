@@ -111,10 +111,11 @@ extension SPVideoListRootVC : UICollectionViewDelegate,UICollectionViewDataSourc
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let videoPlayVC = SPVideoEditVC()
+        let videoPlayVC = SPVideoPlayVC()
         videoPlayVC.videoModel = self.videoDataArray?[indexPath.row]
-//        self.present(videoPlayVC, animated: true, completion: nil)
-        self.navigationController?.pushViewController(videoPlayVC, animated: true)
+   
+        self.present(videoPlayVC, animated: true, completion: nil)
+//        self.navigationController?.pushViewController(videoPlayVC, animated: true)
     }
     
 }
@@ -124,7 +125,10 @@ extension SPVideoListRootVC {
     @objc fileprivate func videoData(){
         let array = SPVideoHelp.videoFile()
         self.videoDataArray = array
-        self.videoCollectionView.reloadData()
+        dispatchMainQueue {
+            self.videoCollectionView.reloadData()
+        }
+       
     }
 }
 // MARK: -- 通知

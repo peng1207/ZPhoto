@@ -11,45 +11,57 @@ import CoreImage
 
 extension CIFilter{
     // MARK: -- 怀旧
-    class func photoEffectInstant() -> CIFilter{
-        return CIFilter(name: "CIPhotoEffectInstant")!
+    class func photoEffectInstant() -> CIFilter?{
+        return CIFilter(name: "CIPhotoEffectInstant")
     }
     // MARK: -- 黑白
-    class func photoEffectNoir() -> CIFilter{
-        return CIFilter(name: "CIPhotoEffectNoir")!
+    class func photoEffectNoir() -> CIFilter?{
+        return CIFilter(name: "CIPhotoEffectNoir")
     }
     // MARK: -- 色调
-    class func photoEffectTonal() -> CIFilter{
-        return  CIFilter(name: "CIPhotoEffectTonal")!
+    class func photoEffectTonal() -> CIFilter?{
+        return  CIFilter(name: "CIPhotoEffectTonal")
     }
     // MARK: -- 岁月
-    class func photoEffectTransfer() -> CIFilter{
-        return CIFilter(name: "CIPhotoEffectTransfer")!
+    class func photoEffectTransfer() -> CIFilter?{
+        return CIFilter(name: "CIPhotoEffectTransfer")
     }
     // MARK: -- 单色
-    class func photoEffectMono() -> CIFilter{
-        return CIFilter(name: "CIPhotoEffectMono")!
+    class func photoEffectMono() -> CIFilter?{
+        return CIFilter(name: "CIPhotoEffectMono")
     }
     // MARK: -- 褪色
-    class func photoEffectFade() -> CIFilter{
-        return CIFilter(name: "CIPhotoEffectFade")!
+    class func photoEffectFade() -> CIFilter?{
+        return CIFilter(name: "CIPhotoEffectFade")
     }
     // MARK: -- 冲印
-    class func photoEffectProcess() -> CIFilter{
-        return CIFilter(name: "CIPhotoEffectProcess")!
+    class func photoEffectProcess() -> CIFilter?{
+        return CIFilter(name: "CIPhotoEffectProcess")
     }
     // MARK: -- 铬黄
-    class func photoEffectChrome() -> CIFilter{
-        return CIFilter(name: "CIPhotoEffectChrome")!
+    class func photoEffectChrome() -> CIFilter?{
+        return CIFilter(name: "CIPhotoEffectChrome")
+    }
+    // MARK: -- 美颜
+    class func photoHueAdjust() -> CIFilter?{
+        let filter = CIFilter(name: "CIHueAdjust")
+        filter?.setValue(1.0, forKey: kCIInputAngleKey)
+        return filter!
+    }
+    class func photoVignetteEffect() ->  CIFilter?{
+        return CIFilter(name: "CIVignetteEffect")!
+    }
+    class func photoSRGBToneCurveToLinear() -> CIFilter?{
+        return CIFilter(name: "CISRGBToneCurveToLinear")
     }
     // MARK: -- 自动改善
-    class func photoautoAdjust(inputImage:CIImage) -> CGImage{
+    class func photoautoAdjust(inputImage:CIImage) -> CIImage {
         let filters = inputImage.autoAdjustmentFilters() as [CIFilter]
         var outputImage : CIImage = inputImage
         for filter : CIFilter in filters{
             filter.setValue(inputImage, forKey: kCIInputImageKey)
             outputImage = filter.outputImage!
         }
-        return outputImage as! CGImage
+        return outputImage
     }
 }

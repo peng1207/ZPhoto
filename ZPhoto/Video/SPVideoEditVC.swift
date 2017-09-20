@@ -34,7 +34,7 @@ class  SPVideoEditVC : SPBaseVC {
         
         
         
-//         let timeRange =  CMTimeRangeMake(CMTimeMakeWithSeconds(0, 30), CMTimeMakeWithSeconds(1, 30))
+//         let timeRange =  CMTimeRangeMake(CMTimeMakeWithSeconds(0, framesPerSecond), CMTimeMakeWithSeconds(1, framesPerSecond))
 //        SPVideoHelp.shear(asset: (videoModel?.asset)!, timeRange: timeRange) { (outUrl) in
 //            var outModel = SPVideoModel()
 //            outModel.url = outUrl

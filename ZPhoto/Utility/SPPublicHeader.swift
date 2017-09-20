@@ -15,8 +15,9 @@ let kDocumentsPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathD
 let kCachesPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
 /// 获取Tmp目录路径
 let kTmpPath = NSTemporaryDirectory()
-
-
+/* 帧数
+ */
+let framesPerSecond : Int32 = 60
 
 /**
  获取字体对象
@@ -40,11 +41,9 @@ func dispatchMainQueue(complete:@escaping ()->Void){
  多线程
  */
 func dispatchAsync(complete:@escaping ()->Void){
-    
     DispatchQueue.global().async {
         complete()
     }
-    
 }
 /**
  延时操作
@@ -56,12 +55,12 @@ func  dispatchAfter(time:UInt64,complete:@escaping ()->Void){
       complete()
     }
 }
-
-
 func SPLog<T>(_ message:T,file:String = #file,function:String = #function,line:Int=#line){
     #if DEBUG
         let fileName = (file as NSString).lastPathComponent
-        print("\(NSDate())---\(fileName):\(line)---\(function) | \(message)")
+        
+//        NSLog("--\(fileName) ---\(line)--\(function) --- \(message)")
+        print("\(NSDate().timeIntervalSince1970)---\(fileName):\(line)---\(function) | \(message)")
     #endif
 
 }

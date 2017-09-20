@@ -8,6 +8,8 @@
 
 import UIKit
 import SnapKit
+import AVFoundation
+
 // 按钮点击事件
 public enum ButtonClickType : Int {
     case done                // 点击完成
@@ -44,14 +46,16 @@ class SPRecordVideoVC: UINavigationController {
         // Dispose of any resources that can be recreated.
     }
     
-    
 }
 
 fileprivate class SPRecordVideoRootVC: SPBaseVC {
-    lazy fileprivate var recordVideoView : SPRecordVideoView! = {
-        let view = SPRecordVideoView()
+    lazy fileprivate var recordVideoView : SPRecordVideoBtnView! = {
+        let view = SPRecordVideoBtnView()
         view.backgroundColor = UIColor.clear
         return view
+    }()
+    lazy fileprivate var preView : SPRecordVideoView! = {
+        return SPRecordVideoView()
     }()
     
     fileprivate var changeButton : UIButton!
@@ -65,18 +69,21 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        self.videoManager.videoLayer?.frame = self.view.frame
+        self.view.backgroundColor = UIColor.white
+//        self.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
      
-        self.view.layer.addSublayer(self.videoManager.videoLayer!)
         self.setupUI()
+        self.videoManager.videoLayer = self.preView.layer as? AVCaptureVideoPreviewLayer
+        self.videoManager.setupRecord()
         self.addChangeButton()
         self.addactionToButton()
         self.addPinchGeusture()
         // Do any additional setup after loading the view.
     }
-    
+  
+    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+        self.dealOrientation(toInterfaceOrientation: toInterfaceOrientation)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -87,23 +94,29 @@ extension SPRecordVideoRootVC {
     
     // 创建UI
     func setupUI (){
-        self.view .addSubview(self.recordVideoView);
+        self.view.addSubview(self.preView)
+        self.view .addSubview(self.recordVideoView)
+        self.addConstraintToView()
+    }
+    /**< 添加约束到view  */
+    private func addConstraintToView(){
+        self.preView.snp.makeConstraints { (maker) in
+            maker.left.right.bottom.top.equalTo(self.view).offset(0);
+        }
         self.recordVideoView.snp.makeConstraints { (maker) in
             maker.bottom.right.left.equalTo(self.view).offset(0);
             maker.height.equalTo(60)
         }
     }
+    
     // 添加切换按钮
     func addChangeButton (){
-        changeButton = SPRecordVideoView.setupButton(title: "切换",selectTitle: nil, fontsize: 14)
+        changeButton = SPRecordVideoBtnView.setupButton(title: "切换",selectTitle: nil, fontsize: 14)
         changeButton.frame = CGRect(x: 0, y: 0, width: 80, height: 40)
         changeButton.addTarget(self, action: #selector(clickChangeAction), for: .touchUpInside)
         let rightItem = UIBarButtonItem(customView: changeButton)
         self.navigationItem.rightBarButtonItem = rightItem
-        
     }
-    
-    
 }
 
 // MARK: -- 处理事件
@@ -144,6 +157,7 @@ extension SPRecordVideoRootVC {
         switch clickType {
         case .cance:
             SPLog("点击取消")
+            self.videoManager.sp_cance()
             self.dismiss(animated: true, completion: nil)
         case .done:
          
@@ -163,22 +177,34 @@ extension SPRecordVideoRootVC {
              SPLog("点击切换镜头")
             self.videoManager.sp_changeVideoDevice()
         }
-        
-        
     }
-    
+    /**< 处理屏幕旋转后视频的方向  */
+    fileprivate func dealOrientation(toInterfaceOrientation: UIInterfaceOrientation){
+        switch toInterfaceOrientation {
+        case .landscapeLeft:
+            self.videoManager.videoLayer?.connection.videoOrientation = .landscapeLeft
+        case .landscapeRight:
+            self.videoManager.videoLayer?.connection.videoOrientation = .landscapeRight
+        case .portrait:
+            self.videoManager.videoLayer?.connection.videoOrientation = .portrait
+        case .portraitUpsideDown:
+            self.videoManager.videoLayer?.connection.videoOrientation = .portraitUpsideDown
+        default: break
+            
+        }
+    }
 }
 
-class SPRecordVideoView: UIView {
+class SPRecordVideoBtnView: UIView {
     
     lazy var canceButton : UIButton! = {
-        return SPRecordVideoView.setupButton(title: "cance",selectTitle: nil, fontsize: 14)
+        return SPRecordVideoBtnView.setupButton(title: "cance",selectTitle: nil, fontsize: 14)
     }()
     lazy var recordButton : UIButton! = {
-        return SPRecordVideoView.setupButton(title: "start",selectTitle: "end", fontsize: 14)
+        return SPRecordVideoBtnView.setupButton(title: "start",selectTitle: "end", fontsize: 14)
     }()
     lazy var flashLampButton : UIButton! = {
-        return SPRecordVideoView.setupButton(title: "on",selectTitle: "off", fontsize: 14)
+        return SPRecordVideoBtnView.setupButton(title: "on",selectTitle: "off", fontsize: 14)
     }()
     var buttonClickBlock : ButtonClickBlock?
     
