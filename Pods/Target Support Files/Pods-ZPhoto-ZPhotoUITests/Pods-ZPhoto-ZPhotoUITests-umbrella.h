@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_ZPhotoUITestsVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_ZPhotoUITestsVersionString[];
+FOUNDATION_EXPORT double Pods_ZPhoto_ZPhotoUITestsVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_ZPhoto_ZPhotoUITestsVersionString[];
 
