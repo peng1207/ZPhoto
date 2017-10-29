@@ -71,7 +71,7 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
 //        self.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-     
+        
         self.setupUI()
         self.videoManager.videoLayer = self.preView.layer as? AVCaptureVideoPreviewLayer
         self.videoManager.setupRecord()

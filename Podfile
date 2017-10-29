@@ -8,12 +8,12 @@ target 'ZPhoto' do
   # Pods for ZPhoto
     pod 'SnapKit'
   target 'ZPhotoTests' do
-    inherit! :search_paths
+      #inherit! :search_paths
     # Pods for testing
   end
 
   target 'ZPhotoUITests' do
-    inherit! :search_paths
+      #   inherit! :search_paths
     # Pods for testing
   end
 
