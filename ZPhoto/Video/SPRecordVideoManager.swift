@@ -301,9 +301,10 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 return
             }
             let currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
+            self.lastSampleTime = currentSampleTime
             var outputImage : CIImage? = nil
             if output == self.videoOutput{
-                self.lastSampleTime = currentSampleTime
+                
                 let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
                 outputImage = CIImage(cvPixelBuffer: imageBuffer)
                 self.noFilterCIImage = outputImage
