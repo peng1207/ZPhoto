@@ -677,8 +677,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangshp.ZPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "86f54084-5f16-4cdf-86f0-8fdb30ae1319";
-				PROVISIONING_PROFILE_SPECIFIER = ZPhotoAddHoc;
+				PROVISIONING_PROFILE = "e41a6068-3123-4eb3-9acb-ebceabee0223";
+				PROVISIONING_PROFILE_SPECIFIER = ZPhotoAdHoc;
 				SWIFT_VERSION = 3.0;
 			};
 			name = ReleaseAdHoc;
@@ -817,8 +817,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangshp.ZPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0ee2f46b-79fe-4033-9e7f-3c87a2e6e0ce";
-				PROVISIONING_PROFILE_SPECIFIER = ZPhotoDeve;
+				PROVISIONING_PROFILE = "e6310527-79c3-45b7-8e15-d49cc71171eb";
+				PROVISIONING_PROFILE_SPECIFIER = ZPhotoDev;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -837,8 +837,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangshp.ZPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "86f54084-5f16-4cdf-86f0-8fdb30ae1319";
-				PROVISIONING_PROFILE_SPECIFIER = ZPhotoAddHoc;
+				PROVISIONING_PROFILE = "3f93c631-f4ac-4374-b173-8a0a25fde743";
+				PROVISIONING_PROFILE_SPECIFIER = ZPhotoAPPStore;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

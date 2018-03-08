@@ -131,9 +131,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     func sp_startRecord(){
         dispatchMainQueue {
             self.setupAssertWrirer()
+            self.startRecording = true
             self.assetWriter?.startWriting()
             self.assetWriter?.startSession(atSourceTime: self.lastSampleTime!)
-            self.startRecording = true
         }
     }
     /**< 初始化writer  */
@@ -296,7 +296,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     
     func captureOutput(_ output: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
         autoreleasepool {
-            SPLog("start------")
+          
             if !CMSampleBufferDataIsReady(sampleBuffer) {
                 return
             }
@@ -304,7 +304,6 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             self.lastSampleTime = currentSampleTime
             var outputImage : CIImage? = nil
             if output == self.videoOutput{
-                
                 let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
                 outputImage = CIImage(cvPixelBuffer: imageBuffer)
                 self.noFilterCIImage = outputImage
@@ -345,7 +344,6 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                     self.videoLayer?.contents = cgImage
                 }
             }
-            SPLog("end------")
         }
     }
     

@@ -104,11 +104,12 @@ class SPVideoHelp: NSObject {
         assetImageGenerator.requestedTimeToleranceBefore = kCMTimeZero
         assetImageGenerator.apertureMode = AVAssetImageGeneratorApertureModeEncodedPixels
         do {
+        
             let thumbnailImageRef = try assetImageGenerator.copyCGImage(at: time, actualTime: nil)
             thumbnailImage = UIImage(cgImage: thumbnailImageRef)
               return thumbnailImage
         } catch {
-            SPLog("\(error)")
+            SPLog("thumbnailImageTo error is \(error)")
             return nil
         }
     }
@@ -140,6 +141,19 @@ class SPVideoHelp: NSObject {
             return  true
         }
         return fileSorted
+    }
+    /**
+     删除视频文件
+     */
+    class func remove(videoUrl:URL) -> Void{
+        remove(fileUrl: videoUrl)
+        sendNotification(notificationName: kVideoChangeNotification)
+    }
+    /**
+     删除文件
+     */
+    class func remove(fileUrl:URL) -> Void{
+       try!  FileManager.default.removeItem(at: fileUrl)
     }
     /**< 发送通知 */
     class func sendNotification(notificationName:String) {
@@ -201,7 +215,5 @@ class SPVideoHelp: NSObject {
         exportSession.exportAsynchronously(completionHandler: {
             completionHandler(exportUrl)
         })
-  
-      
     }
 }
