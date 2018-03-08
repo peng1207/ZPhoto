@@ -57,8 +57,14 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
     lazy fileprivate var preView : SPRecordVideoView! = {
         return SPRecordVideoView()
     }()
+    lazy fileprivate var videoData : SPRecordVideoData! = {
+        return SPRecordVideoData()
+    }()
     
     fileprivate var changeButton : UIButton!
+    fileprivate var filterView : SPRecordVideoFilterView! = {
+        return SPRecordVideoFilterView()
+    } ()
     fileprivate var pinchGesture : UIPinchGestureRecognizer!
     fileprivate var lastScale : CGFloat = 1.00
     
@@ -67,22 +73,27 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
         return manager
     }()
     
+    fileprivate let kVideoManagerKVOKey = "noFilterCIImage"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
-//        self.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         
         self.setupUI()
         self.videoManager.videoLayer = self.preView.layer as? AVCaptureVideoPreviewLayer
+        self.videoManager.addObserver(self, forKeyPath: kVideoManagerKVOKey, options: .new, context: nil)
         self.videoManager.setupRecord()
         self.addChangeButton()
-        self.addactionToButton()
+        self.addActionToButton()
         self.addPinchGeusture()
         // Do any additional setup after loading the view.
     }
-  
+    
     override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         self.dealOrientation(toInterfaceOrientation: toInterfaceOrientation)
+    }
+    deinit {
+        videoManager.removeObserver(self, forKeyPath: kVideoManagerKVOKey)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -96,6 +107,7 @@ extension SPRecordVideoRootVC {
     func setupUI (){
         self.view.addSubview(self.preView)
         self.view .addSubview(self.recordVideoView)
+        self.view.addSubview(self.filterView)
         self.addConstraintToView()
     }
     /**< 添加约束到view  */
@@ -106,6 +118,10 @@ extension SPRecordVideoRootVC {
         self.recordVideoView.snp.makeConstraints { (maker) in
             maker.bottom.right.left.equalTo(self.view).offset(0);
             maker.height.equalTo(60)
+        }
+        self.filterView.snp.makeConstraints { (maker) in
+            maker.left.right.top.equalTo(self.view).offset(0)
+            maker.height.equalTo(30)
         }
     }
     
@@ -122,7 +138,7 @@ extension SPRecordVideoRootVC {
 // MARK: -- 处理事件
 extension SPRecordVideoRootVC {
     // 添加事件到按钮
-    fileprivate func addactionToButton(){
+    fileprivate func addActionToButton(){
         self.recordVideoView.buttonClickBlock = { [weak self](clickType : ButtonClickType,button:UIButton) in
             self?.dealButtonClickAction(clickType: clickType, button: button)
         }
@@ -140,7 +156,7 @@ extension SPRecordVideoRootVC {
             lastScale = 1.0
             return
         }
-         let scale = 1.0 - (lastScale - sender.scale)
+        let scale = 1.0 - (lastScale - sender.scale)
         if lastScale >= sender.scale {
             SPLog("缩小")
             videoManager.sp_zoomOut(scale: 0.1)
@@ -160,7 +176,7 @@ extension SPRecordVideoRootVC {
             self.videoManager.sp_cance()
             self.dismiss(animated: true, completion: nil)
         case .done:
-         
+            
             if button.isSelected {
                 SPLog("点击结束")
                 self.videoManager.sp_stopRecord()
@@ -170,11 +186,11 @@ extension SPRecordVideoRootVC {
             }
             button.isSelected = !button.isSelected
         case .flash:
-             SPLog("点击闪光灯")
+            SPLog("点击闪光灯")
             button.isSelected = !button.isSelected
             self.videoManager.sp_flashlight()
         case .change:
-             SPLog("点击切换镜头")
+            SPLog("点击切换镜头")
             self.videoManager.sp_changeVideoDevice()
         }
     }
@@ -193,6 +209,24 @@ extension SPRecordVideoRootVC {
             
         }
     }
+    
+    fileprivate func clickFilterAction(){
+        videoData.setup(inputImage: videoManager.noFilterCIImage, complete: { [weak self] () in
+            dispatchMainQueue {
+                self?.filterView.filterList = self?.videoData.getFilterList()
+            }
+            
+        })
+        
+        
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == kVideoManagerKVOKey {
+            clickFilterAction()
+        }
+    }
+    
 }
 
 class SPRecordVideoBtnView: UIView {
@@ -207,7 +241,6 @@ class SPRecordVideoBtnView: UIView {
         return SPRecordVideoBtnView.setupButton(title: "on",selectTitle: "off", fontsize: 14)
     }()
     var buttonClickBlock : ButtonClickBlock?
-    
     
     class func setupButton (title:String,selectTitle:String?,fontsize:CGFloat) -> UIButton {
         let button = UIButton(type: .custom)

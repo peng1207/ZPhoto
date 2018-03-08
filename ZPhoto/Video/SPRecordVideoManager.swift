@@ -48,7 +48,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     let  filePath : String = "\(SPVideoHelp.kVideoTempDirectory)/temp.mp4"
     var ciImage : CIImage!
     var filter : CIFilter?
-    var noFilterCIImage : CIImage!
+    dynamic  var noFilterCIImage : CIImage!
     
     let videoDataOutputQueue :DispatchQueue = DispatchQueue(label: "com.hsp.videoDataOutputQueue")
     
@@ -300,20 +300,19 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             if !CMSampleBufferDataIsReady(sampleBuffer) {
                 return
             }
-            let currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
-            self.lastSampleTime = currentSampleTime
+          
             var outputImage : CIImage? = nil
             if output == self.videoOutput{
                 let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
                 outputImage = CIImage(cvPixelBuffer: imageBuffer)
                 self.noFilterCIImage = outputImage
-                //            outputImage = CIFilter.photoautoAdjust(inputImage: outputImage!)
                 if self.filter != nil {
                     self.filter?.setValue(outputImage!, forKey: kCIInputImageKey)
                     outputImage = self.filter?.outputImage
                 }
             }
-            
+            let currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
+            self.lastSampleTime = currentSampleTime
             if startRecording == true && self.assetWriter != nil{
                 if output == self.videoOutput {
                     let newPixelbuffer = self.pixelBuffer(fromImage:   UIImage.convertCIImageToCGImage(ciImage: outputImage!),pixelBufferPool: self.videoWriterPixelbufferInput?.pixelBufferPool)
