@@ -36,6 +36,6 @@ protocol EnumeratableEnumType {
 
 extension SPFilterPhoto : EnumeratableEnumType{
     static var allValues :[SPFilterPhoto] {
-        return [.EffectInstant ,.EffectNoir,.EffectTonal,.EffectTransfer,.EffectMono,.EffectFade,.EffectProcess,.EffectChrome,.HueAdjust,.VignetteEffect,SRGBToneCurveToLinear]
+        return [.EffectInstant ,.EffectNoir,.EffectTonal,.EffectTransfer,.EffectMono,.EffectFade,.EffectProcess,.EffectChrome,.HueAdjust]
     }
 }

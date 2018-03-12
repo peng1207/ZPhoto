@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+import CoreImage
 class SPVideoListVC: UINavigationController {
     
     
@@ -51,6 +51,13 @@ fileprivate class SPVideoListRootVC : SPBaseVC {
         self.setupUI()
         self.videoData()
         self.sendNotification()
+        let filterNames = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
+        
+        for filterName in filterNames {
+            let filter = CIFilter(name: filterName)
+            print("\rfilter:\(filterName)\rattributes:\(filter?.attributes)")
+        }
+
     }
 }
 // MARK: -- UI

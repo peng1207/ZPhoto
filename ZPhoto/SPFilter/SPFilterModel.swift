@@ -12,6 +12,7 @@ import UIKit
 
 class SPFilterModel : NSObject {
     var filter : CIFilter?
+   
     var outputImage : CIImage? {
         didSet{
             showImage = UIImage(ciImage: outputImage!)
@@ -33,11 +34,7 @@ class SPFilterModel : NSObject {
             }
         }
     }
-    lazy var ciContext: CIContext = {
-        let eaglContext = EAGLContext(api: EAGLRenderingAPI.openGLES2)
-        let options = [kCIContextWorkingColorSpace : NSNull()]
-        return CIContext(eaglContext: eaglContext!, options: options)
-    }()
+
     /**
      创建滤镜类
      */

@@ -46,7 +46,6 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     var currentVideoDimensions: CMVideoDimensions?
     var lastSampleTime : CMTime?
     let  filePath : String = "\(SPVideoHelp.kVideoTempDirectory)/temp.mp4"
-    var ciImage : CIImage!
     var filter : CIFilter?
     dynamic  var noFilterCIImage : CIImage!
     
@@ -305,7 +304,10 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             if output == self.videoOutput{
                 let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
                 outputImage = CIImage(cvPixelBuffer: imageBuffer)
-                self.noFilterCIImage = outputImage
+                var noFilterOutputImage  : CIImage? = outputImage
+                noFilterOutputImage = picRotating(imgae: noFilterOutputImage)
+                self.noFilterCIImage =  CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
+                
                 if self.filter != nil {
                     self.filter?.setValue(outputImage!, forKey: kCIInputImageKey)
                     outputImage = self.filter?.outputImage
@@ -325,20 +327,8 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 }
             }
             if outputImage != nil {
-                let orientation = UIDevice.current.orientation
-                var t: CGAffineTransform!
-                if orientation == UIDeviceOrientation.portrait {
-                    t = CGAffineTransform(rotationAngle: CGFloat(-M_PI / 2.0))
-                } else if orientation == UIDeviceOrientation.portraitUpsideDown {
-                    t = CGAffineTransform(rotationAngle: CGFloat(M_PI / 2.0))
-                } else if (orientation == UIDeviceOrientation.landscapeRight) {
-                    t = CGAffineTransform(rotationAngle: CGFloat(M_PI))
-                } else {
-                    t = CGAffineTransform(rotationAngle: 0)
-                }
-                outputImage = outputImage?.applying(t)
+                outputImage = picRotating(imgae: outputImage)
                 let cgImage = self.ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
-                self.ciImage = outputImage
                 dispatchMainQueue {
                     self.videoLayer?.contents = cgImage
                 }

@@ -16,6 +16,7 @@ public enum ButtonClickType : Int {
     case cance               // 点击取消
     case flash               // 点击闪光灯
     case change             // 点击切换镜头
+    case filter                 // 点击滤镜
 }
 // 按钮点击事件回调
 typealias ButtonClickBlock =  (_ clickType:ButtonClickType,_ button:UIButton) ->Void
@@ -106,6 +107,7 @@ extension SPRecordVideoRootVC {
     // 创建UI
     func setupUI (){
         self.view.addSubview(self.preView)
+        self.preView.backgroundColor = UIColor.black
         self.view .addSubview(self.recordVideoView)
         self.view.addSubview(self.filterView)
         self.addConstraintToView()
@@ -117,11 +119,11 @@ extension SPRecordVideoRootVC {
         }
         self.recordVideoView.snp.makeConstraints { (maker) in
             maker.bottom.right.left.equalTo(self.view).offset(0);
-            maker.height.equalTo(60)
+            maker.height.greaterThanOrEqualTo(0)
         }
         self.filterView.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self.view).offset(0)
-            maker.height.equalTo(30)
+            maker.height.equalTo(60)
         }
     }
     
@@ -141,6 +143,9 @@ extension SPRecordVideoRootVC {
     fileprivate func addActionToButton(){
         self.recordVideoView.buttonClickBlock = { [weak self](clickType : ButtonClickType,button:UIButton) in
             self?.dealButtonClickAction(clickType: clickType, button: button)
+        }
+        self.filterView.collectSelectComplete = { [weak self](model : SPFilterModel)  in
+                self?.videoManager.filter = model.filter
         }
     }
     @objc fileprivate func clickChangeAction(){
@@ -192,6 +197,8 @@ extension SPRecordVideoRootVC {
         case .change:
             SPLog("点击切换镜头")
             self.videoManager.sp_changeVideoDevice()
+        case .filter:
+             SPLog("点击滤镜 ")
         }
     }
     /**< 处理屏幕旋转后视频的方向  */
@@ -217,8 +224,6 @@ extension SPRecordVideoRootVC {
             }
             
         })
-        
-        
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -239,6 +244,12 @@ class SPRecordVideoBtnView: UIView {
     }()
     lazy var flashLampButton : UIButton! = {
         return SPRecordVideoBtnView.setupButton(title: "on",selectTitle: "off", fontsize: 14)
+    }()
+    lazy var changeButton : UIButton! = {
+        return SPRecordVideoBtnView.setupButton(title: "切换", selectTitle: nil , fontsize: 14)
+    }()
+    lazy var filterButton : UIButton! = {
+        return SPRecordVideoBtnView.setupButton(title: "滤镜", selectTitle: nil, fontsize: 14)
     }()
     var buttonClickBlock : ButtonClickBlock?
     
@@ -270,6 +281,8 @@ class SPRecordVideoBtnView: UIView {
         self .addSubview(canceButton)
         self.addSubview(recordButton)
         self.addSubview(flashLampButton)
+        self.addSubview(changeButton)
+        self.addSubview(filterButton)
         self.addConstraintToView()
         
     }
@@ -277,40 +290,67 @@ class SPRecordVideoBtnView: UIView {
         canceButton.addTarget(self, action: #selector(clickCanceAction), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(clickDoneAction), for: .touchUpInside)
         flashLampButton.addTarget(self, action: #selector(clickOpenAction), for: .touchUpInside)
+        changeButton.addTarget(self, action: #selector(clickChangeAction), for: .touchUpInside)
+        filterButton.addTarget(self, action: #selector(clickFilterAction), for: .touchUpInside)
     }
     // 点击取消
     func clickCanceAction(){
         self.dealAction(clickType: .cance, button: canceButton)
     }
+    // 点击完成
     func clickDoneAction(){
         self.dealAction(clickType: .done, button: recordButton)
     }
+    // 点击 闪光灯
     func clickOpenAction(){
         self.dealAction(clickType: .flash, button: flashLampButton)
     }
+    // 点击切换
+    func  clickChangeAction(){
+        self.dealAction(clickType: .change, button: changeButton)
+    }
+    // 点击滤镜
+    func clickFilterAction(){
+        self.dealAction(clickType: .filter, button: filterButton)
+    }
+    
     func dealAction(clickType:ButtonClickType,button : UIButton) {
         buttonClickBlock?(clickType,button)
     }
+
     
     fileprivate func addConstraintToView(){
         self.canceButton.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.snp.left).offset(12)
-            maker.height.equalTo(self.snp.height).offset(-20)
-            maker.centerY.equalTo(self.snp.centerY).offset(0)
+            maker.height.equalTo(40)
             maker.width.equalTo(self.recordButton)
+            maker.top.equalTo(10)
         }
         self.recordButton.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.canceButton.snp.right).offset(20)
-            maker.centerY.equalTo(self.canceButton.snp.centerY)
+            maker.top.equalTo(self.canceButton.snp.top)
             maker.height.equalTo(self.canceButton.snp.height)
             maker.width.equalTo(self.flashLampButton)
         }
         self.flashLampButton.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.recordButton.snp.right).offset(20)
             maker.height.equalTo(self.recordButton.snp.height)
-            maker.centerY.equalTo(self.recordButton.snp.centerY)
+            maker.top.equalTo(self.recordButton.snp.top)
             maker.width.equalTo(self.canceButton)
             maker.right.equalTo(self.snp.right).offset(-12)
+        }
+        self.filterButton.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.canceButton.snp.left).offset(0)
+            maker.height.equalTo(self.canceButton.snp.height)
+            maker.width.equalTo(self.canceButton.snp.width).offset(0)
+            maker.top.equalTo(self.canceButton.snp.bottom).offset(10)
+        }
+        self.changeButton.snp.makeConstraints { (maker) in
+            maker.right.equalTo(self.flashLampButton.snp.right).offset(0)
+            maker.height.equalTo(self.flashLampButton.snp.height).offset(0)
+            maker.width.equalTo(self.flashLampButton.snp.width).offset(0)
+            maker.top.equalTo(self.filterButton.snp.top).offset(0)
+            maker.bottom.equalTo(self.snp.bottom).offset(-10)
         }
     }
     

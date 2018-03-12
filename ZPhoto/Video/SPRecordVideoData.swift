@@ -27,11 +27,10 @@ class SPRecordVideoData : NSObject {
     func getFilterList () ->  Array<SPFilterModel>? {
         return filterList
     }
-    func setup(inputImage:CIImage, complete:((Void)->Void)?) {
+    func setup(inputImage:CIImage, complete:(()->Void)?) {
         guard let list = filterList else {
             return
         }
-        
         for model in list{
             model.inputImage = inputImage
         }
@@ -39,6 +38,7 @@ class SPRecordVideoData : NSObject {
             return
         }
         com()
+       
     }
     /**
      初始化 滤镜数据

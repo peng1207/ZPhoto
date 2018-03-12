@@ -11,15 +11,11 @@ import UIKit
 
 class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
  
-    
     lazy fileprivate  var filterCollectionView : UICollectionView? =  {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize  =  CGSize(width: 30, height: 30)
-        layout.minimumLineSpacing = 0 
-        layout.minimumInteritemSpacing = 0
+        let layout = SPRecordVideoFilterFlowLayout()
         let collectionView = UICollectionView(frame: CGRect(), collectionViewLayout:layout)
         collectionView.backgroundColor = UIColor.white
+//        collectionView.isPagingEnabled = true
         return collectionView
     }()
     
@@ -29,6 +25,7 @@ class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionView
             filterCollectionView?.reloadData()
         }
     }
+    var collectSelectComplete : ((_ model : SPFilterModel) ->  Void)?
      fileprivate let identify:String = "filterViewCell"
     
     override init(frame: CGRect) {
@@ -71,8 +68,13 @@ extension SPRecordVideoFilterView{
                   let model = filterList?[indexPath.row]
             cell.imageView.image = model?.showImage
         }
-      
         return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        SPLog("collection select ")
+        if indexPath.row < (filterList?.count)! , let complete  = collectSelectComplete{
+            complete((filterList?[indexPath.row])!)
+        }
     }
 }
 
@@ -95,9 +97,36 @@ extension SPRecordVideoFilterCell {
      */
     fileprivate func setupUI(){
         imageView = UIImageView()
+        imageView.isUserInteractionEnabled = true
         self.contentView.addSubview(imageView)
         imageView.snp.makeConstraints { (maker) in
             maker.left.top.right.bottom.equalTo(self.contentView).offset(0)
         }
+    }
+}
+
+class SPRecordVideoFilterFlowLayout : UICollectionViewFlowLayout{
+    override init() {
+        super.init()
+        self.scrollDirection = .horizontal
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    override func prepare() {
+        self.itemSize = CGSize(width: (self.collectionView?.bounds.size.width)! / 5, height: (self.collectionView?.bounds.size.height)!)
+        self.minimumLineSpacing = 0
+        self.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        super.prepare()
+    }
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        
+        let array = super.layoutAttributesForElements(in: rect)
+        return array
+    }
+    
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        return true
     }
 }
