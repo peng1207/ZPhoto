@@ -76,8 +76,8 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     
     fileprivate func setCaptureInpunt(postion : AVCaptureDevicePosition){
         self.getVideoDevice(postion: postion)
-        let videoInput = try! AVCaptureDeviceInput(device: self.currentDevice)
-        let audioInput = try! AVCaptureDeviceInput(device: self.audioDevice)
+        let videoInput = try? AVCaptureDeviceInput(device: self.currentDevice)
+        let audioInput = try? AVCaptureDeviceInput(device: self.audioDevice)
         self.captureSession.beginConfiguration()
         for input in self.captureSession.inputs {
             self.captureSession.removeInput(input as! AVCaptureInput)

@@ -7,6 +7,7 @@ target 'ZPhoto' do
 
   # Pods for ZPhoto
     pod 'SnapKit'
+    pod 'SQLite.swift', '~> 0.10.1'
   target 'ZPhotoTests' do
       #inherit! :search_paths
     # Pods for testing
