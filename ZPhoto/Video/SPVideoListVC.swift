@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+import CoreImage
 class SPVideoListVC: UINavigationController {
     
     
@@ -51,6 +51,13 @@ fileprivate class SPVideoListRootVC : SPBaseVC {
         self.setupUI()
         self.videoData()
         self.sendNotification()
+        let filterNames = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
+        
+        for filterName in filterNames {
+            let filter = CIFilter(name: filterName)
+            print("\rfilter:\(filterName)\rattributes:\(filter?.attributes)")
+        }
+
     }
 }
 // MARK: -- UI
@@ -91,6 +98,20 @@ extension SPVideoListRootVC {
     @objc fileprivate func clickAdd(){
         self.present(SPRecordVideoVC(), animated: true, completion: nil)
     }
+    /**
+     点击删除
+     */
+    fileprivate func clickDetete(videoModel:SPVideoModel?){
+        guard let model = videoModel else {
+            return
+        }
+        let alert = UIAlertController(title: "tips", message: "is delete?", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "cance", style: UIAlertActionStyle.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "delete", style: UIAlertActionStyle.default, handler: { (action) in
+              SPVideoHelp.remove(videoUrl: model.url!)
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 
 // MARK: -- delegate
@@ -105,17 +126,17 @@ extension SPVideoListRootVC : UICollectionViewDelegate,UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.identify, for: indexPath) as! SPVideoCollectionCell
-        
         cell.videoModel = self.videoDataArray?[indexPath.row]
-        
+        cell.clickComplete = {
+          [unowned self]  (videoModel:SPVideoModel?) in
+            self.clickDetete(videoModel: videoModel)
+        }
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let videoPlayVC = SPVideoPlayVC()
         videoPlayVC.videoModel = self.videoDataArray?[indexPath.row]
-   
         self.present(videoPlayVC, animated: true, completion: nil)
-//        self.navigationController?.pushViewController(videoPlayVC, animated: true)
     }
     
 }
@@ -128,7 +149,6 @@ extension SPVideoListRootVC {
         dispatchMainQueue {
             self.videoCollectionView.reloadData()
         }
-       
     }
 }
 // MARK: -- 通知

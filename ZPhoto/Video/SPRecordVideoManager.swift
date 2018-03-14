@@ -46,9 +46,8 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     var currentVideoDimensions: CMVideoDimensions?
     var lastSampleTime : CMTime?
     let  filePath : String = "\(SPVideoHelp.kVideoTempDirectory)/temp.mp4"
-    var ciImage : CIImage!
     var filter : CIFilter?
-    var noFilterCIImage : CIImage!
+    dynamic  var noFilterCIImage : CIImage!
     
     let videoDataOutputQueue :DispatchQueue = DispatchQueue(label: "com.hsp.videoDataOutputQueue")
     
@@ -131,9 +130,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     func sp_startRecord(){
         dispatchMainQueue {
             self.setupAssertWrirer()
+            self.startRecording = true
             self.assetWriter?.startWriting()
             self.assetWriter?.startSession(atSourceTime: self.lastSampleTime!)
-            self.startRecording = true
         }
     }
     /**< 初始化writer  */
@@ -296,24 +295,26 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     
     func captureOutput(_ output: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
         autoreleasepool {
-            SPLog("start------")
+          
             if !CMSampleBufferDataIsReady(sampleBuffer) {
                 return
             }
-            let currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
+          
             var outputImage : CIImage? = nil
             if output == self.videoOutput{
-                self.lastSampleTime = currentSampleTime
                 let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
                 outputImage = CIImage(cvPixelBuffer: imageBuffer)
-                self.noFilterCIImage = outputImage
-                //            outputImage = CIFilter.photoautoAdjust(inputImage: outputImage!)
+                var noFilterOutputImage  : CIImage? = outputImage
+                noFilterOutputImage = picRotating(imgae: noFilterOutputImage)
+                self.noFilterCIImage =  CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
+                
                 if self.filter != nil {
                     self.filter?.setValue(outputImage!, forKey: kCIInputImageKey)
                     outputImage = self.filter?.outputImage
                 }
             }
-            
+            let currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
+            self.lastSampleTime = currentSampleTime
             if startRecording == true && self.assetWriter != nil{
                 if output == self.videoOutput {
                     let newPixelbuffer = self.pixelBuffer(fromImage:   UIImage.convertCIImageToCGImage(ciImage: outputImage!),pixelBufferPool: self.videoWriterPixelbufferInput?.pixelBufferPool)
@@ -326,25 +327,12 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 }
             }
             if outputImage != nil {
-                let orientation = UIDevice.current.orientation
-                var t: CGAffineTransform!
-                if orientation == UIDeviceOrientation.portrait {
-                    t = CGAffineTransform(rotationAngle: CGFloat(-M_PI / 2.0))
-                } else if orientation == UIDeviceOrientation.portraitUpsideDown {
-                    t = CGAffineTransform(rotationAngle: CGFloat(M_PI / 2.0))
-                } else if (orientation == UIDeviceOrientation.landscapeRight) {
-                    t = CGAffineTransform(rotationAngle: CGFloat(M_PI))
-                } else {
-                    t = CGAffineTransform(rotationAngle: 0)
-                }
-                outputImage = outputImage?.applying(t)
+                outputImage = picRotating(imgae: outputImage)
                 let cgImage = self.ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
-                self.ciImage = outputImage
                 dispatchMainQueue {
                     self.videoLayer?.contents = cgImage
                 }
             }
-            SPLog("end------")
         }
     }
     

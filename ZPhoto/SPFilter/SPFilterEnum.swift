@@ -30,3 +30,12 @@ enum  SPFilterPhoto{
     }
     
 }
+protocol EnumeratableEnumType {
+    static var allValues: [Self] {get}
+}
+
+extension SPFilterPhoto : EnumeratableEnumType{
+    static var allValues :[SPFilterPhoto] {
+        return [.EffectInstant ,.EffectNoir,.EffectTonal,.EffectTransfer,.EffectMono,.EffectFade,.EffectProcess,.EffectChrome,.HueAdjust]
+    }
+}

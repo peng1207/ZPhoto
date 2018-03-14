@@ -62,7 +62,79 @@ func SPLog<T>(_ message:T,file:String = #file,function:String = #function,line:I
 //        NSLog("--\(fileName) ---\(line)--\(function) --- \(message)")
         print("\(NSDate().timeIntervalSince1970)---\(fileName):\(line)---\(function) | \(message)")
     #endif
-
 }
-
-
+/**
+ 对视频图片进行处理 防止旋转不对
+ */
+func picRotating(imgae:CIImage?) -> CIImage? {
+    guard let outputImage = imgae else {
+        return nil
+    }
+    let orientation = UIDevice.current.orientation
+    var t: CGAffineTransform!
+    if orientation == UIDeviceOrientation.portrait {
+        t = CGAffineTransform(rotationAngle: CGFloat(-M_PI / 2.0))
+    } else if orientation == UIDeviceOrientation.portraitUpsideDown {
+        t = CGAffineTransform(rotationAngle: CGFloat(M_PI / 2.0))
+    } else if (orientation == UIDeviceOrientation.landscapeRight) {
+        t = CGAffineTransform(rotationAngle: CGFloat(M_PI))
+    } else {
+        t = CGAffineTransform(rotationAngle: 0)
+    }
+    return  outputImage.applying(t)
+}
+/**
+ 倒计时
+ */
+func  countdown(timeOut:TimeInterval,run:((_ time: TimeInterval)-> Void)?,finish:(()->Void)?) -> Void{
+    var timeCount = timeOut
+    timer {
+        timeCount = timeCount - 1
+        if timeCount <= 0 {
+            if let finishComplete = finish {
+                finishComplete()
+            }
+        }else{
+            if let runComplete = run {
+                runComplete(timeCount)
+            }
+        }
+    }
+}
+/**
+ 计时器
+ */
+func timer(_ complete:(() -> Void)?) -> Void {
+    let codeTimer = DispatchSource.makeTimerSource()
+    codeTimer.scheduleRepeating(deadline: .now(), interval: .seconds(1))
+    codeTimer.setEventHandler {
+        if let com = complete {
+            com()
+        }
+    }
+    codeTimer.resume()
+}
+/**
+ 把秒数转换成时分秒（00:00:00）格式
+ */
+func transToHourMinSec(time: Float) -> String
+{
+    let allTime: Int = Int(time)
+    var hours = 0
+    var minutes = 0
+    var seconds = 0
+    var hoursText = ""
+    var minutesText = ""
+    var secondsText = ""
+    
+    hours = allTime / 3600
+    hoursText = hours > 9 ? "\(hours)" : "0\(hours)"
+    
+    minutes = allTime % 3600 / 60
+    minutesText = minutes > 9 ? "\(minutes)" : "0\(minutes)"
+    
+    seconds = allTime % 3600 % 60
+    secondsText = seconds > 9 ? "\(seconds)" : "0\(seconds)"
+    
+    return "\(hoursText):\(minutesText):\(secondsText)"
+}
