@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = UIColor.white
         window?.makeKeyAndVisible()
         let recordVideoVC = SPVideoListVC()
-        
+       
         window?.rootViewController = recordVideoVC
         // Override point for customization after application launch.
         return true

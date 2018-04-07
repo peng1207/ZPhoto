@@ -58,8 +58,15 @@ fileprivate extension SPVideoPlayView {
     fileprivate func setupUI(){
         self.addSubview(buttonView!)
         buttonView?.snp.makeConstraints({ (maker) in
-            maker.left.bottom.right.equalTo(self).offset(0)
+            maker.left.right.equalTo(self).offset(0)
             maker.height.equalTo(40)
+            
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                // Fallback on earlier versions
+                maker.bottom.equalTo(self).offset(0);
+            };
         })
     }
 }

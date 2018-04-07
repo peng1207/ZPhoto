@@ -21,7 +21,6 @@ class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionView
     
     var filterList : Array<SPFilterModel>?  {
         didSet{
-                
             filterCollectionView?.reloadData()
         }
     }

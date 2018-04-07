@@ -31,18 +31,7 @@ class  SPVideoEditVC : SPBaseVC {
         self.showImage.snp.makeConstraints { (maker) in
             maker.left.top.right.bottom.equalTo(self.view).offset(0)
         }
-        
-        
-        
-//         let timeRange =  CMTimeRangeMake(CMTimeMakeWithSeconds(0, framesPerSecond), CMTimeMakeWithSeconds(1, framesPerSecond))
-//        SPVideoHelp.shear(asset: (videoModel?.asset)!, timeRange: timeRange) { (outUrl) in
-//            var outModel = SPVideoModel()
-//            outModel.url = outUrl
-//            dispatchAfter(time: 3, complete: {
-//                 self.playVideo(videoModel: outModel)
-//            })
-//
-//        }
+    
     }
    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)

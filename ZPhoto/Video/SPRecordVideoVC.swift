@@ -54,27 +54,29 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
         let view = SPRecordVideoBtnView()
         view.backgroundColor = UIColor.clear
         return view
-    }()
+    }() // 操作按钮
     lazy fileprivate var preView : SPRecordVideoView! = {
         return SPRecordVideoView()
-    }()
+    }() // 显示视频流
     lazy fileprivate var videoData : SPRecordVideoData! = {
         return SPRecordVideoData()
     }()
-    
-    fileprivate var changeButton : UIButton!
     fileprivate var filterView : SPRecordVideoFilterView! = {
-        return SPRecordVideoFilterView()
-    } ()
-    fileprivate var pinchGesture : UIPinchGestureRecognizer!
+        let view =  SPRecordVideoFilterView()
+        view.isHidden = true
+        return view
+    } () //滤镜显示view
+    fileprivate var pinchGesture : UIPinchGestureRecognizer!  // 手势
     fileprivate var lastScale : CGFloat = 1.00
     
     lazy fileprivate var videoManager : SPRecordVideoManager! = {
         let manager = SPRecordVideoManager()
         return manager
-    }()
+    }()  // 视频处理类
     
     fileprivate let kVideoManagerKVOKey = "noFilterCIImage"
+    fileprivate var filterTopConstraint : Constraint? = nil
+    fileprivate let filterViewHeight :  CGFloat = 60.00
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,10 +86,18 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
         self.videoManager.videoLayer = self.preView.layer as? AVCaptureVideoPreviewLayer
         self.videoManager.addObserver(self, forKeyPath: kVideoManagerKVOKey, options: .new, context: nil)
         self.videoManager.setupRecord()
-        self.addChangeButton()
         self.addActionToButton()
         self.addPinchGeusture()
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
@@ -118,22 +128,20 @@ extension SPRecordVideoRootVC {
             maker.left.right.bottom.top.equalTo(self.view).offset(0);
         }
         self.recordVideoView.snp.makeConstraints { (maker) in
-            maker.bottom.right.left.equalTo(self.view).offset(0);
+            maker.right.left.equalTo(self.view).offset(0);
             maker.height.greaterThanOrEqualTo(0)
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                // Fallback on earlier versions
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0);
+            };
         }
         self.filterView.snp.makeConstraints { (maker) in
-            maker.left.right.top.equalTo(self.view).offset(0)
-            maker.height.equalTo(60)
+            filterTopConstraint = maker.top.equalTo(self.view).offset( -(filterViewHeight + getStatusBarHeight())).constraint
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.equalTo(filterViewHeight)
         }
-    }
-    
-    // 添加切换按钮
-    func addChangeButton (){
-        changeButton = SPRecordVideoBtnView.setupButton(title: "切换",selectTitle: nil, fontsize: 14)
-        changeButton.frame = CGRect(x: 0, y: 0, width: 80, height: 40)
-        changeButton.addTarget(self, action: #selector(clickChangeAction), for: .touchUpInside)
-        let rightItem = UIBarButtonItem(customView: changeButton)
-        self.navigationItem.rightBarButtonItem = rightItem
     }
 }
 
@@ -147,9 +155,6 @@ extension SPRecordVideoRootVC {
         self.filterView.collectSelectComplete = { [weak self](model : SPFilterModel)  in
                 self?.videoManager.filter = model.filter
         }
-    }
-    @objc fileprivate func clickChangeAction(){
-        self.dealButtonClickAction(clickType: .change, button: changeButton)
     }
     // 添加缩放手势
     fileprivate func addPinchGeusture(){
@@ -198,9 +203,12 @@ extension SPRecordVideoRootVC {
             SPLog("点击切换镜头")
             self.videoManager.sp_changeVideoDevice()
         case .filter:
+            self.clickFilterAction();
              SPLog("点击滤镜 ")
         }
     }
+ 
+    
     /**< 处理屏幕旋转后视频的方向  */
     fileprivate func dealOrientation(toInterfaceOrientation: UIInterfaceOrientation){
         switch toInterfaceOrientation {
@@ -218,17 +226,31 @@ extension SPRecordVideoRootVC {
     }
     
     fileprivate func clickFilterAction(){
-        videoData.setup(inputImage: videoManager.noFilterCIImage, complete: { [weak self] () in
-            dispatchMainQueue {
-                self?.filterView.filterList = self?.videoData.getFilterList()
-            }
-            
-        })
+        if(self.filterView.isHidden){
+            self.filterTopConstraint?.update(offset: getStatusBarHeight())
+        }else{
+            self.filterTopConstraint?.update(offset: -filterViewHeight)
+        }
+        self.filterView.isHidden = !self.filterView.isHidden
+        self.changeFilterData()
     }
+    
+    fileprivate func changeFilterData(){
+        dispatchMainQueue {
+            if (self.filterView.isHidden == false){
+                self.videoData.setup(inputImage: self.videoManager.noFilterCIImage, complete: { [weak self] () in
+                    dispatchMainQueue {
+                        self?.filterView.filterList = self?.videoData.getFilterList()
+                    }
+                })
+            }
+        }
+    }
+    
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == kVideoManagerKVOKey {
-            clickFilterAction()
+            self.changeFilterData()
         }
     }
     

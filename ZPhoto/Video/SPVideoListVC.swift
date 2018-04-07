@@ -53,10 +53,10 @@ fileprivate class SPVideoListRootVC : SPBaseVC {
         self.sendNotification()
         let filterNames = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
         
-        for filterName in filterNames {
-            let filter = CIFilter(name: filterName)
-            print("\rfilter:\(filterName)\rattributes:\(filter?.attributes)")
-        }
+//        for filterName in filterNames {
+//            let filter = CIFilter(name: filterName)
+//            print("\rfilter:\(filterName)\rattributes:\(filter?.attributes)")
+//        }
 
     }
 }

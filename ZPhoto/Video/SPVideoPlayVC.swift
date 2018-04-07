@@ -54,7 +54,8 @@ extension SPVideoPlayVC {
     
         self.view.addSubview(self.videoPlayView!)
         self.videoPlayView?.snp.makeConstraints({ (maker) in
-            maker.top.left.right.bottom.equalTo(self.view).offset(0)
+            maker.top.left.right.equalTo(self.view).offset(0)
+              maker.bottom.equalTo(self.view).offset(0);
         })
         self.videoPlayView?.videoModel = videoModel
     }

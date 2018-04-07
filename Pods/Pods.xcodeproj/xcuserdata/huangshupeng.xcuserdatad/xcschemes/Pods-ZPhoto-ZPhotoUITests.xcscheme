@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7FA2A556407FC26DB6F47C4D15E394B9"
+               BlueprintIdentifier = "67993E075E0A33A81964E8AA0D79DE19"
                BuildableName = "Pods_ZPhoto_ZPhotoUITests.framework"
                BlueprintName = "Pods-ZPhoto-ZPhotoUITests"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -26,7 +26,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
@@ -37,7 +36,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -47,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7FA2A556407FC26DB6F47C4D15E394B9"
+            BlueprintIdentifier = "67993E075E0A33A81964E8AA0D79DE19"
             BuildableName = "Pods_ZPhoto_ZPhotoUITests.framework"
             BlueprintName = "Pods-ZPhoto-ZPhotoUITests"
             ReferencedContainer = "container:Pods.xcodeproj">

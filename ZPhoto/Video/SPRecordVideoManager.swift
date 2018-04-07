@@ -144,7 +144,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 SPLog("file is exist ")
             }
             
-            let size = CGSize(width: 1280, height: 720)
+            let size = CGSize(width: 1125, height: 2436)
             assetWriter = try AVAssetWriter(url:  URL(fileURLWithPath: filePath), fileType: AVFileTypeMPEG4)
             
             let videoOutputSettings = [AVVideoCodecKey : AVVideoCodecH264,
@@ -299,7 +299,8 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             if !CMSampleBufferDataIsReady(sampleBuffer) {
                 return
             }
-          
+            let currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
+            self.lastSampleTime = currentSampleTime
             var outputImage : CIImage? = nil
             if output == self.videoOutput{
                 let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
@@ -313,8 +314,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                     outputImage = self.filter?.outputImage
                 }
             }
-            let currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
-            self.lastSampleTime = currentSampleTime
+            
             if startRecording == true && self.assetWriter != nil{
                 if output == self.videoOutput {
                     let newPixelbuffer = self.pixelBuffer(fromImage:   UIImage.convertCIImageToCGImage(ciImage: outputImage!),pixelBufferPool: self.videoWriterPixelbufferInput?.pixelBufferPool)
@@ -357,27 +357,45 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     
     /**< 将 CGImage 转成CVPixelBuffer */
     fileprivate func pixelBuffer(fromImage image:CGImage,pixelBufferPool:CVPixelBufferPool?) -> CVPixelBuffer?{
-        let size = CGSize(width: image.width, height: image.height)
-        let attributes : [NSObject :AnyObject] = [
-            kCVPixelBufferCGImageCompatibilityKey : true as AnyObject,
-            kCVPixelBufferCGBitmapContextCompatibilityKey : true as AnyObject
-        ]
-        var pxbuffer : CVPixelBuffer? = nil
-        var  status : CVReturn = kCVReturnError
-        if pixelBufferPool != nil {
-            status = CVPixelBufferPoolCreatePixelBuffer(nil, pixelBufferPool!, &pxbuffer)
-        }
+        let cfnumPointer = UnsafeMutablePointer<UnsafeRawPointer>.allocate(capacity: 1)
+        let cfnum = CFNumberCreate(kCFAllocatorDefault, .intType, cfnumPointer)
+        let keys: [CFString] = [kCVPixelBufferCGImageCompatibilityKey, kCVPixelBufferCGBitmapContextCompatibilityKey, kCVPixelBufferBytesPerRowAlignmentKey]
+        let values: [CFTypeRef] = [kCFBooleanTrue, kCFBooleanTrue, cfnum!]
+        let keysPointer = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: 1)
+        let valuesPointer =  UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: 1)
+        keysPointer.initialize(to: keys)
+        valuesPointer.initialize(to: values)
         
-        if pxbuffer == nil {
-            status = CVPixelBufferCreate(kCFAllocatorDefault, Int(size.width), Int(size.height), kCVPixelFormatType_32ARGB, attributes as CFDictionary, &pxbuffer)
-        }
+        let options = CFDictionaryCreate(kCFAllocatorDefault, keysPointer, valuesPointer, keys.count, nil, nil)
         
-        guard (status == kCVReturnSuccess)else{
-            return nil
-        }
-        let outputImage = UIImage.convertCGImageToCIImage(cgImage: image)
-        self.ciContext.render(outputImage, to: pxbuffer!, bounds: outputImage.extent, colorSpace: nil)
-        return pxbuffer
+        let width = image.width
+        let height = image.height
+        
+        var pxbuffer: CVPixelBuffer?
+        // if pxbuffer = nil, you will get status = -6661
+        var status = CVPixelBufferCreate(kCFAllocatorDefault, width, height,
+                                         kCVPixelFormatType_32BGRA, options, &pxbuffer)
+        status = CVPixelBufferLockBaseAddress(pxbuffer!, CVPixelBufferLockFlags(rawValue: 0));
+        
+        let bufferAddress = CVPixelBufferGetBaseAddress(pxbuffer!);
+        
+        
+        let rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+        let bytesperrow = CVPixelBufferGetBytesPerRow(pxbuffer!)
+        let context = CGContext(data: bufferAddress,
+                                width: width,
+                                height: height,
+                                bitsPerComponent: 8,
+                                bytesPerRow: bytesperrow,
+                                space: rgbColorSpace,
+                                bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue);
+//        context?.concatenate(CGAffineTransform(rotationAngle: 360))
+//        context?.concatenate(__CGAffineTransformMake( 1, 0, 0, -1, 0, CGFloat(height) )) //Flip Vertical
+        
+        
+        context?.draw(image, in: CGRect(x:0, y:0, width:CGFloat(width), height:CGFloat(height)));
+        status = CVPixelBufferUnlockBaseAddress(pxbuffer!, CVPixelBufferLockFlags(rawValue: 0));
+        return pxbuffer!;
     }
     
     /**< 点击取消  */

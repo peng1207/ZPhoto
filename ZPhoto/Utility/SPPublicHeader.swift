@@ -29,6 +29,9 @@ let framesPerSecond : Int32 = 60
 func fontSize(fontSize: CGFloat) -> UIFont{
     return UIFont.systemFont(ofSize: fontSize)
 }
+func getStatusBarHeight() -> CGFloat{
+    return UIApplication.shared.statusBarFrame.height
+}
 /**
  主线程
  */
