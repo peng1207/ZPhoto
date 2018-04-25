@@ -118,9 +118,7 @@ extension SPVideoPlayView {
 extension SPVideoPlayView{
     //将秒转成时间字符串的方法，因为我们将得到秒。
     fileprivate func formatPlayTime(seconds: Float64)->String{
-        let Min = Int(seconds / 60)
-        let Sec = Int(seconds.truncatingRemainder(dividingBy: 60))
-        return String(format: "%02d:%02d", Min, Sec)
+        return formatForMin(seconds:seconds)
     }
     //计算当前的缓冲进度
    fileprivate func avalableDurationWithplayerItem()->TimeInterval{

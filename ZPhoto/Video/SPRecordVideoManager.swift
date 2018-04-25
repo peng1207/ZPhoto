@@ -144,7 +144,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 SPLog("file is exist ")
             }
             
-            let size = CGSize(width: 1125, height: 2436)
+            let size = screenPixels()
             assetWriter = try AVAssetWriter(url:  URL(fileURLWithPath: filePath), fileType: AVFileTypeMPEG4)
             
             let videoOutputSettings = [AVVideoCodecKey : AVVideoCodecH264,

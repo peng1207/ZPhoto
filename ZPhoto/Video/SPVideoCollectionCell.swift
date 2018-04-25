@@ -17,7 +17,9 @@ class SPVideoCollectionCell : UICollectionViewCell{
     }()
     lazy public var deleteBtn : UIButton! = {
         let button = UIButton(type: UIButtonType.custom)
-        button.setTitle("D", for: UIControlState.normal)
+        let image = UIImage(named: "delete.png")
+//        button.setImage(image, for: UIControlState.normal)
+        button.setBackgroundImage(image, for: .normal)
         button.setTitleColor(UIColor.red, for: UIControlState.normal)
         return button
     }()
@@ -48,7 +50,8 @@ extension SPVideoCollectionCell{
             maker.top.right.left.bottom.equalTo(self.contentView).offset(0)
         }
         deleteBtn.snp.makeConstraints { (maker) in
-            maker.top.right.equalTo(self.contentView).offset(5)
+            maker.top.equalTo(self.contentView).offset(5)
+            maker.right.equalTo(self.contentView).offset(-5)
             maker.size.equalTo(CGSize(width: 30, height: 30))
         }
     }

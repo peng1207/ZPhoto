@@ -258,24 +258,36 @@ extension SPRecordVideoRootVC {
 
 class SPRecordVideoBtnView: UIView {
     
-    lazy var canceButton : UIButton! = {
+    lazy fileprivate var canceButton : UIButton! = {
         return SPRecordVideoBtnView.setupButton(title: "cance",selectTitle: nil, fontsize: 14)
     }()
-    lazy var recordButton : UIButton! = {
+    lazy fileprivate var recordButton : UIButton! = {
         return SPRecordVideoBtnView.setupButton(title: "start",selectTitle: "end", fontsize: 14)
     }()
-    lazy var flashLampButton : UIButton! = {
+    lazy fileprivate var flashLampButton : UIButton! = {
         return SPRecordVideoBtnView.setupButton(title: "on",selectTitle: "off", fontsize: 14)
     }()
-    lazy var changeButton : UIButton! = {
+    lazy fileprivate var changeButton : UIButton! = {
         return SPRecordVideoBtnView.setupButton(title: "切换", selectTitle: nil , fontsize: 14)
     }()
-    lazy var filterButton : UIButton! = {
+    lazy fileprivate var filterButton : UIButton! = {
         return SPRecordVideoBtnView.setupButton(title: "滤镜", selectTitle: nil, fontsize: 14)
     }()
-    var buttonClickBlock : ButtonClickBlock?
+    lazy fileprivate var timeLabel : UILabel! = {
+        let label = UILabel();
+        label.font = fontSize(fontSize: 14);
+        label.textAlignment = NSTextAlignment.center;
+        label.text = "00:00"
+        label.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+        label.layer.cornerRadius = 40.0 / 2.0
+        label.clipsToBounds = true
+        return label;
+    }()
     
-    class func setupButton (title:String,selectTitle:String?,fontsize:CGFloat) -> UIButton {
+    fileprivate var buttonClickBlock : ButtonClickBlock?
+    fileprivate var sourceTimer : DispatchSourceTimer?
+    
+    class fileprivate func setupButton (title:String,selectTitle:String?,fontsize:CGFloat) -> UIButton {
         let button = UIButton(type: .custom)
         button.backgroundColor = UIColor.white.withAlphaComponent(0.3)
         button.setTitle(title, for: .normal)
@@ -305,9 +317,31 @@ class SPRecordVideoBtnView: UIView {
         self.addSubview(flashLampButton)
         self.addSubview(changeButton)
         self.addSubview(filterButton)
+        self.addSubview(timeLabel)
         self.addConstraintToView()
         
     }
+    // 设置定时器
+    fileprivate func setupTimer (){
+        var i = 0;
+        sourceTimer = timer({
+            SPLog("sdaasdasdasdasd")
+            dispatchMainQueue {
+                self.timeLabel.text = formatForMin(seconds: Float64(i))
+            }
+            i = i + 1
+        })
+    }
+    // 取消定时器
+    fileprivate func canceTimer(){
+        if let timer = sourceTimer {
+            timer.cancel()
+            sourceTimer  = nil
+            timeLabel.text = "00:00"
+        }
+    }
+    
+    // 添加按钮点击事件
     fileprivate func addActionToButton (){
         canceButton.addTarget(self, action: #selector(clickCanceAction), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(clickDoneAction), for: .touchUpInside)
@@ -322,6 +356,11 @@ class SPRecordVideoBtnView: UIView {
     // 点击完成
     func clickDoneAction(){
         self.dealAction(clickType: .done, button: recordButton)
+        if recordButton.isSelected{
+            self.setupTimer()
+        }else{
+            self.canceTimer()
+        }
     }
     // 点击 闪光灯
     func clickOpenAction(){
@@ -339,7 +378,6 @@ class SPRecordVideoBtnView: UIView {
     func dealAction(clickType:ButtonClickType,button : UIButton) {
         buttonClickBlock?(clickType,button)
     }
-
     
     fileprivate func addConstraintToView(){
         self.canceButton.snp.makeConstraints { (maker) in
@@ -373,6 +411,13 @@ class SPRecordVideoBtnView: UIView {
             maker.width.equalTo(self.flashLampButton.snp.width).offset(0)
             maker.top.equalTo(self.filterButton.snp.top).offset(0)
             maker.bottom.equalTo(self.snp.bottom).offset(-10)
+        }
+        
+        self.timeLabel.snp.makeConstraints { (maker) in
+            maker.top.equalTo(self.filterButton.snp.top).offset(0)
+            maker.left.equalTo(self.recordButton.snp.left).offset(0)
+            maker.width.equalTo(self.filterButton.snp.width).offset(0)
+            maker.height.equalTo(self.filterButton.snp.height)
         }
     }
     

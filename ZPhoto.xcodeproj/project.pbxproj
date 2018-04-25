@@ -27,7 +27,6 @@
 		9E251CD91F5B2B2E00D95C4E /* SPRecordVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E251CD81F5B2B2E00D95C4E /* SPRecordVideoView.swift */; };
 		9E317AE01F68106D00D6554C /* SPAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E317ADF1F68106D00D6554C /* SPAnimationView.swift */; };
 		9E47CC3D1EFFDBC1000362CC /* UIView+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E47CC3C1EFFDBC1000362CC /* UIView+extension.swift */; };
-		9E7168A31F643BF200BB7C01 /* default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E7168A21F643BF100BB7C01 /* default.png */; };
 		9E7168A61F659B8400BB7C01 /* SPFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7168A51F659B8400BB7C01 /* SPFilterModel.swift */; };
 		9E7168A81F659F5A00BB7C01 /* SPFilterEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7168A71F659F5A00BB7C01 /* SPFilterEnum.swift */; };
 		9E7226701E8972B4001BB9A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */; };
@@ -85,7 +84,6 @@
 		9E251CD81F5B2B2E00D95C4E /* SPRecordVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRecordVideoView.swift; sourceTree = "<group>"; };
 		9E317ADF1F68106D00D6554C /* SPAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAnimationView.swift; sourceTree = "<group>"; };
 		9E47CC3C1EFFDBC1000362CC /* UIView+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+extension.swift"; sourceTree = "<group>"; };
-		9E7168A21F643BF100BB7C01 /* default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default.png; sourceTree = "<group>"; };
 		9E7168A51F659B8400BB7C01 /* SPFilterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFilterModel.swift; sourceTree = "<group>"; };
 		9E7168A71F659F5A00BB7C01 /* SPFilterEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFilterEnum.swift; sourceTree = "<group>"; };
 		9E72266C1E8972B4001BB9A9 /* ZPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -223,7 +221,6 @@
 			isa = PBXGroup;
 			children = (
 				9E7168A41F659B7400BB7C01 /* SPFilter */,
-				9E7168A21F643BF100BB7C01 /* default.png */,
 				9E1A4E241E9A88C300FEF8B7 /* Utility */,
 				9EFACEDE1E988BC600D11F18 /* Video */,
 				9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */,
@@ -390,7 +387,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E7226771E8972B4001BB9A9 /* Assets.xcassets in Resources */,
-				9E7168A31F643BF200BB7C01 /* default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

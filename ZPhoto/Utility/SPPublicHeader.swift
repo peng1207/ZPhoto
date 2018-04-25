@@ -89,9 +89,9 @@ func picRotating(imgae:CIImage?) -> CIImage? {
 /**
  倒计时
  */
-func  countdown(timeOut:TimeInterval,run:((_ time: TimeInterval)-> Void)?,finish:(()->Void)?) -> Void{
+func  countdown(timeOut:TimeInterval,run:((_ time: TimeInterval)-> Void)?,finish:(()->Void)?) -> DispatchSourceTimer{
     var timeCount = timeOut
-    timer {
+   return timer {
         timeCount = timeCount - 1
         if timeCount <= 0 {
             if let finishComplete = finish {
@@ -107,16 +107,26 @@ func  countdown(timeOut:TimeInterval,run:((_ time: TimeInterval)-> Void)?,finish
 /**
  计时器
  */
-func timer(_ complete:(() -> Void)?) -> Void {
-    let codeTimer = DispatchSource.makeTimerSource()
-    codeTimer.scheduleRepeating(deadline: .now(), interval: .seconds(1))
+func timer(_ complete:(() -> Void)?) -> DispatchSourceTimer {
+    let codeTimer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
+    let timeInterval: Double = 1.0
+    codeTimer.scheduleRepeating(deadline: .now(), interval: timeInterval)
     codeTimer.setEventHandler {
         if let com = complete {
-            com()
+            dispatchMainQueue {
+                 com()
+            }
         }
     }
+    
     codeTimer.resume()
+    return codeTimer
 }
+// 获取屏幕分辨率
+func screenPixels() -> CGSize {
+    return (UIScreen.main.currentMode?.size)!
+}
+
 /**
  把秒数转换成时分秒（00:00:00）格式
  */
@@ -140,4 +150,12 @@ func transToHourMinSec(time: Float) -> String
     secondsText = seconds > 9 ? "\(seconds)" : "0\(seconds)"
     
     return "\(hoursText):\(minutesText):\(secondsText)"
+}
+/*
+ 将秒转成分：秒格式
+ */
+func formatForMin(seconds:Float64) -> String{
+    let Min = Int(seconds / 60)
+    let Sec = Int(seconds.truncatingRemainder(dividingBy: 60))
+    return String(format: "%02d:%02d", Min, Sec)
 }

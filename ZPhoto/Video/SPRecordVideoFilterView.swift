@@ -14,7 +14,7 @@ class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionView
     lazy fileprivate  var filterCollectionView : UICollectionView? =  {
         let layout = SPRecordVideoFilterFlowLayout()
         let collectionView = UICollectionView(frame: CGRect(), collectionViewLayout:layout)
-        collectionView.backgroundColor = UIColor.white
+        collectionView.backgroundColor = self.backgroundColor
 //        collectionView.isPagingEnabled = true
         return collectionView
     }()
