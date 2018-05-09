@@ -185,8 +185,8 @@ extension SPVideoPlayView {
 class SPVideoPlayButtonView : UIView{
     lazy var playButton : UIButton! = {
         let button = UIButton(type: UIButtonType.custom)
-        button.setTitle("on", for: UIControlState.normal)
-        button.setTitle("off", for: UIControlState.selected)
+        button.setImage(UIImage(named: "VideoStop"), for: .normal)
+        button.setImage(UIImage(named: "VideoPlay"), for: .selected)
         return button
     }()
     lazy var timeLabel: UILabel! = {

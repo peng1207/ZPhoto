@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  ZPhoto
+
+  Created by 黄树鹏 on 2018/5/2.
+  Copyright © 2018年 huangshupeng. All rights reserved.
+*/
+"TIPS" = "tips";
+"DELETE_VIDEO_MSG" = "Do you delete video?";
+"CANCE" = "cance";
+"DELETE" = "delete";
+"FILTER" = "filter";
+"START" = "start";
+"END" = "end";
+"FLASH_ON" = "flash on";
+"FLASH_OFF" = "flash off";
+"SWITCH_CAMERA" = "switch camera";
+"NO_VIDEO_TIP" = "No video has been recorded. Oh \n click on the top right + video recording video";
+"NO_CAMERA_AUTH_TIPS" = "Can not use camera to retain a beautiful moment, whether to go set?";
+"GO_TO_SET" = "Go set";
+"NO_MICROPHONE_AUTH_TIPS" = "You can't record the sound without opening the microphone. Do you want to go to the settings?";

@@ -64,6 +64,7 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
     fileprivate var filterView : SPRecordVideoFilterView! = {
         let view =  SPRecordVideoFilterView()
         view.isHidden = true
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         return view
     } () //滤镜显示view
     fileprivate var pinchGesture : UIPinchGestureRecognizer!  // 手势
@@ -75,20 +76,30 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
     }()  // 视频处理类
     
     fileprivate let kVideoManagerKVOKey = "noFilterCIImage"
-    fileprivate var filterTopConstraint : Constraint? = nil
-    fileprivate let filterViewHeight :  CGFloat = 60.00
+    fileprivate var filterRightConstraint : Constraint? = nil
+    fileprivate let filterViewHeight :  CGFloat = 60
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
-        
+        self.setupVideoManager()
         self.setupUI()
-        self.videoManager.videoLayer = self.preView.layer as? AVCaptureVideoPreviewLayer
-        self.videoManager.addObserver(self, forKeyPath: kVideoManagerKVOKey, options: .new, context: nil)
-        self.videoManager.setupRecord()
         self.addActionToButton()
         self.addPinchGeusture()
         // Do any additional setup after loading the view.
+    }
+    /*
+     设置videoManager
+     */
+    fileprivate func setupVideoManager(){
+        self.videoManager.setup(noCameraAuthBlock: {
+         self.dealNOCameraAuthAction()
+        }, noMicrophoneBlock: {
+            self.dealNOMicrophoneAuthAction()
+        })
+        self.videoManager.videoLayer = self.preView.layer as? AVCaptureVideoPreviewLayer
+        self.videoManager.addObserver(self, forKeyPath: kVideoManagerKVOKey, options: .new, context: nil)
+        self.videoManager.setupRecord()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -138,9 +149,11 @@ extension SPRecordVideoRootVC {
             };
         }
         self.filterView.snp.makeConstraints { (maker) in
-            filterTopConstraint = maker.top.equalTo(self.view).offset( -(filterViewHeight + getStatusBarHeight())).constraint
-            maker.left.right.equalTo(self.view).offset(0)
-            maker.height.equalTo(filterViewHeight)
+//            filterRightConstraint = maker.top.equalTo(self.view).offset( -(filterViewHeight + getStatusBarHeight())).constraint
+         filterRightConstraint =  maker.right.equalTo(self.view).offset(0).constraint
+            maker.height.equalTo(self.view.snp.height).multipliedBy(0.5)
+            maker.centerY.equalTo(self.view.snp.centerY).offset(0)
+            maker.width.equalTo(filterViewHeight)
         }
     }
 }
@@ -178,13 +191,15 @@ extension SPRecordVideoRootVC {
         lastScale = sender.scale
         
     }
-    
+    /*
+      处理按钮点击事件的
+     */
     fileprivate func dealButtonClickAction(clickType : ButtonClickType,button:UIButton){
         switch clickType {
         case .cance:
             SPLog("点击取消")
             self.videoManager.sp_cance()
-            self.dismiss(animated: true, completion: nil)
+            self.disMissVC()
         case .done:
             
             if button.isSelected {
@@ -207,8 +222,6 @@ extension SPRecordVideoRootVC {
              SPLog("点击滤镜 ")
         }
     }
- 
-    
     /**< 处理屏幕旋转后视频的方向  */
     fileprivate func dealOrientation(toInterfaceOrientation: UIInterfaceOrientation){
         switch toInterfaceOrientation {
@@ -224,17 +237,21 @@ extension SPRecordVideoRootVC {
             
         }
     }
-    
+    /*
+      点击滤镜按钮事件
+     */
     fileprivate func clickFilterAction(){
         if(self.filterView.isHidden){
-            self.filterTopConstraint?.update(offset: getStatusBarHeight())
+            self.filterRightConstraint?.update(offset: 0)
         }else{
-            self.filterTopConstraint?.update(offset: -filterViewHeight)
+            self.filterRightConstraint?.update(offset: -filterViewHeight)
         }
         self.filterView.isHidden = !self.filterView.isHidden
         self.changeFilterData()
     }
-    
+    /*
+     改变滤镜图片的数据
+     */
     fileprivate func changeFilterData(){
         dispatchMainQueue {
             if (self.filterView.isHidden == false){
@@ -246,32 +263,64 @@ extension SPRecordVideoRootVC {
             }
         }
     }
-    
-    
+    /*
+     监听图片改变的
+     */
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == kVideoManagerKVOKey {
             self.changeFilterData()
         }
     }
+    /*
+     处理没有摄像头权限的事件
+     */
+    fileprivate func dealNOCameraAuthAction(){
+        let alert = UIAlertController(title: SPLanguageChange.getString(key: "TIPS"), message: SPLanguageChange.getString(key: "NO_CAMERA_AUTH_TIPS"), preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: {(action ) in
+            self.disMissVC()
+        }))
+        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "GO_TO_SET"), style: UIAlertActionStyle.default, handler: { (action) in
+            SPSysSet.openSetting()
+             self.disMissVC()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    /*
+     处理没有麦克风的事件
+     */
+    fileprivate func dealNOMicrophoneAuthAction(){
+        let alert = UIAlertController(title: SPLanguageChange.getString(key: "TIPS"), message: SPLanguageChange.getString(key: "NO_MICROPHONE_AUTH_TIPS"), preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "GO_TO_SET"), style: UIAlertActionStyle.default, handler: { (action) in
+            SPSysSet.openSetting()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
     
+    /*
+     隐藏控制器
+     */
+    fileprivate func disMissVC (){
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 class SPRecordVideoBtnView: UIView {
     
     lazy fileprivate var canceButton : UIButton! = {
-        return SPRecordVideoBtnView.setupButton(title: "cance",selectTitle: nil, fontsize: 14)
+        return SPRecordVideoBtnView.setupButton(title: SPLanguageChange.getString(key: "CANCE"),selectTitle: nil, fontsize: 14)
     }()
     lazy fileprivate var recordButton : UIButton! = {
-        return SPRecordVideoBtnView.setupButton(title: "start",selectTitle: "end", fontsize: 14)
+        return SPRecordVideoBtnView.setupButton(title: SPLanguageChange.getString(key: "START"),selectTitle: SPLanguageChange.getString(key: "END"), fontsize: 14)
     }()
     lazy fileprivate var flashLampButton : UIButton! = {
-        return SPRecordVideoBtnView.setupButton(title: "on",selectTitle: "off", fontsize: 14)
+        return SPRecordVideoBtnView.setupButton(title: SPLanguageChange.getString(key: "FLASH_ON"),selectTitle: SPLanguageChange.getString(key: "FLASH_OFF"), fontsize: 14)
     }()
     lazy fileprivate var changeButton : UIButton! = {
-        return SPRecordVideoBtnView.setupButton(title: "切换", selectTitle: nil , fontsize: 14)
+        return SPRecordVideoBtnView.setupButton(title: SPLanguageChange.getString(key: "SWITCH_CAMERA"), selectTitle: nil , fontsize: 14)
     }()
     lazy fileprivate var filterButton : UIButton! = {
-        return SPRecordVideoBtnView.setupButton(title: "滤镜", selectTitle: nil, fontsize: 14)
+        return SPRecordVideoBtnView.setupButton(title: SPLanguageChange.getString(key: "FILTER"), selectTitle: nil, fontsize: 14)
     }()
     lazy fileprivate var timeLabel : UILabel! = {
         let label = UILabel();
@@ -387,13 +436,13 @@ class SPRecordVideoBtnView: UIView {
             maker.top.equalTo(10)
         }
         self.recordButton.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.canceButton.snp.right).offset(20)
+            maker.left.equalTo(self.canceButton.snp.right).offset(15)
             maker.top.equalTo(self.canceButton.snp.top)
             maker.height.equalTo(self.canceButton.snp.height)
             maker.width.equalTo(self.flashLampButton)
         }
         self.flashLampButton.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.recordButton.snp.right).offset(20)
+            maker.left.equalTo(self.recordButton.snp.right).offset(15)
             maker.height.equalTo(self.recordButton.snp.height)
             maker.top.equalTo(self.recordButton.snp.top)
             maker.width.equalTo(self.canceButton)

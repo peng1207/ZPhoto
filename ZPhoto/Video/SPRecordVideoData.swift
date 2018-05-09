@@ -27,12 +27,16 @@ class SPRecordVideoData : NSObject {
     func getFilterList () ->  Array<SPFilterModel>? {
         return filterList
     }
-    func setup(inputImage:CIImage, complete:(()->Void)?) {
+    func setup(inputImage:CIImage?, complete:(()->Void)?) {
         guard let list = filterList else {
             return
         }
+        guard let image = inputImage else{
+            return
+        }
+        
         for model in list{
-            model.inputImage = inputImage
+            model.inputImage = image
         }
         guard let com = complete else {
             return

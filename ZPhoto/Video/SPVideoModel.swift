@@ -11,7 +11,7 @@ import AVFoundation
 import AVKit
 import Photos
 
-struct SPVideoModel {
+class SPVideoModel : NSObject{
     var url : URL?{
         didSet{
             asset = AVAsset(url: url!)
@@ -34,7 +34,7 @@ struct SPVideoModel {
     }
     var thumbnailImage : UIImage?
     
-    init() {
+    override init() {
        url = nil
         asset = nil
     }

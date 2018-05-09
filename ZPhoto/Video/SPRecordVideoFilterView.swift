@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+fileprivate let  itemH: CGFloat = 80
 class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
  
     lazy fileprivate  var filterCollectionView : UICollectionView? =  {
@@ -17,6 +17,12 @@ class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionView
         collectionView.backgroundColor = self.backgroundColor
 //        collectionView.isPagingEnabled = true
         return collectionView
+    }()
+    lazy fileprivate var selectView : UIView = {
+       let view = UIView()
+        view.layer.borderColor = UIColor.white.cgColor
+        view.layer.borderWidth = 2
+        return view
     }()
     
     var filterList : Array<SPFilterModel>?  {
@@ -44,9 +50,15 @@ extension  SPRecordVideoFilterView {
      */
     fileprivate func setupUI(){
         self.addSubview(filterCollectionView!)
+        self.addSubview(selectView)
         filterCollectionView?.snp.makeConstraints({ (maker) in
             maker.left.top.right.bottom.equalTo(self).offset(0)
         })
+        selectView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self).offset(0)
+            maker.height.equalTo(itemH)
+            maker.centerY.equalTo(self.snp.centerY).offset(0)
+        }
         filterCollectionView?.delegate  = self
         filterCollectionView?.dataSource = self
         filterCollectionView?.register(SPRecordVideoFilterCell.self , forCellWithReuseIdentifier: self.identify)
@@ -69,12 +81,28 @@ extension SPRecordVideoFilterView{
         }
         return cell
     }
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        SPLog("collection select ")
-        if indexPath.row < (filterList?.count)! , let complete  = collectSelectComplete{
-            complete((filterList?[indexPath.row])!)
-        }
+ 
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pInView = self.convert((self.filterCollectionView?.center)!, to: self.filterCollectionView)
+        
+        let indexPath = self.filterCollectionView?.indexPathForItem(at: pInView)
+        SPLog("indexPath row \(String(describing: indexPath?.row))")
+        completeBlock(indexPath: indexPath)
     }
+    /*
+     选中的滤镜回调
+     */
+    fileprivate func completeBlock(indexPath:IndexPath?){
+        if let index = indexPath {
+            if index.row < (filterList?.count)! , let complete  = collectSelectComplete{
+                complete((filterList?[index.row])!)
+            }
+        }
+        
+    }
+    
+    
 }
 
 class SPRecordVideoFilterCell : UICollectionViewCell{
@@ -104,27 +132,86 @@ extension SPRecordVideoFilterCell {
     }
 }
 
+
+
 class SPRecordVideoFilterFlowLayout : UICollectionViewFlowLayout{
+    
+    
+    
+    
     override init() {
         super.init()
-        self.scrollDirection = .horizontal
+        
+        self.scrollDirection = .vertical
+        self.minimumLineSpacing = 0.1 * itemH
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     override func prepare() {
-        self.itemSize = CGSize(width: (self.collectionView?.bounds.size.width)! / 5, height: (self.collectionView?.bounds.size.height)!)
-        self.minimumLineSpacing = 0
-        self.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
-        super.prepare()
+//        itemH = self.collectionView?.bounds.width ?? 0;
+        self.itemSize = CGSize(width: itemH, height: itemH)
+        //设置边距(让第一张图片与最后一张图片出现在最中央)ps:这里可以进行优化
+        let inset = (self.collectionView?.bounds.height ?? 0)  * 0.5 - self.itemSize.height * 0.5
+        self.sectionInset = UIEdgeInsetsMake(inset,0, inset, 0)
     }
+    /**
+     用来计算出rect这个范围内所有cell的UICollectionViewLayoutAttributes，
+     并返回。
+     */
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         
-        let array = super.layoutAttributesForElements(in: rect)
-        return array
+        let ret = super.layoutAttributesForElements(in: rect)
+//        //可见矩阵
+//        let visiableRect = CGRect(x:self.collectionView!.contentOffset.x,y: self.collectionView!.contentOffset.y, width:self.collectionView!.frame.width,height:self.collectionView!.frame.height)
+//
+//        //接下来的计算是为了动画效果
+//        let maxCenterMargin = self.collectionView!.bounds.height * 0.5 + itemH * 0.5;
+//        //获得collectionVIew中央的X值(即显示在屏幕中央的X)
+//        let centerX = self.collectionView!.contentOffset.y + self.collectionView!.frame.size.height * 0.5;
+//        for attributes in ret! {
+//            //如果不在屏幕上，直接跳过
+//            if !visiableRect.intersects(attributes.frame) {continue}
+//            let scale = 1 + (0.8 - abs(centerX - attributes.center.y) / maxCenterMargin)
+//            attributes.transform = CGAffineTransform(scaleX: 1.0, y: scale)
+//        }
+        
+        return ret
     }
     
+    /**
+     用来设置collectionView停止滚动那一刻的位置
+     
+     - parameter proposedContentOffset: 原本collectionView停止滚动那一刻的位置
+     - parameter velocity:              滚动速度
+     
+     - returns: 最终停留的位置
+     */
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
+        //实现这个方法的目的是：当停止滑动，时刻有一张图片是位于屏幕最中央的。
+        let lastRect = CGRect(x: proposedContentOffset.x, y: proposedContentOffset.y, width: self.collectionView!.frame.width, height: self.collectionView!.frame.height)
+        //获得collectionVIew中央的X值(即显示在屏幕中央的Y)
+        let centerY = proposedContentOffset.y + self.collectionView!.frame.height * 0.5;
+        //这个范围内所有的属性
+        let array = self.layoutAttributesForElements(in: lastRect)
+        
+        //需要移动的距离
+        var adjustOffsetY = CGFloat(MAXFLOAT);
+        for attri in array! {
+            if abs(attri.center.y - centerY) < abs(adjustOffsetY) {
+                adjustOffsetY = attri.center.y - centerY;
+            }
+        }
+        
+        return CGPoint(x:proposedContentOffset.x , y:proposedContentOffset.y + adjustOffsetY )
+    }
+    
+    /**
+     返回true只要显示的边界发生改变就重新布局:(默认是false)
+     内部会重新调用prepareLayout和调用
+     layoutAttributesForElementsInRect方法获得部分cell的布局属性
+     */
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true
     }

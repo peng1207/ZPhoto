@@ -12,6 +12,9 @@ import AVKit
 import CoreFoundation
 
 typealias PropertyChangeBlock = ()->Void
+// 没有相机权限的回调
+typealias NOAuthBlock = () ->Void
+
 
 class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate{
     //视频捕获会话。它是input和output的桥梁。它协调着intput到output的数据传输
@@ -34,6 +37,8 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             //            videoLayer?.setSessionWithNoConnection(captureSession)
         }
     }
+   fileprivate var noCameraAuthBlock : NOAuthBlock?
+    fileprivate var noMicrophoneBlock : NOAuthBlock?
     // 放大最大的倍数
     var maxZoomActore :CGFloat = 5.00
     var minZoomActore : CGFloat = 1.00
@@ -47,7 +52,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     var lastSampleTime : CMTime?
     let  filePath : String = "\(SPVideoHelp.kVideoTempDirectory)/temp.mp4"
     var filter : CIFilter?
-    dynamic  var noFilterCIImage : CIImage!
+    dynamic  var noFilterCIImage : CIImage?
+    var cameraAuth : Bool = false  // 有没摄像头权限
+    
     
     let videoDataOutputQueue :DispatchQueue = DispatchQueue(label: "com.hsp.videoDataOutputQueue")
     
@@ -68,10 +75,50 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     }
     // 设置视频的初始化
     func setupRecord(){
+        SPAuthorizatio.isRightCamera { (authorized) in
+            self.cameraAuth = authorized
+            if authorized{
+                // 有权限
+                self.isRecordAuth()
+            }else{
+                // 没有权限
+                self.noAuthorizedComplete(noAuthBlock: self.noCameraAuthBlock)
+            }
+        }
+    }
+    func setup(noCameraAuthBlock:NOAuthBlock?,noMicrophoneBlock:NOAuthBlock?){
+        self.noCameraAuthBlock = noCameraAuthBlock
+        self.noMicrophoneBlock = noMicrophoneBlock
+    }
+    
+    /*
+     判断麦克风权限
+     */
+    fileprivate func isRecordAuth(){
+        SPAuthorizatio.isRightRecord { (authorized) in
+             self.setupInit()
+            if authorized == false {
+                self.noAuthorizedComplete(noAuthBlock: self.noMicrophoneBlock)
+            }
+        }
+    }
+    
+    /*
+     初始化组件
+     */
+    fileprivate func setupInit(){
         self.setCaptureInpunt(postion: .back)
         self.captureSession.startRunning()
     }
-    
+    /*
+     没有权限时的回调
+     */
+    fileprivate func noAuthorizedComplete(noAuthBlock :NOAuthBlock?){
+        guard let complete = noAuthBlock else {
+            return
+        }
+        complete()
+    }
     
     fileprivate func setCaptureInpunt(postion : AVCaptureDevicePosition){
         self.getVideoDevice(postion: postion)
@@ -87,6 +134,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         if self.captureSession.canAddInput(audioInput) {
             self.captureSession.addInput(audioInput)
         }
+    
+     
+        
         self.changeDeviceProperty {
             self.currentDevice?.activeVideoMinFrameDuration = CMTimeMake(1, 15)
             self.currentDevice?.activeVideoMaxFrameDuration = CMTimeMake(1, 15)
@@ -128,6 +178,10 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     }
     // 开始录制
     func sp_startRecord(){
+        guard cameraAuth else {
+            return
+        }
+        
         dispatchMainQueue {
             self.setupAssertWrirer()
             self.startRecording = true
@@ -188,6 +242,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     
     // 停止录制
     func sp_stopRecord(){
+        guard cameraAuth else {
+            return
+        }
         self.startRecording = false
         if (self.videoWriterInput?.isReadyForMoreMediaData)!{
             videoWriterInput?.markAsFinished()
@@ -195,9 +252,6 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         if (self.audioWriterInput?.isReadyForMoreMediaData)! {
             audioWriterInput?.markAsFinished()
         }
-        
-        SPLog(filePath)
-        
         assetWriter?.finishWriting(completionHandler: { [weak self] () in
             SPLog("assetwriter error is \(String(describing: self?.assetWriter?.error.debugDescription))")
             if self?.assetWriter?.error != nil{
@@ -213,6 +267,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     }
     // 切换镜头
     func sp_changeVideoDevice(){
+        guard cameraAuth else {
+            return
+        }
         let postion = currentDevice?.position
         self.setCaptureInpunt(postion: postion == .back ? .front : .back)
         self.sp_changeCameraAnimate()
@@ -260,6 +317,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     }
     // MARK: -- 闪光灯设置
     func sp_flashlight(){
+        guard cameraAuth else {
+            return
+        }
         if self.currentDevice?.position == AVCaptureDevicePosition.front {
             return
         }
@@ -292,10 +352,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         }
     }
     // MARK: -- delegate
-    
     func captureOutput(_ output: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
         autoreleasepool {
-          
+            
             if !CMSampleBufferDataIsReady(sampleBuffer) {
                 return
             }
@@ -389,8 +448,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                                 bytesPerRow: bytesperrow,
                                 space: rgbColorSpace,
                                 bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue);
-//        context?.concatenate(CGAffineTransform(rotationAngle: 360))
-//        context?.concatenate(__CGAffineTransformMake( 1, 0, 0, -1, 0, CGFloat(height) )) //Flip Vertical
+        // 放大
+        //        context?.concatenate(CGAffineTransform(rotationAngle: 360))
+        //        context?.concatenate(__CGAffineTransformMake( 1, 0, 0, -1, 0, CGFloat(height) )) //Flip Vertical
         
         
         context?.draw(image, in: CGRect(x:0, y:0, width:CGFloat(width), height:CGFloat(height)));

@@ -18,8 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow.init(frame: UIScreen.main.bounds)
         window?.backgroundColor = UIColor.white
         window?.makeKeyAndVisible()
+         SPLanguageChange.shareInstance.initLanguage()
         let recordVideoVC = SPVideoListVC()
-       
         window?.rootViewController = recordVideoVC
         // Override point for customization after application launch.
         return true

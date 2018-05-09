@@ -14,6 +14,7 @@ class SPVideoListVC: UINavigationController {
     
     internal init() {
         super.init(rootViewController: SPVideoListRootVC())
+        
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -46,18 +47,31 @@ fileprivate class SPVideoListRootVC : SPBaseVC {
     }()
     fileprivate let identify:String = "ViewCell"
     fileprivate var videoDataArray : Array<SPVideoModel>? = nil
+    fileprivate lazy var noDataView : UILabel = {
+        let label = UILabel()
+        label.text = SPLanguageChange.getString(key: "NO_VIDEO_TIP")
+        label.numberOfLines = 0;
+        label.font = fontSize(fontSize: 14)
+        label.isHidden = true
+        label.textAlignment = .center
+        return label
+    }()
     
     override func viewDidLoad() {
         self.setupUI()
         self.videoData()
         self.sendNotification()
-        let filterNames = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
+        let userDefault = UserDefaults.standard
+        let languages:NSArray = userDefault.object(forKey: "AppleLanguages") as! NSArray
+        SPLog("languages is \(languages)")
         
-//        for filterName in filterNames {
-//            let filter = CIFilter(name: filterName)
-//            print("\rfilter:\(filterName)\rattributes:\(filter?.attributes)")
-//        }
-
+        //        let filterNames = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
+        
+        //        for filterName in filterNames {
+        //            let filter = CIFilter(name: filterName)
+        //            print("\rfilter:\(filterName)\rattributes:\(filter?.attributes)")
+        //        }
+        
     }
 }
 // MARK: -- UI
@@ -70,6 +84,7 @@ extension SPVideoListRootVC {
     /**< 创建collectionview */
     fileprivate func setupCollectionView(){
         self.view.addSubview(self.videoCollectionView)
+        self.view.addSubview(self.noDataView);
         self.videoCollectionView.delegate = self
         self.videoCollectionView.dataSource = self
         self.videoCollectionView.register(SPVideoCollectionCell.self, forCellWithReuseIdentifier: identify)
@@ -88,7 +103,19 @@ extension SPVideoListRootVC {
     
     private func addConstraintToView (){
         self.videoCollectionView.snp.makeConstraints { (maker) in
-            maker.left.top.right.bottom.equalTo(self.view).offset(0)
+            maker.left.top.right.equalTo(self.view).offset(0)
+            
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+            }
+        }
+        self.noDataView.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.view).offset(20)
+            maker.right.equalTo(self.view).offset(-20);
+            maker.height.greaterThanOrEqualTo(0)
+            maker.centerY.equalTo(self.view.snp.centerY).offset(0)
         }
     }
     
@@ -105,12 +132,26 @@ extension SPVideoListRootVC {
         guard let model = videoModel else {
             return
         }
-        let alert = UIAlertController(title: "tips", message: "is delete?", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "cance", style: UIAlertActionStyle.cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "delete", style: UIAlertActionStyle.default, handler: { (action) in
-              SPVideoHelp.remove(videoUrl: model.url!)
+        let alert = UIAlertController(title: SPLanguageChange.getString(key: "TIPS"), message: SPLanguageChange.getString(key: "DELETE_VIDEO_MSG"), preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "DELETE"), style: UIAlertActionStyle.default, handler: { [weak self](action) in
+            self?.videoDataArray?.remove(object: model)
+            SPVideoHelp.remove(fileUrl: model.url!)
+            self?.reloadData()
         }))
         self.present(alert, animated: true, completion: nil)
+    }
+    /*
+     处理没有数据的
+     */
+    fileprivate func dealNoData(){
+        if ((self.videoDataArray?.count)! > 0) {
+            self.noDataView.isHidden = true
+            self.videoCollectionView.isHidden = false
+        }else{
+            self.noDataView.isHidden = false
+            self.videoCollectionView.isHidden = true
+        }
     }
 }
 
@@ -128,7 +169,7 @@ extension SPVideoListRootVC : UICollectionViewDelegate,UICollectionViewDataSourc
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.identify, for: indexPath) as! SPVideoCollectionCell
         cell.videoModel = self.videoDataArray?[indexPath.row]
         cell.clickComplete = {
-          [unowned self]  (videoModel:SPVideoModel?) in
+            [unowned self]  (videoModel:SPVideoModel?) in
             self.clickDetete(videoModel: videoModel)
         }
         return cell
@@ -146,10 +187,18 @@ extension SPVideoListRootVC {
     @objc fileprivate func videoData(){
         let array = SPVideoHelp.videoFile()
         self.videoDataArray = array
+        self.reloadData()
+    }
+    /*
+     刷新数据
+     */
+    fileprivate func reloadData(){
         dispatchMainQueue {
             self.videoCollectionView.reloadData()
+            self.dealNoData()
         }
     }
+    
 }
 // MARK: -- 通知
 extension SPVideoListRootVC{

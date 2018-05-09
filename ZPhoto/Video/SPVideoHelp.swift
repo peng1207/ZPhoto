@@ -62,16 +62,25 @@ class SPVideoHelp: NSObject {
     class func recordForDeal(asset:AVAsset,outputPath:String,complete : @escaping ExportSuccess)-> Void{
         let componsition = AVMutableComposition()
         let videoTrack = componsition.addMutableTrack(withMediaType: AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
-        let audioTrack = componsition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
+       
         let videoAsset = asset.tracks(withMediaType: AVMediaTypeVideo)[0]
-        let audioAsset = asset.tracks(withMediaType: AVMediaTypeAudio)[0]
         let videoDuration = videoAsset.timeRange.duration
-        var audioDuration = audioAsset.timeRange.duration
+
         let videoStart = videoAsset.timeRange.start
-        var audioStart = audioAsset.timeRange.start
-        if CMTimeGetSeconds(videoAsset.timeRange.duration) < CMTimeGetSeconds(audioAsset.timeRange.duration) {
-            audioDuration = videoDuration
-            audioStart = videoStart
+        if asset.tracks(withMediaType: AVMediaTypeAudio).count > 0 {
+             let audioTrack = componsition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
+            let audioAsset = asset.tracks(withMediaType: AVMediaTypeAudio)[0]
+            var audioDuration = audioAsset.timeRange.duration
+            var audioStart = audioAsset.timeRange.start
+            if CMTimeGetSeconds(videoAsset.timeRange.duration) < CMTimeGetSeconds(audioAsset.timeRange.duration) {
+                audioDuration = videoDuration
+                audioStart = videoStart
+            }
+            do {
+                try audioTrack.insertTimeRange(CMTimeRangeMake(audioStart, audioDuration), of: audioAsset, at: kCMTimeZero)
+            } catch _{
+                
+            }
         }
         
         do {
@@ -79,11 +88,7 @@ class SPVideoHelp: NSObject {
         }catch _{
             
         }
-        do {
-            try audioTrack.insertTimeRange(CMTimeRangeMake(audioStart, audioDuration), of: audioAsset, at: kCMTimeZero)
-        } catch _{
-            
-        }
+    
         videoTrack.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
         let videoPath = URL(fileURLWithPath: outputPath)
         let exporter = AVAssetExportSession(asset: componsition, presetName: AVAssetExportPresetHighestQuality)!
@@ -115,12 +120,11 @@ class SPVideoHelp: NSObject {
     }
     /**< 获取视频文件 转为 */
     class func videoFile() -> [SPVideoModel]? {
-        var videoArray = [SPVideoModel]()
+        var videoArray = Array<SPVideoModel>()
         let fileArray = self.getfile(forDirectory: kVideoDirectory)
         for file in fileArray! {
-            var model = SPVideoModel()
-            let path = "\(kVideoDirectory)/\(file)"
-            model.url = URL(fileURLWithPath: path)
+             let path = "\(kVideoDirectory)/\(file)"
+            let model = getVideoModel(path: path)
             if  (model.asset != nil) {
                 videoArray.append(model)
             }else{
@@ -128,6 +132,14 @@ class SPVideoHelp: NSObject {
             }
         }
         return videoArray
+    }
+    /*
+     获取videomodel
+     */
+    class func getVideoModel(path:String) -> SPVideoModel{
+        var model = SPVideoModel();
+        model.url = URL(fileURLWithPath: path)
+        return model
     }
     
     /**< 根据目录获取该目录下所有的文件 并排序*/
