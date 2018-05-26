@@ -39,7 +39,11 @@ class SPLanguageChange {
         string = string.replacingOccurrences(of: "-US", with: "")
         var path = Bundle.main.path(forResource:string , ofType: "lproj")
         if path == nil {
-            path = Bundle.main.path(forResource:"zh-Hans" , ofType: "lproj")
+            if string.hasPrefix("zh-TW") || string.hasPrefix("zh-HK") || string.hasPrefix("zh-Hant") {
+                 path = Bundle.main.path(forResource:"zh-Hans" , ofType: "lproj")
+            }else {
+                 path = Bundle.main.path(forResource:"en" , ofType: "lproj")
+            }
         }
         bundle = Bundle(path: path!)
     }

@@ -35,7 +35,7 @@
 		9E7226901E8972B4001BB9A9 /* ZPhotoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E72268F1E8972B4001BB9A9 /* ZPhotoUITests.swift */; };
 		9E774E05209A0C2C0071493B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E774E07209A0C2C0071493B /* Localizable.strings */; };
 		9E774E0A209A0F920071493B /* SPLanguageChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E774E09209A0F920071493B /* SPLanguageChange.swift */; };
-		9E774E0D209A147D0071493B /* infoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E774E0F209A147D0071493B /* infoPlist.strings */; };
+		9E774E0D209A147D0071493B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E774E0F209A147D0071493B /* InfoPlist.strings */; };
 		9E817737209E0A9B00EE7EB4 /* SPAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E817736209E0A9B00EE7EB4 /* SPAuthorization.swift */; };
 		9E98ED5820A0AA4600DDB427 /* SPSysSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98ED5720A0AA4600DDB427 /* SPSysSet.swift */; };
 		9E98ED5A20A14EC000DDB427 /* SPArray+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98ED5920A14EC000DDB427 /* SPArray+extension.swift */; };
@@ -105,8 +105,8 @@
 		9E774E06209A0C2C0071493B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9E774E08209A0C520071493B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		9E774E09209A0F920071493B /* SPLanguageChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPLanguageChange.swift; sourceTree = "<group>"; };
-		9E774E0E209A147D0071493B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/infoPlist.strings"; sourceTree = "<group>"; };
-		9E774E10209A147F0071493B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/infoPlist.strings; sourceTree = "<group>"; };
+		9E774E0E209A147D0071493B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		9E774E10209A147F0071493B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9E817736209E0A9B00EE7EB4 /* SPAuthorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuthorization.swift; sourceTree = "<group>"; };
 		9E98ED5720A0AA4600DDB427 /* SPSysSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSysSet.swift; sourceTree = "<group>"; };
 		9E98ED5920A14EC000DDB427 /* SPArray+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SPArray+extension.swift"; sourceTree = "<group>"; };
@@ -245,7 +245,7 @@
 				9E7226761E8972B4001BB9A9 /* Assets.xcassets */,
 				9E72267B1E8972B4001BB9A9 /* Info.plist */,
 				9E774E07209A0C2C0071493B /* Localizable.strings */,
-				9E774E0F209A147D0071493B /* infoPlist.strings */,
+				9E774E0F209A147D0071493B /* InfoPlist.strings */,
 			);
 			path = ZPhoto;
 			sourceTree = "<group>";
@@ -409,7 +409,7 @@
 			files = (
 				9E7226771E8972B4001BB9A9 /* Assets.xcassets in Resources */,
 				9E774E05209A0C2C0071493B /* Localizable.strings in Resources */,
-				9E774E0D209A147D0071493B /* infoPlist.strings in Resources */,
+				9E774E0D209A147D0071493B /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -661,13 +661,13 @@
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
-		9E774E0F209A147D0071493B /* infoPlist.strings */ = {
+		9E774E0F209A147D0071493B /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				9E774E0E209A147D0071493B /* zh-Hans */,
 				9E774E10209A147F0071493B /* en */,
 			);
-			name = infoPlist.strings;
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

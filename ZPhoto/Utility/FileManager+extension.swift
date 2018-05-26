@@ -15,10 +15,30 @@ extension FileManager{
     class func directory(createPath:String){
         do{
             try FileManager.default.createDirectory(atPath: createPath, withIntermediateDirectories: true, attributes: nil)
+            addSkipBackupAttributeToItem(AtURL: URL(fileURLWithPath: createPath))
         }catch{
             SPLog("creat directory is  \(error)")
         }
     }
+    class private func addSkipBackupAttributeToItem(AtURL url:URL) {
+        
+        assert(FileManager.default.fileExists(atPath: url.path),"\(url.path)文件为创建成功")
+        
+        let urlNs:NSURL = url as NSURL
+        
+        do{
+            
+            try urlNs.setResourceValue(true, forKey:URLResourceKey.isExcludedFromBackupKey)
+            
+        }catch{
+            
+            assert(false,"设置不同步云端失败：\(error)")
+            
+        }
+        
+    }
+    
+    
     /**< 删除文件 */
     class func remove(path: String){
         let fileManager = FileManager.default
@@ -27,7 +47,7 @@ extension FileManager{
                 do {
                     try fileManager.removeItem(atPath: path)
                 }catch {
-                     SPLog("delete file is  \(error)")
+                    SPLog("delete file is  \(error)")
                 }
             }
         }
