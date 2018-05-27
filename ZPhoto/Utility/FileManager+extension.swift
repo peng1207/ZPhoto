@@ -35,10 +35,7 @@ extension FileManager{
             assert(false,"设置不同步云端失败：\(error)")
             
         }
-        
     }
-    
-    
     /**< 删除文件 */
     class func remove(path: String){
         let fileManager = FileManager.default

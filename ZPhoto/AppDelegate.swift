@@ -21,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          SPLanguageChange.shareInstance.initLanguage()
         let recordVideoVC = SPVideoListVC()
         window?.rootViewController = recordVideoVC
+        createCachePath()
+        setUncaughtExceptionHandler()
         // Override point for customization after application launch.
         return true
     }

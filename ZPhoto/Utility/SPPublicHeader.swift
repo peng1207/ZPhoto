@@ -159,3 +159,30 @@ func formatForMin(seconds:Float64) -> String{
     let Sec = Int(seconds.truncatingRemainder(dividingBy: 60))
     return String(format: "%02d:%02d", Min, Sec)
 }
+
+func setUncaughtExceptionHandler() {
+    NSSetUncaughtExceptionHandler(UncaughtExceptionHandler())
+}
+
+func UncaughtExceptionHandler() -> @convention(c) (NSException) -> Void {
+    return { (exception) -> Void in
+        let arr:NSArray = exception.callStackSymbols as NSArray//得到当前调用栈信息
+        let reason = exception.reason//非常重要，就是崩溃的原因
+        let name = exception.name//异常类型
+        
+        let content =  String("===异常错误报告===:name:\(name)===\n==reson:\(reason)==\n==ncallStackSymbols:\n\(arr.componentsJoined(by: "\n"))")
+        SPLog("exception type : \(name) \n crash reason : \(reason) \n call stack info : \(arr)====content-->\(content)");
+        do {
+             try content?.write(to: URL(fileURLWithPath: "\(kCachesPath)/ZPhoteCash/\(Date()).txt"), atomically: false, encoding: String.Encoding.utf8)
+        }catch{
+            
+        }
+      
+    }
+}
+/*
+ 创建崩溃日志的目录
+ */
+func createCachePath (){
+    FileManager.directory(createPath: "\(kCachesPath)/ZPhoteCash")
+}

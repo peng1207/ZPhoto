@@ -19,7 +19,17 @@ typealias NOAuthBlock = () ->Void
 class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate{
     //视频捕获会话。它是input和output的桥梁。它协调着intput到output的数据传输
     fileprivate let captureSession = AVCaptureSession()
-    fileprivate let devices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
+    
+//    fileprivate let devices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
+    fileprivate let devices = { () -> [AVCaptureDevice] in
+        if SP_VERSION_10_UP{
+             return AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
+        }else{
+           let deviceDiscovery = AVCaptureDeviceDiscoverySession(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: AVCaptureDevicePosition.back)
+            return (deviceDiscovery?.devices)!
+        }
+    }()
+    
     fileprivate var currentDevice : AVCaptureDevice?
     //音频输入设备
     fileprivate let audioDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeAudio)
@@ -101,6 +111,8 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 self.noAuthorizedComplete(noAuthBlock: self.noMicrophoneBlock)
             }
         }
+       
+        
     }
     
     /*
@@ -323,19 +335,33 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         if self.currentDevice?.position == AVCaptureDevicePosition.front {
             return
         }
+        
         if self.currentDevice?.torchMode == AVCaptureTorchMode.off {
-            self.changeDeviceProperty(propertyBlock: { [weak self]() in
-                self?.currentDevice?.torchMode = AVCaptureTorchMode.on
-                self?.currentDevice?.flashMode = AVCaptureFlashMode.on
-            })
+           sp_flashOn()
         }else{
-            self.changeDeviceProperty(propertyBlock: { [weak self]() in
-                self?.currentDevice?.torchMode = AVCaptureTorchMode.off
-                self?.currentDevice?.flashMode = AVCaptureFlashMode.off
-            })
-            
+           sp_flashOff()
         }
     }
+    /*
+     打开闪光灯
+     */
+    func sp_flashOn(){
+        self.changeDeviceProperty(propertyBlock: { [weak self]() in
+            self?.currentDevice?.torchMode = AVCaptureTorchMode.on
+            self?.currentDevice?.flashMode = AVCaptureFlashMode.on
+        })
+    }
+    /*
+     关闭闪光灯
+     */
+    func sp_flashOff(){
+        self.changeDeviceProperty(propertyBlock: { [weak self]() in
+            self?.currentDevice?.torchMode = AVCaptureTorchMode.off
+            self?.currentDevice?.flashMode = AVCaptureFlashMode.off
+        })
+        
+    }
+    
     // MARK: -- 私有方法
     /**< 改变属性操作 */
     fileprivate func changeDeviceProperty(propertyBlock:PropertyChangeBlock?){
@@ -467,7 +493,6 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 assetWriter.cancelWriting()
             }
         }
-        
         self.assetWriter = nil
     }
     deinit {

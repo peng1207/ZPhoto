@@ -93,11 +93,11 @@ extension SPVideoListRootVC {
     }
     /**< 创建导航栏上控件 */
     fileprivate func setupNavUI(){
-        let addButton = UIButton(type: .custom)
-        addButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+//        let addButton = UIButton(type: .custom)
+        let addButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+//        addButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         addButton.addTarget(self, action: #selector(clickAdd), for: .touchUpInside)
-        addButton.setTitle("+", for: .normal)
-        addButton.setTitleColor(UIColor.red, for: .normal)
+        addButton.setImage(UIImage(named: "videoAdd"), for: UIControlState.normal)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: addButton)
     }
     

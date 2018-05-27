@@ -15,6 +15,13 @@ class SPVideoCollectionCell : UICollectionViewCell{
         let imageView = UIImageView()
         return imageView
     }()
+    lazy public var playImageView : UIImageView! = {
+        let imageView = UIImageView()
+        imageView.isUserInteractionEnabled = true
+        imageView.image = UIImage(named: "play")
+        return imageView
+    }()
+    
     lazy public var deleteBtn : UIButton! = {
         let button = UIButton(type: UIButtonType.custom)
         let image = UIImage(named: "delete.png")
@@ -46,6 +53,7 @@ extension SPVideoCollectionCell{
     fileprivate func setupUI(){
         self.contentView.addSubview(videoImageView)
         self.contentView.addSubview(deleteBtn)
+        self.contentView.addSubview(playImageView)
         videoImageView.snp.makeConstraints { (maker) in
             maker.top.right.left.bottom.equalTo(self.contentView).offset(0)
         }
@@ -53,6 +61,10 @@ extension SPVideoCollectionCell{
             maker.top.equalTo(self.contentView).offset(5)
             maker.right.equalTo(self.contentView).offset(-5)
             maker.size.equalTo(CGSize(width: 30, height: 30))
+        }
+        playImageView.snp.makeConstraints { (maker) in
+            maker.size.equalTo(CGSize(width: 40, height: 40))
+            maker.center.equalTo(self.contentView.snp.center).offset(0)
         }
     }
     

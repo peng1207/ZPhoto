@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-fileprivate let  itemH: CGFloat = 80
+fileprivate let  itemH: CGFloat = 60
 class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
  
     lazy fileprivate  var filterCollectionView : UICollectionView? =  {
