@@ -382,7 +382,9 @@ class SPRecordVideoBtnView: UIView {
     fileprivate func setupUI(){
         self .addSubview(canceButton)
         self.addSubview(recordButton)
-        self.addSubview(flashLampButton)
+        if !SP_IS_IPAD {
+             self.addSubview(flashLampButton)
+        }
         self.addSubview(changeButton)
         self.addSubview(filterButton)
         self.addSubview(timeLabel)
@@ -413,7 +415,9 @@ class SPRecordVideoBtnView: UIView {
     fileprivate func addActionToButton (){
         canceButton.addTarget(self, action: #selector(clickCanceAction), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(clickDoneAction), for: .touchUpInside)
-        flashLampButton.addTarget(self, action: #selector(clickOpenAction), for: .touchUpInside)
+        if !SP_IS_IPAD {
+         flashLampButton.addTarget(self, action: #selector(clickOpenAction), for: .touchUpInside)
+        }
         changeButton.addTarget(self, action: #selector(clickChangeAction), for: .touchUpInside)
         filterButton.addTarget(self, action: #selector(clickFilterAction), for: .touchUpInside)
     }
@@ -460,15 +464,18 @@ class SPRecordVideoBtnView: UIView {
         self.recordButton.snp.makeConstraints { (maker) in
             maker.top.equalTo(self.canceButton.snp.top)
             maker.height.equalTo(self.canceButton.snp.height)
-            maker.width.equalTo(self.flashLampButton)
+            maker.width.equalTo(self.canceButton)
             maker.centerX.equalTo(self.snp.centerX).offset(0)
         }
-        self.flashLampButton.snp.makeConstraints { (maker) in
-            maker.height.equalTo(self.canceButton.snp.height)
-            maker.top.equalTo(self.canceButton.snp.top)
-            maker.width.equalTo(self.canceButton)
-            maker.right.equalTo(self.snp.right).offset(-12)
+        if !SP_IS_IPAD {
+            self.flashLampButton.snp.makeConstraints { (maker) in
+                maker.height.equalTo(self.canceButton.snp.height)
+                maker.top.equalTo(self.canceButton.snp.top)
+                maker.width.equalTo(self.canceButton)
+                maker.right.equalTo(self.snp.right).offset(-12)
+            }
         }
+        
         self.filterButton.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.recordButton.snp.left).multipliedBy(0.5)
             maker.height.equalTo(self.canceButton.snp.height)
@@ -477,8 +484,8 @@ class SPRecordVideoBtnView: UIView {
         }
         self.changeButton.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.recordButton.snp.left).multipliedBy(1.5)
-            maker.height.equalTo(self.flashLampButton.snp.height).offset(0)
-            maker.width.equalTo(self.flashLampButton.snp.width).offset(0)
+            maker.height.equalTo(self.canceButton.snp.height).offset(0)
+            maker.width.equalTo(self.canceButton.snp.width).offset(0)
             maker.top.equalTo(self.filterButton.snp.top).offset(0)
         }
         self.timeLabel.snp.makeConstraints { (maker) in

@@ -43,6 +43,7 @@
 		9E9D8D581ED47E2600522BCA /* SPVideoCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9D8D571ED47E2600522BCA /* SPVideoCollectionCell.swift */; };
 		9EAB5AAF1EED6C7900605945 /* UIImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB5AAE1EED6C7900605945 /* UIImageManager.swift */; };
 		9EF177B720BAFD5B00925FE2 /* SPSystemVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF177B620BAFD5B00925FE2 /* SPSystemVersion.swift */; };
+		9EF177B920BC576500925FE2 /* SPDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF177B820BC576500925FE2 /* SPDevice.swift */; };
 		9EFACEE01E988C0400D11F18 /* SPRecordVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFACEDF1E988C0300D11F18 /* SPRecordVideoVC.swift */; };
 		F0E618971AA6A17A4645133C /* Pods_ZPhotoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */; };
 /* End PBXBuildFile section */
@@ -115,6 +116,7 @@
 		9E9D8D571ED47E2600522BCA /* SPVideoCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoCollectionCell.swift; sourceTree = "<group>"; };
 		9EAB5AAE1EED6C7900605945 /* UIImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageManager.swift; sourceTree = "<group>"; };
 		9EF177B620BAFD5B00925FE2 /* SPSystemVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSystemVersion.swift; sourceTree = "<group>"; };
+		9EF177B820BC576500925FE2 /* SPDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDevice.swift; sourceTree = "<group>"; };
 		9EFACEDF1E988C0300D11F18 /* SPRecordVideoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPRecordVideoVC.swift; sourceTree = "<group>"; };
 		A48F6C5FB7358C64CE5D01E2 /* Pods-ZPhoto-ZPhotoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.release.xcconfig"; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 				9E98ED5720A0AA4600DDB427 /* SPSysSet.swift */,
 				9E98ED5920A14EC000DDB427 /* SPArray+extension.swift */,
 				9EF177B620BAFD5B00925FE2 /* SPSystemVersion.swift */,
+				9EF177B820BC576500925FE2 /* SPDevice.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -602,6 +605,7 @@
 				9E9D8D561ED47C1F00522BCA /* SPVideoListVC.swift in Sources */,
 				9E9D8D581ED47E2600522BCA /* SPVideoCollectionCell.swift in Sources */,
 				9E1A4E271E9A891F00FEF8B7 /* SPPublicHeader.swift in Sources */,
+				9EF177B920BC576500925FE2 /* SPDevice.swift in Sources */,
 				9E0654D01EE29B6E0035189B /* SPVideoPlayVC.swift in Sources */,
 				9E7168A61F659B8400BB7C01 /* SPFilterModel.swift in Sources */,
 				9EFACEE01E988C0400D11F18 /* SPRecordVideoVC.swift in Sources */,
@@ -787,6 +791,7 @@
 				PROVISIONING_PROFILE = "e6310527-79c3-45b7-8e15-d49cc71171eb";
 				PROVISIONING_PROFILE_SPECIFIER = ZPhotoDev;
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -807,6 +812,7 @@
 				PROVISIONING_PROFILE = "3f93c631-f4ac-4374-b173-8a0a25fde743";
 				PROVISIONING_PROFILE_SPECIFIER = ZPhotoAPPStore;
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

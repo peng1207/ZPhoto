@@ -332,10 +332,14 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         guard cameraAuth else {
             return
         }
-        if self.currentDevice?.position == AVCaptureDevicePosition.front {
+        if SP_IS_IPAD {
             return
         }
         
+        if self.currentDevice?.position == AVCaptureDevicePosition.front {
+            return
+        }
+
         if self.currentDevice?.torchMode == AVCaptureTorchMode.off {
            sp_flashOn()
         }else{
@@ -346,6 +350,10 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
      打开闪光灯
      */
     func sp_flashOn(){
+        if SP_IS_IPAD {
+            return
+        }
+        
         self.changeDeviceProperty(propertyBlock: { [weak self]() in
             self?.currentDevice?.torchMode = AVCaptureTorchMode.on
             self?.currentDevice?.flashMode = AVCaptureFlashMode.on
@@ -355,6 +363,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
      关闭闪光灯
      */
     func sp_flashOff(){
+        if SP_IS_IPAD {
+            return
+        }
         self.changeDeviceProperty(propertyBlock: { [weak self]() in
             self?.currentDevice?.torchMode = AVCaptureTorchMode.off
             self?.currentDevice?.flashMode = AVCaptureFlashMode.off

@@ -23,6 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = recordVideoVC
         createCachePath()
         setUncaughtExceptionHandler()
+        
+        SPLog("\(UIDevice.current.model)")
+        
         // Override point for customization after application launch.
         return true
     }
