@@ -58,8 +58,15 @@ fileprivate extension SPVideoPlayView {
     fileprivate func setupUI(){
         self.addSubview(buttonView!)
         buttonView?.snp.makeConstraints({ (maker) in
-            maker.left.bottom.right.equalTo(self).offset(0)
+            maker.left.right.equalTo(self).offset(0)
             maker.height.equalTo(40)
+            
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                // Fallback on earlier versions
+                maker.bottom.equalTo(self).offset(0);
+            };
         })
     }
 }
@@ -111,9 +118,7 @@ extension SPVideoPlayView {
 extension SPVideoPlayView{
     //将秒转成时间字符串的方法，因为我们将得到秒。
     fileprivate func formatPlayTime(seconds: Float64)->String{
-        let Min = Int(seconds / 60)
-        let Sec = Int(seconds.truncatingRemainder(dividingBy: 60))
-        return String(format: "%02d:%02d", Min, Sec)
+        return formatForMin(seconds:seconds)
     }
     //计算当前的缓冲进度
    fileprivate func avalableDurationWithplayerItem()->TimeInterval{
@@ -180,8 +185,8 @@ extension SPVideoPlayView {
 class SPVideoPlayButtonView : UIView{
     lazy var playButton : UIButton! = {
         let button = UIButton(type: UIButtonType.custom)
-        button.setTitle("on", for: UIControlState.normal)
-        button.setTitle("off", for: UIControlState.selected)
+        button.setImage(UIImage(named: "VideoStop"), for: .normal)
+        button.setImage(UIImage(named: "VideoPlay"), for: .selected)
         return button
     }()
     lazy var timeLabel: UILabel! = {

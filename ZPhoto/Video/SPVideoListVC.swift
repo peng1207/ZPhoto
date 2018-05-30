@@ -8,12 +8,13 @@
 
 import Foundation
 import UIKit
-
+import CoreImage
 class SPVideoListVC: UINavigationController {
     
     
     internal init() {
         super.init(rootViewController: SPVideoListRootVC())
+        
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -46,11 +47,31 @@ fileprivate class SPVideoListRootVC : SPBaseVC {
     }()
     fileprivate let identify:String = "ViewCell"
     fileprivate var videoDataArray : Array<SPVideoModel>? = nil
+    fileprivate lazy var noDataView : UILabel = {
+        let label = UILabel()
+        label.text = SPLanguageChange.getString(key: "NO_VIDEO_TIP")
+        label.numberOfLines = 0;
+        label.font = fontSize(fontSize: 14)
+        label.isHidden = true
+        label.textAlignment = .center
+        return label
+    }()
     
     override func viewDidLoad() {
         self.setupUI()
         self.videoData()
         self.sendNotification()
+        let userDefault = UserDefaults.standard
+        let languages:NSArray = userDefault.object(forKey: "AppleLanguages") as! NSArray
+        SPLog("languages is \(languages)")
+        
+        //        let filterNames = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
+        
+        //        for filterName in filterNames {
+        //            let filter = CIFilter(name: filterName)
+        //            print("\rfilter:\(filterName)\rattributes:\(filter?.attributes)")
+        //        }
+        
     }
 }
 // MARK: -- UI
@@ -63,6 +84,7 @@ extension SPVideoListRootVC {
     /**< 创建collectionview */
     fileprivate func setupCollectionView(){
         self.view.addSubview(self.videoCollectionView)
+        self.view.addSubview(self.noDataView);
         self.videoCollectionView.delegate = self
         self.videoCollectionView.dataSource = self
         self.videoCollectionView.register(SPVideoCollectionCell.self, forCellWithReuseIdentifier: identify)
@@ -71,17 +93,29 @@ extension SPVideoListRootVC {
     }
     /**< 创建导航栏上控件 */
     fileprivate func setupNavUI(){
-        let addButton = UIButton(type: .custom)
-        addButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+//        let addButton = UIButton(type: .custom)
+        let addButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+//        addButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         addButton.addTarget(self, action: #selector(clickAdd), for: .touchUpInside)
-        addButton.setTitle("+", for: .normal)
-        addButton.setTitleColor(UIColor.red, for: .normal)
+        addButton.setImage(UIImage(named: "videoAdd"), for: UIControlState.normal)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: addButton)
     }
     
     private func addConstraintToView (){
         self.videoCollectionView.snp.makeConstraints { (maker) in
-            maker.left.top.right.bottom.equalTo(self.view).offset(0)
+            maker.left.top.right.equalTo(self.view).offset(0)
+            
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+            }
+        }
+        self.noDataView.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.view).offset(20)
+            maker.right.equalTo(self.view).offset(-20);
+            maker.height.greaterThanOrEqualTo(0)
+            maker.centerY.equalTo(self.view.snp.centerY).offset(0)
         }
     }
     
@@ -90,6 +124,34 @@ extension SPVideoListRootVC {
 extension SPVideoListRootVC {
     @objc fileprivate func clickAdd(){
         self.present(SPRecordVideoVC(), animated: true, completion: nil)
+    }
+    /**
+     点击删除
+     */
+    fileprivate func clickDetete(videoModel:SPVideoModel?){
+        guard let model = videoModel else {
+            return
+        }
+        let alert = UIAlertController(title: SPLanguageChange.getString(key: "TIPS"), message: SPLanguageChange.getString(key: "DELETE_VIDEO_MSG"), preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "DELETE"), style: UIAlertActionStyle.default, handler: { [weak self](action) in
+            self?.videoDataArray?.remove(object: model)
+            SPVideoHelp.remove(fileUrl: model.url!)
+            self?.reloadData()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    /*
+     处理没有数据的
+     */
+    fileprivate func dealNoData(){
+        if ((self.videoDataArray?.count)! > 0) {
+            self.noDataView.isHidden = true
+            self.videoCollectionView.isHidden = false
+        }else{
+            self.noDataView.isHidden = false
+            self.videoCollectionView.isHidden = true
+        }
     }
 }
 
@@ -105,16 +167,17 @@ extension SPVideoListRootVC : UICollectionViewDelegate,UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.identify, for: indexPath) as! SPVideoCollectionCell
-        
         cell.videoModel = self.videoDataArray?[indexPath.row]
-        
+        cell.clickComplete = {
+            [unowned self]  (videoModel:SPVideoModel?) in
+            self.clickDetete(videoModel: videoModel)
+        }
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let videoPlayVC = SPVideoEditVC()
+        let videoPlayVC = SPVideoPlayVC()
         videoPlayVC.videoModel = self.videoDataArray?[indexPath.row]
-//        self.present(videoPlayVC, animated: true, completion: nil)
-        self.navigationController?.pushViewController(videoPlayVC, animated: true)
+        self.present(videoPlayVC, animated: true, completion: nil)
     }
     
 }
@@ -124,8 +187,18 @@ extension SPVideoListRootVC {
     @objc fileprivate func videoData(){
         let array = SPVideoHelp.videoFile()
         self.videoDataArray = array
-        self.videoCollectionView.reloadData()
+        self.reloadData()
     }
+    /*
+     刷新数据
+     */
+    fileprivate func reloadData(){
+        dispatchMainQueue {
+            self.videoCollectionView.reloadData()
+            self.dealNoData()
+        }
+    }
+    
 }
 // MARK: -- 通知
 extension SPVideoListRootVC{

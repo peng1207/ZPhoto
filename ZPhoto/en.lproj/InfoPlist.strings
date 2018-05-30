@@ -1,0 +1,11 @@
+/* 
+  infoPlist.strings
+  ZPhoto
+
+  Created by 黄树鹏 on 2018/5/2.
+  Copyright © 2018年 huangshupeng. All rights reserved.
+*/
+CFBundleName = "ZPhoto";
+NSCameraUsageDescription = "Use camera to record video or take pictures, record the beautiful moment with camera. If you don't allow it, you can't use it.";
+NSMicrophoneUsageDescription = "Get your voice or nearby sound source and save the wonderful sound. If you don't allow it, you can't use it.";
+NSPhotoLibraryUsageDescription = "If you want to get pictures or videos in your album, you want to save your videos or pictures to your albums.";

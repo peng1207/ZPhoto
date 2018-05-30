@@ -15,19 +15,17 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.0.0</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>1.0.0.3</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCalendarsUsageDescription</key>
-	<string>12</string>
 	<key>NSCameraUsageDescription</key>
-	<string>相机</string>
+	<string>用摄像头来录制视频或用来拍照，用摄像头记录美好的瞬间.若不允许无法使用哦</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>12</string>
+	<string>获取您的声音或附近的音源,保存美妙的音.若不允许无法使用哦</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>相册</string>
+	<string>想获取您相册中的图片或视频，想把视频或图片保存到您的相册中.若不允许无法使用哦</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
@@ -35,8 +33,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 </dict>
 </plist>

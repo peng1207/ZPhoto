@@ -18,9 +18,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow.init(frame: UIScreen.main.bounds)
         window?.backgroundColor = UIColor.white
         window?.makeKeyAndVisible()
+         SPLanguageChange.shareInstance.initLanguage()
         let recordVideoVC = SPVideoListVC()
-        
         window?.rootViewController = recordVideoVC
+        createCachePath()
+        setUncaughtExceptionHandler()
+        
+        SPLog("\(UIDevice.current.model)")
+        
         // Override point for customization after application launch.
         return true
     }
@@ -45,6 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        SPLog("app is kill")
+        
     }
 
 

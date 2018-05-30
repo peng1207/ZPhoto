@@ -11,7 +11,7 @@ import AVFoundation
 import AVKit
 import Photos
 
-struct SPVideoModel {
+class SPVideoModel : NSObject{
     var url : URL?{
         didSet{
             asset = AVAsset(url: url!)
@@ -19,12 +19,22 @@ struct SPVideoModel {
     }
     var asset : AVAsset? {
         didSet{
-            thumbnailImage = SPVideoHelp.thumbnailImageTo(assesst: asset!, time: CMTimeMakeWithSeconds(0.0, 60))
+            let second = CMTimeGetSeconds(asset!.duration)
+            if second <= 0 || asset == nil{
+                asset = nil
+            }else{
+                 thumbnailImage = SPVideoHelp.thumbnailImageTo(assesst: asset!, time: CMTimeMakeWithSeconds(0.00, framesPerSecond))
+                if thumbnailImage == nil {
+                    thumbnailImage = UIImage(named: "default")
+                }
+                
+            }
+
         }
     }
     var thumbnailImage : UIImage?
     
-    init() {
+    override init() {
        url = nil
         asset = nil
     }

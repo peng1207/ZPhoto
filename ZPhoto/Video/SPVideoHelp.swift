@@ -22,7 +22,7 @@ class SPVideoHelp: NSObject {
     // 获取视频的名称
      class func getVideoName() -> String {
         let date = NSDate()
-        return "video_\(Int(date.timeIntervalSince1970)).mov"
+        return "video_\(Int(date.timeIntervalSince1970)).mp4"
     }
     
     // 合并视频片段
@@ -37,7 +37,7 @@ class SPVideoHelp: NSObject {
             do {
                 try firstTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), of: asset.tracks(withMediaType: AVMediaTypeVideo)[0], at: insertTime)
             } catch _ {
-                
+            
             }
             do {
                 try audioTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), of: asset.tracks(withMediaType: AVMediaTypeAudio)[0], at: insertTime)
@@ -57,31 +57,94 @@ class SPVideoHelp: NSObject {
         exporter.exportAsynchronously(completionHandler: {
             exportSuuccess()
         })
+    }
+    /**< 对录制好的视频处理  */
+    class func recordForDeal(asset:AVAsset,outputPath:String,complete : @escaping ExportSuccess)-> Void{
+        let componsition = AVMutableComposition()
+        let videoTrack = componsition.addMutableTrack(withMediaType: AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
+       
+        let videoAsset = asset.tracks(withMediaType: AVMediaTypeVideo)[0]
+        let videoDuration = videoAsset.timeRange.duration
+
+        let videoStart = videoAsset.timeRange.start
+        if asset.tracks(withMediaType: AVMediaTypeAudio).count > 0 {
+             let audioTrack = componsition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
+            let audioAsset = asset.tracks(withMediaType: AVMediaTypeAudio)[0]
+            var audioDuration = audioAsset.timeRange.duration
+            var audioStart = audioAsset.timeRange.start
+            if CMTimeGetSeconds(videoAsset.timeRange.duration) < CMTimeGetSeconds(audioAsset.timeRange.duration) {
+                audioDuration = videoDuration
+                audioStart = videoStart
+            }
+            do {
+                try audioTrack.insertTimeRange(CMTimeRangeMake(audioStart, audioDuration), of: audioAsset, at: kCMTimeZero)
+            } catch _{
+                
+            }
+        }
+        
+        do {
+            try videoTrack.insertTimeRange(CMTimeRangeMake(videoStart, videoDuration), of: videoAsset, at: kCMTimeZero)
+        }catch _{
+            
+        }
+    
+        videoTrack.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
+        let videoPath = URL(fileURLWithPath: outputPath)
+        let exporter = AVAssetExportSession(asset: componsition, presetName: AVAssetExportPresetHighestQuality)!
+        exporter.outputURL = videoPath
+        exporter.outputFileType = AVFileTypeQuickTimeMovie
+        exporter.shouldOptimizeForNetworkUse = true
+        exporter.exportAsynchronously(completionHandler: {
+            complete()
+        })
         
     }
     /**< 根据assesst和time 获取对应的图片 */
     class func thumbnailImageTo(assesst: AVAsset,time : CMTime) -> UIImage?{
+        var thumbnailImage : UIImage? = nil
         let assetImageGenerator = AVAssetImageGenerator(asset: assesst)
         assetImageGenerator.appliesPreferredTrackTransform = true
+        assetImageGenerator.requestedTimeToleranceAfter = kCMTimeZero
+        assetImageGenerator.requestedTimeToleranceBefore = kCMTimeZero
         assetImageGenerator.apertureMode = AVAssetImageGeneratorApertureModeEncodedPixels
-        let thumbnailImageRef = try! assetImageGenerator.copyCGImage(at: time, actualTime: nil)
-        let thumbnailImage = UIImage(cgImage: thumbnailImageRef)
-        return thumbnailImage
+        do {
+        
+            let thumbnailImageRef = try assetImageGenerator.copyCGImage(at: time, actualTime: nil)
+            thumbnailImage = UIImage(cgImage: thumbnailImageRef)
+              return thumbnailImage
+        } catch {
+            SPLog("thumbnailImageTo error is \(error)")
+            return nil
+        }
     }
     /**< 获取视频文件 转为 */
     class func videoFile() -> [SPVideoModel]? {
-        var videoArray = [SPVideoModel]()
+        var videoArray = Array<SPVideoModel>()
         let fileArray = self.getfile(forDirectory: kVideoDirectory)
         for file in fileArray! {
-            var model = SPVideoModel()
-            model.url = URL(fileURLWithPath: "\(kVideoDirectory)/\(file)")
-            videoArray.append(model)
+             let path = "\(kVideoDirectory)/\(file)"
+            let model = getVideoModel(path: path)
+            if  (model.asset != nil) {
+                videoArray.append(model)
+            }else{
+                FileManager.remove(path:path)
+            }
         }
         return videoArray
+    }
+    /*
+     获取videomodel
+     */
+    class func getVideoModel(path:String) -> SPVideoModel{
+        var model = SPVideoModel();
+        model.url = URL(fileURLWithPath: path)
+        return model
     }
     
     /**< 根据目录获取该目录下所有的文件 并排序*/
     class func getfile(forDirectory:String) -> [String]?{
+        FileManager.directory(createPath: forDirectory)
         let fileArray = try! FileManager.default.contentsOfDirectory(atPath: forDirectory)
         let fileSorted = fileArray.sorted { (file1 : String, file2 : String) -> Bool in
             if file1.compare(file2) == ComparisonResult.orderedAscending {
@@ -90,6 +153,19 @@ class SPVideoHelp: NSObject {
             return  true
         }
         return fileSorted
+    }
+    /**
+     删除视频文件
+     */
+    class func remove(videoUrl:URL) -> Void{
+        remove(fileUrl: videoUrl)
+        sendNotification(notificationName: kVideoChangeNotification)
+    }
+    /**
+     删除文件
+     */
+    class func remove(fileUrl:URL) -> Void{
+       try!  FileManager.default.removeItem(at: fileUrl)
     }
     /**< 发送通知 */
     class func sendNotification(notificationName:String) {
@@ -151,12 +227,5 @@ class SPVideoHelp: NSObject {
         exportSession.exportAsynchronously(completionHandler: {
             completionHandler(exportUrl)
         })
-     var writerInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: nil)
-        
-        
-   let pixelBufferWriter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: writerInput, sourcePixelBufferAttributes: nil)
- 
-//        AVAssetReader
-      
     }
 }

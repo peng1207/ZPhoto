@@ -7,8 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0FC82228CAC6295E6E42D4BD /* Pods_ZPhoto_ZPhotoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 581BCD2AA12EA7F29D52DAE0 /* Pods_ZPhoto_ZPhotoUITests.framework */; };
 		145CB29182DB4F0AAA9938A5 /* Pods_ZPhoto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */; };
+		237500A620511247000A1B96 /* SPRecordVideoFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237500A520511247000A1B96 /* SPRecordVideoFilterView.swift */; };
+		237500A820512DC8000A1B96 /* SPRecordVideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237500A720512DC8000A1B96 /* SPRecordVideoData.swift */; };
 		26291E7D822E5F0FB9210A4D /* Pods_ZPhotoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */; };
+		2C4AFCB7EC3DE3B0F56DCA96 /* Pods_ZPhoto_ZPhotoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E09A31056057CB0AB8306CB3 /* Pods_ZPhoto_ZPhotoTests.framework */; };
 		9E0654CE1EDF24A90035189B /* SPVideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0654CD1EDF24A90035189B /* SPVideoModel.swift */; };
 		9E0654D01EE29B6E0035189B /* SPVideoPlayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0654CF1EE29B6E0035189B /* SPVideoPlayVC.swift */; };
 		9E0654D21EE3D2B00035189B /* SPVideoPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0654D11EE3D2B00035189B /* SPVideoPlayView.swift */; };
@@ -20,14 +24,26 @@
 		9E205EDB1EFFCF3800AB18C3 /* SPBaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E205EDA1EFFCF3800AB18C3 /* SPBaseVC.swift */; };
 		9E251CD51F48243400D95C4E /* FileManager+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E251CD41F48243400D95C4E /* FileManager+extension.swift */; };
 		9E251CD71F4C791700D95C4E /* CIFilter+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E251CD61F4C791700D95C4E /* CIFilter+extension.swift */; };
+		9E251CD91F5B2B2E00D95C4E /* SPRecordVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E251CD81F5B2B2E00D95C4E /* SPRecordVideoView.swift */; };
+		9E317AE01F68106D00D6554C /* SPAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E317ADF1F68106D00D6554C /* SPAnimationView.swift */; };
 		9E47CC3D1EFFDBC1000362CC /* UIView+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E47CC3C1EFFDBC1000362CC /* UIView+extension.swift */; };
+		9E7168A61F659B8400BB7C01 /* SPFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7168A51F659B8400BB7C01 /* SPFilterModel.swift */; };
+		9E7168A81F659F5A00BB7C01 /* SPFilterEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7168A71F659F5A00BB7C01 /* SPFilterEnum.swift */; };
 		9E7226701E8972B4001BB9A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */; };
 		9E7226771E8972B4001BB9A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E7226761E8972B4001BB9A9 /* Assets.xcassets */; };
 		9E7226851E8972B4001BB9A9 /* ZPhotoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7226841E8972B4001BB9A9 /* ZPhotoTests.swift */; };
 		9E7226901E8972B4001BB9A9 /* ZPhotoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E72268F1E8972B4001BB9A9 /* ZPhotoUITests.swift */; };
+		9E774E05209A0C2C0071493B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E774E07209A0C2C0071493B /* Localizable.strings */; };
+		9E774E0A209A0F920071493B /* SPLanguageChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E774E09209A0F920071493B /* SPLanguageChange.swift */; };
+		9E774E0D209A147D0071493B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E774E0F209A147D0071493B /* InfoPlist.strings */; };
+		9E817737209E0A9B00EE7EB4 /* SPAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E817736209E0A9B00EE7EB4 /* SPAuthorization.swift */; };
+		9E98ED5820A0AA4600DDB427 /* SPSysSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98ED5720A0AA4600DDB427 /* SPSysSet.swift */; };
+		9E98ED5A20A14EC000DDB427 /* SPArray+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98ED5920A14EC000DDB427 /* SPArray+extension.swift */; };
 		9E9D8D561ED47C1F00522BCA /* SPVideoListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9D8D551ED47C1F00522BCA /* SPVideoListVC.swift */; };
 		9E9D8D581ED47E2600522BCA /* SPVideoCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9D8D571ED47E2600522BCA /* SPVideoCollectionCell.swift */; };
 		9EAB5AAF1EED6C7900605945 /* UIImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAB5AAE1EED6C7900605945 /* UIImageManager.swift */; };
+		9EF177B720BAFD5B00925FE2 /* SPSystemVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF177B620BAFD5B00925FE2 /* SPSystemVersion.swift */; };
+		9EF177B920BC576500925FE2 /* SPDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF177B820BC576500925FE2 /* SPDevice.swift */; };
 		9EFACEE01E988C0400D11F18 /* SPRecordVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFACEDF1E988C0300D11F18 /* SPRecordVideoVC.swift */; };
 		F0E618971AA6A17A4645133C /* Pods_ZPhotoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */; };
 /* End PBXBuildFile section */
@@ -51,9 +67,17 @@
 
 /* Begin PBXFileReference section */
 		07BA85C69A0AADC582A26091 /* Pods-ZPhotoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		132C40AACFA72A246818367C /* Pods-ZPhoto-ZPhotoUITests.releaseadhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoUITests.releaseadhoc.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoUITests/Pods-ZPhoto-ZPhotoUITests.releaseadhoc.xcconfig"; sourceTree = "<group>"; };
 		1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhotoUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		237500A520511247000A1B96 /* SPRecordVideoFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRecordVideoFilterView.swift; sourceTree = "<group>"; };
+		237500A720512DC8000A1B96 /* SPRecordVideoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRecordVideoData.swift; sourceTree = "<group>"; };
 		37B2953C120C1B91174FA422 /* Pods-ZPhoto.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.debug.xcconfig"; sourceTree = "<group>"; };
+		39F99C17C26D1FD4DA8F8A0C /* Pods-ZPhoto-ZPhotoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests.release.xcconfig"; sourceTree = "<group>"; };
+		3C5C89CA18838367F24DE7CC /* Pods-ZPhoto-ZPhotoTests.releaseadhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoTests.releaseadhoc.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests.releaseadhoc.xcconfig"; sourceTree = "<group>"; };
 		3C693C2DF867F8838AC46338 /* Pods-ZPhotoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests.release.xcconfig"; sourceTree = "<group>"; };
+		52AA4B96C0EEF8C1EE867BF2 /* Pods-ZPhoto.releaseadhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.releaseadhoc.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.releaseadhoc.xcconfig"; sourceTree = "<group>"; };
+		581BCD2AA12EA7F29D52DAE0 /* Pods_ZPhoto_ZPhotoUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhoto_ZPhotoUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6609ABEA8F5F0D5DC63FF968 /* Pods-ZPhoto-ZPhotoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoUITests/Pods-ZPhoto-ZPhotoUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9E0654CD1EDF24A90035189B /* SPVideoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoModel.swift; sourceTree = "<group>"; };
 		9E0654CF1EE29B6E0035189B /* SPVideoPlayVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoPlayVC.swift; sourceTree = "<group>"; };
 		9E0654D11EE3D2B00035189B /* SPVideoPlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoPlayView.swift; sourceTree = "<group>"; };
@@ -65,7 +89,11 @@
 		9E205EDA1EFFCF3800AB18C3 /* SPBaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPBaseVC.swift; sourceTree = "<group>"; };
 		9E251CD41F48243400D95C4E /* FileManager+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+extension.swift"; sourceTree = "<group>"; };
 		9E251CD61F4C791700D95C4E /* CIFilter+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CIFilter+extension.swift"; sourceTree = "<group>"; };
+		9E251CD81F5B2B2E00D95C4E /* SPRecordVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRecordVideoView.swift; sourceTree = "<group>"; };
+		9E317ADF1F68106D00D6554C /* SPAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAnimationView.swift; sourceTree = "<group>"; };
 		9E47CC3C1EFFDBC1000362CC /* UIView+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+extension.swift"; sourceTree = "<group>"; };
+		9E7168A51F659B8400BB7C01 /* SPFilterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFilterModel.swift; sourceTree = "<group>"; };
+		9E7168A71F659F5A00BB7C01 /* SPFilterEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFilterEnum.swift; sourceTree = "<group>"; };
 		9E72266C1E8972B4001BB9A9 /* ZPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9E7226761E8972B4001BB9A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -76,15 +104,28 @@
 		9E72268B1E8972B4001BB9A9 /* ZPhotoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZPhotoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E72268F1E8972B4001BB9A9 /* ZPhotoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPhotoUITests.swift; sourceTree = "<group>"; };
 		9E7226911E8972B4001BB9A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9E774E06209A0C2C0071493B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		9E774E08209A0C520071493B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		9E774E09209A0F920071493B /* SPLanguageChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPLanguageChange.swift; sourceTree = "<group>"; };
+		9E774E0E209A147D0071493B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		9E774E10209A147F0071493B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9E817736209E0A9B00EE7EB4 /* SPAuthorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAuthorization.swift; sourceTree = "<group>"; };
+		9E98ED5720A0AA4600DDB427 /* SPSysSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSysSet.swift; sourceTree = "<group>"; };
+		9E98ED5920A14EC000DDB427 /* SPArray+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SPArray+extension.swift"; sourceTree = "<group>"; };
 		9E9D8D551ED47C1F00522BCA /* SPVideoListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoListVC.swift; sourceTree = "<group>"; };
 		9E9D8D571ED47E2600522BCA /* SPVideoCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoCollectionCell.swift; sourceTree = "<group>"; };
 		9EAB5AAE1EED6C7900605945 /* UIImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageManager.swift; sourceTree = "<group>"; };
+		9EF177B620BAFD5B00925FE2 /* SPSystemVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSystemVersion.swift; sourceTree = "<group>"; };
+		9EF177B820BC576500925FE2 /* SPDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDevice.swift; sourceTree = "<group>"; };
 		9EFACEDF1E988C0300D11F18 /* SPRecordVideoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPRecordVideoVC.swift; sourceTree = "<group>"; };
+		A48F6C5FB7358C64CE5D01E2 /* Pods-ZPhoto-ZPhotoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.release.xcconfig"; sourceTree = "<group>"; };
 		B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhotoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhoto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C51E104DB0F1870B26D77C6B /* Pods-ZPhotoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoTests/Pods-ZPhotoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E09A31056057CB0AB8306CB3 /* Pods_ZPhoto_ZPhotoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhoto_ZPhotoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F183CFE9FF0D101A7BFCC189 /* Pods-ZPhotoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoTests/Pods-ZPhotoTests.release.xcconfig"; sourceTree = "<group>"; };
+		F3A999EA99A71A6F9437823B /* Pods-ZPhoto-ZPhotoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoUITests/Pods-ZPhoto-ZPhotoUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0E618971AA6A17A4645133C /* Pods_ZPhotoTests.framework in Frameworks */,
+				2C4AFCB7EC3DE3B0F56DCA96 /* Pods_ZPhoto_ZPhotoTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				26291E7D822E5F0FB9210A4D /* Pods_ZPhotoUITests.framework in Frameworks */,
+				0FC82228CAC6295E6E42D4BD /* Pods_ZPhoto_ZPhotoUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,6 +164,8 @@
 				C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */,
 				B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */,
 				1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */,
+				E09A31056057CB0AB8306CB3 /* Pods_ZPhoto_ZPhotoTests.framework */,
+				581BCD2AA12EA7F29D52DAE0 /* Pods_ZPhoto_ZPhotoUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -134,6 +179,13 @@
 				F183CFE9FF0D101A7BFCC189 /* Pods-ZPhotoTests.release.xcconfig */,
 				07BA85C69A0AADC582A26091 /* Pods-ZPhotoUITests.debug.xcconfig */,
 				3C693C2DF867F8838AC46338 /* Pods-ZPhotoUITests.release.xcconfig */,
+				52AA4B96C0EEF8C1EE867BF2 /* Pods-ZPhoto.releaseadhoc.xcconfig */,
+				A48F6C5FB7358C64CE5D01E2 /* Pods-ZPhoto-ZPhotoTests.debug.xcconfig */,
+				39F99C17C26D1FD4DA8F8A0C /* Pods-ZPhoto-ZPhotoTests.release.xcconfig */,
+				3C5C89CA18838367F24DE7CC /* Pods-ZPhoto-ZPhotoTests.releaseadhoc.xcconfig */,
+				F3A999EA99A71A6F9437823B /* Pods-ZPhoto-ZPhotoUITests.debug.xcconfig */,
+				6609ABEA8F5F0D5DC63FF968 /* Pods-ZPhoto-ZPhotoUITests.release.xcconfig */,
+				132C40AACFA72A246818367C /* Pods-ZPhoto-ZPhotoUITests.releaseadhoc.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -142,13 +194,29 @@
 			isa = PBXGroup;
 			children = (
 				9E1A4E261E9A891F00FEF8B7 /* SPPublicHeader.swift */,
+				9E817736209E0A9B00EE7EB4 /* SPAuthorization.swift */,
 				9EAB5AAE1EED6C7900605945 /* UIImageManager.swift */,
 				9E205EDA1EFFCF3800AB18C3 /* SPBaseVC.swift */,
 				9E47CC3C1EFFDBC1000362CC /* UIView+extension.swift */,
 				9E251CD41F48243400D95C4E /* FileManager+extension.swift */,
 				9E251CD61F4C791700D95C4E /* CIFilter+extension.swift */,
+				9E317ADF1F68106D00D6554C /* SPAnimationView.swift */,
+				9E774E09209A0F920071493B /* SPLanguageChange.swift */,
+				9E98ED5720A0AA4600DDB427 /* SPSysSet.swift */,
+				9E98ED5920A14EC000DDB427 /* SPArray+extension.swift */,
+				9EF177B620BAFD5B00925FE2 /* SPSystemVersion.swift */,
+				9EF177B820BC576500925FE2 /* SPDevice.swift */,
 			);
 			path = Utility;
+			sourceTree = "<group>";
+		};
+		9E7168A41F659B7400BB7C01 /* SPFilter */ = {
+			isa = PBXGroup;
+			children = (
+				9E7168A51F659B8400BB7C01 /* SPFilterModel.swift */,
+				9E7168A71F659F5A00BB7C01 /* SPFilterEnum.swift */,
+			);
+			path = SPFilter;
 			sourceTree = "<group>";
 		};
 		9E7226631E8972B4001BB9A9 = {
@@ -176,11 +244,14 @@
 		9E72266E1E8972B4001BB9A9 /* ZPhoto */ = {
 			isa = PBXGroup;
 			children = (
+				9E7168A41F659B7400BB7C01 /* SPFilter */,
 				9E1A4E241E9A88C300FEF8B7 /* Utility */,
 				9EFACEDE1E988BC600D11F18 /* Video */,
 				9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */,
 				9E7226761E8972B4001BB9A9 /* Assets.xcassets */,
 				9E72267B1E8972B4001BB9A9 /* Info.plist */,
+				9E774E07209A0C2C0071493B /* Localizable.strings */,
+				9E774E0F209A147D0071493B /* InfoPlist.strings */,
 			);
 			path = ZPhoto;
 			sourceTree = "<group>";
@@ -207,7 +278,10 @@
 			isa = PBXGroup;
 			children = (
 				9EFACEDF1E988C0300D11F18 /* SPRecordVideoVC.swift */,
+				9E251CD81F5B2B2E00D95C4E /* SPRecordVideoView.swift */,
+				237500A520511247000A1B96 /* SPRecordVideoFilterView.swift */,
 				9E1A4E201E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift */,
+				237500A720512DC8000A1B96 /* SPRecordVideoData.swift */,
 				9E1A4E221E9A823F00FEF8B7 /* SPVideoHelp.swift */,
 				9E9D8D551ED47C1F00522BCA /* SPVideoListVC.swift */,
 				9E9D8D571ED47E2600522BCA /* SPVideoCollectionCell.swift */,
@@ -320,6 +394,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 9E7226631E8972B4001BB9A9;
 			productRefGroup = 9E72266D1E8972B4001BB9A9 /* Products */;
@@ -339,6 +414,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E7226771E8972B4001BB9A9 /* Assets.xcassets in Resources */,
+				9E774E05209A0C2C0071493B /* Localizable.strings in Resources */,
+				9E774E0D209A147D0071493B /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,13 +457,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ZPhoto-ZPhotoTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		3B68F6E261EA93F76BFFA20F /* [CP] Embed Pods Frameworks */ = {
@@ -395,13 +475,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto-ZPhotoUITests/Pods-ZPhoto-ZPhotoUITests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto-ZPhotoUITests/Pods-ZPhoto-ZPhotoUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		3BD35525EA9B792869201208 /* [CP] Copy Pods Resources */ = {
@@ -416,7 +499,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhotoTests/Pods-ZPhotoTests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		564E913EB10CDB51E84F8AD2 /* [CP] Copy Pods Resources */ = {
@@ -431,7 +514,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto-ZPhotoUITests/Pods-ZPhoto-ZPhotoUITests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9CA014F25D585D3EBC367E7B /* [CP] Embed Pods Frameworks */ = {
@@ -440,13 +523,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhotoTests/Pods-ZPhotoTests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A6C6DFDEC4510FF0DE551740 /* [CP] Check Pods Manifest.lock */ = {
@@ -455,13 +541,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ZPhoto-ZPhotoUITests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AB8869EF72E19E634CA5AC30 /* [CP] Embed Pods Frameworks */ = {
@@ -470,9 +559,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -485,13 +577,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ZPhoto-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -501,23 +596,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				237500A620511247000A1B96 /* SPRecordVideoFilterView.swift in Sources */,
 				9E47CC3D1EFFDBC1000362CC /* UIView+extension.swift in Sources */,
 				9E205EDB1EFFCF3800AB18C3 /* SPBaseVC.swift in Sources */,
 				9EAB5AAF1EED6C7900605945 /* UIImageManager.swift in Sources */,
 				9E0654CE1EDF24A90035189B /* SPVideoModel.swift in Sources */,
+				9E817737209E0A9B00EE7EB4 /* SPAuthorization.swift in Sources */,
 				9E9D8D561ED47C1F00522BCA /* SPVideoListVC.swift in Sources */,
 				9E9D8D581ED47E2600522BCA /* SPVideoCollectionCell.swift in Sources */,
 				9E1A4E271E9A891F00FEF8B7 /* SPPublicHeader.swift in Sources */,
+				9EF177B920BC576500925FE2 /* SPDevice.swift in Sources */,
 				9E0654D01EE29B6E0035189B /* SPVideoPlayVC.swift in Sources */,
+				9E7168A61F659B8400BB7C01 /* SPFilterModel.swift in Sources */,
 				9EFACEE01E988C0400D11F18 /* SPRecordVideoVC.swift in Sources */,
+				9E98ED5A20A14EC000DDB427 /* SPArray+extension.swift in Sources */,
 				9E251CD51F48243400D95C4E /* FileManager+extension.swift in Sources */,
+				9EF177B720BAFD5B00925FE2 /* SPSystemVersion.swift in Sources */,
+				9E317AE01F68106D00D6554C /* SPAnimationView.swift in Sources */,
 				9E1A4E211E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift in Sources */,
+				9E98ED5820A0AA4600DDB427 /* SPSysSet.swift in Sources */,
+				9E774E0A209A0F920071493B /* SPLanguageChange.swift in Sources */,
 				9E1A4E231E9A823F00FEF8B7 /* SPVideoHelp.swift in Sources */,
+				9E251CD91F5B2B2E00D95C4E /* SPRecordVideoView.swift in Sources */,
 				9E7226701E8972B4001BB9A9 /* AppDelegate.swift in Sources */,
+				237500A820512DC8000A1B96 /* SPRecordVideoData.swift in Sources */,
 				9E205ED91EF0323600AB18C3 /* SPVideoScheduleView.swift in Sources */,
 				9E0654D21EE3D2B00035189B /* SPVideoPlayView.swift in Sources */,
 				9E251CD71F4C791700D95C4E /* CIFilter+extension.swift in Sources */,
 				9E205ED71EEEC3B600AB18C3 /* SPVideoEditVC.swift in Sources */,
+				9E7168A81F659F5A00BB7C01 /* SPFilterEnum.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,11 +659,33 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		9E774E07209A0C2C0071493B /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9E774E06209A0C2C0071493B /* en */,
+				9E774E08209A0C520071493B /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		9E774E0F209A147D0071493B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9E774E0E209A147D0071493B /* zh-Hans */,
+				9E774E10209A147F0071493B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		9E7226921E8972B4001BB9A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -606,6 +735,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -654,13 +784,14 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: shupeng Technology Park Xili private quarters (595W5226P2)";
 				DEVELOPMENT_TEAM = 2X8ED8ZMS2;
 				INFOPLIST_FILE = ZPhoto/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangshp.ZPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0ee2f46b-79fe-4033-9e7f-3c87a2e6e0ce";
-				PROVISIONING_PROFILE_SPECIFIER = ZPhotoDeve;
+				PROVISIONING_PROFILE = "e6310527-79c3-45b7-8e15-d49cc71171eb";
+				PROVISIONING_PROFILE_SPECIFIER = ZPhotoDev;
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -674,19 +805,20 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: shupeng Technology Park Xili private quarters (2X8ED8ZMS2)";
 				DEVELOPMENT_TEAM = 2X8ED8ZMS2;
 				INFOPLIST_FILE = ZPhoto/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangshp.ZPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "d7d6598e-74fb-4914-8fd3-96fea2d0c871";
-				PROVISIONING_PROFILE_SPECIFIER = ZPhotoAdHoc;
+				PROVISIONING_PROFILE = "3f93c631-f4ac-4374-b173-8a0a25fde743";
+				PROVISIONING_PROFILE_SPECIFIER = ZPhotoAPPStore;
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
 		9E7226981E8972B4001BB9A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C51E104DB0F1870B26D77C6B /* Pods-ZPhotoTests.debug.xcconfig */;
+			baseConfigurationReference = A48F6C5FB7358C64CE5D01E2 /* Pods-ZPhoto-ZPhotoTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -701,7 +833,7 @@
 		};
 		9E7226991E8972B4001BB9A9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F183CFE9FF0D101A7BFCC189 /* Pods-ZPhotoTests.release.xcconfig */;
+			baseConfigurationReference = 39F99C17C26D1FD4DA8F8A0C /* Pods-ZPhoto-ZPhotoTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -716,7 +848,7 @@
 		};
 		9E72269B1E8972B4001BB9A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 07BA85C69A0AADC582A26091 /* Pods-ZPhotoUITests.debug.xcconfig */;
+			baseConfigurationReference = F3A999EA99A71A6F9437823B /* Pods-ZPhoto-ZPhotoUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = ZPhotoUITests/Info.plist;
@@ -730,7 +862,7 @@
 		};
 		9E72269C1E8972B4001BB9A9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3C693C2DF867F8838AC46338 /* Pods-ZPhotoUITests.release.xcconfig */;
+			baseConfigurationReference = 6609ABEA8F5F0D5DC63FF968 /* Pods-ZPhoto-ZPhotoUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = ZPhotoUITests/Info.plist;

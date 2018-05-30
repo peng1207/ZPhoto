@@ -1,26 +1,13 @@
 {
   "images" : [
     {
-      "orientation" : "portrait",
-      "idiom" : "iphone",
-      "filename" : "320X480.png",
       "extent" : "full-screen",
-      "scale" : "1x"
-    },
-    {
-      "orientation" : "portrait",
       "idiom" : "iphone",
-      "filename" : "640X960-1.png",
-      "extent" : "full-screen",
-      "scale" : "2x"
-    },
-    {
+      "subtype" : "2436h",
+      "filename" : "1125x2436.png",
+      "minimum-system-version" : "11.0",
       "orientation" : "portrait",
-      "idiom" : "iphone",
-      "filename" : "640X1136-1.png",
-      "extent" : "full-screen",
-      "subtype" : "retina4",
-      "scale" : "2x"
+      "scale" : "3x"
     },
     {
       "extent" : "full-screen",
