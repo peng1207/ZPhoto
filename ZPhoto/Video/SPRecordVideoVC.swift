@@ -10,19 +10,12 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-// 按钮点击事件
-public enum ButtonClickType : Int {
-    case done                // 点击完成
-    case cance               // 点击取消
-    case flash               // 点击闪光灯
-    case change             // 点击切换镜头
-    case filter                 // 点击滤镜
-}
+
 // 按钮点击事件回调
 typealias ButtonClickBlock =  (_ clickType:ButtonClickType,_ button:UIButton) ->Void
 
 
-class SPRecordVideoVC: UINavigationController {
+class SPRecordVideoVC: SPBaseNavVC {
     
     internal init() {
         super.init(rootViewController: SPRecordVideoRootVC());
@@ -55,8 +48,8 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
         view.backgroundColor = UIColor.clear
         return view
     }() // 操作按钮
-    lazy fileprivate var preView : SPRecordVideoView! = {
-        return SPRecordVideoView()
+    lazy fileprivate var preView : SPVideoPreviewLayerView = {
+        return SPVideoPreviewLayerView()
     }() // 显示视频流
     lazy fileprivate var videoData : SPRecordVideoData! = {
         return SPRecordVideoData()
@@ -81,7 +74,6 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.white
         self.setupVideoManager()
         self.setupUI()
         self.addActionToButton()
@@ -335,7 +327,7 @@ class SPRecordVideoBtnView: UIView {
     }()
     lazy fileprivate var timeLabel : UILabel! = {
         let label = UILabel();
-        label.font = fontSize(fontSize: 14);
+        label.font = sp_fontSize(fontSize: 14);
         label.textAlignment = NSTextAlignment.center;
         label.text = "00:00"
         label.backgroundColor = UIColor.white.withAlphaComponent(0.3)
@@ -353,7 +345,7 @@ class SPRecordVideoBtnView: UIView {
         if let select = selectTitle {
             button.setTitle(select, for: .selected)
         }
-        button.titleLabel?.font = fontSize(fontSize: fontsize)
+        button.titleLabel?.font = sp_fontSize(fontSize: fontsize)
         button.setTitleColor(UIColor.black.withAlphaComponent(0.5), for: .normal)
         if let image = norImage {
             button.setImage(image, for: UIControlState.normal)
@@ -452,9 +444,6 @@ class SPRecordVideoBtnView: UIView {
     }
     
     fileprivate func addConstraintToView(){
-        
-       
-        
         self.canceButton.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.snp.left).offset(12)
             maker.height.equalTo(40)

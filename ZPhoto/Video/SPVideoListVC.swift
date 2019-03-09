@@ -9,35 +9,9 @@
 import Foundation
 import UIKit
 import CoreImage
-class SPVideoListVC: UINavigationController {
-    
-    
-    internal init() {
-        super.init(rootViewController: SPVideoListRootVC())
-        
-    }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-}
+
 // MARK: -- 视频列表
-fileprivate class SPVideoListRootVC : SPBaseVC {
+  class SPVideoListVC : SPBaseVC {
     
     fileprivate lazy var videoCollectionView : UICollectionView = {
         let layout = SPVideoCollectionFlowLayout()
@@ -45,37 +19,38 @@ fileprivate class SPVideoListRootVC : SPBaseVC {
         let  collectionView = UICollectionView(frame: CGRect(), collectionViewLayout: layout)
         return collectionView
     }()
+    fileprivate lazy var backBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setImage(UIImage(named: "public_back"), for: UIControlState.normal)
+        btn.addTarget(self, action: #selector(sp_clickBack), for: UIControlEvents.touchUpInside)
+        btn.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        return btn
+    }()
     fileprivate let identify:String = "ViewCell"
     fileprivate var videoDataArray : Array<SPVideoModel>? = nil
     fileprivate lazy var noDataView : UILabel = {
         let label = UILabel()
         label.text = SPLanguageChange.getString(key: "NO_VIDEO_TIP")
         label.numberOfLines = 0;
-        label.font = fontSize(fontSize: 14)
+        label.font = sp_fontSize(fontSize: 14)
         label.isHidden = true
         label.textAlignment = .center
         return label
     }()
     
     override func viewDidLoad() {
+        super .viewDidLoad()
         self.setupUI()
         self.videoData()
         self.sendNotification()
-        let userDefault = UserDefaults.standard
-        let languages:NSArray = userDefault.object(forKey: "AppleLanguages") as! NSArray
-        SPLog("languages is \(languages)")
-        
-        //        let filterNames = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
-        
-        //        for filterName in filterNames {
-        //            let filter = CIFilter(name: filterName)
-        //            print("\rfilter:\(filterName)\rattributes:\(filter?.attributes)")
-        //        }
-        
+    }
+    /// 点击返回
+    override func sp_clickBack(){
+        self.dismiss(animated: true, completion: nil)
     }
 }
 // MARK: -- UI
-extension SPVideoListRootVC {
+extension SPVideoListVC {
     
     fileprivate func setupUI(){
         self.setupCollectionView()
@@ -88,7 +63,7 @@ extension SPVideoListRootVC {
         self.videoCollectionView.delegate = self
         self.videoCollectionView.dataSource = self
         self.videoCollectionView.register(SPVideoCollectionCell.self, forCellWithReuseIdentifier: identify)
-        self.videoCollectionView.backgroundColor = UIColor.white
+        self.videoCollectionView.backgroundColor =  self.view.backgroundColor
         self.addConstraintToView()
     }
     /**< 创建导航栏上控件 */
@@ -97,8 +72,10 @@ extension SPVideoListRootVC {
         let addButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
 //        addButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         addButton.addTarget(self, action: #selector(clickAdd), for: .touchUpInside)
-        addButton.setImage(UIImage(named: "videoAdd"), for: UIControlState.normal)
+    
+        addButton.setImage(UIImage(named: "add_white"), for: UIControlState.normal)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: addButton)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.backBtn)
     }
     
     private func addConstraintToView (){
@@ -118,10 +95,10 @@ extension SPVideoListRootVC {
             maker.centerY.equalTo(self.view.snp.centerY).offset(0)
         }
     }
-    
 }
 // MARK: -- action
-extension SPVideoListRootVC {
+extension SPVideoListVC {
+  
     @objc fileprivate func clickAdd(){
         self.present(SPRecordVideoVC(), animated: true, completion: nil)
     }
@@ -156,7 +133,7 @@ extension SPVideoListRootVC {
 }
 
 // MARK: -- delegate
-extension SPVideoListRootVC : UICollectionViewDelegate,UICollectionViewDataSource {
+extension SPVideoListVC : UICollectionViewDelegate,UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return (self.videoDataArray?.count)!
     }
@@ -182,7 +159,7 @@ extension SPVideoListRootVC : UICollectionViewDelegate,UICollectionViewDataSourc
     
 }
 // MARK: -- 数据
-extension SPVideoListRootVC {
+extension SPVideoListVC {
     /**< 获取视频数据  */
     @objc fileprivate func videoData(){
         let array = SPVideoHelp.videoFile()
@@ -201,7 +178,7 @@ extension SPVideoListRootVC {
     
 }
 // MARK: -- 通知
-extension SPVideoListRootVC{
+extension SPVideoListVC{
     /**< 发送通知 */
     func sendNotification(){
         NotificationCenter.default.addObserver(self, selector: #selector(videoData), name:NSNotification.Name(rawValue: kVideoChangeNotification), object: nil)

@@ -9,11 +9,18 @@
 import Foundation
 import UIKit
 class SPBaseVC : UIViewController{
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupBase()
+    }
+    func sp_setupUI() {
+        
+    }
+    func sp_dealNoData(){
+        
+    }
+   @objc func sp_clickBack(){
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -22,7 +29,7 @@ fileprivate extension  SPBaseVC{
     fileprivate func setupBase(){
         // UI适配
         self.edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
-        self.view.backgroundColor = UIColor.white
+        self.view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue)
     }
     
 }

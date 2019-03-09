@@ -111,8 +111,6 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 self.noAuthorizedComplete(noAuthBlock: self.noMicrophoneBlock)
             }
         }
-       
-        
     }
     
     /*
@@ -138,7 +136,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         let audioInput = try? AVCaptureDeviceInput(device: self.audioDevice)
         self.captureSession.beginConfiguration()
         for input in self.captureSession.inputs {
-            self.captureSession.removeInput(input as! AVCaptureInput)
+            self.captureSession.removeInput(input as? AVCaptureInput)
         }
         if self.captureSession.canAddInput(videoInput) {
             self.captureSession.addInput(videoInput)
@@ -203,7 +201,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     }
     /**< 初始化writer  */
     fileprivate func setupAssertWrirer(){
-        FileManager.directory(createPath: SPVideoHelp.kVideoTempDirectory)
+        FileManager.sp_directory(createPath: SPVideoHelp.kVideoTempDirectory)
         do {
             if FileManager.default.fileExists(atPath: filePath) {
                 FileManager.remove(path: filePath)
@@ -353,10 +351,20 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         if SP_IS_IPAD {
             return
         }
-        
+        if !(self.currentDevice?.hasFlash)! {
+            return
+        }
+        if  !(self.currentDevice?.hasTorch)! {
+            return
+        }
         self.changeDeviceProperty(propertyBlock: { [weak self]() in
-            self?.currentDevice?.torchMode = AVCaptureTorchMode.on
-            self?.currentDevice?.flashMode = AVCaptureFlashMode.on
+            if self?.currentDevice?.torchMode == AVCaptureTorchMode.off {
+                 self?.currentDevice?.torchMode = AVCaptureTorchMode.on
+            }
+            if self?.currentDevice?.flashMode == AVCaptureFlashMode.off {
+                 self?.currentDevice?.flashMode = AVCaptureFlashMode.on
+            }
+           
         })
     }
     /*
@@ -366,9 +374,22 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         if SP_IS_IPAD {
             return
         }
+        if self.currentDevice == nil {
+            return
+        }
+        if !(self.currentDevice?.hasFlash)! {
+            return
+        }
+        if  !(self.currentDevice?.hasTorch)! {
+            return
+        }
         self.changeDeviceProperty(propertyBlock: { [weak self]() in
-            self?.currentDevice?.torchMode = AVCaptureTorchMode.off
-            self?.currentDevice?.flashMode = AVCaptureFlashMode.off
+            if self?.currentDevice?.torchMode == AVCaptureTorchMode.on {
+                 self?.currentDevice?.torchMode = AVCaptureTorchMode.off
+            }
+            if self?.currentDevice?.flashMode == AVCaptureFlashMode.on {
+                 self?.currentDevice?.flashMode = AVCaptureFlashMode.off
+            }
         })
         
     }

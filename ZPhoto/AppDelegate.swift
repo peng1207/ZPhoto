@@ -18,13 +18,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow.init(frame: UIScreen.main.bounds)
         window?.backgroundColor = UIColor.white
         window?.makeKeyAndVisible()
+        UINavigationController.sp_initialize()
          SPLanguageChange.shareInstance.initLanguage()
-        let recordVideoVC = SPVideoListVC()
+        let recordVideoVC = SPMainVC()
         window?.rootViewController = recordVideoVC
         createCachePath()
         setUncaughtExceptionHandler()
-        
-        SPLog("\(UIDevice.current.model)")
         
         // Override point for customization after application launch.
         return true

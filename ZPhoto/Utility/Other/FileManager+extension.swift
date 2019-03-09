@@ -12,7 +12,7 @@ import Foundation
 extension FileManager{
     
     /**< 创建文件夹  */
-    class func directory(createPath:String){
+    class func sp_directory(createPath:String){
         do{
             try FileManager.default.createDirectory(atPath: createPath, withIntermediateDirectories: true, attributes: nil)
             addSkipBackupAttributeToItem(AtURL: URL(fileURLWithPath: createPath))

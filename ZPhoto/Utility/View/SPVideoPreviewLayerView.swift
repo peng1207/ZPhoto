@@ -1,21 +1,16 @@
 //
-//  SPRecordVideoView.swift
+//  SPVideoPreviewLayerView.swift
 //  ZPhoto
 //
-//  Created by huangshupeng on 2017/9/3.
-//  Copyright © 2017年 huangshupeng. All rights reserved.
+//  Created by 黄树鹏 on 2019/2/26.
+//  Copyright © 2019 huangshupeng. All rights reserved.
 //
 
 import Foundation
 import UIKit
 import AVFoundation
-
-class SPRecordVideoView : UIView{
-    
+class SPVideoPreviewLayerView: UIView {
     override class var layerClass: Swift.AnyClass {
         return AVCaptureVideoPreviewLayer.self
     }
 }
-
-
-

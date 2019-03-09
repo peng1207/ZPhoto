@@ -19,3 +19,8 @@
 "NO_CAMERA_AUTH_TIPS" = "无法使用摄像头保留美好的一刻，是否前往设置？";
 "GO_TO_SET" = "前往";
 "NO_MICROPHONE_AUTH_TIPS" = "没有开启麦克风，无法录到声音，是否前往设置?";
+"FIlE" = "文件";
+"SPLICING" = "拼接";
+"EDIT" = "编辑";
+"INVERSION" = "倒放"; 
+ 

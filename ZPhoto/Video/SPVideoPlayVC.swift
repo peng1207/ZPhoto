@@ -24,7 +24,7 @@ class SPVideoPlayVC : SPBaseVC {
         button.setBackgroundImage(UIImage(named: "delete"), for: .normal)
         
         
-        button.frame = CGRect(x: 10, y: getStatusBarHeight(), width: 30, height: 30)
+        button.frame = CGRect(x: 10, y: sp_getStatusBarHeight(), width: 30, height: 30)
        
         button.clipsToBounds = true 
         return button

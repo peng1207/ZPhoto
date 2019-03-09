@@ -27,9 +27,7 @@ class SPVideoModel : NSObject{
                 if thumbnailImage == nil {
                     thumbnailImage = UIImage(named: "default")
                 }
-                
             }
-
         }
     }
     var thumbnailImage : UIImage?
@@ -38,5 +36,7 @@ class SPVideoModel : NSObject{
        url = nil
         asset = nil
     }
-    
+    deinit {
+        
+    }
 }

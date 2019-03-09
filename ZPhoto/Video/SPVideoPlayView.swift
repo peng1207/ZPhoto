@@ -192,7 +192,7 @@ class SPVideoPlayButtonView : UIView{
     lazy var timeLabel: UILabel! = {
         let label = UILabel()
         label.text = "00.00"
-        label.font = fontSize(fontSize: 14)
+        label.font = sp_fontSize(fontSize: 14)
         label.textColor = UIColor.white
         return label
     }()

@@ -19,3 +19,8 @@
 "NO_CAMERA_AUTH_TIPS" = "Can not use camera to retain a beautiful moment, whether to go set?";
 "GO_TO_SET" = "Go set";
 "NO_MICROPHONE_AUTH_TIPS" = "You can't record the sound without opening the microphone. Do you want to go to the settings?";
+"FIlE" = "FILE";
+"SPLICING" = "splicing";
+"EDIT" = "edit";
+"INVERSION" = "Inversion";
+ 

@@ -137,14 +137,14 @@ class SPVideoHelp: NSObject {
      获取videomodel
      */
     class func getVideoModel(path:String) -> SPVideoModel{
-        var model = SPVideoModel();
+        let model = SPVideoModel();
         model.url = URL(fileURLWithPath: path)
         return model
     }
     
     /**< 根据目录获取该目录下所有的文件 并排序*/
     class func getfile(forDirectory:String) -> [String]?{
-        FileManager.directory(createPath: forDirectory)
+        FileManager.sp_directory(createPath: forDirectory)
         let fileArray = try! FileManager.default.contentsOfDirectory(atPath: forDirectory)
         let fileSorted = fileArray.sorted { (file1 : String, file2 : String) -> Bool in
             if file1.compare(file2) == ComparisonResult.orderedAscending {
@@ -216,7 +216,7 @@ class SPVideoHelp: NSObject {
         }
         videoTrack.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
         
-        FileManager.directory(createPath: kVideoTempDirectory)
+        FileManager.sp_directory(createPath: kVideoTempDirectory)
         
        let exportUrl = URL(fileURLWithPath: "\(kVideoTempDirectory)/\(getVideoName())")
         

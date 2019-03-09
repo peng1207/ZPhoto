@@ -18,7 +18,8 @@ let kTmpPath = NSTemporaryDirectory()
 /* 帧数
  */
 let framesPerSecond : Int32 = 60
-
+/// 按钮点击回调
+typealias SPBtnComplete = ()->Void
 /**
  获取字体对象
  
@@ -26,10 +27,10 @@ let framesPerSecond : Int32 = 60
  
  - returns: font
  */
-func fontSize(fontSize: CGFloat) -> UIFont{
+func sp_fontSize(fontSize: CGFloat) -> UIFont{
     return UIFont.systemFont(ofSize: fontSize)
 }
-func getStatusBarHeight() -> CGFloat{
+func sp_getStatusBarHeight() -> CGFloat{
     return UIApplication.shared.statusBarFrame.height
 }
 /**
@@ -184,5 +185,12 @@ func UncaughtExceptionHandler() -> @convention(c) (NSException) -> Void {
  创建崩溃日志的目录
  */
 func createCachePath (){
-    FileManager.directory(createPath: "\(kCachesPath)/ZPhoteCash")
+    FileManager.sp_directory(createPath: "\(kCachesPath)/ZPhoteCash")
+}
+///  获取字体
+///
+/// - Parameter size: 大小
+/// - Returns: 字体
+func sp_getFontSize(size : CGFloat)->UIFont{
+    return UIFont.systemFont(ofSize: size)
 }
