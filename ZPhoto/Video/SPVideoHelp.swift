@@ -121,7 +121,7 @@ class SPVideoHelp: NSObject {
     /**< 获取视频文件 转为 */
     class func videoFile() -> [SPVideoModel]? {
         var videoArray = Array<SPVideoModel>()
-        let fileArray = self.getfile(forDirectory: kVideoDirectory)
+        let fileArray = sp_getfile(forDirectory: kVideoDirectory)
         for file in fileArray! {
              let path = "\(kVideoDirectory)/\(file)"
             let model = getVideoModel(path: path)
@@ -142,18 +142,7 @@ class SPVideoHelp: NSObject {
         return model
     }
     
-    /**< 根据目录获取该目录下所有的文件 并排序*/
-    class func getfile(forDirectory:String) -> [String]?{
-        FileManager.sp_directory(createPath: forDirectory)
-        let fileArray = try! FileManager.default.contentsOfDirectory(atPath: forDirectory)
-        let fileSorted = fileArray.sorted { (file1 : String, file2 : String) -> Bool in
-            if file1.compare(file2) == ComparisonResult.orderedAscending {
-                return false
-            }
-            return  true
-        }
-        return fileSorted
-    }
+ 
     /**
      删除视频文件
      */

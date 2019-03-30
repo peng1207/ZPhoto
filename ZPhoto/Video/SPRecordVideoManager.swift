@@ -192,7 +192,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             return
         }
         
-        dispatchMainQueue {
+        sp_dispatchMainQueue {
             self.setupAssertWrirer()
             self.startRecording = true
             self.assetWriter?.startWriting()
@@ -446,7 +446,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             if outputImage != nil {
                 outputImage = picRotating(imgae: outputImage)
                 let cgImage = self.ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
-                dispatchMainQueue {
+                sp_dispatchMainQueue {
                     self.videoLayer?.contents = cgImage
                 }
             }

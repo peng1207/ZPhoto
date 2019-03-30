@@ -72,6 +72,7 @@ class SPPentagonView:  UIView{
             pathPag.move(to: CGPoint(x: 0, y: 0))
             pathPag.addLine(to: CGPoint(x: sp_width() - space, y: 0))
             pathPag.addLine(to: CGPoint(x: sp_width(), y: sp_height()/2.0))
+          
             pathPag.addLine(to: CGPoint(x: sp_width() - space, y: sp_height()))
             pathPag.addLine(to: CGPoint(x: 0, y: sp_height()))
         case .left:
@@ -92,7 +93,7 @@ class SPPentagonView:  UIView{
             pathPag.addLine(to: CGPoint(x: sp_width(), y: sp_height() - space))
             pathPag.addLine(to: CGPoint(x: sp_width()/2.0, y: sp_height()))
             pathPag.addLine(to: CGPoint(x: 0, y: sp_height() - space))
-   
+            
         }
         if let color = self.fillColor {
             color.set()

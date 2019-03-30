@@ -184,10 +184,10 @@ fileprivate extension SPCameraRootVC{
      改变滤镜图片的数据
      */
     fileprivate func sp_changeFilterData(){
-        dispatchMainQueue {
+        sp_dispatchMainQueue {
             if (self.filterView.isHidden == false){
                 self.videoData.setup(inputImage: self.cameraManmager.noFilterCIImage, complete: { [weak self] () in
-                    dispatchMainQueue {
+                    sp_dispatchMainQueue {
                         self?.filterView.filterList = self?.videoData.getFilterList()
                     }
                 })

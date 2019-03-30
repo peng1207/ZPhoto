@@ -143,7 +143,7 @@ extension SPCameraManager:AVCaptureVideoDataOutputSampleBufferDelegate{
             if let oImg = outputImage {
                 outputImage = picRotating(imgae: oImg)
                 let cgImage = self.ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
-                dispatchMainQueue {
+                sp_dispatchMainQueue {
                     self.videoLayer?.contents = cgImage
                     self.filterCGImage = cgImage
                 }

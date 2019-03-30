@@ -19,6 +19,21 @@ class SPPhotoHelp {
         return "\(Int(date.timeIntervalSince1970))"
     }
     
+    /// 获取保存的本地图片的数据
+    ///
+    /// - Returns: 图片数据
+    class func sp_getPhototList()->[SPPhotoModel]{
+        var list = [SPPhotoModel]()
+        let fileArray = sp_getfile(forDirectory: SPPhotoDirectory)
+        for file in fileArray! {
+            let path = "\(SPPhotoDirectory)/\(file)"
+            let model = SPPhotoModel()
+            model.filePath = path
+            list.append(model)
+        }
+        return list
+    }
+    
     
     
     

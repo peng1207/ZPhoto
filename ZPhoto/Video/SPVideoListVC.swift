@@ -170,7 +170,7 @@ extension SPVideoListVC {
      刷新数据
      */
     fileprivate func reloadData(){
-        dispatchMainQueue {
+        sp_dispatchMainQueue {
             self.videoCollectionView.reloadData()
             self.dealNoData()
         }

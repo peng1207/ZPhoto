@@ -77,7 +77,7 @@ class  SPVideoEditVC : SPBaseVC {
 ////                self.filter.setValue(outputImage, forKey: kCIInputImageKey)
 ////                outputImage = self.filter.outputImage!
 ////                 CMSampleBufferInvalidate(videoBuffer!)
-////                dispatchMainQueue {
+////                sp_dispatchMainQueue {
 ////                    self.showImage.image = UIImage(ciImage: outputImage)
 ////                }
 //

@@ -30,13 +30,83 @@ typealias SPBtnComplete = ()->Void
 func sp_fontSize(fontSize: CGFloat) -> UIFont{
     return UIFont.systemFont(ofSize: fontSize)
 }
+/// 获取状态栏高度
+///
+/// - Returns: 高度
 func sp_getStatusBarHeight() -> CGFloat{
     return UIApplication.shared.statusBarFrame.height
+}
+/// 判断是否为数组
+///
+/// - Parameter array: 数据源
+/// - Returns: 返回数组类型
+func sp_isArray(array:Any) -> Array<Any>{
+    let list : Array<Any>? = array as? Array<Any>
+    if let a = list {
+        return a
+    }
+    return []
+}
+/// 获取数组的数量
+///
+/// - Parameter array: 数组
+/// - Returns: 数量
+func sp_getArrayCount(array:Array<Any>?) -> Int{
+    if let listArray = array {
+        return listArray.count
+    }else{
+        return 0
+    }
+}
+/// 是否为数组
+///
+/// - Parameter array: 数据
+/// - Returns: 是否
+func sp_isArray(array:Any?) -> Bool {
+    if let _ : [Any] = array as? [Any]  {
+        return true
+    }else{
+        return false
+    }
+}
+/// 是否为字典
+///
+/// - Parameter dic: 数据
+/// - Returns: 是否
+func sp_isDic(dic : Any?) -> Bool{
+    if let _ : [String : Any] = dic as? [String : Any] {
+        return true
+    }else{
+        return false
+    }
+}
+/// 获取字符串
+///
+/// - Parameter string: 字符串
+/// - Returns: 字符串
+func sp_getString(string:Any?) ->  String{
+    if string == nil{
+        return ""
+    }
+    if string is NSNull {
+        return ""
+    }
+    let str : String? = string as? String
+    
+    if let s = str {
+        return s
+    }
+    if string is NSNumber {
+        let s : NSNumber = string as! NSNumber
+        return s.description
+    }
+    return "\(string ?? "")"
+    
 }
 /**
  主线程
  */
-func dispatchMainQueue(complete:@escaping ()->Void){
+func sp_dispatchMainQueue(complete:@escaping ()->Void){
     DispatchQueue.main.async(execute: {
          complete()
     })
@@ -44,11 +114,22 @@ func dispatchMainQueue(complete:@escaping ()->Void){
 /**
  多线程
  */
-func dispatchAsync(complete:@escaping ()->Void){
+func sp_dispatchAsync(complete:@escaping ()->Void){
     DispatchQueue.global().async {
         complete()
     }
 }
+///  延迟
+///
+/// - Parameters:
+///   - time: 延迟时间
+///   - complete: 回调
+func sp_after(time:TimeInterval,complete:@escaping ()->Void){
+    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) {
+        complete()
+    }
+}
+
 /**
  延时操作
  - parameter time:     延时时间
@@ -114,7 +195,7 @@ func timer(_ complete:(() -> Void)?) -> DispatchSourceTimer {
     codeTimer.scheduleRepeating(deadline: .now(), interval: timeInterval)
     codeTimer.setEventHandler {
         if let com = complete {
-            dispatchMainQueue {
+            sp_dispatchMainQueue {
                  com()
             }
         }
@@ -193,4 +274,20 @@ func createCachePath (){
 /// - Returns: 字体
 func sp_getFontSize(size : CGFloat)->UIFont{
     return UIFont.systemFont(ofSize: size)
+}
+
+/// 根据目录获取该目录下所有的文件 并排序
+///
+/// - Parameter forDirectory: 文件夹
+/// - Returns: 该文件下所有的文件
+func sp_getfile(forDirectory:String) -> [String]?{
+    FileManager.sp_directory(createPath: forDirectory)
+    let fileArray = try! FileManager.default.contentsOfDirectory(atPath: forDirectory)
+    let fileSorted = fileArray.sorted { (file1 : String, file2 : String) -> Bool in
+        if file1.compare(file2) == ComparisonResult.orderedAscending {
+            return false
+        }
+        return  true
+    }
+    return fileSorted
 }

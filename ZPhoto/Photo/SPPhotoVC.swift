@@ -171,7 +171,8 @@ extension SPPhotoRootVC {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     fileprivate func sp_clickSplicing(){
-        
+        let vc = SPPhotoSplicingSelectVC()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     fileprivate func sp_clickGif(){
         

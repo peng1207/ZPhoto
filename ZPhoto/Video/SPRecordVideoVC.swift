@@ -256,10 +256,10 @@ extension SPRecordVideoRootVC {
      改变滤镜图片的数据
      */
     fileprivate func changeFilterData(){
-        dispatchMainQueue {
+        sp_dispatchMainQueue {
             if (self.filterView.isHidden == false){
                 self.videoData.setup(inputImage: self.videoManager.noFilterCIImage, complete: { [weak self] () in
-                    dispatchMainQueue {
+                    sp_dispatchMainQueue {
                         self?.filterView.filterList = self?.videoData.getFilterList()
                     }
                 })
@@ -388,7 +388,7 @@ class SPRecordVideoBtnView: UIView {
         var i = 0;
         sourceTimer = timer({
             SPLog("sdaasdasdasdasd")
-            dispatchMainQueue {
+            sp_dispatchMainQueue {
                 self.timeLabel.text = formatForMin(seconds: Float64(i))
             }
             i = i + 1

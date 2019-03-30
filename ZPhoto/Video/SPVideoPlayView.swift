@@ -77,6 +77,8 @@ extension SPVideoPlayView {
         buttonView?.playButton.addTarget(self, action: #selector(playAction), for: UIControlEvents.touchUpInside)
         buttonView?.progressView.addTarget(self, action: #selector(change(silder:)), for: UIControlEvents.valueChanged)
         buttonView?.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControlEvents.touchUpInside)
+        buttonView?.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControlEvents.touchCancel)
+         buttonView?.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControlEvents.touchUpOutside)
     }
     /**< 播放按钮点击事件  */
     @objc fileprivate func playAction(){
@@ -101,15 +103,18 @@ extension SPVideoPlayView {
     }
     /**< 滑块滑动结束 */
     @objc fileprivate func changeEnd(silder:UISlider){
-        let seconds  = silder.value
-        let targetTime : CMTime = CMTimeMakeWithSeconds(Float64(seconds), 60)
-        videoPlayer?.seek(to: targetTime, completionHandler: { [weak self] (finish : Bool) in
-            if self?.videoPlayer?.rate == 0{
-                self?.videoPlayer?.play()
-            }
-            self?.buttonView?.playButton.isSelected = true
-            self?.canRun = true
-        })
+        if (self.videoPlayer != nil) {
+            let seconds  = silder.value
+            let targetTime : CMTime = CMTimeMakeWithSeconds(Float64(seconds), (self.videoPlayer?.currentTime().timescale)!)
+            videoPlayer?.seek(to: targetTime, completionHandler: { [weak self] (finish : Bool) in
+                if self?.videoPlayer?.rate == 0{
+                    self?.videoPlayer?.play()
+                }
+                self?.buttonView?.playButton.isSelected = true
+                self?.canRun = true
+            })
+        }
+       
         
         
     }
