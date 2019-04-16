@@ -66,7 +66,7 @@ class SPMainVC: SPBaseVC {
     }
     /// 处理有没数据
     override func sp_dealNoData(){
-        
+       
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){

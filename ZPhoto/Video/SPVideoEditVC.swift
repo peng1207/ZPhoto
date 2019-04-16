@@ -39,7 +39,7 @@ class  SPVideoEditVC : SPBaseVC {
     }
     func reader(){
         let asserReader = try! AVAssetReader(asset: (videoModel?.asset)!)
-        let videoTrack = videoModel?.asset?.tracks(withMediaType: AVMediaTypeVideo)[0]
+        let videoTrack = videoModel?.asset?.tracks(withMediaType: AVMediaType.video)[0]
         let outputSettings :[String:Any] =  [kCVPixelBufferPixelFormatTypeKey as String : Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
         
         let trackOutput = AVAssetReaderTrackOutput(track: videoTrack!, outputSettings: outputSettings)

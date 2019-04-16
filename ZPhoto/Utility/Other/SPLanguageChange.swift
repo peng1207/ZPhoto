@@ -18,7 +18,7 @@ class SPLanguageChange {
     /*
      获取国际化对应的文字
      */
-    class func getString(key:String) -> String{
+    class func sp_getString(key:String) -> String{
         let bundle = SPLanguageChange.shareInstance.bundle
         let str = bundle?.localizedString(forKey: key, value: nil, table: nil)
         return str!

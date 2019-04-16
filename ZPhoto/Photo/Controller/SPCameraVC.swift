@@ -129,7 +129,7 @@ fileprivate class SPCameraRootVC: SPBaseVC {
 }
 fileprivate extension SPCameraRootVC{
     
-    fileprivate func sp_dealBtnClick(type:ButtonClickType){
+    func sp_dealBtnClick(type:ButtonClickType){
         switch type {
         case .cance:
             SPLog("点击返回")
@@ -148,11 +148,11 @@ fileprivate extension SPCameraRootVC{
             sp_clickChangeDev()
         }
     }
-    fileprivate func sp_back(){
+    func sp_back(){
         self.cameraManmager.sp_cane()
         self.dismiss(animated: true, completion: nil)
     }
-    fileprivate func sp_clickCamera(){
+    func sp_clickCamera(){
         let outputCIImg = self.cameraManmager.filterCGImage
         var outputImg : UIImage?
         if let ciImg = outputCIImg {
@@ -171,7 +171,7 @@ fileprivate extension SPCameraRootVC{
             }
         }
     }
-    fileprivate func sp_clickFilter(){
+    func sp_clickFilter(){
         if(self.filterView.isHidden){
             self.filterRightConstraint.update(offset: 0)
         }else{
@@ -183,7 +183,7 @@ fileprivate extension SPCameraRootVC{
     /*
      改变滤镜图片的数据
      */
-    fileprivate func sp_changeFilterData(){
+    func sp_changeFilterData(){
         sp_dispatchMainQueue {
             if (self.filterView.isHidden == false){
                 self.videoData.setup(inputImage: self.cameraManmager.noFilterCIImage, complete: { [weak self] () in
@@ -194,10 +194,10 @@ fileprivate extension SPCameraRootVC{
             }
         }
     }
-    fileprivate func sp_clickFlash(){
+    func sp_clickFlash(){
         self.cameraManmager.sp_flashlight()
     }
-    fileprivate func sp_clickChangeDev(){
+    func sp_clickChangeDev(){
         self.cameraManmager.sp_changeCamera()
     }
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {

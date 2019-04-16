@@ -16,12 +16,25 @@
 		9E0654CE1EDF24A90035189B /* SPVideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0654CD1EDF24A90035189B /* SPVideoModel.swift */; };
 		9E0654D01EE29B6E0035189B /* SPVideoPlayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0654CF1EE29B6E0035189B /* SPVideoPlayVC.swift */; };
 		9E0654D21EE3D2B00035189B /* SPVideoPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0654D11EE3D2B00035189B /* SPVideoPlayView.swift */; };
+		9E0C7393225DDE8B0081C352 /* SPSplicingToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0C7392225DDE8B0081C352 /* SPSplicingToolView.swift */; };
 		9E1A4E211E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1A4E201E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift */; };
 		9E1A4E231E9A823F00FEF8B7 /* SPVideoHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1A4E221E9A823F00FEF8B7 /* SPVideoHelp.swift */; };
 		9E205ED71EEEC3B600AB18C3 /* SPVideoEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E205ED61EEEC3B600AB18C3 /* SPVideoEditVC.swift */; };
 		9E205ED91EF0323600AB18C3 /* SPVideoScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E205ED81EF0323600AB18C3 /* SPVideoScheduleView.swift */; };
-		9E61FAA422324C5E006376E5 /* SPPhotoListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61FAA322324C5E006376E5 /* SPPhotoListVC.swift */; };
-		9E61FAA622324DE4006376E5 /* SPPhotoHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61FAA522324DE4006376E5 /* SPPhotoHelp.swift */; };
+		9E2D909F225C849600299C15 /* SPPhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D9091225C849500299C15 /* SPPhotoVC.swift */; };
+		9E2D90A0225C849600299C15 /* SPPhotoSplicingSelectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D9092225C849500299C15 /* SPPhotoSplicingSelectVC.swift */; };
+		9E2D90A1225C849600299C15 /* SPCameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D9093225C849500299C15 /* SPCameraVC.swift */; };
+		9E2D90A2225C849600299C15 /* SPPhotoSplicingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D9094225C849500299C15 /* SPPhotoSplicingVC.swift */; };
+		9E2D90A3225C849600299C15 /* SPPhotoEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D9095225C849500299C15 /* SPPhotoEditVC.swift */; };
+		9E2D90A4225C849600299C15 /* SPPhotoBrowseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D9096225C849500299C15 /* SPPhotoBrowseVC.swift */; };
+		9E2D90A5225C849600299C15 /* SPPhotoListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D9097225C849500299C15 /* SPPhotoListVC.swift */; };
+		9E2D90A6225C849600299C15 /* SPCameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D9099225C849500299C15 /* SPCameraManager.swift */; };
+		9E2D90A7225C849600299C15 /* SPPhotoHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D909A225C849500299C15 /* SPPhotoHelp.swift */; };
+		9E2D90A8225C849600299C15 /* SPPhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D909B225C849500299C15 /* SPPhotoModel.swift */; };
+		9E2D90A9225C849600299C15 /* SPCameraBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D909D225C849500299C15 /* SPCameraBtnView.swift */; };
+		9E2D90AA225C849600299C15 /* SPPhotoListCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D909E225C849500299C15 /* SPPhotoListCollectionCell.swift */; };
+		9E2D90AC225C855600299C15 /* SPPhotoSplicingSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2D90AB225C855600299C15 /* SPPhotoSplicingSelectView.swift */; };
+		9E622E18225D8EAB00722FD8 /* SPCustomPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E622E17225D8EAB00722FD8 /* SPCustomPictureView.swift */; };
 		9E7168A61F659B8400BB7C01 /* SPFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7168A51F659B8400BB7C01 /* SPFilterModel.swift */; };
 		9E7168A81F659F5A00BB7C01 /* SPFilterEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7168A71F659F5A00BB7C01 /* SPFilterEnum.swift */; };
 		9E7226701E8972B4001BB9A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */; };
@@ -32,18 +45,8 @@
 		9E774E0D209A147D0071493B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E774E0F209A147D0071493B /* InfoPlist.strings */; };
 		9E9D8D561ED47C1F00522BCA /* SPVideoListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9D8D551ED47C1F00522BCA /* SPVideoListVC.swift */; };
 		9E9D8D581ED47E2600522BCA /* SPVideoCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9D8D571ED47E2600522BCA /* SPVideoCollectionCell.swift */; };
-		9EA86C6F2216B7E000088AD8 /* SPCameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA86C6E2216B7E000088AD8 /* SPCameraVC.swift */; };
 		9EAF1783222A526000247BE1 /* SPVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAF1782222A526000247BE1 /* SPVideoVC.swift */; };
-		9EB4AE37223CE97400306A94 /* SPPhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB4AE36223CE97400306A94 /* SPPhotoModel.swift */; };
-		9EB4AE39223CEEE800306A94 /* SPPhotoListCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB4AE38223CEEE800306A94 /* SPPhotoListCollectionCell.swift */; };
-		9EB4AE79223F9B2B00306A94 /* SPPhotoSplicingSelectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB4AE78223F9B2B00306A94 /* SPPhotoSplicingSelectVC.swift */; };
-		9EB4AE7B223F9F4900306A94 /* SPPhotoBrowseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB4AE7A223F9F4900306A94 /* SPPhotoBrowseVC.swift */; };
-		9EB4AE7D223F9FA800306A94 /* SPPhotoEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB4AE7C223F9FA800306A94 /* SPPhotoEditVC.swift */; };
-		9EB4AE7F223F9FE500306A94 /* SPPhotoSplicingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB4AE7E223F9FE500306A94 /* SPPhotoSplicingVC.swift */; };
-		9ECE7BE422250CB600FE6BCD /* SPCameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7BE322250CB600FE6BCD /* SPCameraManager.swift */; };
-		9ECE7BE622250CC200FE6BCD /* SPPhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7BE522250CC200FE6BCD /* SPPhotoVC.swift */; };
 		9ECE7BEA222523CD00FE6BCD /* SPMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7BE9222523CD00FE6BCD /* SPMainVC.swift */; };
-		9ECE7BEC22265C1800FE6BCD /* SPCameraBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7BEB22265C1800FE6BCD /* SPCameraBtnView.swift */; };
 		9ECE7C062227B80300FE6BCD /* SPColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7BF12227B80300FE6BCD /* SPColor.swift */; };
 		9ECE7C072227B80300FE6BCD /* SPSysSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7BF22227B80300FE6BCD /* SPSysSet.swift */; };
 		9ECE7C082227B80300FE6BCD /* CIFilter+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7BF32227B80300FE6BCD /* CIFilter+extension.swift */; };
@@ -100,12 +103,25 @@
 		9E0654CD1EDF24A90035189B /* SPVideoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoModel.swift; sourceTree = "<group>"; };
 		9E0654CF1EE29B6E0035189B /* SPVideoPlayVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoPlayVC.swift; sourceTree = "<group>"; };
 		9E0654D11EE3D2B00035189B /* SPVideoPlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoPlayView.swift; sourceTree = "<group>"; };
+		9E0C7392225DDE8B0081C352 /* SPSplicingToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSplicingToolView.swift; sourceTree = "<group>"; };
 		9E1A4E201E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPRecordVideoManager.swift; sourceTree = "<group>"; };
 		9E1A4E221E9A823F00FEF8B7 /* SPVideoHelp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoHelp.swift; sourceTree = "<group>"; };
 		9E205ED61EEEC3B600AB18C3 /* SPVideoEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoEditVC.swift; sourceTree = "<group>"; };
 		9E205ED81EF0323600AB18C3 /* SPVideoScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoScheduleView.swift; sourceTree = "<group>"; };
-		9E61FAA322324C5E006376E5 /* SPPhotoListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPhotoListVC.swift; sourceTree = "<group>"; };
-		9E61FAA522324DE4006376E5 /* SPPhotoHelp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPhotoHelp.swift; sourceTree = "<group>"; };
+		9E2D9091225C849500299C15 /* SPPhotoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPhotoVC.swift; sourceTree = "<group>"; };
+		9E2D9092225C849500299C15 /* SPPhotoSplicingSelectVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPhotoSplicingSelectVC.swift; sourceTree = "<group>"; };
+		9E2D9093225C849500299C15 /* SPCameraVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPCameraVC.swift; sourceTree = "<group>"; };
+		9E2D9094225C849500299C15 /* SPPhotoSplicingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPhotoSplicingVC.swift; sourceTree = "<group>"; };
+		9E2D9095225C849500299C15 /* SPPhotoEditVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPhotoEditVC.swift; sourceTree = "<group>"; };
+		9E2D9096225C849500299C15 /* SPPhotoBrowseVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPhotoBrowseVC.swift; sourceTree = "<group>"; };
+		9E2D9097225C849500299C15 /* SPPhotoListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPhotoListVC.swift; sourceTree = "<group>"; };
+		9E2D9099225C849500299C15 /* SPCameraManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPCameraManager.swift; sourceTree = "<group>"; };
+		9E2D909A225C849500299C15 /* SPPhotoHelp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPhotoHelp.swift; sourceTree = "<group>"; };
+		9E2D909B225C849500299C15 /* SPPhotoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPhotoModel.swift; sourceTree = "<group>"; };
+		9E2D909D225C849500299C15 /* SPCameraBtnView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPCameraBtnView.swift; sourceTree = "<group>"; };
+		9E2D909E225C849500299C15 /* SPPhotoListCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPhotoListCollectionCell.swift; sourceTree = "<group>"; };
+		9E2D90AB225C855600299C15 /* SPPhotoSplicingSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPhotoSplicingSelectView.swift; sourceTree = "<group>"; };
+		9E622E17225D8EAB00722FD8 /* SPCustomPictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCustomPictureView.swift; sourceTree = "<group>"; };
 		9E7168A51F659B8400BB7C01 /* SPFilterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFilterModel.swift; sourceTree = "<group>"; };
 		9E7168A71F659F5A00BB7C01 /* SPFilterEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFilterEnum.swift; sourceTree = "<group>"; };
 		9E72266C1E8972B4001BB9A9 /* ZPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,18 +140,8 @@
 		9E774E10209A147F0071493B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9E9D8D551ED47C1F00522BCA /* SPVideoListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoListVC.swift; sourceTree = "<group>"; };
 		9E9D8D571ED47E2600522BCA /* SPVideoCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoCollectionCell.swift; sourceTree = "<group>"; };
-		9EA86C6E2216B7E000088AD8 /* SPCameraVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCameraVC.swift; sourceTree = "<group>"; };
 		9EAF1782222A526000247BE1 /* SPVideoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoVC.swift; sourceTree = "<group>"; };
-		9EB4AE36223CE97400306A94 /* SPPhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPhotoModel.swift; sourceTree = "<group>"; };
-		9EB4AE38223CEEE800306A94 /* SPPhotoListCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPhotoListCollectionCell.swift; sourceTree = "<group>"; };
-		9EB4AE78223F9B2B00306A94 /* SPPhotoSplicingSelectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPhotoSplicingSelectVC.swift; sourceTree = "<group>"; };
-		9EB4AE7A223F9F4900306A94 /* SPPhotoBrowseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPhotoBrowseVC.swift; sourceTree = "<group>"; };
-		9EB4AE7C223F9FA800306A94 /* SPPhotoEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPhotoEditVC.swift; sourceTree = "<group>"; };
-		9EB4AE7E223F9FE500306A94 /* SPPhotoSplicingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPhotoSplicingVC.swift; sourceTree = "<group>"; };
-		9ECE7BE322250CB600FE6BCD /* SPCameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCameraManager.swift; sourceTree = "<group>"; };
-		9ECE7BE522250CC200FE6BCD /* SPPhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPhotoVC.swift; sourceTree = "<group>"; };
 		9ECE7BE9222523CD00FE6BCD /* SPMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMainVC.swift; sourceTree = "<group>"; };
-		9ECE7BEB22265C1800FE6BCD /* SPCameraBtnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCameraBtnView.swift; sourceTree = "<group>"; };
 		9ECE7BF12227B80300FE6BCD /* SPColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPColor.swift; sourceTree = "<group>"; };
 		9ECE7BF22227B80300FE6BCD /* SPSysSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPSysSet.swift; sourceTree = "<group>"; };
 		9ECE7BF32227B80300FE6BCD /* CIFilter+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CIFilter+extension.swift"; sourceTree = "<group>"; };
@@ -228,6 +234,52 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		9E2D908F225C849500299C15 /* Photo */ = {
+			isa = PBXGroup;
+			children = (
+				9E2D9090225C849500299C15 /* Controller */,
+				9E2D9098225C849500299C15 /* Model */,
+				9E2D909C225C849500299C15 /* View */,
+			);
+			path = Photo;
+			sourceTree = "<group>";
+		};
+		9E2D9090225C849500299C15 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9E2D9091225C849500299C15 /* SPPhotoVC.swift */,
+				9E2D9092225C849500299C15 /* SPPhotoSplicingSelectVC.swift */,
+				9E2D9093225C849500299C15 /* SPCameraVC.swift */,
+				9E2D9094225C849500299C15 /* SPPhotoSplicingVC.swift */,
+				9E2D9095225C849500299C15 /* SPPhotoEditVC.swift */,
+				9E2D9096225C849500299C15 /* SPPhotoBrowseVC.swift */,
+				9E2D9097225C849500299C15 /* SPPhotoListVC.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9E2D9098225C849500299C15 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9E2D9099225C849500299C15 /* SPCameraManager.swift */,
+				9E2D909A225C849500299C15 /* SPPhotoHelp.swift */,
+				9E2D909B225C849500299C15 /* SPPhotoModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9E2D909C225C849500299C15 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9E2D909D225C849500299C15 /* SPCameraBtnView.swift */,
+				9E2D909E225C849500299C15 /* SPPhotoListCollectionCell.swift */,
+				9E2D90AB225C855600299C15 /* SPPhotoSplicingSelectView.swift */,
+				9E622E17225D8EAB00722FD8 /* SPCustomPictureView.swift */,
+				9E0C7392225DDE8B0081C352 /* SPSplicingToolView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		9E7168A41F659B7400BB7C01 /* SPFilter */ = {
 			isa = PBXGroup;
 			children = (
@@ -262,9 +314,9 @@
 		9E72266E1E8972B4001BB9A9 /* ZPhoto */ = {
 			isa = PBXGroup;
 			children = (
+				9E2D908F225C849500299C15 /* Photo */,
 				9ECE7BEF2227B80300FE6BCD /* Utility */,
 				9EA86C6D2216B31C00088AD8 /* Main */,
-				9EA86C6C2216B31C00088AD8 /* Photo */,
 				9E7168A41F659B7400BB7C01 /* SPFilter */,
 				9EFACEDE1E988BC600D11F18 /* Video */,
 				9E72266F1E8972B4001BB9A9 /* AppDelegate.swift */,
@@ -292,25 +344,6 @@
 				9E7226911E8972B4001BB9A9 /* Info.plist */,
 			);
 			path = ZPhotoUITests;
-			sourceTree = "<group>";
-		};
-		9EA86C6C2216B31C00088AD8 /* Photo */ = {
-			isa = PBXGroup;
-			children = (
-				9EA86C6E2216B7E000088AD8 /* SPCameraVC.swift */,
-				9ECE7BE322250CB600FE6BCD /* SPCameraManager.swift */,
-				9ECE7BE522250CC200FE6BCD /* SPPhotoVC.swift */,
-				9E61FAA322324C5E006376E5 /* SPPhotoListVC.swift */,
-				9EB4AE7A223F9F4900306A94 /* SPPhotoBrowseVC.swift */,
-				9EB4AE38223CEEE800306A94 /* SPPhotoListCollectionCell.swift */,
-				9ECE7BEB22265C1800FE6BCD /* SPCameraBtnView.swift */,
-				9E61FAA522324DE4006376E5 /* SPPhotoHelp.swift */,
-				9EB4AE36223CE97400306A94 /* SPPhotoModel.swift */,
-				9EB4AE78223F9B2B00306A94 /* SPPhotoSplicingSelectVC.swift */,
-				9EB4AE7E223F9FE500306A94 /* SPPhotoSplicingVC.swift */,
-				9EB4AE7C223F9FA800306A94 /* SPPhotoEditVC.swift */,
-			);
-			path = Photo;
 			sourceTree = "<group>";
 		};
 		9EA86C6D2216B31C00088AD8 /* Main */ = {
@@ -486,6 +519,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 				"zh-Hans",
@@ -646,53 +680,56 @@
 			buildActionMask = 2147483647;
 			files = (
 				9ECE7BEA222523CD00FE6BCD /* SPMainVC.swift in Sources */,
-				9EB4AE7F223F9FE500306A94 /* SPPhotoSplicingVC.swift in Sources */,
 				237500A620511247000A1B96 /* SPRecordVideoFilterView.swift in Sources */,
 				9E0654CE1EDF24A90035189B /* SPVideoModel.swift in Sources */,
 				9E9D8D561ED47C1F00522BCA /* SPVideoListVC.swift in Sources */,
 				9ECE7C112227B80300FE6BCD /* SPAuthorization.swift in Sources */,
 				9ECE7C152227B80300FE6BCD /* SPPentagonView.swift in Sources */,
-				9ECE7BE622250CC200FE6BCD /* SPPhotoVC.swift in Sources */,
-				9EB4AE39223CEEE800306A94 /* SPPhotoListCollectionCell.swift in Sources */,
 				9ECE7C082227B80300FE6BCD /* CIFilter+extension.swift in Sources */,
+				9E622E18225D8EAB00722FD8 /* SPCustomPictureView.swift in Sources */,
 				9ECE7C102227B80300FE6BCD /* SPSystemVersion.swift in Sources */,
-				9EB4AE7D223F9FA800306A94 /* SPPhotoEditVC.swift in Sources */,
+				9E2D90A1225C849600299C15 /* SPCameraVC.swift in Sources */,
+				9E2D90A2225C849600299C15 /* SPPhotoSplicingVC.swift in Sources */,
 				9E9D8D581ED47E2600522BCA /* SPVideoCollectionCell.swift in Sources */,
 				9ECE7C182227B80300FE6BCD /* SPVideoPreviewLayerView.swift in Sources */,
-				9EA86C6F2216B7E000088AD8 /* SPCameraVC.swift in Sources */,
-				9EB4AE7B223F9F4900306A94 /* SPPhotoBrowseVC.swift in Sources */,
-				9E61FAA622324DE4006376E5 /* SPPhotoHelp.swift in Sources */,
 				9E0654D01EE29B6E0035189B /* SPVideoPlayVC.swift in Sources */,
+				9E2D90A5225C849600299C15 /* SPPhotoListVC.swift in Sources */,
 				9E7168A61F659B8400BB7C01 /* SPFilterModel.swift in Sources */,
+				9E2D90AA225C849600299C15 /* SPPhotoListCollectionCell.swift in Sources */,
 				9EFACEE01E988C0400D11F18 /* SPRecordVideoVC.swift in Sources */,
 				9ECE7C092227B80300FE6BCD /* UIImageManager.swift in Sources */,
+				9E2D90A8225C849600299C15 /* SPPhotoModel.swift in Sources */,
 				9ECE7C0B2227B80300FE6BCD /* SPLanguageChange.swift in Sources */,
-				9ECE7BE422250CB600FE6BCD /* SPCameraManager.swift in Sources */,
-				9EB4AE37223CE97400306A94 /* SPPhotoModel.swift in Sources */,
+				9E2D90A7225C849600299C15 /* SPPhotoHelp.swift in Sources */,
 				9ECE7C142227B80300FE6BCD /* SPBaseNavVC.swift in Sources */,
+				9E2D90A4225C849600299C15 /* SPPhotoBrowseVC.swift in Sources */,
 				9ECE7C072227B80300FE6BCD /* SPSysSet.swift in Sources */,
+				9E2D90AC225C855600299C15 /* SPPhotoSplicingSelectView.swift in Sources */,
+				9E2D909F225C849600299C15 /* SPPhotoVC.swift in Sources */,
 				9E1A4E211E9A7ECF00FEF8B7 /* SPRecordVideoManager.swift in Sources */,
 				9E1A4E231E9A823F00FEF8B7 /* SPVideoHelp.swift in Sources */,
 				9ECE7C0A2227B80300FE6BCD /* FileManager+extension.swift in Sources */,
+				9E2D90A0225C849600299C15 /* SPPhotoSplicingSelectVC.swift in Sources */,
 				9ECE7C0F2227B80300FE6BCD /* SPArray+extension.swift in Sources */,
 				9E7226701E8972B4001BB9A9 /* AppDelegate.swift in Sources */,
 				9ECE7C062227B80300FE6BCD /* SPColor.swift in Sources */,
 				237500A820512DC8000A1B96 /* SPRecordVideoData.swift in Sources */,
-				9ECE7BEC22265C1800FE6BCD /* SPCameraBtnView.swift in Sources */,
-				9E61FAA422324C5E006376E5 /* SPPhotoListVC.swift in Sources */,
+				9E2D90A3225C849600299C15 /* SPPhotoEditVC.swift in Sources */,
 				9ECE7C0E2227B80300FE6BCD /* SPPublicHeader.swift in Sources */,
+				9E2D90A9225C849600299C15 /* SPCameraBtnView.swift in Sources */,
 				9EAF1783222A526000247BE1 /* SPVideoVC.swift in Sources */,
-				9EB4AE79223F9B2B00306A94 /* SPPhotoSplicingSelectVC.swift in Sources */,
 				9E205ED91EF0323600AB18C3 /* SPVideoScheduleView.swift in Sources */,
 				9ECE7C162227B80300FE6BCD /* UIView+extension.swift in Sources */,
 				9E0654D21EE3D2B00035189B /* SPVideoPlayView.swift in Sources */,
 				9E205ED71EEEC3B600AB18C3 /* SPVideoEditVC.swift in Sources */,
 				9E7168A81F659F5A00BB7C01 /* SPFilterEnum.swift in Sources */,
 				9ECE7C132227B80300FE6BCD /* SPBaseVC.swift in Sources */,
+				9E0C7393225DDE8B0081C352 /* SPSplicingToolView.swift in Sources */,
 				9ECE7C122227B80300FE6BCD /* SPDevice.swift in Sources */,
 				9ECE7C0D2227B80300FE6BCD /* SPImage.swift in Sources */,
 				9ECE7C172227B80300FE6BCD /* SPAnimationView.swift in Sources */,
 				9ECE7C0C2227B80300FE6BCD /* SPEnum.swift in Sources */,
+				9E2D90A6225C849600299C15 /* SPCameraManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -858,7 +895,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "e6310527-79c3-45b7-8e15-d49cc71171eb";
 				PROVISIONING_PROFILE_SPECIFIER = ZPhotoDev;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -879,7 +916,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "3f93c631-f4ac-4374-b173-8a0a25fde743";
 				PROVISIONING_PROFILE_SPECIFIER = ZPhotoAPPStore;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

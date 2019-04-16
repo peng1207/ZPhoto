@@ -22,17 +22,18 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     
 //    fileprivate let devices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
     fileprivate let devices = { () -> [AVCaptureDevice] in
-        if SP_VERSION_10_UP{
-             return AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
+        if SP_VERSION_10_UP == false{
+            return AVCaptureDevice.devices(for: AVMediaType.video)
         }else{
-           let deviceDiscovery = AVCaptureDeviceDiscoverySession(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: AVCaptureDevicePosition.back)
-            return (deviceDiscovery?.devices)!
+            let deviceDiscovery = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.back)
+            return (deviceDiscovery.devices)
         }
     }()
     
     fileprivate var currentDevice : AVCaptureDevice?
     //音频输入设备
-    fileprivate let audioDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeAudio)
+    fileprivate let audioDevice = AVCaptureDevice.default(for: AVMediaType.audio)
+    
     // 视频源的出口
     var videoOutput : AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
     //是视频源的控制中心
@@ -43,7 +44,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     var audioConnection: AVCaptureConnection?
     var videoLayer : AVCaptureVideoPreviewLayer? {
         didSet{
-            videoLayer?.videoGravity = AVLayerVideoGravityResize
+            videoLayer?.videoGravity = AVLayerVideoGravity.resize
             //            videoLayer?.setSessionWithNoConnection(captureSession)
         }
     }
@@ -62,7 +63,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     var lastSampleTime : CMTime?
     let  filePath : String = "\(SPVideoHelp.kVideoTempDirectory)/temp.mp4"
     var filter : CIFilter?
-    dynamic  var noFilterCIImage : CIImage?
+    @objc dynamic  var noFilterCIImage : CIImage?
     var cameraAuth : Bool = false  // 有没摄像头权限
     
     
@@ -130,19 +131,19 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         complete()
     }
     
-    fileprivate func setCaptureInpunt(postion : AVCaptureDevicePosition){
+    fileprivate func setCaptureInpunt(postion : AVCaptureDevice.Position){
         self.getVideoDevice(postion: postion)
-        let videoInput = try? AVCaptureDeviceInput(device: self.currentDevice)
-        let audioInput = try? AVCaptureDeviceInput(device: self.audioDevice)
+        let videoInput = try? AVCaptureDeviceInput(device: self.currentDevice!)
+        let audioInput = try? AVCaptureDeviceInput(device: self.audioDevice!)
         self.captureSession.beginConfiguration()
         for input in self.captureSession.inputs {
-            self.captureSession.removeInput(input as? AVCaptureInput)
+            self.captureSession.removeInput((input as? AVCaptureInput)!)
         }
-        if self.captureSession.canAddInput(videoInput) {
-            self.captureSession.addInput(videoInput)
+        if self.captureSession.canAddInput(videoInput!) {
+            self.captureSession.addInput(videoInput!)
         }
-        if self.captureSession.canAddInput(audioInput) {
-            self.captureSession.addInput(audioInput)
+        if self.captureSession.canAddInput(audioInput!) {
+            self.captureSession.addInput(audioInput!)
         }
     
      
@@ -154,7 +155,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         let needAdd : Bool = self.captureSession.outputs.count > 0 ? false : true
         
         if needAdd == true {
-            videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey : Int(kCVPixelFormatType_32BGRA)]
+            videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey : Int(kCVPixelFormatType_32BGRA)] as [String : Any]
             
             videoOutput.alwaysDiscardsLateVideoFrames = true
             videoOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
@@ -164,22 +165,27 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             if self.captureSession.canAddOutput(videoOutput){
                 self.captureSession.addOutput(videoOutput)
             }
-            videoConnection = videoOutput.connection(withMediaType: AVMediaTypeVideo)
+            videoConnection = videoOutput.connection(with: AVMediaType.video)
             
             if self.captureSession.canAddOutput(audioOutput) {
                 self.captureSession.addOutput(audioOutput)
             }
-            audioConnection = audioOutput.connection(withMediaType: AVMediaTypeAudio)
+            audioConnection = audioOutput.connection(with: AVMediaType.audio)
         }
         self.captureSession.commitConfiguration()
     }
     
     // 获取当前的摄像头
-    fileprivate func getVideoDevice(postion : AVCaptureDevicePosition) {
+    fileprivate func getVideoDevice(postion : AVCaptureDevice.Position) {
         var videoDevice : AVCaptureDevice?
-        for device in devices {
-            if device.position == postion {
-                videoDevice = device
+        
+        if SP_VERSION_10_UP {
+            videoDevice = AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video, position: postion)
+        }else{
+            for device in devices {
+                if device.position == postion {
+                    videoDevice = device
+                }
             }
         }
         if let currDevice = videoDevice {
@@ -209,7 +215,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             }
             
             let size = screenPixels()
-            assetWriter = try AVAssetWriter(url:  URL(fileURLWithPath: filePath), fileType: AVFileTypeMPEG4)
+            assetWriter = try AVAssetWriter(url:  URL(fileURLWithPath: filePath), fileType: AVFileType.mp4)
             
             let videoOutputSettings = [AVVideoCodecKey : AVVideoCodecH264,
                                        AVVideoWidthKey : size.width,
@@ -218,7 +224,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             var videoFormat : CMFormatDescription? = nil
             CMVideoFormatDescriptionCreate(kCFAllocatorDefault, kCMVideoCodecType_H264, Int32(size.width), Int32(size.height), nil, &videoFormat)
             
-            videoWriterInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoOutputSettings)
+            videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoOutputSettings)
             videoWriterInput?.expectsMediaDataInRealTime = true
             videoWriterInput?.transform =  CGAffineTransform(rotationAngle: CGFloat(M_PI/2))
             
@@ -236,7 +242,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             }else {
                 SPLog("is no add  videoWriterInput")
             }
-            audioWriterInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: audioSetting)
+            audioWriterInput = AVAssetWriterInput(mediaType: AVMediaType.audio, outputSettings: audioSetting)
             audioWriterInput?.expectsMediaDataInRealTime = true
             if (assetWriter?.canAdd(audioWriterInput!))! {
                 assetWriter?.add(audioWriterInput!)
@@ -334,11 +340,11 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             return
         }
         
-        if self.currentDevice?.position == AVCaptureDevicePosition.front {
+        if self.currentDevice?.position == AVCaptureDevice.Position.front {
             return
         }
 
-        if self.currentDevice?.torchMode == AVCaptureTorchMode.off {
+        if self.currentDevice?.torchMode == AVCaptureDevice.TorchMode.off {
            sp_flashOn()
         }else{
            sp_flashOff()
@@ -358,11 +364,11 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             return
         }
         self.changeDeviceProperty(propertyBlock: { [weak self]() in
-            if self?.currentDevice?.torchMode == AVCaptureTorchMode.off {
-                 self?.currentDevice?.torchMode = AVCaptureTorchMode.on
+            if self?.currentDevice?.torchMode == AVCaptureDevice.TorchMode.off {
+                self?.currentDevice?.torchMode = AVCaptureDevice.TorchMode.on
             }
-            if self?.currentDevice?.flashMode == AVCaptureFlashMode.off {
-                 self?.currentDevice?.flashMode = AVCaptureFlashMode.on
+            if self?.currentDevice?.flashMode == AVCaptureDevice.FlashMode.off {
+                self?.currentDevice?.flashMode = AVCaptureDevice.FlashMode.on
             }
            
         })
@@ -384,11 +390,11 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             return
         }
         self.changeDeviceProperty(propertyBlock: { [weak self]() in
-            if self?.currentDevice?.torchMode == AVCaptureTorchMode.on {
-                 self?.currentDevice?.torchMode = AVCaptureTorchMode.off
+            if self?.currentDevice?.torchMode == AVCaptureDevice.TorchMode.on {
+                self?.currentDevice?.torchMode = AVCaptureDevice.TorchMode.off
             }
-            if self?.currentDevice?.flashMode == AVCaptureFlashMode.on {
-                 self?.currentDevice?.flashMode = AVCaptureFlashMode.off
+            if self?.currentDevice?.flashMode == AVCaptureDevice.FlashMode.on {
+                self?.currentDevice?.flashMode = AVCaptureDevice.FlashMode.off
             }
         })
         
@@ -410,7 +416,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         }
     }
     // MARK: -- delegate
-    func captureOutput(_ output: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         autoreleasepool {
             
             if !CMSampleBufferDataIsReady(sampleBuffer) {

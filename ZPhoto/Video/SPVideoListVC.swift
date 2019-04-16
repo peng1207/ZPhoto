@@ -30,7 +30,7 @@ import CoreImage
     fileprivate var videoDataArray : Array<SPVideoModel>? = nil
     fileprivate lazy var noDataView : UILabel = {
         let label = UILabel()
-        label.text = SPLanguageChange.getString(key: "NO_VIDEO_TIP")
+        label.text = SPLanguageChange.sp_getString(key: "NO_VIDEO_TIP")
         label.numberOfLines = 0;
         label.font = sp_fontSize(fontSize: 14)
         label.isHidden = true
@@ -109,9 +109,9 @@ extension SPVideoListVC {
         guard let model = videoModel else {
             return
         }
-        let alert = UIAlertController(title: SPLanguageChange.getString(key: "TIPS"), message: SPLanguageChange.getString(key: "DELETE_VIDEO_MSG"), preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "DELETE"), style: UIAlertActionStyle.default, handler: { [weak self](action) in
+        let alert = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "DELETE_VIDEO_MSG"), preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "DELETE"), style: UIAlertActionStyle.default, handler: { [weak self](action) in
             self?.videoDataArray?.remove(object: model)
             SPVideoHelp.remove(fileUrl: model.url!)
             self?.reloadData()

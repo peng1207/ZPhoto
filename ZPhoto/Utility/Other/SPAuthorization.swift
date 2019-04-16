@@ -24,10 +24,10 @@ class SPAuthorizatio{
             return
         }
         
-        let authStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+    let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
         if authStatus == .notDetermined {
             // 第一次授权
-            AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { (grant) in
+            AVCaptureDevice.requestAccess(for: AVMediaType.video) { (grant) in
                 authoriedComplete(grant)
             }
         }else if authStatus == .authorized{

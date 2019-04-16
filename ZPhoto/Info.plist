@@ -26,6 +26,8 @@
 	<string>获取您的声音或附近的音源,保存美妙的音.若不允许无法使用哦</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>想获取您相册中的图片或视频，想把视频或图片保存到您的相册中.若不允许无法使用哦</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>想要把图片保存到相册中，若不同意无法把图片保存到相册中</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
@@ -34,5 +36,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>LSApplicationCategoryType</key>
+	<string>NSPhotoLibraryAddUsageDescription</string>
 </dict>
 </plist>

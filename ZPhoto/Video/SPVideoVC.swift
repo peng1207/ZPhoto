@@ -55,7 +55,7 @@ fileprivate class SPVideoRootVC: SPBaseVC {
     fileprivate lazy var fileView : SPPentagonView = {
         let view = SPPentagonView()
         view.corners = .right
-        view.titleLabel.text = SPLanguageChange.getString(key: "FIlE")
+        view.titleLabel.text = SPLanguageChange.sp_getString(key: "FIlE")
         view.clickBlock = { [weak self] in
             self?.sp_clickFile()
         }
@@ -64,7 +64,7 @@ fileprivate class SPVideoRootVC: SPBaseVC {
     fileprivate lazy var splicingView : SPPentagonView = {
         let view = SPPentagonView()
         view.corners = .left
-        view.titleLabel.text = SPLanguageChange.getString(key: "SPLICING")
+        view.titleLabel.text = SPLanguageChange.sp_getString(key: "SPLICING")
         view.clickBlock = { [weak self] in
             self?.sp_clickSplicing()
         }
@@ -73,7 +73,7 @@ fileprivate class SPVideoRootVC: SPBaseVC {
     fileprivate lazy var editView : SPPentagonView = {
         let view = SPPentagonView()
         view.corners = .right
-        view.titleLabel.text = SPLanguageChange.getString(key: "EDIT")
+        view.titleLabel.text = SPLanguageChange.sp_getString(key: "EDIT")
         view.clickBlock = { [weak self] in
             self?.sp_clickEdit()
         }
@@ -82,7 +82,7 @@ fileprivate class SPVideoRootVC: SPBaseVC {
     fileprivate lazy var inversionView : SPPentagonView = {
         let view = SPPentagonView()
         view.corners = .left
-        view.titleLabel.text = SPLanguageChange.getString(key: "INVERSION")
+        view.titleLabel.text = SPLanguageChange.sp_getString(key: "INVERSION")
         view.clickBlock = { [weak self] in
             self?.sp_clickInversion()
         }

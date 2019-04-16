@@ -17,21 +17,21 @@ class SPCameraManager : NSObject {
     //    fileprivate let devices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
     fileprivate let devices = { () -> [AVCaptureDevice] in
         if SP_VERSION_10_UP{
-            return AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
+            let deviceDiscovery = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.back)
+            return (deviceDiscovery.devices)
         }else{
-            let deviceDiscovery = AVCaptureDeviceDiscoverySession(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: AVCaptureDevicePosition.back)
-            return (deviceDiscovery?.devices)!
+            return AVCaptureDevice.devices(for: AVMediaType.video)
         }
     }()
     var videoLayer : AVCaptureVideoPreviewLayer? {
         didSet{
-            videoLayer?.videoGravity = AVLayerVideoGravityResize
+            videoLayer?.videoGravity = AVLayerVideoGravity.resize
         }
     }
     fileprivate var currentDevice : AVCaptureDevice?
     fileprivate var output:  AVCaptureVideoDataOutput! /// 图像流输出
     let videoDataOutputQueue :DispatchQueue = DispatchQueue(label: "com.hsp.videoDataOutputQueue")
-     dynamic  var noFilterCIImage : CIImage?
+    @objc dynamic  var noFilterCIImage : CIImage?
     var filterCGImage : CGImage?
     var filter : CIFilter?
     var cameraAuth : Bool = false  // 有没摄像头权限
@@ -64,16 +64,16 @@ class SPCameraManager : NSObject {
     /// 初始化输入的设备
     ///
     /// - Parameter postion: 摄像头位置
-    fileprivate func sp_initCaptureInput(postion : AVCaptureDevicePosition){
+    fileprivate func sp_initCaptureInput(postion : AVCaptureDevice.Position){
         sp_getVideoDevice(postion: postion)
-        let videoInput = try? AVCaptureDeviceInput(device: self.currentDevice)
+        let videoInput = try? AVCaptureDeviceInput(device: self.currentDevice!)
         
         self.captureSession.beginConfiguration()
         for input in self.captureSession.inputs {
-            self.captureSession.removeInput(input as? AVCaptureInput)
+            self.captureSession.removeInput(input)
         }
-        if self.captureSession.canAddInput(videoInput) {
-            self.captureSession.addInput(videoInput)
+        if self.captureSession.canAddInput(videoInput!) {
+            self.captureSession.addInput(videoInput!)
         }
         let needAdd : Bool = self.captureSession.outputs.count > 0 ? false : true
         
@@ -81,21 +81,28 @@ class SPCameraManager : NSObject {
             self.output = AVCaptureVideoDataOutput()
             self.output.alwaysDiscardsLateVideoFrames = true
             self.output.setSampleBufferDelegate(self, queue: self.videoDataOutputQueue)
+
             if self.captureSession.canAddOutput(self.output){
                 self.captureSession.addOutput(self.output)
             }
         }
+        self.captureSession.sessionPreset = .hd1280x720
         self.captureSession.commitConfiguration()
         
     }
     /// 获取当前的摄像头
     ///
     /// - Parameter postion: 前置还是后置
-    fileprivate func sp_getVideoDevice(postion : AVCaptureDevicePosition) {
+    fileprivate func sp_getVideoDevice(postion : AVCaptureDevice.Position) {
         var videoDevive : AVCaptureDevice?
-        for device in devices {
-            if device.position == postion {
-                videoDevive = device
+        
+        if SP_VERSION_10_UP {
+               videoDevive = AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video, position: postion)
+        }else{
+            for device in devices {
+                if device.position == postion {
+                    videoDevive = device
+                }
             }
         }
         if let currentDevice = videoDevive {
@@ -124,7 +131,7 @@ class SPCameraManager : NSObject {
 }
 //MARK: - delegate
 extension SPCameraManager:AVCaptureVideoDataOutputSampleBufferDelegate{
-    func captureOutput(_ output: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         autoreleasepool {
             if !CMSampleBufferDataIsReady(sampleBuffer) {
                 return
@@ -150,6 +157,7 @@ extension SPCameraManager:AVCaptureVideoDataOutputSampleBufferDelegate{
             }
         }
     }
+ 
 }
 
 extension SPCameraManager {
@@ -164,7 +172,7 @@ extension SPCameraManager {
     /// 获取当前摄像头的位置
     ///
     /// - Returns: 前置 还是后置
-    fileprivate func sp_getPosition()->AVCaptureDevicePosition{
+    fileprivate func sp_getPosition()->AVCaptureDevice.Position{
         if let dev = currentDevice {
             return dev.position
         }
@@ -192,11 +200,11 @@ extension SPCameraManager {
             return
         }
         
-        if self.currentDevice?.position == AVCaptureDevicePosition.front {
+        if self.currentDevice?.position == AVCaptureDevice.Position.front {
             return
         }
         
-        if self.currentDevice?.torchMode == AVCaptureTorchMode.off {
+        if self.currentDevice?.torchMode == AVCaptureDevice.TorchMode.off {
             sp_flashOn()
         }else{
             sp_flashOff()
@@ -216,11 +224,11 @@ extension SPCameraManager {
             return
         }
         self.sp_changeDeviceProperty {  [weak self]() in
-            if self?.currentDevice?.torchMode == AVCaptureTorchMode.off {
-                self?.currentDevice?.torchMode = AVCaptureTorchMode.on
+            if self?.currentDevice?.torchMode == AVCaptureDevice.TorchMode.off {
+                self?.currentDevice?.torchMode = AVCaptureDevice.TorchMode.on
             }
-            if self?.currentDevice?.flashMode == AVCaptureFlashMode.off {
-                self?.currentDevice?.flashMode = AVCaptureFlashMode.on
+            if self?.currentDevice?.flashMode == AVCaptureDevice.FlashMode.off {
+                self?.currentDevice?.flashMode = AVCaptureDevice.FlashMode.on
             }
         }
       
@@ -242,11 +250,11 @@ extension SPCameraManager {
             return
         }
         self.sp_changeDeviceProperty { [weak self]() in
-            if self?.currentDevice?.torchMode == AVCaptureTorchMode.on {
-                self?.currentDevice?.torchMode = AVCaptureTorchMode.off
+            if self?.currentDevice?.torchMode == AVCaptureDevice.TorchMode.on {
+                self?.currentDevice?.torchMode = AVCaptureDevice.TorchMode.off
             }
-            if self?.currentDevice?.flashMode == AVCaptureFlashMode.on {
-                self?.currentDevice?.flashMode = AVCaptureFlashMode.off
+            if self?.currentDevice?.flashMode == AVCaptureDevice.FlashMode.on {
+                self?.currentDevice?.flashMode = AVCaptureDevice.FlashMode.off
             }
         }
     }

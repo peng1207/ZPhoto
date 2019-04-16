@@ -29,18 +29,18 @@ class SPVideoHelp: NSObject {
     class func mergeVideos(videoAsset : [AVAsset],outputPath:String,exportSuuccess:@escaping ExportSuccess) {
         let compostition = AVMutableComposition()
         //合并视频、音频轨道 
-        let firstTrack = compostition.addMutableTrack(withMediaType: AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
-        let audioTrack = compostition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
+        let firstTrack = compostition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: CMPersistentTrackID())
+        let audioTrack = compostition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: CMPersistentTrackID())
         var insertTime : CMTime = kCMTimeZero
         var duration = 0.0
         for asset  in videoAsset {
             do {
-                try firstTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), of: asset.tracks(withMediaType: AVMediaTypeVideo)[0], at: insertTime)
+                try firstTrack!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), of: asset.tracks(withMediaType: AVMediaType.video)[0], at: insertTime)
             } catch _ {
             
             }
             do {
-                try audioTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), of: asset.tracks(withMediaType: AVMediaTypeAudio)[0], at: insertTime)
+                try audioTrack!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), of: asset.tracks(withMediaType: AVMediaType.audio)[0], at: insertTime)
             } catch _ {
                 
             }
@@ -48,11 +48,11 @@ class SPVideoHelp: NSObject {
             insertTime = CMTimeAdd(insertTime, asset.duration)
         }
         // 旋转视图图像，防止90度颠倒
-        firstTrack.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
+        firstTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
         let videoPath = URL(fileURLWithPath: outputPath)
         let exporter = AVAssetExportSession(asset: compostition, presetName: AVAssetExportPresetHighestQuality)!
         exporter.outputURL = videoPath
-        exporter.outputFileType = AVFileTypeQuickTimeMovie
+        exporter.outputFileType = AVFileType.mov
         exporter.shouldOptimizeForNetworkUse = true
         exporter.exportAsynchronously(completionHandler: {
             exportSuuccess()
@@ -61,15 +61,15 @@ class SPVideoHelp: NSObject {
     /**< 对录制好的视频处理  */
     class func recordForDeal(asset:AVAsset,outputPath:String,complete : @escaping ExportSuccess)-> Void{
         let componsition = AVMutableComposition()
-        let videoTrack = componsition.addMutableTrack(withMediaType: AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
+        let videoTrack = componsition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: CMPersistentTrackID())
        
-        let videoAsset = asset.tracks(withMediaType: AVMediaTypeVideo)[0]
+        let videoAsset = asset.tracks(withMediaType: AVMediaType.video)[0]
         let videoDuration = videoAsset.timeRange.duration
 
         let videoStart = videoAsset.timeRange.start
-        if asset.tracks(withMediaType: AVMediaTypeAudio).count > 0 {
-             let audioTrack = componsition.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
-            let audioAsset = asset.tracks(withMediaType: AVMediaTypeAudio)[0]
+        if asset.tracks(withMediaType: AVMediaType.audio).count > 0 {
+            let audioTrack = componsition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: CMPersistentTrackID())
+            let audioAsset = asset.tracks(withMediaType: AVMediaType.audio)[0]
             var audioDuration = audioAsset.timeRange.duration
             var audioStart = audioAsset.timeRange.start
             if CMTimeGetSeconds(videoAsset.timeRange.duration) < CMTimeGetSeconds(audioAsset.timeRange.duration) {
@@ -77,23 +77,23 @@ class SPVideoHelp: NSObject {
                 audioStart = videoStart
             }
             do {
-                try audioTrack.insertTimeRange(CMTimeRangeMake(audioStart, audioDuration), of: audioAsset, at: kCMTimeZero)
+                try audioTrack!.insertTimeRange(CMTimeRangeMake(audioStart, audioDuration), of: audioAsset, at: kCMTimeZero)
             } catch _{
                 
             }
         }
         
         do {
-            try videoTrack.insertTimeRange(CMTimeRangeMake(videoStart, videoDuration), of: videoAsset, at: kCMTimeZero)
+            try videoTrack!.insertTimeRange(CMTimeRangeMake(videoStart, videoDuration), of: videoAsset, at: kCMTimeZero)
         }catch _{
             
         }
     
-        videoTrack.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
+        videoTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
         let videoPath = URL(fileURLWithPath: outputPath)
         let exporter = AVAssetExportSession(asset: componsition, presetName: AVAssetExportPresetHighestQuality)!
         exporter.outputURL = videoPath
-        exporter.outputFileType = AVFileTypeQuickTimeMovie
+        exporter.outputFileType = AVFileType.mov
         exporter.shouldOptimizeForNetworkUse = true
         exporter.exportAsynchronously(completionHandler: {
             complete()
@@ -107,7 +107,7 @@ class SPVideoHelp: NSObject {
         assetImageGenerator.appliesPreferredTrackTransform = true
         assetImageGenerator.requestedTimeToleranceAfter = kCMTimeZero
         assetImageGenerator.requestedTimeToleranceBefore = kCMTimeZero
-        assetImageGenerator.apertureMode = AVAssetImageGeneratorApertureModeEncodedPixels
+        assetImageGenerator.apertureMode = AVAssetImageGeneratorApertureMode.encodedPixels
         do {
         
             let thumbnailImageRef = try assetImageGenerator.copyCGImage(at: time, actualTime: nil)
@@ -191,26 +191,26 @@ class SPVideoHelp: NSObject {
     /**< 剪切视频 timeRange 剪切的位置  */
     class func shear(asset:AVAsset,timeRange: CMTimeRange,completionHandler:@escaping (_ outUrl:URL)->Void) ->  Void{
         let compostion  = AVMutableComposition()
-        let videoTrack = compostion.addMutableTrack(withMediaType: AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
-        let audioTrack = compostion.addMutableTrack(withMediaType: AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
+        let videoTrack = compostion.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: CMPersistentTrackID())
+        let audioTrack = compostion.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: CMPersistentTrackID())
         do {
-             try videoTrack.insertTimeRange(timeRange, of: asset.tracks(withMediaType: AVMediaTypeVideo)[0], at: kCMTimeZero)
+            try videoTrack!.insertTimeRange(timeRange, of: asset.tracks(withMediaType: AVMediaType.video)[0], at: kCMTimeZero)
         }catch _ {
             
         }
         do {
-            try audioTrack.insertTimeRange(timeRange, of: asset.tracks(withMediaType: AVMediaTypeAudio)[0], at: kCMTimeZero)
+            try audioTrack!.insertTimeRange(timeRange, of: asset.tracks(withMediaType: AVMediaType.audio)[0], at: kCMTimeZero)
         }catch _ {
             
         }
-        videoTrack.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
+        videoTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
         
         FileManager.sp_directory(createPath: kVideoTempDirectory)
         
        let exportUrl = URL(fileURLWithPath: "\(kVideoTempDirectory)/\(getVideoName())")
         
         let exportSession = AVAssetExportSession(asset: compostion, presetName: AVAssetExportPresetHighestQuality)!
-        exportSession.outputFileType = AVFileTypeQuickTimeMovie
+        exportSession.outputFileType = AVFileType.mov
         exportSession.shouldOptimizeForNetworkUse = true
         exportSession.outputURL = exportUrl
         exportSession.exportAsynchronously(completionHandler: {

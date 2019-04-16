@@ -8,12 +8,15 @@
 
 import Foundation
 import SnapKit
+typealias SPPhotoListSelectComplete = (_ model : SPPhotoModel)->Void
 class SPPhotoListVC: SPBaseVC {
     fileprivate var collectionView : UICollectionView!
     fileprivate var dataArray : [SPPhotoModel]?
-    fileprivate var selectArray : [SPPhotoModel] = [SPPhotoModel]()
+    var selectArray : [SPPhotoModel] = [SPPhotoModel]()
     fileprivate let cellID = "SPPHOTOLISTCOLLECTCELLID"
     fileprivate var isEdit : Bool = false
+    var selectBlock : SPPhotoListSelectComplete?
+    var selectMaxCount : Int = 9
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -41,7 +44,7 @@ class SPPhotoListVC: SPBaseVC {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 1
         layout.minimumInteritemSpacing = 1
-        layout.sectionInset = UIEdgeInsets(top: 1, left: 0, bottom: 0, right: 0)
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
         self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
@@ -86,6 +89,9 @@ extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,U
             var isSelect = false
             if let m = model, self.selectArray.contains(m){
                 isSelect = true
+                cell.num = self.selectArray.sp_number(of: m)
+            }else{
+                cell.num = 0
             }
             cell.isSelect = isSelect;
         }
@@ -103,12 +109,26 @@ extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,U
                     }
                     self.collectionView.reloadData()
                 }else{
-                    let vc = SPPhotoBrowseVC()
-                    vc.dataArray = self.dataArray
-                    vc.selectModel = m
-                    self.navigationController?.pushViewController(vc, animated: true)
+                    if let block = self.selectBlock {
+                        if sp_getArrayCount(array: self.selectArray) < self.selectMaxCount {
+                            block(m)
+                            self.selectArray.append(m)
+                            self.collectionView.reloadData()
+                        }else{
+                           
+                            let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: "\(SPLanguageChange.sp_getString(key: "MAXSELECT"))\(sp_getString(string: self.selectMaxCount))", preferredStyle: UIAlertControllerStyle.alert)
+                            alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: { (action) in
+                                
+                            }))
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    }else{
+                        let vc = SPPhotoBrowseVC()
+                        vc.dataArray = self.dataArray
+                        vc.selectModel = m
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
                 }
-               
             }
         }
     }
@@ -126,5 +146,16 @@ extension SPPhotoListVC {
         self.selectArray.remove(object: model)
         self.collectionView.reloadData()
     }
-    
+    /// 清除所有的数据
+    func sp_clearSelect(){
+        self.selectArray.removeAll()
+        self.collectionView.reloadData()
+    }
+    /// 删除某个位置的元素
+    ///
+    /// - Parameter index: 位置
+    func sp_removeSelect(index : Int){
+        self.selectArray.sp_remove(of: index)
+        self.collectionView.reloadData()
+    }
 }

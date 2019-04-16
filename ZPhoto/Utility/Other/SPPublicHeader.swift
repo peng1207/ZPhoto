@@ -20,6 +20,8 @@ let kTmpPath = NSTemporaryDirectory()
 let framesPerSecond : Int32 = 60
 /// 按钮点击回调
 typealias SPBtnComplete = ()->Void
+/// 点击回调 回传位置
+typealias SPIndexComplete = (_ index : Int)->Void
 /**
  获取字体对象
  
@@ -143,7 +145,7 @@ func  dispatchAfter(time:UInt64,complete:@escaping ()->Void){
 func SPLog<T>(_ message:T,file:String = #file,function:String = #function,line:Int=#line){
     #if DEBUG
         let fileName = (file as NSString).lastPathComponent
-        
+    
 //        NSLog("--\(fileName) ---\(line)--\(function) --- \(message)")
         print("\(NSDate().timeIntervalSince1970)---\(fileName):\(line)---\(function) | \(message)")
     #endif
@@ -166,7 +168,7 @@ func picRotating(imgae:CIImage?) -> CIImage? {
     } else {
         t = CGAffineTransform(rotationAngle: 0)
     }
-    return  outputImage.applying(t)
+    return  outputImage.transformed(by: t)
 }
 /**
  倒计时
@@ -255,7 +257,7 @@ func UncaughtExceptionHandler() -> @convention(c) (NSException) -> Void {
         let content =  String("===异常错误报告===:name:\(name)===\n==reson:\(reason)==\n==ncallStackSymbols:\n\(arr.componentsJoined(by: "\n"))")
         SPLog("exception type : \(name) \n crash reason : \(reason) \n call stack info : \(arr)====content-->\(content)");
         do {
-             try content?.write(to: URL(fileURLWithPath: "\(kCachesPath)/ZPhoteCash/\(Date()).txt"), atomically: false, encoding: String.Encoding.utf8)
+            try content.write(to: URL(fileURLWithPath: "\(kCachesPath)/ZPhoteCash/\(Date()).txt"), atomically: false, encoding: String.Encoding.utf8)
         }catch{
             
         }

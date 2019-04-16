@@ -229,13 +229,13 @@ extension SPRecordVideoRootVC {
     fileprivate func dealOrientation(toInterfaceOrientation: UIInterfaceOrientation){
         switch toInterfaceOrientation {
         case .landscapeLeft:
-            self.videoManager.videoLayer?.connection.videoOrientation = .landscapeLeft
+            self.videoManager.videoLayer?.connection!.videoOrientation = .landscapeLeft
         case .landscapeRight:
-            self.videoManager.videoLayer?.connection.videoOrientation = .landscapeRight
+            self.videoManager.videoLayer?.connection!.videoOrientation = .landscapeRight
         case .portrait:
-            self.videoManager.videoLayer?.connection.videoOrientation = .portrait
+            self.videoManager.videoLayer?.connection!.videoOrientation = .portrait
         case .portraitUpsideDown:
-            self.videoManager.videoLayer?.connection.videoOrientation = .portraitUpsideDown
+            self.videoManager.videoLayer?.connection!.videoOrientation = .portraitUpsideDown
         default: break
             
         }
@@ -278,11 +278,11 @@ extension SPRecordVideoRootVC {
      处理没有摄像头权限的事件
      */
     fileprivate func dealNOCameraAuthAction(){
-        let alert = UIAlertController(title: SPLanguageChange.getString(key: "TIPS"), message: SPLanguageChange.getString(key: "NO_CAMERA_AUTH_TIPS"), preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: {(action ) in
+        let alert = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "NO_CAMERA_AUTH_TIPS"), preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: {(action ) in
             self.disMissVC()
         }))
-        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "GO_TO_SET"), style: UIAlertActionStyle.default, handler: { (action) in
+        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "GO_TO_SET"), style: UIAlertActionStyle.default, handler: { (action) in
             SPSysSet.openSetting()
              self.disMissVC()
         }))
@@ -292,9 +292,9 @@ extension SPRecordVideoRootVC {
      处理没有麦克风的事件
      */
     fileprivate func dealNOMicrophoneAuthAction(){
-        let alert = UIAlertController(title: SPLanguageChange.getString(key: "TIPS"), message: SPLanguageChange.getString(key: "NO_MICROPHONE_AUTH_TIPS"), preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: SPLanguageChange.getString(key: "GO_TO_SET"), style: UIAlertActionStyle.default, handler: { (action) in
+        let alert = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "NO_MICROPHONE_AUTH_TIPS"), preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "GO_TO_SET"), style: UIAlertActionStyle.default, handler: { (action) in
             SPSysSet.openSetting()
         }))
         self.present(alert, animated: true, completion: nil)
@@ -414,11 +414,11 @@ class SPRecordVideoBtnView: UIView {
         filterButton.addTarget(self, action: #selector(clickFilterAction), for: .touchUpInside)
     }
     // 点击取消
-    func clickCanceAction(){
+    @objc func clickCanceAction(){
         self.dealAction(clickType: .cance, button: canceButton)
     }
     // 点击完成
-    func clickDoneAction(){
+    @objc func clickDoneAction(){
         self.dealAction(clickType: .done, button: recordButton)
         if recordButton.isSelected{
             self.setupTimer()
@@ -427,15 +427,15 @@ class SPRecordVideoBtnView: UIView {
         }
     }
     // 点击 闪光灯
-    func clickOpenAction(){
+    @objc func clickOpenAction(){
         self.dealAction(clickType: .flash, button: flashLampButton)
     }
     // 点击切换
-    func  clickChangeAction(){
+    @objc func  clickChangeAction(){
         self.dealAction(clickType: .change, button: changeButton)
     }
     // 点击滤镜
-    func clickFilterAction(){
+    @objc func clickFilterAction(){
         self.dealAction(clickType: .filter, button: filterButton)
     }
     

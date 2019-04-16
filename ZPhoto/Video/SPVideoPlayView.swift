@@ -27,7 +27,7 @@ class SPVideoPlayView : UIView{
             videoPlayer = AVPlayer(playerItem: videoPlayerItem)
             let layer = self.layer as! AVPlayerLayer
             layer.player = videoPlayer
-            layer.videoGravity = AVLayerVideoGravityResize
+            layer.videoGravity = AVLayerVideoGravity.resize
             
             let second = CMTimeGetSeconds((videoModel?.asset?.duration)!)
             buttonView?.timeLabel.text = formatPlayTime(seconds: second)
@@ -164,7 +164,7 @@ extension SPVideoPlayView{
 // MARK: -- 通知 观察者
 extension SPVideoPlayView {
     /**< 播放结束的通知 */
-    func playerDidReachEnd(){
+    @objc func playerDidReachEnd(){
         videoPlayer?.seek(to: kCMTimeZero, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
         buttonView?.progressView.setValue(0, animated: true)
         buttonView?.playButton.isSelected = false

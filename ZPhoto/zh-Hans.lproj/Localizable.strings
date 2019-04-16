@@ -22,5 +22,14 @@
 "FIlE" = "文件";
 "SPLICING" = "拼接";
 "EDIT" = "编辑";
-"INVERSION" = "倒放"; 
- 
+"INVERSION" = "倒放";
+"NEXT" = "下一步";
+"CLEARSELECT" = "清除选择";
+"SELECTED" = "已选";
+"DONE" = "确定";
+"MAXSELECT" = "最多选择";
+"GIVEUP" = "放弃";
+"GIVEUP_EDIT_PICTURE_TIPS" = "图片编辑没有完成，是否放弃编辑?";
+"SAVE" = "保存";
+"OK" = "好的";
+"NO_CHOICE_TIPS" = "别闹了! 好歹选择一张图片";
