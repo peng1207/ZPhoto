@@ -24,7 +24,7 @@ class SPBaseVC : UIViewController{
     }
 }
 
-fileprivate extension  SPBaseVC{
+ extension  SPBaseVC{
     
     fileprivate func setupBase(){
         // UI适配

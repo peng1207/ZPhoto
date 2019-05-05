@@ -15,14 +15,15 @@ class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionView
         let layout = SPRecordVideoFilterFlowLayout()
         let collectionView = UICollectionView(frame: CGRect(), collectionViewLayout:layout)
         collectionView.backgroundColor = self.backgroundColor
-//        collectionView.isPagingEnabled = true
+ 
         return collectionView
     }()
-    lazy fileprivate var selectView : UIView = {
-       let view = UIView()
-        view.layer.borderColor = UIColor.white.cgColor
-        view.layer.borderWidth = 2
-        return view
+  
+    fileprivate  lazy var selectLayer : CALayer = {
+        let layer = CALayer()
+        layer.borderColor = UIColor.red.cgColor
+        layer.borderWidth = 2
+        return layer
     }()
     
     var filterList : Array<SPFilterModel>?  {
@@ -41,6 +42,10 @@ class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionView
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.selectLayer.frame = CGRect(x: 0, y: self.frame.size.height / 2.0 - itemH / 2.0, width: self.frame.size.width, height: itemH)
+    }
     
 }
 
@@ -50,15 +55,12 @@ extension  SPRecordVideoFilterView {
      */
     fileprivate func setupUI(){
         self.addSubview(filterCollectionView!)
-        self.addSubview(selectView)
+        
+        self.layer.addSublayer(self.selectLayer)
         filterCollectionView?.snp.makeConstraints({ (maker) in
             maker.left.top.right.bottom.equalTo(self).offset(0)
         })
-        selectView.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self).offset(0)
-            maker.height.equalTo(itemH)
-            maker.centerY.equalTo(self.snp.centerY).offset(0)
-        }
+        
         filterCollectionView?.delegate  = self
         filterCollectionView?.dataSource = self
         filterCollectionView?.register(SPRecordVideoFilterCell.self , forCellWithReuseIdentifier: self.identify)
@@ -136,9 +138,6 @@ extension SPRecordVideoFilterCell {
 
 class SPRecordVideoFilterFlowLayout : UICollectionViewFlowLayout{
     
-    
-    
-    
     override init() {
         super.init()
         
@@ -203,7 +202,6 @@ class SPRecordVideoFilterFlowLayout : UICollectionViewFlowLayout{
                 adjustOffsetY = attri.center.y - centerY;
             }
         }
-        
         return CGPoint(x:proposedContentOffset.x , y:proposedContentOffset.y + adjustOffsetY )
     }
     

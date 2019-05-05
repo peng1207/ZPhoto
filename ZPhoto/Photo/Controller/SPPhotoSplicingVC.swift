@@ -70,6 +70,12 @@ class SPPhotoSplicingVC: SPBaseVC {
         self.view.addSubview(self.toolView)
         self.sp_addConstraint()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.saveBtn)
+        let cornerView = SPCustomPictureView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        cornerView.imgView.image = self.dataArray.first?.img
+        cornerView.layoutType = .heart
+        self.bgView.addSubview(cornerView)
+        cornerView.sp_drawMaskLayer()
+        
     }
     /// 处理有没数据
     override func sp_dealNoData(){

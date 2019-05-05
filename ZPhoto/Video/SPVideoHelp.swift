@@ -48,7 +48,7 @@ class SPVideoHelp: NSObject {
             insertTime = CMTimeAdd(insertTime, asset.duration)
         }
         // 旋转视图图像，防止90度颠倒
-        firstTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
+        firstTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
         let videoPath = URL(fileURLWithPath: outputPath)
         let exporter = AVAssetExportSession(asset: compostition, presetName: AVAssetExportPresetHighestQuality)!
         exporter.outputURL = videoPath
@@ -89,7 +89,7 @@ class SPVideoHelp: NSObject {
             
         }
     
-        videoTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
+        videoTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
         let videoPath = URL(fileURLWithPath: outputPath)
         let exporter = AVAssetExportSession(asset: componsition, presetName: AVAssetExportPresetHighestQuality)!
         exporter.outputURL = videoPath
@@ -203,7 +203,7 @@ class SPVideoHelp: NSObject {
         }catch _ {
             
         }
-        videoTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(M_PI_2))
+        videoTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
         
         FileManager.sp_directory(createPath: kVideoTempDirectory)
         

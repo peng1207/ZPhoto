@@ -54,10 +54,11 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
     lazy fileprivate var videoData : SPRecordVideoData! = {
         return SPRecordVideoData()
     }()
-    fileprivate var filterView : SPRecordVideoFilterView! = {
+   lazy fileprivate var filterView : SPRecordVideoFilterView! = {
         let view =  SPRecordVideoFilterView()
         view.isHidden = true
         view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        view.sp_cornerRadius(cornerRadius: filterViewWidth / 2.0)
         return view
     } () //滤镜显示view
     fileprivate var pinchGesture : UIPinchGestureRecognizer!  // 手势
@@ -70,7 +71,7 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
     
     fileprivate let kVideoManagerKVOKey = "noFilterCIImage"
     fileprivate var filterRightConstraint : Constraint? = nil
-    fileprivate let filterViewHeight :  CGFloat = 60
+    fileprivate let filterViewWidth :  CGFloat = 60
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -150,7 +151,7 @@ extension SPRecordVideoRootVC {
          filterRightConstraint =  maker.right.equalTo(self.view).offset(0).constraint
             maker.height.equalTo(self.view.snp.height).multipliedBy(0.5)
             maker.centerY.equalTo(self.view.snp.centerY).offset(0)
-            maker.width.equalTo(filterViewHeight)
+            maker.width.equalTo(filterViewWidth)
         }
     }
 }
@@ -247,7 +248,7 @@ extension SPRecordVideoRootVC {
         if(self.filterView.isHidden){
             self.filterRightConstraint?.update(offset: 0)
         }else{
-            self.filterRightConstraint?.update(offset: -filterViewHeight)
+            self.filterRightConstraint?.update(offset: -filterViewWidth)
         }
         self.filterView.isHidden = !self.filterView.isHidden
         self.changeFilterData()

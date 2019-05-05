@@ -53,7 +53,7 @@ class SPVideoPlayView : UIView{
     }
 }
 // MARK: -- UI
-fileprivate extension SPVideoPlayView {
+ extension SPVideoPlayView {
     /**< 创建UI */
     fileprivate func setupUI(){
         self.addSubview(buttonView!)

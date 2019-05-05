@@ -58,13 +58,14 @@ fileprivate class SPCameraRootVC: SPBaseVC {
         view.collectSelectComplete = { [weak self](model : SPFilterModel)  in
             self?.cameraManmager.filter = model.filter
         }
+        view.sp_cornerRadius(cornerRadius: filterViewWidth / 2.0)
         return view
     }() //滤镜显示view
     lazy fileprivate var videoData : SPRecordVideoData! = {
         return SPRecordVideoData()
     }()
     fileprivate var filterRightConstraint : Constraint!
-    fileprivate let filterViewHeight :  CGFloat = 60
+    fileprivate let filterViewWidth :  CGFloat = 60
      fileprivate let kCameraManagerKVOKey = "noFilterCIImage"
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,7 +121,7 @@ fileprivate class SPCameraRootVC: SPBaseVC {
             filterRightConstraint =  maker.right.equalTo(self.view).offset(0).constraint
             maker.height.equalTo(self.view.snp.height).multipliedBy(0.5)
             maker.centerY.equalTo(self.view.snp.centerY).offset(0)
-            maker.width.equalTo(filterViewHeight)
+            maker.width.equalTo(filterViewWidth)
         }
     }
     deinit {
@@ -175,7 +176,7 @@ fileprivate extension SPCameraRootVC{
         if(self.filterView.isHidden){
             self.filterRightConstraint.update(offset: 0)
         }else{
-            self.filterRightConstraint.update(offset: -filterViewHeight)
+            self.filterRightConstraint.update(offset: -filterViewWidth)
         }
         self.filterView.isHidden = !self.filterView.isHidden
         sp_changeFilterData()

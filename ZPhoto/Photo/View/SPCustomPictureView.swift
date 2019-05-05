@@ -12,6 +12,9 @@ import SnapKit
 class SPCustomPictureView:  UIView,UIScrollViewDelegate{
     fileprivate lazy var scrollView : UIScrollView = {
         let view = UIScrollView()
+        view.contentSize = CGSize(width: sp_getScreenWidth(), height:  sp_getScreenWidth())
+        view.showsVerticalScrollIndicator = false
+        view.showsHorizontalScrollIndicator = false
         return view
     }()
     lazy var imgView : UIImageView = {
@@ -23,6 +26,7 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         didSet{
             self.sp_updateImgLayout()
             self.sp_setLayerBorder()
+            self.sp_drawMaskLayer()
         }
     }
     var boderColor : UIColor = UIColor.white {
@@ -30,11 +34,12 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
             self.sp_setLayerBorder()
         }
     }
-    var netRotation : CGFloat = 0;//旋转
-    var lastScaleFactor : CGFloat! = 1  //放大、缩小
+    fileprivate var netRotation : CGFloat = 0;//旋转
+    fileprivate var lastScaleFactor : CGFloat! = 1  //放大、缩小
     fileprivate let minScale : CGFloat = 0.1
     /// 切割多边形的点
     var points : [CGPoint]?
+    var layoutType : SPPictureLayoutType = .rectangle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,16 +51,16 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         fatalError("init(coder:) has not been implemented")
     }
     fileprivate func sp_setLayerBorder(){
-        self.layer.borderWidth = self.boder
-        self.layer.borderColor = self.boderColor.cgColor
+//        self.layer.borderWidth = self.boder
+//        self.layer.borderColor = self.boderColor.cgColor
+        
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
- 
+        
         self.addSubview(self.scrollView)
         self.scrollView.addSubview(self.imgView)
         self.sp_addConstraint()
-       
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
@@ -68,7 +73,7 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         guard self.imgView.superview != nil else {
             return
         }
-        self.imgView.snp.makeConstraints { (maker) in
+        self.imgView.snp.remakeConstraints { (maker) in
             maker.left.equalTo(self.scrollView.snp.left).offset(boder)
             maker.top.equalTo(self.scrollView.snp.top).offset(boder)
             maker.width.equalTo(self.scrollView.snp.width).offset(-2 * boder)
@@ -77,20 +82,460 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
     }
     
     func sp_drawMaskLayer(){
-        guard (points != nil) else {
-            return
+        
+        switch self.layoutType {
+        case .circular:
+            sp_drawCorner()
+        case .diamond:
+            sp_drawDiamond()
+        case .ellipse:
+            sp_drawEllipse()
+        case .triangle(_):
+            sp_drawTriangle()
+        case .rectangleCorner(let type,let radius):
+            sp_drawRectangleCorner(type: type, radius: CGFloat(radius))
+        case .rectangleCornerInner(_):
+            sp_drawRectangleCornerInner()
+        case .polygon(_):
+            sp_drawPolygon()
+        case .heart:
+            sp_drawHeart()
+        case .waterDrop:
+            sp_drawWaterDrop()
+        default:
+            SPLog("没有其他 不画")
+           
         }
-        let bezierPath1 = UIBezierPath()
-        bezierPath1.move(to: points![0])
-        for index in 1..<points!.count {
-              bezierPath1.addLine(to: points![index])
-        }
-           bezierPath1.addLine(to: points![0])
+    }
+    
+    /// 画圆
+    fileprivate func sp_drawCorner(){
+        self.sp_drawLayer(bezierPath: self.sp_getCornerPath())
+    }
+    ///  画椭圆
+    fileprivate func sp_drawEllipse(){
+        sp_drawLayer(bezierPath: sp_getEllipsePath())
+    }
+    /// 画菱形
+    fileprivate func sp_drawDiamond(){
+        sp_drawLayer(bezierPath: sp_getDiamondPath())
+    }
+    /// 画三角形
+    fileprivate func sp_drawTriangle(){
+        sp_drawLayer(bezierPath: sp_getTrianglePath())
+    }
+    /// 画多边形
+    fileprivate func sp_drawPolygon(){
+        sp_drawLayer(bezierPath: sp_getPolygonPath())
+    }
+    /// 画矩形 中带用圆角 圆形朝内
+    fileprivate func sp_drawRectangleCornerInner(){
+        sp_drawLayer(bezierPath: sp_getRectangleCornerInnerPath())
+    }
+    /// 画矩形 中带有圆角 圆形朝外
+    fileprivate func sp_drawRectangleCorner(type : SPPictureLayoutType.RectangleCorner , radius : CGFloat){
+        sp_drawLayer(bezierPath: sp_getRectangleCornerPath(type: type, radiusValue:radius))
+    }
+    /// 画齿轮
+    fileprivate func sp_drawGear(){
+        sp_drawLayer(bezierPath: sp_getGearPath())
+    }
+    /// 画心形
+    fileprivate func sp_drawHeart(){
+        sp_drawLayer(bezierPath: sp_getHeartPatg())
+    }
+    /// 画水滴
+    fileprivate func sp_drawWaterDrop(){
+        sp_drawLayer(bezierPath: sp_getWaterDropPath())
+    }
+    /// 画layer
+    ///
+    /// - Parameter bezierPath: 路径
+    fileprivate func sp_drawLayer(bezierPath : UIBezierPath){
         let shapeLayer = CAShapeLayer()
-        shapeLayer.path = bezierPath1.cgPath
+        shapeLayer.path = bezierPath.cgPath
         self.layer.mask = shapeLayer
     }
     
+    /// 获取圆的路径
+    ///
+    /// - Returns: 路径
+    fileprivate func sp_getCornerPath()->UIBezierPath{
+        var radius : CGFloat = 0
+        let maxX = self.frame.size.width - self.boder
+        let maxY = self.frame.size.height - self.boder
+        let minX = self.boder
+        let minY = self.boder
+        let centerY = self.frame.size.height / 2.0
+        let centerX = self.frame.size.width / 2.0
+        if self.frame.size.width > self.frame.size.height {
+            radius = (maxY - minY ) / 2.0
+        }else{
+            radius = (maxX - minX) / 2.0
+        }
+        return  UIBezierPath(arcCenter: CGPoint(x: centerX, y: centerY), radius: radius, startAngle: 0, endAngle:CGFloat.pi * 2.0, clockwise: true)
+    }
+    /// 获取椭圆的路径
+    ///
+    /// - Returns: j路径
+    fileprivate func sp_getEllipsePath()->UIBezierPath{
+        let maxX = self.frame.size.width - self.boder
+        let maxY = self.frame.size.height - self.boder
+        let minX = self.boder
+        let minY = self.boder
+        return  UIBezierPath(ovalIn: CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY))
+    }
+    /// 获取菱形的路径
+    ///
+    /// - Returns: 路径
+    fileprivate func sp_getDiamondPath()->UIBezierPath{
+        let bezierPath = UIBezierPath()
+        let maxX = self.frame.size.width - self.boder
+        let maxY = self.frame.size.height - self.boder
+        let minX = self.boder
+        let minY = self.boder
+        let centerY = self.frame.size.height / 2.0
+        let centerX = self.frame.size.width / 2.0
+        bezierPath.move(to: CGPoint(x: centerX, y: minY))
+        bezierPath.addLine(to: CGPoint(x: maxX, y: centerY))
+        bezierPath.addLine(to: CGPoint(x: centerX, y: maxY))
+        bezierPath.addLine(to: CGPoint(x: minX, y: centerY))
+        bezierPath.addLine(to: CGPoint(x: centerX, y: minY))
+        return bezierPath
+    }
+    /// 获取三角形的路径
+    ///
+    /// - Returns: 路径
+    fileprivate func sp_getTrianglePath()->UIBezierPath{
+        let  bezierPath = UIBezierPath()
+        let maxX = self.frame.size.width - self.boder
+        let maxY = self.frame.size.height - self.boder
+        let minX = self.boder
+        let minY = self.boder
+        let centerY = self.frame.size.height / 2.0
+        let centerX = self.frame.size.width / 2.0
+        switch self.layoutType {
+        case .triangle(triangle:  .left):
+            bezierPath.move(to: CGPoint(x: minX, y: centerY))
+            bezierPath.addLine(to: CGPoint(x: maxX, y: minY))
+            bezierPath.addLine(to: CGPoint(x: maxX, y:maxY))
+            bezierPath.addLine(to: CGPoint(x: minX, y: centerY))
+            
+        case .triangle(triangle:  .top):
+            bezierPath.move(to: CGPoint(x: centerX, y: minY))
+            bezierPath.addLine(to: CGPoint(x: maxX, y: maxY))
+            bezierPath.addLine(to: CGPoint(x: minX, y:maxY))
+            bezierPath.addLine(to: CGPoint(x: centerX, y: minY))
+            
+        case .triangle(triangle:  .right):
+            bezierPath.move(to: CGPoint(x: maxX, y: centerY))
+            bezierPath.addLine(to: CGPoint(x: minX, y: maxY))
+            bezierPath.addLine(to: CGPoint(x: minX, y: minY))
+            bezierPath.addLine(to: CGPoint(x: maxX, y: centerY))
+        case .triangle(triangle:  .bottom):
+            bezierPath.move(to: CGPoint(x: centerX, y: maxY))
+            bezierPath.addLine(to: CGPoint(x: minX, y: minY))
+            bezierPath.addLine(to: CGPoint(x: maxX, y: minY))
+            bezierPath.addLine(to: CGPoint(x: centerX, y: maxY))
+        case .triangle(triangle:  .left_bottom):
+            bezierPath.move(to: CGPoint(x: minX, y: minY))
+            bezierPath.addLine(to: CGPoint(x: maxX, y: maxY))
+            bezierPath.addLine(to: CGPoint(x: minX, y: maxY))
+            bezierPath.addLine(to: CGPoint(x: minX, y: minY))
+        case .triangle(triangle:  .right_top):
+            bezierPath.move(to: CGPoint(x: maxX, y: minY))
+            bezierPath.addLine(to: CGPoint(x: maxX, y: maxY))
+            bezierPath.addLine(to: CGPoint(x: minX, y: minY))
+            bezierPath.addLine(to: CGPoint(x: maxX, y: minY))
+        case .triangle(triangle:  .left_top):
+            bezierPath.move(to: CGPoint(x: minX, y: minY))
+            bezierPath.addLine(to: CGPoint(x: maxX, y: minY))
+            bezierPath.addLine(to: CGPoint(x: minX, y: maxY))
+            bezierPath.addLine(to: CGPoint(x: minX, y: minY))
+        case .triangle(triangle:  .right_bottom):
+            bezierPath.move(to: CGPoint(x: maxX, y: minY))
+            bezierPath.addLine(to: CGPoint(x: maxX, y: maxY))
+            bezierPath.addLine(to: CGPoint(x: minX, y: maxY))
+            bezierPath.addLine(to: CGPoint(x: maxX, y: minY))
+        default:
+            SPLog("")
+        }
+        return bezierPath
+    }
+    /// 获取多边形的路径
+    ///
+    /// - Returns: 路径
+    fileprivate func sp_getPolygonPath()->UIBezierPath{
+        let bezierPath = UIBezierPath()
+        return bezierPath
+    }
+    /// 获取矩形 中带用圆角 圆形朝内的路径
+    ///
+    /// - Returns: 路径
+    fileprivate func sp_getRectangleCornerInnerPath()->UIBezierPath{
+        let bezizerPath = UIBezierPath()
+        let maxX = self.frame.size.width - self.boder
+        let maxY = self.frame.size.height - self.boder
+        let minx = self.boder
+        let minY = self.boder
+        let centerY = self.frame.size.height / 2.0
+        let centerX = self.frame.size.width / 2.0
+        switch self.layoutType {
+        case .rectangleCornerInner(type: .left):
+            let radius = centerY
+            bezizerPath.addArc(withCenter: CGPoint(x: minx + radius, y: centerY), radius: radius, startAngle: CGFloat.pi * 0.5 , endAngle: CGFloat.pi * 1.5, clockwise: true)
+            bezizerPath.move(to: CGPoint(x: minx + radius, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: minx + radius, y: maxY))
+        case .rectangleCornerInner(type: .right):
+            let radius = centerY
+            bezizerPath.addArc(withCenter: CGPoint(x: maxX - radius, y: centerY), radius: radius, startAngle: CGFloat.pi * 0.5, endAngle: CGFloat.pi * 1.5, clockwise: false)
+            bezizerPath.move(to: CGPoint(x: maxX - radius, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX - radius, y: maxY))
+        case .rectangleCornerInner(type: .top):
+             let radius = centerX
+            bezizerPath.addArc(withCenter: CGPoint(x: centerX, y: minY + radius), radius: radius, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 2.0, clockwise: true)
+            bezizerPath.move(to: CGPoint(x: minx, y: minY + radius))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: minY + radius))
+        case .rectangleCornerInner(type: .bottom):
+             let radius = centerX
+            bezizerPath.addArc(withCenter: CGPoint(x: centerX, y: maxY - radius), radius: radius, startAngle: 0, endAngle: CGFloat.pi, clockwise: true)
+            bezizerPath.move(to: CGPoint(x: maxX, y: maxY - radius))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: maxY - radius))
+        case .rectangleCornerInner(type: .left_top):
+             let radius = self.frame.size.height - 2 * boder
+            bezizerPath.addArc(withCenter: CGPoint(x: minx + radius, y: maxY), radius: radius, startAngle: CGFloat.pi * 1.5 , endAngle: CGFloat.pi * 1.0, clockwise: false)
+            bezizerPath.move(to: CGPoint(x: minx , y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx + radius, y: minY))
+        case .rectangleCornerInner(type: .left_bottom):
+             let radius = self.frame.size.height - 2 * boder
+            bezizerPath.addArc(withCenter: CGPoint(x: minx + radius, y: minY), radius: radius, startAngle: CGFloat.pi * 1.0, endAngle: CGFloat.pi * 0.5, clockwise: false)
+             bezizerPath.move(to: CGPoint(x: minx + radius, y: maxY))
+             bezizerPath.addLine(to: CGPoint(x: maxX, y: maxY))
+             bezizerPath.addLine(to: CGPoint(x: maxX, y: minY))
+             bezizerPath.addLine(to: CGPoint(x: minx , y: minY))
+        case .rectangleCornerInner(type: .right_top):
+             let radius = self.frame.size.height - 2 * boder
+            bezizerPath.addArc(withCenter: CGPoint(x: maxX - radius, y: maxY), radius: radius, startAngle: CGFloat.pi * 2.0, endAngle: CGFloat.pi * 1.5, clockwise: false)
+            bezizerPath.move(to: CGPoint(x: maxX - radius, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX , y: maxY))
+        case .rectangleCornerInner(type: .right_bottom):
+            let radius = self.frame.size.height - 2 * boder
+            bezizerPath.addArc(withCenter: CGPoint(x: maxX - radius, y: minY), radius: radius, startAngle: CGFloat.pi * 0.5, endAngle: CGFloat.pi * 0, clockwise: false)
+            bezizerPath.move(to: CGPoint(x: maxX, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX - radius, y: maxY))
+        case .rectangleCornerInner(type: .horizontal):
+            let radius = centerY
+            bezizerPath.addArc(withCenter: CGPoint(x: minx + radius, y: centerY), radius: radius, startAngle: CGFloat.pi * 0.5 , endAngle: CGFloat.pi * 1.5, clockwise: true)
+            bezizerPath.move(to: CGPoint(x: minx + radius, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: maxX - radius, y: minY))
+            bezizerPath.addArc(withCenter: CGPoint(x: maxX - radius, y: centerY), radius: radius, startAngle: CGFloat.pi * 1.5, endAngle: CGFloat.pi * 0.5, clockwise: true)
+            bezizerPath.addLine(to: CGPoint(x: maxX - radius, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: minx + radius, y: maxY))
+        case .rectangleCornerInner(type: .vertical):
+            let radius = centerX
+            bezizerPath.addArc(withCenter: CGPoint(x: centerX, y: minY + radius), radius: radius, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 2.0, clockwise: true)
+            bezizerPath.move(to: CGPoint(x: maxX, y: minY + radius))
+            bezizerPath.addLine(to: CGPoint(x: maxY, y: maxY - radius))
+            bezizerPath.addArc(withCenter: CGPoint(x: centerX, y: maxY - radius), radius: radius, startAngle: 0, endAngle: CGFloat.pi, clockwise: true)
+            bezizerPath.addLine(to: CGPoint(x: minx, y: maxY - radius))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: minY + radius))
+            
+        default:
+             SPLog("")
+        }
+        
+        return bezizerPath
+    }
+    /// 获取矩形 中带有圆角 圆形朝外的路径
+    ///
+    /// - Returns: 路径
+    fileprivate func sp_getRectangleCornerPath(type : SPPictureLayoutType.RectangleCorner , radiusValue : CGFloat)->UIBezierPath{
+        let bezizerPath = UIBezierPath()
+        let maxX = self.frame.size.width - self.boder
+        let maxY = self.frame.size.height - self.boder
+        let minx = self.boder
+        let minY = self.boder
+        let centerY = self.frame.size.height / 2.0
+        let centerX = self.frame.size.width / 2.0
+        var radius : CGFloat = radiusValue
+        
+        
+        switch type {
+        case .left:
+            if radius == 0 {
+                 radius = centerY
+            }
+            bezizerPath.addArc(withCenter: CGPoint(x: minx, y: centerY), radius: radius, startAngle: CGFloat.pi * 1.5, endAngle: CGFloat.pi * 0.5, clockwise: true)
+            if radiusValue > 0   {
+                bezizerPath.move(to: CGPoint(x: minx, y: centerY + radiusValue))
+                bezizerPath.addLine(to: CGPoint(x: minx, y: maxY))
+            }else{
+                bezizerPath.move(to: CGPoint(x: minx, y: maxY))
+            }
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: minY))
+            if radiusValue > 0{
+                bezizerPath.addLine(to: CGPoint(x: minx, y: centerY - radiusValue))
+            }
+            
+        case .right:
+            if radius == 0 {
+                radius = centerY
+            }
+            bezizerPath.addArc(withCenter: CGPoint(x: maxX, y: centerY), radius: radius, startAngle: CGFloat.pi * 0.5, endAngle: CGFloat.pi * 1.5, clockwise: true)
+            bezizerPath.move(to: CGPoint(x:maxX, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: maxY))
+        case .top:
+            if radius == 0 {
+                 radius = centerX
+            }
+            bezizerPath.addArc(withCenter: CGPoint(x: centerX, y: minY), radius: radius, startAngle: CGFloat(0), endAngle: CGFloat.pi, clockwise: true)
+            bezizerPath.move(to: CGPoint(x: minx, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: minY))
+        case .bottom:
+            if radius == 0{
+                 radius = centerX
+            }
+            bezizerPath.addArc(withCenter: CGPoint(x: centerX, y: maxY), radius: radius, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 2.0, clockwise: true)
+            bezizerPath.move(to: CGPoint(x: maxX, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: maxY))
+        case .left_top:
+            if radius == 0 {
+                radius = self.frame.size.height - 2 * self.boder
+            }
+          
+            bezizerPath.addArc(withCenter: CGPoint(x: minx, y: minY), radius: radius, startAngle: 0, endAngle: CGFloat.pi * 0.5 , clockwise: true)
+
+            bezizerPath.move(to: CGPoint(x: minx, y: self.boder + radius))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx + radius, y: minY))
+            
+        case .left_bottom:
+            if radius == 0{
+                 radius = self.frame.size.height - 2 * self.boder
+            }
+            bezizerPath.addArc(withCenter: CGPoint(x: minx, y: maxY), radius: radius, startAngle: CGFloat.pi * 1.5, endAngle: CGFloat.pi * 2.0, clockwise: true)
+            
+            bezizerPath.move(to: CGPoint(x: minx + radius, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: maxY - radius))
+        case .right_top:
+            if radius == 0 {
+                 radius = self.frame.size.height - 2 * self.boder
+            }
+            
+            bezizerPath.addArc(withCenter: CGPoint(x: maxX, y: minY), radius: radius, startAngle: CGFloat.pi * 0.5, endAngle: CGFloat.pi * 1.0, clockwise: true)
+            bezizerPath.move(to: CGPoint(x: maxX - radius, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: minY + radius))
+        case .right_bottom:
+            if radius == 0 {
+                 radius = self.frame.size.height - 2 * self.boder
+            }
+            bezizerPath.addArc(withCenter: CGPoint(x: maxX, y: maxY), radius: radius, startAngle: CGFloat.pi * 1.0, endAngle: CGFloat.pi * 1.5, clockwise: true)
+            bezizerPath.move(to: CGPoint(x: maxX, y: maxY - radius))
+            bezizerPath.addLine(to: CGPoint(x: maxX, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: minY))
+            bezizerPath.addLine(to: CGPoint(x: minx, y: maxY))
+            bezizerPath.addLine(to: CGPoint(x: maxX - radius, y: maxY))
+        }
+        return bezizerPath
+    }
+    /// 获取齿轮的路径
+    ///
+    /// - Returns: 路径
+    fileprivate func sp_getGearPath()->UIBezierPath{
+        let bezierPath = UIBezierPath()
+        let maxX = self.frame.size.width - self.boder
+        let maxY = self.frame.size.height - self.boder
+        let minx = self.boder
+        let minY = self.boder
+        let centerY = self.frame.size.height / 2.0
+        let centerX = self.frame.size.width / 2.0
+        switch self.layoutType {
+        case .gear(type: .corner):
+            bezierPath.addLine(to: CGPoint(x: 0, y: 0))
+        case .gear(type: .triangle):
+            bezierPath.addLine(to: CGPoint(x: 0, y: 0))
+        default:
+            SPLog("")
+        }
+        return bezierPath
+    }
+    /// 获取心形路径
+    ///
+    /// - Returns: 路径
+    fileprivate func sp_getHeartPatg()->UIBezierPath{
+        let bezierPath = UIBezierPath()
+        let maxX = self.frame.size.width - self.boder
+        let maxY = self.frame.size.height - self.boder
+        let minx = self.boder
+        let minY = self.boder
+        let centerY = self.frame.size.height / 2.0
+        let centerX = self.frame.size.width / 2.0
+        
+        let startY = self.frame.size.height / 3.0
+        
+        let startPoint = CGPoint(x: centerX, y:  startY)
+        let endPoint = CGPoint(x: centerX, y: maxY)
+        bezierPath.move(to: startPoint)
+        bezierPath.addCurve(to: endPoint, controlPoint1: CGPoint(x: minx, y: minY ), controlPoint2: CGPoint(x: 0, y: centerY + startY))
+        bezierPath.move(to: endPoint)
+        bezierPath.addCurve(to: startPoint, controlPoint1: CGPoint(x: self.frame.size.width, y: centerY + startY), controlPoint2: CGPoint(x: maxX, y: minY ))
+        bezierPath.lineCapStyle = .round
+        bezierPath.lineJoinStyle = .round
+    
+        return bezierPath
+    }
+    /// 获取水滴路径
+    ///
+    /// - Returns: 路径
+    fileprivate func sp_getWaterDropPath()->UIBezierPath{
+        let bezierPath = UIBezierPath()
+       
+        let maxY = self.frame.size.height - self.boder
+      
+        let minY = self.boder
+        let centerY = self.frame.size.height / 2.0
+        let centerX = self.frame.size.width / 2.0
+        let startX = self.frame.size.width / 4.0
+        let startPoint = CGPoint(x: centerX, y: minY)
+        let endPoint = CGPoint(x: centerX, y: maxY)
+        bezierPath.move(to: startPoint)
+        bezierPath.addCurve(to: endPoint, controlPoint1: CGPoint(x: 0, y: centerX), controlPoint2: CGPoint(x: startX, y: maxY))
+        bezierPath.move(to: endPoint)
+        bezierPath.addCurve(to: startPoint, controlPoint1: CGPoint(x:  startX + centerX, y: maxY), controlPoint2: CGPoint(x: self.frame.size.width, y: centerY))
+        bezierPath.lineCapStyle = .round
+        bezierPath.lineJoinStyle = .round
+        return bezierPath
+    }
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if points != nil {
             if (super.hitTest(point, with: event) == scrollView){
@@ -127,7 +572,6 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
             if (pX == newX && pY == newY) || (pX == oldX && pY == oldY) {
                 return false
             }
-            
             // 判断线段两端点是否在射线两侧
             if (oldY > pY && newY < pY) || (oldY < pY && newY > pY) {
                 // 线段上与射线 Y 坐标相同的点的 X 坐标

@@ -73,19 +73,21 @@ public enum ButtonClickType : Int {
 }
 
 ///  图片布局类型
-public enum SPPictureLayout : Int {
+enum SPPictureLayoutType  {
     /// 矩形
     case rectangle
     /// 圆
-    case corner
+    case circular
     /// 椭圆
     case ellipse
     /// 菱形
     case diamond
     /// 心形
     case heart
+    /// 水滴
+    case waterDrop
     ///  矩形 中带有圆角 圆形朝外
-    enum rectangleCorner {
+    enum RectangleCorner {
         /// 左边圆角 半径为高度一半
         case left
         /// 右边圆角 半径为高度一半
@@ -102,9 +104,12 @@ public enum SPPictureLayout : Int {
         case right_top
         /// 右下圆角 半径为高度
         case right_bottom
+        
     }
+    case rectangleCorner(type:RectangleCorner,radius:Float)
     /// 矩形 中带用圆角 圆形朝内
-    enum rectangleCornerInner {
+    enum RectangleCornerInner {
+        
         /// 左边圆角 半径为高度一半
         case left
         /// 右边圆角 半径为高度一半
@@ -121,9 +126,14 @@ public enum SPPictureLayout : Int {
         case right_top
         /// 右下圆角 半径为高度
         case right_bottom
+        /// 左右 两个半圆 半径为高度一半
+        case horizontal
+        ///  上下 两个半圆 半径为高度一半
+        case vertical
     }
+    case rectangleCornerInner(type:RectangleCornerInner)
     ///  多边形
-    enum polygon {
+    enum Polygon {
         /// 五边形
         case five
         /// 六边形
@@ -131,8 +141,9 @@ public enum SPPictureLayout : Int {
         /// 七边形
         case seven
     }
+    case polygon(polygon : Polygon)
     /// 三角形
-    enum triangle {
+    enum Triangle : Int {
         /// 顶角在左边
         case left
         /// 顶角在右边
@@ -141,11 +152,24 @@ public enum SPPictureLayout : Int {
         case top
         /// 顶角在下边
         case bottom
-        /// 左斜角
+        /// 左上斜角
+        case left_top
+        /// 左右斜角
         case left_bottom
-        /// 右斜角
+        /// 右上斜角
         case right_top
+        /// 右下斜角
+        case right_bottom
     }
+    case triangle(triangle : Triangle)
+    /// 齿轮
+    enum Gear : Int{
+        /// 三角形
+        case triangle
+        /// 圆形
+        case corner
+    }
+    case gear(type:Gear)
     
 }
 

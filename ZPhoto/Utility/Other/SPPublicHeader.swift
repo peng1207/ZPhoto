@@ -38,6 +38,18 @@ func sp_fontSize(fontSize: CGFloat) -> UIFont{
 func sp_getStatusBarHeight() -> CGFloat{
     return UIApplication.shared.statusBarFrame.height
 }
+/// 获取屏幕的宽度
+///
+/// - Returns: 宽度
+func sp_getScreenWidth()->CGFloat{
+    return UIScreen.main.bounds.size.width
+}
+/// 获取屏幕的高度
+///
+/// - Returns: 高度
+func sp_getScreenHeight()->CGFloat{
+    return UIScreen.main.bounds.size.height
+}
 /// 判断是否为数组
 ///
 /// - Parameter array: 数据源
@@ -160,11 +172,11 @@ func picRotating(imgae:CIImage?) -> CIImage? {
     let orientation = UIDevice.current.orientation
     var t: CGAffineTransform!
     if orientation == UIDeviceOrientation.portrait {
-        t = CGAffineTransform(rotationAngle: CGFloat(-M_PI / 2.0))
+        t = CGAffineTransform(rotationAngle: CGFloat(-Double.pi / 2.0))
     } else if orientation == UIDeviceOrientation.portraitUpsideDown {
-        t = CGAffineTransform(rotationAngle: CGFloat(M_PI / 2.0))
+        t = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2.0))
     } else if (orientation == UIDeviceOrientation.landscapeRight) {
-        t = CGAffineTransform(rotationAngle: CGFloat(M_PI))
+        t = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
     } else {
         t = CGAffineTransform(rotationAngle: 0)
     }
@@ -194,7 +206,7 @@ func  countdown(timeOut:TimeInterval,run:((_ time: TimeInterval)-> Void)?,finish
 func timer(_ complete:(() -> Void)?) -> DispatchSourceTimer {
     let codeTimer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
     let timeInterval: Double = 1.0
-    codeTimer.scheduleRepeating(deadline: .now(), interval: timeInterval)
+    codeTimer.schedule(deadline: .now(), repeating: timeInterval)
     codeTimer.setEventHandler {
         if let com = complete {
             sp_dispatchMainQueue {
