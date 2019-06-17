@@ -125,6 +125,7 @@ extension SPRecordVideoRootVC {
     
     // 创建UI
     func setupUI (){
+        
         self.view.addSubview(self.preView)
         self.preView.backgroundColor = UIColor.black
         self.view .addSubview(self.recordVideoView)
@@ -217,6 +218,8 @@ extension SPRecordVideoRootVC {
         case .filter:
             self.clickFilterAction();
              SPLog("点击滤镜 ")
+        default:
+            SPLog("其他没有定义")
         }
     }
     fileprivate func clickCance(){

@@ -20,6 +20,17 @@
 	<string>1.0.0.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string></string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.huangshp.ZPhoto</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>用摄像头来录制视频或用来拍照，用摄像头记录美好的瞬间.若不允许无法使用哦</string>
 	<key>NSMicrophoneUsageDescription</key>
@@ -36,6 +47,10 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 	<key>LSApplicationCategoryType</key>
 	<string>NSPhotoLibraryAddUsageDescription</string>
 </dict>

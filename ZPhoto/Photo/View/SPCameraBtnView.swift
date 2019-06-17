@@ -115,6 +115,7 @@ extension SPCameraBtnView {
     /// 点击闪光灯
     @objc fileprivate func sp_clickFlash(){
         sp_dealComplete(type: .flash)
+        self.flashBtn.isSelected = !self.flashBtn.isSelected
     }
     /// 点击切换摄像头
     @objc fileprivate func sp_clickChangeDev(){

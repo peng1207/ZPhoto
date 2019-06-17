@@ -97,9 +97,30 @@ class SPVideoCollectionFlowLayout: UICollectionViewFlowLayout {
     }
     
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        
+        //根据当前滚动进行对每个cell进行缩放
+        //首先获取 当前rect范围内的 attributes对象
         let array = super.layoutAttributesForElements(in: rect)
+        let ScaleFactor:CGFloat = 0.001//缩放因子
+        //计算缩放比  首先计算出整体中心点的X值 和每个cell的中心点X的值
+        //用着两个x值的差值 ，计算出绝对值
+        //colleciotnView中心点的值
+        let centerX =  (collectionView?.contentOffset.x)! + (collectionView?.bounds.size.width)!/2
+        //循环遍历每个attributes对象 对每个对象进行缩放
+        for attr in array! {
+            //计算每个对象cell中心点的X值
+            let cell_centerX = attr.center.x
+            
+            //计算两个中心点的便宜（距离）
+            //距离越大缩放比越小，距离小 缩放比越大，缩放比最大为1，即重合
+            let distance = abs(cell_centerX-centerX)
+            let scale:CGFloat = 1/(1+distance*ScaleFactor)
+            attr.transform3D = CATransform3DMakeScale(1.0, scale, 1.0)
+            
+        }
+        
         return array
+//        let array = super.layoutAttributesForElements(in: rect)
+//        return array
     }
     
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {

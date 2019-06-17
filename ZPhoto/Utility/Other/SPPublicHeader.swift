@@ -305,3 +305,46 @@ func sp_getfile(forDirectory:String) -> [String]?{
     }
     return fileSorted
 }
+/// 分享图片
+///
+/// - Parameters:
+///   - imgs: 分享多个图片
+///   - vc: 当前控制器
+func sp_shareImg(imgs : [UIImage]?,vc : UIViewController?){
+    guard let shareImg = imgs else {
+        return
+    }
+    guard let currentVC = vc else {
+        return
+    }
+    
+    let activityVC = UIActivityViewController(activityItems: shareImg, applicationActivities: nil)
+    let popover = activityVC.popoverPresentationController
+    if (popover != nil) {
+        
+        popover?.permittedArrowDirections = .up
+    }
+    
+    currentVC.present(activityVC, animated: true, completion: nil)
+}
+/// 分享视频
+///
+/// - Parameters:
+///   - videoUrls: 视频文件路径
+///   - vc: 当前控制器
+func sp_shareVideo(videoUrls : [String]?,vc : UIViewController?){
+    guard let currentVC = vc else {
+        return
+    }
+    guard let shareList = videoUrls else {
+        return
+    }
+    let activityVC = UIActivityViewController(activityItems: shareList, applicationActivities: nil)
+    let popover = activityVC.popoverPresentationController
+    if (popover != nil) {
+        popover?.permittedArrowDirections = .up
+    }
+    
+    currentVC.present(activityVC, animated: true, completion: nil)
+}
+

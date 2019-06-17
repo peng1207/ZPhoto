@@ -21,14 +21,14 @@ class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionView
   
     fileprivate  lazy var selectLayer : CALayer = {
         let layer = CALayer()
-        layer.borderColor = UIColor.red.cgColor
+        layer.borderColor = UIColor.white.cgColor
         layer.borderWidth = 2
         return layer
     }()
     
     var filterList : Array<SPFilterModel>?  {
         didSet{
-            filterCollectionView?.reloadData()
+            sp_reload()
         }
     }
     var collectSelectComplete : ((_ model : SPFilterModel) ->  Void)?
@@ -41,6 +41,17 @@ class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionView
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    fileprivate func sp_reload(){
+       
+        if sp_getArrayCount(array: self.filterList) > 0 {
+            UIView.performWithoutAnimation {
+                filterCollectionView?.reloadSections([0])
+            }
+        }else{
+            filterCollectionView?.reloadData()
+        }
+      
     }
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -77,8 +88,8 @@ extension SPRecordVideoFilterView{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell  = collectionView.dequeueReusableCell(withReuseIdentifier: self.identify, for: indexPath) as! SPRecordVideoFilterCell
-        if indexPath.row <  (filterList?.count)!{
-                  let model = filterList?[indexPath.row]
+        if indexPath.row <  sp_getArrayCount(array: self.filterList){
+            let model = filterList?[indexPath.row]
             cell.imageView.image = model?.showImage
         }
         return cell
@@ -103,8 +114,6 @@ extension SPRecordVideoFilterView{
         }
         
     }
-    
-    
 }
 
 class SPRecordVideoFilterCell : UICollectionViewCell{

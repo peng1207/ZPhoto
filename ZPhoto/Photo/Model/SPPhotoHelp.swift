@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import UIKit
 class SPPhotoHelp {
     static let SPPhotoDirectory = "\(kDocumentsPath)/photo"
  
@@ -31,10 +31,11 @@ class SPPhotoHelp {
             model.filePath = path
             list.append(model)
         }
+     
         return list
     }
-    
-    
-    
-    
+    class func sp_getFrame(count : Int , width : CGFloat , height : CGFloat)-> [CGRect]{
+        let frameArray = [CGRect]()
+        return frameArray
+    }
 }

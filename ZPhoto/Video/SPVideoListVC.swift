@@ -44,10 +44,11 @@ import CoreImage
         self.videoData()
         self.sendNotification()
     }
-    /// 点击返回
-    override func sp_clickBack(){
-        self.dismiss(animated: true, completion: nil)
-    }
+//    /// 点击返回
+//    override func sp_clickBack(){
+//        super.p
+////        self.dismiss(animated: true, completion: nil)
+//    }
 }
 // MARK: -- UI
 extension SPVideoListVC {
@@ -68,14 +69,12 @@ extension SPVideoListVC {
     }
     /**< 创建导航栏上控件 */
     fileprivate func setupNavUI(){
-//        let addButton = UIButton(type: .custom)
+ 
         let addButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-//        addButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         addButton.addTarget(self, action: #selector(clickAdd), for: .touchUpInside)
     
         addButton.setImage(UIImage(named: "add_white"), for: UIControlState.normal)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: addButton)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.backBtn)
     }
     
     private func addConstraintToView (){

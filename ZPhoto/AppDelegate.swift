@@ -24,8 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = recordVideoVC
         createCachePath()
         setUncaughtExceptionHandler()
-        SPLog("preferredLanguages is \(NSLocale.preferredLanguages)");
-            
+        SPLog("preferredLanguages is \(NSLocale.preferredLanguages)")
         // Override point for customization after application launch.
         return true
     }

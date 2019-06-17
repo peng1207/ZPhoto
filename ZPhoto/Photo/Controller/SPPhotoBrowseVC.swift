@@ -10,6 +10,15 @@ import Foundation
 import SnapKit
 class SPPhotoBrowseVC: SPBaseVC {
      fileprivate var collectionView : UICollectionView!
+    fileprivate lazy var editBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle("编辑", for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.addTarget(self, action: #selector(sp_clickEdit), for: UIControlEvents.touchUpInside)
+        btn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
+        return btn
+    }()
     var dataArray : [SPPhotoModel]?
     fileprivate let cellID = "SPPhotoBrowseCellID"
     var selectModel : SPPhotoModel?
@@ -65,7 +74,7 @@ class SPPhotoBrowseVC: SPBaseVC {
         self.collectionView.register(SPPhotoListCollectionCell.self, forCellWithReuseIdentifier: self.cellID)
         self.collectionView.showsVerticalScrollIndicator = false
         self.view.addSubview(self.collectionView)
-      
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.editBtn)
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -106,10 +115,26 @@ extension SPPhotoBrowseVC : UICollectionViewDelegate ,UICollectionViewDataSource
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row < sp_getArrayCount(array: self.dataArray) {
-            let model = self.dataArray?[indexPath.row]
-            let vc = SPPhotoEditVC()
-            vc.photoModel = model
-            self.navigationController?.pushViewController(vc, animated: true)
+//            let model = self.dataArray?[indexPath.row]
+//            let vc = SPPhotoEditVC()
+//            vc.photoModel = model
+//            self.navigationController?.pushViewController(vc, animated: true)
         }
     }
+}
+extension SPPhotoBrowseVC {
+    
+    @objc fileprivate func sp_clickEdit(){
+        
+        let index = Int(self.collectionView.contentOffset.x / self.collectionView.frame.size.width)
+        if index < sp_getArrayCount(array: self.dataArray) {
+            let model = self.dataArray?[index]
+            let vc = SPPhotoEditVC()
+            vc.photoModel = model
+            self.navigationController?.pushViewController(vc, animated: false)
+        }
+        
+
+    }
+    
 }

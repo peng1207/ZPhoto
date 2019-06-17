@@ -56,6 +56,7 @@ enum SP_HexColor : String {
     case color_00a1fe   = "#00a1fe"
     case color_01b5da   = "#01b5da"
     case color_2a96fd   = "#2a96fd"
+    case color_ff3300   = "#ff3300"
 }
 
 ///  按钮点击事件
@@ -70,10 +71,14 @@ public enum ButtonClickType : Int {
     case change
     /// 点击滤镜
     case filter
+    /// 剪切
+    case shear
 }
 
 ///  图片布局类型
 enum SPPictureLayoutType  {
+    /// 外面传的point数组
+    case point
     /// 矩形
     case rectangle
     /// 圆

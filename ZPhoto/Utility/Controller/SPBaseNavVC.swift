@@ -36,10 +36,11 @@ extension UINavigationController{
     class func sp_initialize(){
         let navBar = UINavigationBar.appearance()
         navBar.setBackgroundImage(UIImage.sp_getImageWithColor(color: sp_getMianColor()), for: UIBarMetrics.default)
-//        navBar.barTintColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
+//        navBar.barTintColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
 //        navBar.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         navBar.shadowImage = UIImage()
-//        navBar.titleTextAttributes = [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 18), NSAttributedStringKey.foregroundColor:UIColor.white] as [NSAttributedStringKey : Any]
+        navBar.titleTextAttributes = [NSAttributedStringKey.font : sp_getFontSize(size: 18),NSAttributedStringKey.foregroundColor : UIColor.white]
+ 
         UIApplication.shared.statusBarStyle = .lightContent
     }
     

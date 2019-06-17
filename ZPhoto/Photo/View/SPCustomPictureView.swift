@@ -102,12 +102,17 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
             sp_drawHeart()
         case .waterDrop:
             sp_drawWaterDrop()
+        case .point:
+            sp_drawPoint()
         default:
             SPLog("没有其他 不画")
            
         }
     }
-    
+    /// 根据point画图
+    fileprivate func sp_drawPoint(){
+    sp_drawLayer(bezierPath: sp_getPointPath())
+    }
     /// 画圆
     fileprivate func sp_drawCorner(){
         self.sp_drawLayer(bezierPath: self.sp_getCornerPath())
@@ -156,7 +161,20 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         shapeLayer.path = bezierPath.cgPath
         self.layer.mask = shapeLayer
     }
-    
+    /// 获取点的路径
+    ///
+    /// - Returns: 路径
+    fileprivate func sp_getPointPath()->UIBezierPath{
+        let bezierPath = UIBezierPath()
+        if sp_getArrayCount(array: self.points) > 0 {
+            bezierPath.move(to: self.points![0])
+            for index in 1..<sp_getArrayCount(array: self.points){
+                bezierPath.addLine(to: self.points![index])
+            }
+            bezierPath.addLine(to: self.points![0])
+        }
+        return bezierPath
+    }
     /// 获取圆的路径
     ///
     /// - Returns: 路径

@@ -115,6 +115,7 @@ fileprivate class SPPhotoRootVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
+        self.navigationItem.title = SPLanguageChange.sp_getString(key: "PHOTO")
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.backBtn)
         self.view.addSubview(self.cameraBtn)
         self.view.addSubview(self.fileView)

@@ -129,12 +129,13 @@ extension SPPhotoSplicingSelectView {
     
     /// 点击清除所有
     @objc fileprivate func sp_clickClear(){
-        self.dataArray.removeAll()
-        self.collectionView.reloadData()
-        sp_dealNum()
         if let block = self.clearBlock {
             block()
         }
+        self.dataArray.removeAll()
+        self.collectionView.reloadData()
+        sp_dealNum()
+       
     }
     /// 删除某个位置的元素
     ///

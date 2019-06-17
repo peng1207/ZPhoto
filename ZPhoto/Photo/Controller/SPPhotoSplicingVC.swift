@@ -69,6 +69,7 @@ class SPPhotoSplicingVC: SPBaseVC {
         self.view.addSubview(self.bgView)
         self.view.addSubview(self.toolView)
         self.sp_addConstraint()
+        
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.saveBtn)
         let cornerView = SPCustomPictureView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         cornerView.imgView.image = self.dataArray.first?.img
@@ -94,7 +95,7 @@ class SPPhotoSplicingVC: SPBaseVC {
         }
         self.toolView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
-            maker.height.equalTo(50)
+            maker.height.equalTo(70)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
             } else {

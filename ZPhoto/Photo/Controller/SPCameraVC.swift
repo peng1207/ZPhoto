@@ -147,6 +147,8 @@ fileprivate extension SPCameraRootVC{
         case .change:
             SPLog("点击切换镜头")
             sp_clickChangeDev()
+        default:
+            SPLog("没有定义")
         }
     }
     func sp_back(){

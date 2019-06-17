@@ -33,3 +33,8 @@
 "SAVE" = "保存";
 "OK" = "好的";
 "NO_CHOICE_TIPS" = "别闹了! 好歹选择一张图片";
+"PHOTO" = "照片";
+"VIDEO" = "视频";
+"SET" = "设置";
+"CHOICE" = "选择";
+"FINISH" = "完成";

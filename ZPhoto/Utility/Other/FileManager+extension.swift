@@ -36,7 +36,10 @@ extension FileManager{
             
         }
     }
-    /**< 删除文件 */
+ 
+    /// 删除文件
+    ///
+    /// - Parameter path: 文件路径
     class func remove(path: String){
         let fileManager = FileManager.default
         do {
@@ -49,6 +52,17 @@ extension FileManager{
             }
         }
     }
+    /// 删除多个文件
+    ///
+    /// - Parameter paths: 文件路径数组
+    class func sp_remove(paths : [String]?){
+        if let list = paths {
+            for path in list {
+                remove(path: path)
+            }
+        }
+    }
+    
     
     
 }

@@ -30,6 +30,11 @@ extension Array where Element: Equatable {
         }
         return count
     }
+    mutating func remove(of array : [Element]){
+        for model in array {
+            remove(object: model)
+        }
+    }
     /// 删除某个位置的数据
     ///
     /// - Parameter index: 删除的位置
@@ -38,4 +43,5 @@ extension Array where Element: Equatable {
             self.remove(at: index)
         }
     }
+    
 }

@@ -109,6 +109,7 @@ fileprivate class SPVideoRootVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
+        self.navigationItem.title = SPLanguageChange.sp_getString(key: "VIDEO")
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.backBtn)
         
         self.view.addSubview(self.fileView)

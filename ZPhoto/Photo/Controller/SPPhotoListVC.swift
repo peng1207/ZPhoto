@@ -11,10 +11,33 @@ import SnapKit
 typealias SPPhotoListSelectComplete = (_ model : SPPhotoModel)->Void
 class SPPhotoListVC: SPBaseVC {
     fileprivate var collectionView : UICollectionView!
+    fileprivate lazy var choiceBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle(SPLanguageChange.sp_getString(key: "CHOICE"), for: UIControlState.normal)
+        btn.setTitle(SPLanguageChange.sp_getString(key: "CANCE"), for: UIControlState.selected)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.selected)
+        btn.titleLabel?.font = sp_getFontSize(size: 16)
+        btn.frame = CGRect(x: 0, y: 0, width: 60, height: 30)
+        btn.addTarget(self, action: #selector(sp_clickChoise), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
+    fileprivate lazy var editView : SPPhotoListEditView = {
+        let view = SPPhotoListEditView()
+        view.deleteBlock = { [weak self] in
+            self?.sp_clickDelete()
+        }
+        view.shareBlock = { [weak self] in
+            self?.sp_clickShare()
+        }
+        view.isHidden = true
+        return view
+    }()
     fileprivate var dataArray : [SPPhotoModel]?
     var selectArray : [SPPhotoModel] = [SPPhotoModel]()
     fileprivate let cellID = "SPPHOTOLISTCOLLECTCELLID"
     fileprivate var isEdit : Bool = false
+    fileprivate var editHeight : Constraint!
     var selectBlock : SPPhotoListSelectComplete?
     var selectMaxCount : Int = 9
     override func viewDidLoad() {
@@ -53,6 +76,8 @@ class SPPhotoListVC: SPBaseVC {
         self.collectionView.register(SPPhotoListCollectionCell.self, forCellWithReuseIdentifier: cellID)
         self.collectionView.showsVerticalScrollIndicator = false
         self.view.addSubview(self.collectionView)
+        self.view.addSubview(self.editView)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.choiceBtn)
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -63,6 +88,11 @@ class SPPhotoListVC: SPBaseVC {
     fileprivate func sp_addConstraint(){
         self.collectionView.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self.view).offset(0)
+            maker.bottom.equalTo(self.editView.snp.top).offset(0)
+        }
+        self.editView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            self.editHeight = maker.height.equalTo(0).constraint
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
             } else {
@@ -108,6 +138,7 @@ extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,U
                         self.selectArray.append(m)
                     }
                     self.collectionView.reloadData()
+                     sp_dealBtnEnabled()
                 }else{
                     if let block = self.selectBlock {
                         if sp_getArrayCount(array: self.selectArray) < self.selectMaxCount {
@@ -115,7 +146,6 @@ extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,U
                             self.selectArray.append(m)
                             self.collectionView.reloadData()
                         }else{
-                           
                             let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: "\(SPLanguageChange.sp_getString(key: "MAXSELECT"))\(sp_getString(string: self.selectMaxCount))", preferredStyle: UIAlertControllerStyle.alert)
                             alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: { (action) in
                                 
@@ -157,5 +187,135 @@ extension SPPhotoListVC {
     func sp_removeSelect(index : Int){
         self.selectArray.sp_remove(of: index)
         self.collectionView.reloadData()
+    }
+    /// 获取cell 的位置
+    ///
+    /// - Parameter model: 数据源
+    /// - Returns: 位置
+    func sp_getCellPoint(model : SPPhotoModel)->CGPoint{
+        var point = CGPoint(x: 0, y: 0 )
+        if let index = self.dataArray?.index(of: model){
+            if let cell = self.collectionView.cellForItem(at: IndexPath(item: index, section: 0)) {
+                point = self.collectionView.convert(cell.frame.origin, to: self.view)
+                point.x = point.x + cell.frame.size.width / 2.0
+                point.y = point.y + cell.frame.size.height / 2.0
+            }
+        }
+        return point
+    }
+    
+    @objc fileprivate func sp_clickChoise(){
+        self.choiceBtn.isSelected = !self.choiceBtn.isSelected;
+        self.isEdit = !self.isEdit
+        if self.choiceBtn.isSelected == false {
+            self.selectArray.removeAll()
+            self.collectionView.reloadData()
+        }
+        sp_dealEditView()
+        sp_dealBtnEnabled()
+    }
+    /// 点击分享
+    @objc fileprivate func sp_clickShare(){
+        var imgArray = [UIImage]()
+        for model in self.selectArray {
+            if let img = model.img {
+                imgArray.append(img)
+            }
+        }
+        sp_shareImg(imgs: imgArray, vc: self)
+        
+    }
+    /// 点击删除
+    @objc fileprivate func sp_clickDelete(){
+        let actionSheet = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let deleteAction = UIAlertAction(title:  SPLanguageChange.sp_getString(key: "DELETE"), style: UIAlertActionStyle.default, handler: { [weak self](action) in
+            self?.sp_dealFileDelete()
+        })
+        let canceAction = UIAlertAction(title:  SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertActionStyle.cancel) { (action) in
+            
+        }
+        deleteAction.setValue(SPColorForHexString(hex: SP_HexColor.color_ff3300.rawValue), forKey: "_titleTextColor")
+        actionSheet.addAction(deleteAction)
+        actionSheet.addAction(canceAction)
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+    /// 处理文件删除
+    fileprivate func sp_dealFileDelete(){
+        for model in self.selectArray {
+            FileManager.remove(path: sp_getString(string: model.filePath))
+             let point = sp_getCellPoint(model: model)
+            sp_removeImgAnimation(img: model.img,startPoint: point)
+        }
+        self.dataArray?.remove(of: self.selectArray)
+        self.selectArray.removeAll()
+        self.collectionView.reloadData()
+        sp_dealBtnEnabled()
+    }
+    fileprivate func sp_removeImgAnimation(img : UIImage?,startPoint : CGPoint){
+        guard let image = img else {
+            return
+        }
+        let layerW : CGFloat = 50.00
+        let groupAnimation = CAAnimationGroup()
+        groupAnimation.duration = 1
+        
+        
+        
+         let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation.fromValue = 1.0
+        scaleAnimation.toValue = 0.2
+        
+         let position = CAKeyframeAnimation(keyPath: "position")
+        let path = UIBezierPath()
+        path.move(to:startPoint)
+        var curvePoint = CGPoint(x: startPoint.x + sp_getScreenWidth() / 2.0 , y: startPoint.y - 30)
+        if curvePoint.x >= sp_getScreenWidth() {
+            curvePoint.x = startPoint.x - sp_getScreenWidth() / 2.0
+        }
+        
+        if curvePoint.x < 0  {
+            curvePoint.x = sp_getScreenWidth() / 2.0
+        }
+        if curvePoint.y < 0  {
+            curvePoint.y = 0
+        }
+        
+        path.addQuadCurve(to: CGPoint(x: sp_getScreenWidth() - 10 - 15, y: self.editView.frame.origin.y + 15), controlPoint: curvePoint)
+        position.path = path.cgPath
+        position.rotationMode = kCAAnimationRotateAuto
+        
+        groupAnimation.animations = [scaleAnimation,position]
+        
+        let imgLayer = CALayer()
+        imgLayer.frame = CGRect(x: 0, y: -layerW, width: layerW, height: layerW)
+        imgLayer.contents = image.cgImage
+        imgLayer.cornerRadius = layerW / 2.0
+        imgLayer.masksToBounds = true
+        self.view.layer.addSublayer(imgLayer)
+        imgLayer.add(groupAnimation, forKey: "")
+        sp_after(time: 1) {
+            imgLayer.removeFromSuperlayer()
+        }
+    }
+    
+    
+    
+    /// 处理编辑view是否显示
+    fileprivate func sp_dealEditView(){
+        if self.choiceBtn.isSelected {
+            self.editHeight.update(offset: 50)
+            self.editView.isHidden = false
+        }else{
+            self.editHeight.update(offset: 0)
+            self.editView.isHidden = true
+        }
+    }
+    /// 处理编辑按钮是否可以点击
+    fileprivate func sp_dealBtnEnabled(){
+        if sp_getArrayCount(array: self.selectArray) > 0 {
+            self.editView.sp_dealBtn(isEnabled: true)
+        }else{
+            self.editView.sp_dealBtn(isEnabled: false)
+        }
     }
 }
