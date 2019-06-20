@@ -12,23 +12,15 @@ class SPPhotoEditVC: SPBaseVC {
     
     fileprivate lazy var scrollView : UIScrollView = {
         let view = UIScrollView()
-        view.maximumZoomScale = 2
-        view.minimumZoomScale = 0.5
+        view.maximumZoomScale = 3
+        view.minimumZoomScale = 1
         return view
     }()
     fileprivate lazy var iconImgView : UIImageView = {
         let view = UIImageView()
         return view
     }()
-    fileprivate lazy var editBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle("编辑", for: UIControlState.normal)
-        btn.frame = CGRect(x: 0, y: 0, width: 60, height: 40)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 15)
-        btn.addTarget(self, action: #selector(sp_clickEdit), for: UIControlEvents.touchUpInside)
-        return btn
-    }()
+  
     fileprivate lazy var editView : SPPhotoEditView = {
         let view = SPPhotoEditView()
         view.clickBlock = { [weak self](type)in
@@ -58,9 +50,75 @@ class SPPhotoEditVC: SPBaseVC {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
+    @objc func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer)
+    {
+        if let e = error as NSError?
+        {
+            SPLog(e)
+        }
+        else
+        {
+            UIAlertController.init(title: nil,
+                                   message: "保存成功！",
+                                   preferredStyle: UIAlertControllerStyle.alert).show(self, sender: nil);
+        }
+    }
     /// 赋值
     fileprivate func sp_setupData(){
-        self.iconImgView.image = self.photoModel?.img
+        if let srcImage = self.photoModel?.img {
+//            if let ciImg = CIImage(image: srcImage) {
+//                let tran =  CGAffineTransform(translationX: 10, y: 0)
+//
+//                let img =  UIImage(ciImage:  ciImg.transformed(by: tran))
+//                self.iconImgView.image = img
+//
+////                UIImageWriteToSavedPhotosAlbum(img, self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
+//            }
+            
+            
+//            //Quartz重绘图片
+            let rect = CGRect(x: 0, y: 0, width: srcImage.size.width , height: srcImage.size.height );//创建矩形框
+//            //根据size大小创建一个基于位图的图形上下文
+            UIGraphicsBeginImageContextWithOptions(rect.size, false, 1.0)
+            let currentContext =  UIGraphicsGetCurrentContext()//获取当前quartz 2d绘图环境
+
+//            currentContext?.clip(to: rect)//设置当前绘图环境到矩形框
+//             currentContext?.translateBy(x: 10, y: 0)
+//            currentContext?.scaleBy(x: 0.25, y: 0.5)
+//            currentContext?.rotate(by: CGFloat.pi / 180 * 45 ) //旋转角度
+//            currentContext.
+            //平移， 这里是平移坐标系，跟平移图形是一个道理
+//           currentContext?.translateBy(x: rect.size.width, y: 0)
+
+            currentContext?.draw(srcImage.cgImage!, in: rect,byTiling: true)
+           
+            let drawImage =  UIGraphicsGetImageFromCurrentImageContext();//获得图片
+            UIGraphicsEndImageContext()
+            let flipImage =  UIImage(cgImage: (drawImage?.cgImage)!, scale: srcImage.scale, orientation: .up)
+            
+            //Quartz重绘图片
+          
+            //根据size大小创建一个基于位图的图形上下文
+//            UIGraphicsBeginImageContextWithOptions(rect.size, false, 2)
+//            let currentContext =  UIGraphicsGetCurrentContext();//获取当前quartz 2d绘图环境
+//
+//            currentContext?.clip(to: rect)   //设置当前绘图环境到矩形框
+//            //绘图
+//            currentContext?.draw(srcImage.cgImage!, in: rect)
+//            //翻转图片
+//            let drawImage =  UIGraphicsGetImageFromCurrentImageContext();//获得图片
+//            let flipImage =  UIImage(cgImage:(drawImage?.cgImage)!,
+//                                     scale:srcImage.scale,
+//                                     orientation:srcImage.imageOrientation  //图片方向不用改
+//            )
+            
+            self.iconImgView.image = flipImage
+//             UIImageWriteToSavedPhotosAlbum(flipImage, self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
+           
+        }
+        
+        
+//        self.iconImgView.image = self.photoModel?.img
     }
     override func sp_clickBack() {
         super.sp_clickBack()
@@ -73,7 +131,6 @@ class SPPhotoEditVC: SPBaseVC {
         self.scrollView.addSubview(self.iconImgView)
         self.view.addSubview(self.editView)
         self.sp_addConstraint()
-//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.editBtn)
     }
     /// 处理有没数据
     override func sp_dealNoData(){
@@ -108,6 +165,18 @@ extension SPPhotoEditVC : UIScrollViewDelegate{
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.iconImgView
     }
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        let delta_x = scrollView.bounds.size.width > scrollView.contentSize.width ? (scrollView.bounds.size.width-scrollView.contentSize.width)/2 : 0;
+        
+        let delta_y = scrollView.bounds.size.height > scrollView.contentSize.height ? (scrollView.bounds.size.height - scrollView.contentSize.height)/2 : 0;
+        
+        //让imageView一直居中
+        
+        //实时修改imageView的center属性 保持其居中
+       
+        self.iconImgView.center = CGPoint(x: scrollView.contentSize.width/2 + delta_x, y: scrollView.contentSize.height/2 + delta_y)
+         SPLog(self.iconImgView.frame)
+    }
     
 }
 
@@ -128,5 +197,5 @@ extension SPPhotoEditVC {
     fileprivate func sp_clickFinish(){
         
     }
-    
+     
 }

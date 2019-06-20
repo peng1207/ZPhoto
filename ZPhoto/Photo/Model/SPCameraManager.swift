@@ -140,15 +140,15 @@ extension SPCameraManager:AVCaptureVideoDataOutputSampleBufferDelegate{
             let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
             outputImage = CIImage(cvPixelBuffer: imageBuffer)
             var noFilterOutputImage  : CIImage? = outputImage
-            noFilterOutputImage = picRotating(imgae: noFilterOutputImage)
+            noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
             self.noFilterCIImage =  CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
-            
+//            outputImage =  UIImage.sp_detectFace(inputImg: outputImage!, coverImg: UIImage(named: "filter"))
             if self.filter != nil {
                 self.filter?.setValue(outputImage!, forKey: kCIInputImageKey)
                 outputImage = self.filter?.outputImage
             }
             if let oImg = outputImage {
-                outputImage = picRotating(imgae: oImg)
+                outputImage =  UIImage.sp_picRotating(imgae: oImg)
                 let cgImage = self.ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
                 sp_dispatchMainQueue {
                     self.videoLayer?.contents = cgImage
@@ -157,7 +157,6 @@ extension SPCameraManager:AVCaptureVideoDataOutputSampleBufferDelegate{
             }
         }
     }
- 
 }
 
 extension SPCameraManager {

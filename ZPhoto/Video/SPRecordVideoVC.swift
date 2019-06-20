@@ -90,6 +90,7 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
         }, noMicrophoneBlock: { [weak self] () in
             self?.dealNOMicrophoneAuthAction()
         })
+        
         self.videoManager.videoLayer = self.preView.layer as? AVCaptureVideoPreviewLayer
         self.videoManager.addObserver(self, forKeyPath: kVideoManagerKVOKey, options: .new, context: nil)
         self.videoManager.setupRecord()

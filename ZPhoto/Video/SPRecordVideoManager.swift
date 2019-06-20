@@ -48,6 +48,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             //            videoLayer?.setSessionWithNoConnection(captureSession)
         }
     }
+ 
    fileprivate var noCameraAuthBlock : NOAuthBlock?
     fileprivate var noMicrophoneBlock : NOAuthBlock?
     // 放大最大的倍数
@@ -429,11 +430,10 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
                 outputImage = CIImage(cvPixelBuffer: imageBuffer)
                 var noFilterOutputImage  : CIImage? = outputImage
-                noFilterOutputImage = picRotating(imgae: noFilterOutputImage)
+                noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
                 self.noFilterCIImage =  CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
-                
                 // 执行判断人脸 然后增加头像上去
-                
+//                outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg: UIImage(named: "filter"))
                 if self.filter != nil {
                     self.filter?.setValue(outputImage!, forKey: kCIInputImageKey)
                     outputImage = self.filter?.outputImage
@@ -452,7 +452,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 }
             }
             if outputImage != nil {
-                outputImage = picRotating(imgae: outputImage)
+                outputImage =  UIImage.sp_picRotating(imgae: outputImage)
                 let cgImage = self.ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
                 sp_dispatchMainQueue {
                     self.videoLayer?.contents = cgImage
@@ -523,6 +523,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         status = CVPixelBufferUnlockBaseAddress(pxbuffer!, CVPixelBufferLockFlags(rawValue: 0));
         return pxbuffer!;
     }
+    
     
     /**< 点击取消  */
     func sp_cance(){

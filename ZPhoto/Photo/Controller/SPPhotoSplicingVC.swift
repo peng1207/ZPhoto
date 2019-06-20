@@ -15,7 +15,7 @@ class SPPhotoSplicingVC: SPBaseVC {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "SAVE"), for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
-        btn.frame = CGRect(x: 0, y: 0, width: 80, height: 40)
+        btn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickSave), for: UIControlEvents.touchUpInside)
         return btn
@@ -59,7 +59,6 @@ class SPPhotoSplicingVC: SPBaseVC {
         alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "GIVEUP"), style: UIAlertActionStyle.cancel, handler: { (action) in
                 super.sp_clickBack()
         }))
-        
         self.present(alertController, animated: true, completion: nil)
     }
     /// 创建UI
@@ -69,14 +68,7 @@ class SPPhotoSplicingVC: SPBaseVC {
         self.view.addSubview(self.bgView)
         self.view.addSubview(self.toolView)
         self.sp_addConstraint()
-        
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.saveBtn)
-        let cornerView = SPCustomPictureView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        cornerView.imgView.image = self.dataArray.first?.img
-        cornerView.layoutType = .heart
-        self.bgView.addSubview(cornerView)
-        cornerView.sp_drawMaskLayer()
-        
     }
     /// 处理有没数据
     override func sp_dealNoData(){
@@ -85,7 +77,7 @@ class SPPhotoSplicingVC: SPBaseVC {
     /// 添加约束
     fileprivate func sp_addConstraint(){
         self.hiddenView.snp.makeConstraints { (maker) in
-             maker.left.right.top.equalTo(self.view).offset(0)
+            maker.left.right.top.equalTo(self.view).offset(0)
             maker.bottom.equalTo(self.toolView.snp.top).offset(0)
         }
         self.bgView.snp.makeConstraints { (maker) in
@@ -98,7 +90,7 @@ class SPPhotoSplicingVC: SPBaseVC {
             maker.height.equalTo(70)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
-            } else {
+            }else{
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }

@@ -8,15 +8,9 @@
 
 import Foundation
 import SnapKit
+
 class SPMainVC: SPBaseVC {
-    fileprivate lazy var numLabel : UILabel = {
-        let label = UILabel()
-        label.font = sp_getFontSize(size: 15)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_333333.rawValue)
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        return label
-    }()
+  
     fileprivate lazy var videoView : SPPentagonView = {
         let view = SPPentagonView()
         view.corners = .left
@@ -68,7 +62,7 @@ class SPMainVC: SPBaseVC {
         self.view.addSubview(self.videoView)
         self.view.addSubview(self.photoView)
         self.view.addSubview(self.setView)
-        self.view.addSubview(self.numLabel)
+  
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -93,12 +87,6 @@ class SPMainVC: SPBaseVC {
             maker.left.equalTo(self.videoView.snp.left).offset(0)
             maker.top.equalTo(self.view.snp.centerY).offset(10)
         }
-        self.numLabel.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.view).offset(0)
-            maker.top.equalTo(100)
-            maker.height.greaterThanOrEqualTo(0)
-        }
-        
     }
     deinit {
         

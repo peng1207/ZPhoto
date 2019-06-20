@@ -54,4 +54,132 @@ extension UIImage{
         return img
     }
     
+    /// 人脸检测
+    ///
+    /// - Parameters:
+    ///   - inputImg: 检测的图片
+    ///   - coverImg: 需要遮盖人脸的图片
+    /// - Returns: 处理后的人脸的图片
+    class func sp_detectFace(inputImg : CIImage,coverImg : UIImage?)->CIImage?{
+        guard let coverImage = coverImg else {
+            return inputImg
+        }
+         var outImg : CIImage?
+       
+        let context = CIContext(options:[kCIContextUseSoftwareRenderer:true])
+        let detector = CIDetector(ofType: CIDetectorTypeFace,
+                                  context: context,
+                                  options: [CIDetectorAccuracy: CIDetectorAccuracyHigh])
+        var faceFeatures : [CIFaceFeature]?
+        if let orientation : AnyObject = inputImg.properties[kCGImagePropertyOrientation as String] as AnyObject? {
+            faceFeatures = detector?.features(in: inputImg, options: [CIDetectorImageOrientation: orientation]) as? [CIFaceFeature]
+        }else{
+            faceFeatures = detector?.features(in: inputImg) as? [CIFaceFeature]
+        }
+        
+        let inputImageSize = inputImg.extent.size
+        var transform = CGAffineTransform(scaleX: 1, y: -1)
+        transform = transform.translatedBy(x: 0, y: -inputImageSize.height)
+        if let list = faceFeatures {
+            var baseImage = UIImage(ciImage: inputImg)
+            for faceFeature in list {
+                let faceViewBounds = faceFeature.bounds.applying(transform)
+                let size = inputImageSize
+                UIGraphicsBeginImageContext(size)
+                baseImage.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+                coverImage.draw(in: faceViewBounds)
+                let image = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                if let img = image {
+                    outImg = CIImage(image: img)
+                    baseImage = img
+                }
+            }
+        }
+        if outImg == nil {
+            outImg = inputImg
+        }
+        return outImg
+    }
+    /// 对视频图片进行处理 防止旋转不对
+    ///
+    /// - Parameter imgae: 需要处理的图片
+    /// - Returns: 处理后的图片
+    class func sp_picRotating(imgae:CIImage?) -> CIImage? {
+        guard let outputImage = imgae else {
+            return nil
+        }
+        let orientation = UIDevice.current.orientation
+        var t: CGAffineTransform!
+        if orientation == UIDeviceOrientation.portrait {
+            t = CGAffineTransform(rotationAngle: CGFloat(-Double.pi / 2.0))
+        } else if orientation == UIDeviceOrientation.portraitUpsideDown {
+            t = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2.0))
+        } else if (orientation == UIDeviceOrientation.landscapeRight) {
+            t = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
+        } else {
+            t = CGAffineTransform(rotationAngle: 0)
+        }
+        return  outputImage.transformed(by: t)
+    }
+    /// 给图片添加文字
+    ///
+    /// - Parameters:
+    ///   - inputImg: 输入图片
+    ///   - text: 文字
+    ///   - font: 文字大小
+    ///   - textColor: 文字颜色
+    ///   - point: 添加文字的位置
+    /// - Returns:  添加文字之后的图片
+    class func sp_drawText(inputImg:UIImage,text : String, font : UIFont = UIFont.systemFont(ofSize: 14),textColor : UIColor = UIColor.white,point:CGPoint = CGPoint(x: 0, y: 0))->UIImage?{
+       
+        if text.count > 0 {
+            let size = inputImg.size
+            UIGraphicsBeginImageContext(size)
+            inputImg.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+            let textAttributes = [NSAttributedStringKey.foregroundColor : textColor ,NSAttributedStringKey.font : font]
+            let textSize = NSString(string: text).size(withAttributes: textAttributes)
+            let textFrame = CGRect(x: point.x, y: point.y, width: textSize.width, height: textSize.height)
+            NSString(string: text).draw(in: textFrame, withAttributes: textAttributes)
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return image
+        }else{
+            return inputImg
+        }
+    }
+    /// 给图片添加文字
+    ///
+    /// - Parameters:
+    ///   - inputImg: 输入图片
+    ///   - text: 文字
+    ///   - font: 文字大小
+    ///   - textColor: 文字颜色
+    ///   - point: 添加文字的位置
+    /// - Returns:  添加文字之后的图片
+    class func sp_drawText(inputImg : CIImage,text : String, font : UIFont = UIFont.systemFont(ofSize: 14),textColor : UIColor = UIColor.white,point:CGPoint = CGPoint(x: 0, y: 0))->CIImage?{
+        let image = UIImage(ciImage: inputImg)
+        let outputImg = sp_drawText(inputImg: image, text: text, font: font, textColor: textColor,point: point)
+        if let outImg = outputImg, let outCIImg = CIImage(image: outImg) {
+            return outCIImg
+        }
+        return  inputImg
+    }
+    /// 给图片添加文字
+    ///
+    /// - Parameters:
+    ///   - inputImg: 输入图片
+    ///   - text: 文字
+    ///   - font: 文字大小
+    ///   - textColor: 文字颜色
+    ///   - point: 添加文字的位置
+    /// - Returns:  添加文字之后的图片
+    class func sp_drawText(inputImg : CGImage,text : String, font : UIFont = UIFont.systemFont(ofSize: 14),textColor : UIColor = UIColor.white,point:CGPoint = CGPoint(x: 0, y: 0))->CGImage?{
+        let image = UIImage(cgImage: inputImg)
+        let outputImg = sp_drawText(inputImg: image, text: text, font: font, textColor: textColor,point:point)
+        if let outImg = outputImg, let outCGImg = outImg.cgImage {
+            return outCGImg
+        }
+        return  inputImg
+    }
 }

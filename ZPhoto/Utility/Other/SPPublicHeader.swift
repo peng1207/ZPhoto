@@ -157,31 +157,10 @@ func  dispatchAfter(time:UInt64,complete:@escaping ()->Void){
 func SPLog<T>(_ message:T,file:String = #file,function:String = #function,line:Int=#line){
     #if DEBUG
         let fileName = (file as NSString).lastPathComponent
-    
-//        NSLog("--\(fileName) ---\(line)--\(function) --- \(message)")
         print("\(NSDate().timeIntervalSince1970)---\(fileName):\(line)---\(function) | \(message)")
     #endif
 }
-/**
- 对视频图片进行处理 防止旋转不对
- */
-func picRotating(imgae:CIImage?) -> CIImage? {
-    guard let outputImage = imgae else {
-        return nil
-    }
-    let orientation = UIDevice.current.orientation
-    var t: CGAffineTransform!
-    if orientation == UIDeviceOrientation.portrait {
-        t = CGAffineTransform(rotationAngle: CGFloat(-Double.pi / 2.0))
-    } else if orientation == UIDeviceOrientation.portraitUpsideDown {
-        t = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2.0))
-    } else if (orientation == UIDeviceOrientation.landscapeRight) {
-        t = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
-    } else {
-        t = CGAffineTransform(rotationAngle: 0)
-    }
-    return  outputImage.transformed(by: t)
-}
+ 
 /**
  倒计时
  */

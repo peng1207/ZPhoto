@@ -10,6 +10,7 @@
 import Foundation
 import UIKit
 import SnapKit
+
 class SPSplicingToolView:  UIView{
     
     fileprivate var collectionView : UICollectionView!
@@ -25,12 +26,8 @@ class SPSplicingToolView:  UIView{
     }
     /// 赋值
     fileprivate func sp_setupData(){
-            var model = SPSplicingToolModel()
-        model.title = "布局"
-        self.dataArray.append(model)
-        model = SPSplicingToolModel()
-        model.title = "背景"
-        self.dataArray.append(model)
+        self.dataArray.append(SPSplicingToolModel.sp_init(type: .layout))
+        self.dataArray.append( SPSplicingToolModel.sp_init(type: .background))
         self.collectionView.reloadData()
     }
     /// 添加UI
@@ -48,7 +45,6 @@ class SPSplicingToolView:  UIView{
         self.collectionView.register(SPSplicingToolCollectionCell.self, forCellWithReuseIdentifier: self.cellID)
         self.collectionView.showsVerticalScrollIndicator = false
         self.addSubview(self.collectionView)
-        
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -87,7 +83,6 @@ class SPSplicingToolCollectionCell: UICollectionViewCell {
     
     fileprivate lazy var iconImgView : UIImageView = {
         let view = UIImageView()
-        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         return view
     }()
     fileprivate lazy var titleLabel : UILabel = {
@@ -112,6 +107,7 @@ class SPSplicingToolCollectionCell: UICollectionViewCell {
     /// 赋值
     fileprivate func sp_setupData(){
         self.titleLabel.text = sp_getString(string: self.model?.title)
+        self.iconImgView.image = self.model?.img
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
@@ -127,7 +123,6 @@ class SPSplicingToolCollectionCell: UICollectionViewCell {
             maker.width.equalTo(self.iconImgView.snp.height).offset(0)
             maker.centerX.equalTo(self.contentView.snp.centerX).offset(0)
         }
-        
         self.titleLabel.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.contentView).offset(0)
             maker.height.greaterThanOrEqualTo(0)
