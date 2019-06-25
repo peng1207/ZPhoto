@@ -11,6 +11,7 @@ target 'ZPhoto' do
   # Pods for ZPhoto
 #    pod 'SnapKit'
     pod 'SPCommonLibrary'
+#    pod 'Firebase/AdMob'
     #pod 'va', '~> 0.10.1'
   target 'ZPhotoTests' do
       #inherit! :search_paths

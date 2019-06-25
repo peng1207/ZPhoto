@@ -157,6 +157,7 @@ func  dispatchAfter(time:UInt64,complete:@escaping ()->Void){
 func SPLog<T>(_ message:T,file:String = #file,function:String = #function,line:Int=#line){
     #if DEBUG
         let fileName = (file as NSString).lastPathComponent
+    
         print("\(NSDate().timeIntervalSince1970)---\(fileName):\(line)---\(function) | \(message)")
     #endif
 }

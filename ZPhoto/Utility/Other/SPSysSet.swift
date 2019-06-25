@@ -18,6 +18,7 @@ class SPSysSet {
             if (UIApplication.shared.canOpenURL(url)){
                 UIApplication.shared.openURL(url)
             }
+            
         }
     }
     

@@ -178,4 +178,7 @@ enum SPPictureLayoutType  {
     
 }
 
+enum SPSPlicingType {
+    case nice
+}
 

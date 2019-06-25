@@ -34,7 +34,7 @@
 "OK" = "OK";
 "NO_CHOICE_TIPS" = "Stop fussing! At least have a choice.";
 "PHOTO" = "photo";
-"video" = "video";
+"VIDEO" = "video";
 "SET" = "set";
 "CHOICE" = "choice";
 "FINISH" = "finish";

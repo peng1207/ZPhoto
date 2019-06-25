@@ -22,7 +22,7 @@ class SPPhotoSplicingVC: SPBaseVC {
     }()
     fileprivate lazy var bgView : UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.white
+        view.layer.backgroundColor = UIColor.white.cgColor
         return view
     }()
     fileprivate lazy var hiddenView : UIView = {
@@ -38,6 +38,7 @@ class SPPhotoSplicingVC: SPBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        sp_setupData()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -69,6 +70,69 @@ class SPPhotoSplicingVC: SPBaseVC {
         self.view.addSubview(self.toolView)
         self.sp_addConstraint()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.saveBtn)
+    }
+    fileprivate func sp_setupData(){
+        var index = 0
+        for model in self.dataArray {
+            let width = sp_getScreenWidth() / 3.0
+            let view = SPCustomPictureView(frame: CGRect(x: CGFloat(index % 3) * width, y:  CGFloat(index / 3) * width, width: width, height: width))
+            // 余数
+            let remainder = index % 3
+            // 除数
+            let divisor = index / 3
+            var left : CGFloat = 0
+            var top : CGFloat = 0
+            var right : CGFloat = 0
+            var bottom : CGFloat = 0
+            if divisor == 0 {
+                left = 4
+                top = 4
+            }else if divisor == 1 {
+                left = 4
+                top = 2
+                bottom = 2
+            }else if divisor == 2 {
+                left = 4
+                bottom = 4
+            }
+           
+            if remainder == 0 {
+                
+            }else if remainder == 1 {
+                if divisor == 0 {
+                    left = 2
+                    right = 2
+                }else if divisor == 1 {
+                    left = 2
+                    right = 2
+                    top = 2
+                    bottom = 2
+                }else if divisor == 2 {
+                    left = 2
+                    right = 2
+                }
+                
+            }else if remainder == 2 {
+                if divisor == 0 {
+                    left = 0
+                    right = 4
+                }else if divisor == 1 {
+                    left = 0
+                    right = 4
+                    top = 2
+                    bottom = 2
+                }else if divisor == 2 {
+                    left = 0
+                    right = 4
+                }
+            }
+            view.sp_update(left: left, top: top, right: right, bottom: bottom)
+            view.imgView.image = model.img
+            view.layoutType = .rectangle
+            view.sp_drawMaskLayer()
+            self.bgView.addSubview(view)
+            index = index + 1
+        }
     }
     /// 处理有没数据
     override func sp_dealNoData(){

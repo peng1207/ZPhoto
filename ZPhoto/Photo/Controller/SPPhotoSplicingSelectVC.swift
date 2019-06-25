@@ -32,8 +32,6 @@ class SPPhotoSplicingSelectVC: SPBaseVC {
         view.selectMaxCount = selectMaxCount
         return view
     }()
-    
-    
     fileprivate lazy var nextBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "NEXT"), for: UIControlState.normal)
@@ -179,8 +177,6 @@ extension SPPhotoSplicingSelectVC : CAAnimationDelegate{
             imgLayer.removeFromSuperlayer()
         }
     }
-    
-    
     /// 点击下一步
     @objc func sp_clickNext(){
         if sp_getArrayCount(array: self.selectView.dataArray) > 0 {
