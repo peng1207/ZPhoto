@@ -74,8 +74,8 @@ class SPPhotoSplicingVC: SPBaseVC {
     fileprivate func sp_setupData(){
         var index = 0
         for model in self.dataArray {
-            let width = sp_getScreenWidth() / 3.0
-            let view = SPCustomPictureView(frame: CGRect(x: CGFloat(index % 3) * width, y:  CGFloat(index / 3) * width, width: width, height: width))
+            let frame = SPPhotoSplicingHelp.sp_getFrame(index: index, count: self.dataArray.count, type: SPSPlicingType.nine(nineType: .one), width: sp_getScreenWidth(), height: sp_getScreenWidth())
+            let view = SPCustomPictureView(frame:frame)
             // 余数
             let remainder = index % 3
             // 除数
@@ -127,7 +127,7 @@ class SPPhotoSplicingVC: SPBaseVC {
                 }
             }
             view.sp_update(left: left, top: top, right: right, bottom: bottom)
-            view.imgView.image = model.img
+            view.sp_update(img: model.img)
             view.layoutType = .rectangle
             view.sp_drawMaskLayer()
             self.bgView.addSubview(view)

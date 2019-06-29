@@ -26,7 +26,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setUncaughtExceptionHandler()
      
         SPLog("preferredLanguages is \(NSLocale.preferredLanguages)")
-        SPLog(sp_limitUp(current: 11.00, count: 5))
+//        let properties = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
+//        for fileterName : String in properties {
+//            let filter = CIFilter(name: fileterName)
+//            // 滤镜的参数
+//            SPLog("滤镜名称----\(fileterName)")
+//            SPLog(filter?.attributes)
+//        }
+//        SPLog(sp_limitUp(current: 11.00, count: 5))
         // Override point for customization after application launch.
         return true
     }

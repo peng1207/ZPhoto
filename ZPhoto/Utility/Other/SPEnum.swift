@@ -179,6 +179,29 @@ enum SPPictureLayoutType  {
 }
 
 enum SPSPlicingType {
-    case nice
+    
+    enum EightType {
+        
+    }
+    
+    case eight(type : EightType)
+    
+    enum NineType {
+        case one
+        case two
+        case three
+        case four
+        case five
+        case six
+        case seven
+        case eight
+        case nine
+        case ten
+        case eleven
+    }
+    case nine(nineType:NineType)
+    
+    
+    
 }
 

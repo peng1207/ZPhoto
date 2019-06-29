@@ -59,8 +59,14 @@ class SPPhotoListVC: SPBaseVC {
     }
     /// 赋值
     fileprivate func sp_setupData(){
-        self.dataArray = SPPhotoHelp.sp_getPhototList()
-        self.collectionView.reloadData()
+        sp_dispatchAsync {
+            self.dataArray = SPPhotoHelp.sp_getPhototList()
+            sp_dispatchMainQueue {
+                 self.collectionView.reloadData()
+            }
+           
+        }
+       
     }
     /// 创建UI
     override func sp_setupUI() {

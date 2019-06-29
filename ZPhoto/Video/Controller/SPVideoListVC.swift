@@ -134,16 +134,19 @@ extension SPVideoListVC {
 // MARK: -- delegate
 extension SPVideoListVC : UICollectionViewDelegate,UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return (self.videoDataArray?.count)!
+        return sp_getArrayCount(array: self.videoDataArray)
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return (self.videoDataArray?.count)! > 0  ? 1 : 0
+        return sp_getArrayCount(array: self.videoDataArray) > 0  ? 1 : 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.identify, for: indexPath) as! SPVideoCollectionCell
-        cell.videoModel = self.videoDataArray?[indexPath.row]
+        if indexPath.row < sp_getArrayCount(array: self.videoDataArray){
+              cell.videoModel = self.videoDataArray?[indexPath.row]
+        }
+      
         cell.clickComplete = {
             [unowned self]  (videoModel:SPVideoModel?) in
             self.clickDetete(videoModel: videoModel)
@@ -151,9 +154,19 @@ extension SPVideoListVC : UICollectionViewDelegate,UICollectionViewDataSource {
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let videoPlayVC = SPVideoPlayVC()
-        videoPlayVC.videoModel = self.videoDataArray?[indexPath.row]
-        self.present(videoPlayVC, animated: true, completion: nil)
+        if indexPath.row < sp_getArrayCount(array: self.videoDataArray) {
+            let videoModel = self.videoDataArray?[indexPath.row]
+//            let videoPlayVC = SPVideoPlayVC()
+//            videoPlayVC.videoModel = videoModel
+//            self.present(videoPlayVC, animated: true, completion: nil)
+            let upendVC = SPVideoUpendVC()
+            upendVC.videoModel = videoModel
+            self.navigationController?.pushViewController(upendVC, animated: true)
+          
+            //        let videoPlayVC = SPVideoEditVC()
+            //        videoPlayVC.videoModel = videoModel
+            //        self.navigationController?.pushViewController(videoPlayVC, animated: true)
+        }
     }
     
 }
@@ -161,9 +174,13 @@ extension SPVideoListVC : UICollectionViewDelegate,UICollectionViewDataSource {
 extension SPVideoListVC {
     /**< 获取视频数据  */
     @objc fileprivate func videoData(){
-        let array = SPVideoHelp.videoFile()
-        self.videoDataArray = array
-        self.reloadData()
+        sp_dispatchAsync {
+            let array = SPVideoHelp.videoFile()
+            sp_dispatchMainQueue {
+                self.videoDataArray = array
+                self.reloadData()
+            }
+        }
     }
     /*
      刷新数据

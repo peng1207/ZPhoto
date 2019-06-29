@@ -158,7 +158,7 @@ func SPLog<T>(_ message:T,file:String = #file,function:String = #function,line:I
     #if DEBUG
         let fileName = (file as NSString).lastPathComponent
     
-        print("\(NSDate().timeIntervalSince1970)---\(fileName):\(line)---\(function) | \(message)")
+        print("\(NSDate().timeIntervalSince1970)---\(fileName):\(line)---\(function) \(message)")
     #endif
 }
  

@@ -10,7 +10,8 @@ import UIKit
 import AVFoundation
 import Photos
 
-typealias ExportSuccess = ()-> Void
+/// 导出成功
+typealias ExportSuccess = (_ assert : AVAsset?,_ url : String)-> Void
 let kVideoChangeNotification : String = "VideoChangeNotification"
 
 class SPVideoHelp: NSObject {
@@ -20,7 +21,7 @@ class SPVideoHelp: NSObject {
     static let kVideoTempDirectory = "\(kTmpPath)/video"
     
     // 获取视频的名称
-     class func getVideoName() -> String {
+    class func getVideoName() -> String {
         let date = NSDate()
         return "video_\(Int(date.timeIntervalSince1970)).mp4"
     }
@@ -32,19 +33,17 @@ class SPVideoHelp: NSObject {
         let firstTrack = compostition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: CMPersistentTrackID())
         let audioTrack = compostition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: CMPersistentTrackID())
         var insertTime : CMTime = kCMTimeZero
-        var duration = 0.0
         for asset  in videoAsset {
             do {
                 try firstTrack!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), of: asset.tracks(withMediaType: AVMediaType.video)[0], at: insertTime)
             } catch _ {
-            
+                
             }
             do {
                 try audioTrack!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), of: asset.tracks(withMediaType: AVMediaType.audio)[0], at: insertTime)
             } catch _ {
                 
             }
-            duration += asset.duration.seconds
             insertTime = CMTimeAdd(insertTime, asset.duration)
         }
         // 旋转视图图像，防止90度颠倒
@@ -55,17 +54,17 @@ class SPVideoHelp: NSObject {
         exporter.outputFileType = AVFileType.mov
         exporter.shouldOptimizeForNetworkUse = true
         exporter.exportAsynchronously(completionHandler: {
-            exportSuuccess()
+            exportSuuccess(AVAsset(url: URL(fileURLWithPath: outputPath)),outputPath)
         })
     }
     /**< 对录制好的视频处理  */
     class func recordForDeal(asset:AVAsset,outputPath:String,complete : @escaping ExportSuccess)-> Void{
         let componsition = AVMutableComposition()
         let videoTrack = componsition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: CMPersistentTrackID())
-       
+        
         let videoAsset = asset.tracks(withMediaType: AVMediaType.video)[0]
         let videoDuration = videoAsset.timeRange.duration
-
+        
         let videoStart = videoAsset.timeRange.start
         if asset.tracks(withMediaType: AVMediaType.audio).count > 0 {
             let audioTrack = componsition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: CMPersistentTrackID())
@@ -88,7 +87,7 @@ class SPVideoHelp: NSObject {
         }catch _{
             
         }
-    
+        
         videoTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
         let videoPath = URL(fileURLWithPath: outputPath)
         let exporter = AVAssetExportSession(asset: componsition, presetName: AVAssetExportPresetHighestQuality)!
@@ -96,7 +95,7 @@ class SPVideoHelp: NSObject {
         exporter.outputFileType = AVFileType.mov
         exporter.shouldOptimizeForNetworkUse = true
         exporter.exportAsynchronously(completionHandler: {
-            complete()
+             complete(AVAsset(url: URL(fileURLWithPath: outputPath)),outputPath)
         })
         
     }
@@ -109,10 +108,10 @@ class SPVideoHelp: NSObject {
         assetImageGenerator.requestedTimeToleranceBefore = kCMTimeZero
         assetImageGenerator.apertureMode = AVAssetImageGeneratorApertureMode.encodedPixels
         do {
-        
+            
             let thumbnailImageRef = try assetImageGenerator.copyCGImage(at: time, actualTime: nil)
             thumbnailImage = UIImage(cgImage: thumbnailImageRef)
-              return thumbnailImage
+            return thumbnailImage
         } catch {
             SPLog("thumbnailImageTo error is \(error)")
             return nil
@@ -120,10 +119,10 @@ class SPVideoHelp: NSObject {
     }
     /**< 获取视频文件 转为 */
     class func videoFile() -> [SPVideoModel]? {
-        var videoArray = Array<SPVideoModel>()
+        var videoArray = [SPVideoModel]()
         let fileArray = sp_getfile(forDirectory: kVideoDirectory)
         for file in fileArray! {
-             let path = "\(kVideoDirectory)/\(file)"
+            let path = "\(kVideoDirectory)/\(file)"
             let model = getVideoModel(path: path)
             if  (model.asset != nil) {
                 videoArray.append(model)
@@ -142,7 +141,7 @@ class SPVideoHelp: NSObject {
         return model
     }
     
- 
+    
     /**
      删除视频文件
      */
@@ -154,7 +153,7 @@ class SPVideoHelp: NSObject {
      删除文件
      */
     class func remove(fileUrl:URL) -> Void{
-       try!  FileManager.default.removeItem(at: fileUrl)
+        try!  FileManager.default.removeItem(at: fileUrl)
     }
     /**< 发送通知 */
     class func sendNotification(notificationName:String) {
@@ -207,7 +206,7 @@ class SPVideoHelp: NSObject {
         
         FileManager.sp_directory(createPath: kVideoTempDirectory)
         
-       let exportUrl = URL(fileURLWithPath: "\(kVideoTempDirectory)/\(getVideoName())")
+        let exportUrl = URL(fileURLWithPath: "\(kVideoTempDirectory)/\(getVideoName())")
         
         let exportSession = AVAssetExportSession(asset: compostion, presetName: AVAssetExportPresetHighestQuality)!
         exportSession.outputFileType = AVFileType.mov
@@ -216,5 +215,142 @@ class SPVideoHelp: NSObject {
         exportSession.exportAsynchronously(completionHandler: {
             completionHandler(exportUrl)
         })
+    }
+    /// 获取视频流数据
+    ///
+    /// - Parameter asset: 视频
+    /// - Returns: 视频流数据
+    class func sp_getVideoBuffer(asset : AVAsset?) ->[CMSampleBuffer]?{
+        guard let videoAsset = asset else {
+            return nil
+        }
+        let asserReader = try! AVAssetReader(asset: videoAsset)
+        let videoTrack = videoAsset.tracks(withMediaType: AVMediaType.video).first
+        let audioTrack = videoAsset.tracks(withMediaType: AVMediaType.audio).first
+        if videoTrack == nil {
+            return nil
+        }
+        let outputSettings :[String:Any] =  [kCVPixelBufferPixelFormatTypeKey as String : Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
+        let trackOutput = AVAssetReaderTrackOutput(track: videoTrack!, outputSettings: outputSettings)
+         asserReader.add(trackOutput)
+        
+//        if let audio = audioTrack {
+//            let audioOutput = AVAssetReaderTrackOutput(track: audio, outputSettings: nil)
+//            if asserReader.canAdd(audioOutput){
+//                asserReader.add(audioOutput)
+//            }
+//
+//
+//        }
+        asserReader.startReading()
+        var samples: [CMSampleBuffer] = []
+        while let sample = trackOutput.copyNextSampleBuffer() {
+            SPLog("读取中")
+            samples.append(sample)
+//            CMSampleBufferInvalidate(sample)
+        }
+        SPLog("读取结束")
+        asserReader.cancelReading()
+        return samples
+    }
+    private class func sp_dealVideoUnpend(asset:AVAsset?,url : String,complete : ExportSuccess? = nil){
+        guard let block = complete else {
+            return
+        }
+        sp_dispatchMainQueue {
+            block(asset,url)
+        }
+       
+    }
+    /// 视频倒放
+    ///
+    /// - Parameter asset: 视频
+    /// - Returns: 处理倒放后的视频
+    class func sp_videoUnpend(asset : AVAsset?,complete : ExportSuccess? = nil){
+        guard let videoAsset = asset else {
+            sp_dealVideoUnpend(asset: nil, url: "", complete: complete)
+            return
+        }
+        sp_dispatchAsync {
+            let samples = sp_getVideoBuffer(asset: videoAsset)
+            if sp_getArrayCount(array: samples) > 0 {
+                let  filePath : String = "\(SPVideoHelp.kVideoTempDirectory)/temp.mp4"
+                FileManager.sp_directory(createPath: SPVideoHelp.kVideoTempDirectory)
+                if FileManager.default.fileExists(atPath: filePath) {
+                    FileManager.remove(path: filePath)
+                    
+                }
+                let videoTrack = videoAsset.tracks(withMediaType: AVMediaType.video).first
+                if let size = videoTrack?.naturalSize {
+                    
+                    let assetWriter = try! AVAssetWriter(outputURL: URL(fileURLWithPath: filePath), fileType: AVFileType.mp4)
+                    let videoOutputSettings : [String : Any]
+                    
+                    if #available(iOS 11.0, *) {
+                        videoOutputSettings = [AVVideoCodecKey : AVVideoCodecHEVC,
+                                               AVVideoWidthKey : size.width,
+                                               AVVideoHeightKey : size.height,
+                                               AVVideoCompressionPropertiesKey : [AVVideoAverageBitRateKey : videoTrack!.estimatedDataRate]
+                        ]
+                    } else {
+                        // Fallback on earlier versions
+                        videoOutputSettings = [AVVideoCodecKey : AVVideoCodecH264,
+                                               AVVideoWidthKey : size.width,
+                                               AVVideoHeightKey : size.height,
+                        ]
+                    }
+                    let videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoOutputSettings, sourceFormatHint: (videoTrack?.formatDescriptions.last as! CMFormatDescription))
+                    videoWriterInput.expectsMediaDataInRealTime = false
+                    videoWriterInput.transform = videoTrack!.preferredTransform
+                    let videoWriterPixelbufferInput = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoWriterInput, sourcePixelBufferAttributes: nil)
+                    assetWriter.add(videoWriterInput)
+//                    let audioWriterInput = AVAssetWriterInput(mediaType: AVMediaType.audio, outputSettings: [
+//                        AVFormatIDKey: NSNumber(value: kAudioFormatMPEG4AAC),
+//                        AVNumberOfChannelsKey: 1 as AnyObject,
+//                        AVSampleRateKey: 22050 as AnyObject
+//                        ])
+//                    if assetWriter.canAdd(audioWriterInput){
+//                        assetWriter.add(audioWriterInput)
+//                    }
+//
+
+                    assetWriter.startWriting()
+                
+                    let startTime = CMSampleBufferGetPresentationTimeStamp(samples!.first!)
+                    assetWriter.startSession(atSourceTime: startTime)
+                    SPLog("开始转换 倒放")
+                    for i in 0..<sp_getArrayCount(array: samples){
+                        if let samplesBuffer = samples?[i] {
+                            let time = CMSampleBufferGetPresentationTimeStamp(samplesBuffer)
+                            let dataBuffer = samples?[sp_getArrayCount(array: samples) - i - 1]
+                           
+                            if  let imageBufferRef = CMSampleBufferGetImageBuffer(dataBuffer!){
+                                while !videoWriterInput.isReadyForMoreMediaData {
+                                    Thread.sleep(forTimeInterval: 0.1)
+                                }
+                                videoWriterPixelbufferInput.append(imageBufferRef, withPresentationTime: time)
+                            }else{
+                                SPLog("转换失败")
+                            }
+                        }
+                    }
+                    SPLog("结束转换 倒放")
+                    videoWriterInput.markAsFinished()
+//                    audioWriterInput.markAsFinished()
+                    assetWriter.finishWriting {
+                        let newAssert = AVAsset(url: URL(fileURLWithPath: filePath))
+                        SPLog("视频倒放转换成功 \(newAssert)")
+                        sp_dealVideoUnpend(asset: newAssert, url: filePath, complete: complete)
+                    }
+                }else{
+                    sp_dealVideoUnpend(asset: nil, url: "", complete: complete)
+                }
+            }else{
+                sp_dealVideoUnpend(asset: nil, url: "", complete: complete)
+            }
+        }
+       
+        
+       
     }
 }

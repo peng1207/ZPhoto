@@ -20,8 +20,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     //视频捕获会话。它是input和output的桥梁。它协调着intput到output的数据传输
     fileprivate let captureSession = AVCaptureSession()
     
-//    fileprivate let devices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
-    fileprivate let devices = { () -> [AVCaptureDevice] in
+     fileprivate let devices = { () -> [AVCaptureDevice] in
         if SP_VERSION_10_UP == false{
             return AVCaptureDevice.devices(for: AVMediaType.video)
         }else{
@@ -56,6 +55,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     var minZoomActore : CGFloat = 1.00
     // 开始录制
     var startRecording : Bool = false
+    var isFirstVideo : Bool = false
     var assetWriter: AVAssetWriter?
     var videoWriterInput: AVAssetWriterInput?
     var audioWriterInput: AVAssetWriterInput?
@@ -131,6 +131,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         }
         complete()
     }
+    fileprivate func sp_getCVPixelFormatType()->OSType{
+        return kCVPixelFormatType_32BGRA
+    }
     
     fileprivate func setCaptureInpunt(postion : AVCaptureDevice.Position){
         self.getVideoDevice(postion: postion)
@@ -156,7 +159,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         let needAdd : Bool = self.captureSession.outputs.count > 0 ? false : true
         
         if needAdd == true {
-            videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey : Int(kCVPixelFormatType_32BGRA)] as [String : Any]
+            videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey : Int(sp_getCVPixelFormatType())] as [String : Any]
             
             videoOutput.alwaysDiscardsLateVideoFrames = true
             videoOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
@@ -201,6 +204,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         
         sp_dispatchMainQueue {
             self.setupAssertWrirer()
+            self.isFirstVideo = false
             self.startRecording = true
             self.assetWriter?.startWriting()
             self.assetWriter?.startSession(atSourceTime: self.lastSampleTime!)
@@ -217,27 +221,41 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             
             let size = screenPixels()
             assetWriter = try AVAssetWriter(url:  URL(fileURLWithPath: filePath), fileType: AVFileType.mp4)
+            let videoOutputSettings : [String : Any]
             
-            let videoOutputSettings = [AVVideoCodecKey : AVVideoCodecH264,
+            if #available(iOS 11.0, *) {
+                videoOutputSettings = [AVVideoCodecKey : AVVideoCodecHEVC,
                                        AVVideoWidthKey : size.width,
                                        AVVideoHeightKey : size.height,
-                                       ] as [String : Any]
-            var videoFormat : CMFormatDescription? = nil
-            CMVideoFormatDescriptionCreate(kCFAllocatorDefault, kCMVideoCodecType_H264, Int32(size.width), Int32(size.height), nil, &videoFormat)
+                        ]
+            } else {
+                // Fallback on earlier versions
+                videoOutputSettings = [AVVideoCodecKey : AVVideoCodecH264,
+                                       AVVideoWidthKey : size.width,
+                                       AVVideoHeightKey : size.height,
+                    ]
+            }
             
+            var videoFormat : CMFormatDescription? = nil
+            if #available(iOS 11.0, *) {
+                 CMVideoFormatDescriptionCreate(kCFAllocatorDefault, kCMVideoCodecType_HEVC, Int32(size.width), Int32(size.height), nil, &videoFormat)
+            }else{
+                CMVideoFormatDescriptionCreate(kCFAllocatorDefault, kCMVideoCodecType_H264, Int32(size.width), Int32(size.height), nil, &videoFormat)
+            }
+           
             videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoOutputSettings)
             videoWriterInput?.expectsMediaDataInRealTime = true
             videoWriterInput?.transform =  CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
             
             let sourcePixelBufferAttributesDictionary = [
-                String(kCVPixelBufferPixelFormatTypeKey) : Int(kCVPixelFormatType_32BGRA),
+                String(kCVPixelBufferPixelFormatTypeKey) : Int(sp_getCVPixelFormatType()),
                 String(kCVPixelBufferWidthKey) : size.width,
                 String(kCVPixelBufferHeightKey) : size.height ,
                 String(kCVPixelFormatOpenGLESCompatibility) : kCFBooleanTrue
                 ] as [String : Any]
             
             videoWriterPixelbufferInput = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoWriterInput!, sourcePixelBufferAttributes: sourcePixelBufferAttributesDictionary)
-            
+           
             if (assetWriter?.canAdd(videoWriterInput!))! {
                 assetWriter?.add(videoWriterInput!)
             }else {
@@ -263,6 +281,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             return
         }
         self.startRecording = false
+        self.isFirstVideo = false
         if (self.videoWriterInput?.isReadyForMoreMediaData)!{
             videoWriterInput?.markAsFinished()
         }
@@ -275,7 +294,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 //                FileManager.remove(path: self.filePath)
             }else{
                 let asset = AVAsset(url: URL(fileURLWithPath: (self?.filePath)!))
-                SPVideoHelp.recordForDeal(asset: asset, outputPath: "\(SPVideoHelp.kVideoDirectory)/\(SPVideoHelp.getVideoName())") {
+                SPVideoHelp.recordForDeal(asset: asset, outputPath: "\(SPVideoHelp.kVideoDirectory)/\(SPVideoHelp.getVideoName())") { (newAsset ,url) in
                     SPVideoHelp.sendNotification(notificationName: kVideoChangeNotification)
                 }
             }
@@ -431,9 +450,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 outputImage = CIImage(cvPixelBuffer: imageBuffer)
                 var noFilterOutputImage  : CIImage? = outputImage
                 noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
-                self.noFilterCIImage =  CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
+                self.noFilterCIImage = CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
                 // 执行判断人脸 然后增加头像上去
-//                outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg: UIImage(named: "filter"))
+                outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg: UIImage(named: "filter"))
                 if self.filter != nil {
                     self.filter?.setValue(outputImage!, forKey: kCIInputImageKey)
                     outputImage = self.filter?.outputImage
@@ -442,11 +461,13 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             
             if startRecording == true && self.assetWriter != nil{
                 if output == self.videoOutput {
+                    self.isFirstVideo = true
+                    // 写入图像
                     let newPixelbuffer = self.pixelBuffer(fromImage:   UIImage.convertCIImageToCGImage(ciImage: outputImage!),pixelBufferPool: self.videoWriterPixelbufferInput?.pixelBufferPool)
                     self.writerVideo(toPixelBuffer: newPixelbuffer, time: currentSampleTime)
-                    
                 }
-                if (output == self.audioOutput){
+                // 必须第一帧为视频流后才能加入音频
+                if (output == self.audioOutput && self.isFirstVideo){
                     // 音频
                     self.writerAudio(didOutputSampleBuffer: sampleBuffer)
                 }
@@ -493,23 +514,23 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         
         let options = CFDictionaryCreate(kCFAllocatorDefault, keysPointer, valuesPointer, keys.count, nil, nil)
         
-        let width = image.width
-        let height = image.height
-        
+         let size = screenPixels()
+        let width = size.width
+        let height = size.height
         var pxbuffer: CVPixelBuffer?
         // if pxbuffer = nil, you will get status = -6661
-        var status = CVPixelBufferCreate(kCFAllocatorDefault, width, height,
-                                         kCVPixelFormatType_32BGRA, options, &pxbuffer)
+        var status = CVPixelBufferCreate(kCFAllocatorDefault, Int(width), Int(height),
+                                         sp_getCVPixelFormatType(), options, &pxbuffer)
+       
         status = CVPixelBufferLockBaseAddress(pxbuffer!, CVPixelBufferLockFlags(rawValue: 0));
         
         let bufferAddress = CVPixelBufferGetBaseAddress(pxbuffer!);
         
-        
         let rgbColorSpace = CGColorSpaceCreateDeviceRGB();
         let bytesperrow = CVPixelBufferGetBytesPerRow(pxbuffer!)
         let context = CGContext(data: bufferAddress,
-                                width: width,
-                                height: height,
+                                width: Int(width),
+                                height: Int(height),
                                 bitsPerComponent: 8,
                                 bytesPerRow: bytesperrow,
                                 space: rgbColorSpace,
@@ -517,9 +538,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         // 放大
         //        context?.concatenate(CGAffineTransform(rotationAngle: 360))
         //        context?.concatenate(__CGAffineTransformMake( 1, 0, 0, -1, 0, CGFloat(height) )) //Flip Vertical
-        
-        
-        context?.draw(image, in: CGRect(x:0, y:0, width:CGFloat(width), height:CGFloat(height)));
+//        context?.clear(CGRect(x: 0, y: 0, width: CGFloat(width), height: CGFloat(height)))
+       
+        context?.draw(image, in: CGRect(x:0, y:0, width:width, height: height));
         status = CVPixelBufferUnlockBaseAddress(pxbuffer!, CVPixelBufferLockFlags(rawValue: 0));
         return pxbuffer!;
     }

@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: -- 滤镜枚举
 enum  SPFilterPhoto{
-    case EffectInstant ,EffectNoir,EffectTonal,EffectTransfer,EffectMono,EffectFade,EffectProcess,EffectChrome,HueAdjust,VignetteEffect,SRGBToneCurveToLinear
+    case EffectInstant ,EffectNoir,EffectTonal,EffectTransfer,EffectMono,EffectFade,EffectProcess,EffectChrome,HueAdjust,VignetteEffect,SRGBToneCurveToLinear,CISepiaTone
     
     func introduced() -> String {
         switch self {
@@ -25,6 +25,7 @@ enum  SPFilterPhoto{
         case .VignetteEffect: return "VignetteEffect"
         case .SRGBToneCurveToLinear: return "SRGBToneCurveToLinear"
         case .EffectInstant:return "怀旧"
+        case .CISepiaTone: return "棕色"
         }
         
     }
@@ -36,6 +37,6 @@ protocol EnumeratableEnumType {
 
 extension SPFilterPhoto : EnumeratableEnumType{
     static var allValues :[SPFilterPhoto] {
-        return [.EffectInstant ,.EffectNoir,.EffectTonal,.EffectTransfer,.EffectMono,.EffectFade,.EffectProcess,.EffectChrome,.HueAdjust]
+        return [.EffectInstant ,.EffectNoir,.EffectTonal,.EffectTransfer,.EffectMono,.EffectFade,.EffectProcess,.EffectChrome,.HueAdjust,CISepiaTone]
     }
 }

@@ -55,6 +55,15 @@ extension UIView{
         self.layer.cornerRadius = cornerRadius
         self.layer.masksToBounds = true
     }
+    /// 设置边框
+    ///
+    /// - Parameters:
+    ///   - color: 边框颜色
+    ///   - width: 边框大小
+    func sp_border(color:UIColor,width : CGFloat){
+        self.layer.borderColor = color.cgColor
+        self.layer.borderWidth = width
+    }
     
     
 }

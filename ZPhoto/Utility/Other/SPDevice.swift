@@ -11,6 +11,7 @@ import UIKit
 
 
 let SP_DEVICE_TYPE :  String = UIDevice.current.model  // 获取设备类型
+let SP_DEVICE_SCALE = UIScreen.main.scale  //  设备的比例
 let SP_IS_IPAD = { () -> Bool in
     if SP_DEVICE_TYPE == "iPad" {
         return true

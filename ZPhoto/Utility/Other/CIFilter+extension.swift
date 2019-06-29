@@ -54,6 +54,12 @@ extension CIFilter{
     class func photoSRGBToneCurveToLinear() -> CIFilter?{
         return CIFilter(name: "CISRGBToneCurveToLinear")
     }
+    // 棕色滤镜
+    class func photoCISepiaTone()->CIFilter?{
+        let f = CIFilter(name: "CISepiaTone")
+        f?.setValue(0.9, forKey: kCIInputIntensityKey)
+        return f
+    }
     // MARK: -- 自动改善
     class func photoautoAdjust(inputImage:CIImage) -> CIImage {
         let filters = inputImage.autoAdjustmentFilters() as [CIFilter]
@@ -61,6 +67,7 @@ extension CIFilter{
         for filter : CIFilter in filters{
             filter.setValue(inputImage, forKey: kCIInputImageKey)
             outputImage = filter.outputImage!
+            
         }
         return outputImage
     }

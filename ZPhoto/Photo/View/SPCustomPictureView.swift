@@ -12,7 +12,6 @@ import SnapKit
 class SPCustomPictureView:  UIView,UIScrollViewDelegate{
     fileprivate lazy var scrollView : UIScrollView = {
         let view = UIScrollView()
-        view.contentSize = CGSize(width: sp_getScreenWidth(), height:  sp_getScreenWidth())
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
         return view
@@ -66,8 +65,13 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         self.imgView.snp.remakeConstraints { (maker) in
             maker.left.equalTo(self.scrollView.snp.left).offset(0)
             maker.top.equalTo(self.scrollView.snp.top).offset(0)
-            maker.width.equalTo(self.scrollView.snp.width).offset(0)
-            maker.height.equalTo(self.scrollView.snp.height).offset(0)
+            if let img = self.imgView.image {
+                maker.width.equalTo(img.size.width / SP_DEVICE_SCALE)
+                maker.height.equalTo(img.size.height / SP_DEVICE_SCALE)
+            }else{
+                maker.width.equalTo(self.scrollView.snp.width).offset(0)
+                maker.height.equalTo(self.scrollView.snp.height).offset(0)
+            }
         }
     }
     func sp_update(left:CGFloat = 2.0,top:CGFloat = 2.0,right : CGFloat = 2.0, bottom : CGFloat
@@ -76,6 +80,13 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         self.rightBoder = right
         self.topBoder = top
         self.bottomBoder = bottom
+    }
+    func sp_update(img:UIImage?){
+        self.imgView.image = img
+        sp_updateImgLayout()
+        if let image = img {
+            self.scrollView.contentSize = CGSize(width: image.size.width / SP_DEVICE_SCALE, height: image.size.height / SP_DEVICE_SCALE)
+        }
     }
     
     func sp_drawMaskLayer(){
@@ -652,7 +663,6 @@ extension SPCustomPictureView {
         var transform = CGAffineTransform(rotationAngle: rotation+netRotation)
         transform = transform.scaledBy(x: lastScaleFactor, y: lastScaleFactor)
         imgView.transform = transform
-        //        imgView.transform = CGAffineTransform(rotationAngle: rotation+netRotation)
         //状态结束，保存数据
         if sender.state == UIGestureRecognizerState.ended{
             netRotation += rotation

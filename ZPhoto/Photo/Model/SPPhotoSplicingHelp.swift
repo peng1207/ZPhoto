@@ -25,9 +25,33 @@ class SPPhotoSplicingHelp {
                            type:SPSPlicingType,
                            width:CGFloat = sp_getScreenWidth(),
                            height:CGFloat = sp_getScreenWidth())-> CGRect{
+        var frame = CGRect.zero
+        switch type {
+        case .nine(let t):
+           frame = sp_getNineFrame(index: index, type: t, width: width, height: height)
+        default:
+            SPLog("没有其他")
+        }
         
-        return CGRect.zero
+        return frame
     }
+    private class func sp_getNineFrame(index : Int,
+                                       type:SPSPlicingType.NineType,
+                                       width:CGFloat,
+                                       height:CGFloat)->CGRect{
+        var frame = CGRect.zero
+        switch type {
+        case .one:
+            let w = width / 3.0
+            let h = height / 3.0
+            frame = CGRect(x: CGFloat(index % 3) * w, y:  CGFloat(index / 3) * h, width: w, height: h)
+            
+        default:
+            SPLog("没有其他")
+        }
+        return frame
+    }
+    
     /// 获取view的边距
     ///
     /// - Parameters:
@@ -45,7 +69,9 @@ class SPPhotoSplicingHelp {
         
         return (0,0,0,0)
     }
-    
+    /// 获取背景颜色
+    ///
+    /// - Returns: 背景颜色数组
     class func sp_getDefaultColor()->[UIColor]{
         
         return [ sp_getMianColor(),
@@ -53,5 +79,21 @@ class SPPhotoSplicingHelp {
                  SPColorForHexString(hex: SP_HexColor.color_ff3300.rawValue)]
         
     }
-    
+    /// 根据数量展示布局
+    ///
+    /// - Parameter count: 数量
+    /// - Returns: 布局
+    class func sp_getSplicingLayout(count : Int) ->[SPSPlicingType]{
+        if count == 9 {
+            return [.nine(nineType: .one),.nine(nineType: .two),.nine(nineType: .three),.nine(nineType: .four),.nine(nineType: .five),.nine(nineType: .six),.nine(nineType: .seven),.nine(nineType: .eight),.nine(nineType: .nine),.nine(nineType: .ten),.nine(nineType: .eleven)]
+        }else if count == 8 {
+            
+        }
+        return []
+    }
+    class func sp_getLayoutType(index : Int,
+                                count : Int,
+                                type:SPSPlicingType) -> SPPictureLayoutType{
+        return .rectangle
+    }
 }

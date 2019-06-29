@@ -63,6 +63,8 @@ class SPFilterModel : NSObject {
             filter = CIFilter.photoVignetteEffect()
         case .SRGBToneCurveToLinear?:
             filter = CIFilter.photoSRGBToneCurveToLinear()
+        case .CISepiaTone?:
+            filter = CIFilter.photoCISepiaTone()
         case .none:
             filter = nil
         case .some(_):

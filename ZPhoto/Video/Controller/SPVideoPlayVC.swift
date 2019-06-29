@@ -18,7 +18,7 @@ class SPVideoPlayVC : SPBaseVC {
         let playView = SPVideoPlayView()
         return playView
     }()
-    lazy fileprivate var closeBtn : UIButton! = {
+    lazy fileprivate var closeBtn : UIButton = {
         let button = UIButton(type: .custom)
         
         button.setBackgroundImage(UIImage(named: "delete"), for: .normal)

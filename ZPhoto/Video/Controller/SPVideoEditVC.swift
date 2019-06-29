@@ -35,40 +35,41 @@ class  SPVideoEditVC : SPBaseVC {
     }
    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-    self.reader()
+        self.reader()
     }
     func reader(){
-        let asserReader = try! AVAssetReader(asset: (videoModel?.asset)!)
-        let videoTrack = videoModel?.asset?.tracks(withMediaType: AVMediaType.video)[0]
-        let outputSettings :[String:Any] =  [kCVPixelBufferPixelFormatTypeKey as String : Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
-        
-        let trackOutput = AVAssetReaderTrackOutput(track: videoTrack!, outputSettings: outputSettings)
-        if asserReader.canAdd(trackOutput) {
-            asserReader.add(trackOutput)
-        }
-        asserReader.startReading()
-        var  nominalFrameRate : Int = 0
-          var samples: [CMSampleBuffer] = []
-      
+        SPVideoHelp.sp_getVideoBuffer(asset: videoModel?.asset)
+//        let asserReader = try! AVAssetReader(asset: (videoModel?.asset)!)
+//        let videoTrack = videoModel?.asset?.tracks(withMediaType: AVMediaType.video)[0]
+//        let outputSettings :[String:Any] =  [kCVPixelBufferPixelFormatTypeKey as String : Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
+//
+//        let trackOutput = AVAssetReaderTrackOutput(track: videoTrack!, outputSettings: outputSettings)
+//        if asserReader.canAdd(trackOutput) {
+//            asserReader.add(trackOutput)
+//        }
+//        asserReader.startReading()
+////        var  nominalFrameRate : Int = 0
+//          var samples: [CMSampleBuffer] = []
+//
+////            while let sample = trackOutput.copyNextSampleBuffer() {
+////                samples.append(sample)s
+////                SPLog("\(nominalFrameRate)")
+////                nominalFrameRate = nominalFrameRate + 1
+//        //            }
+//        sp_dispatchAsync {
 //            while let sample = trackOutput.copyNextSampleBuffer() {
+//                SPLog("读取中")
+//
+//                Thread.sleep(forTimeInterval: 0.01)
+//
 //                samples.append(sample)
-//                SPLog("\(nominalFrameRate)")
-//                nominalFrameRate = nominalFrameRate + 1
+//                CMSampleBufferInvalidate(sample)
 //            }
-    
-            while let sample = trackOutput.copyNextSampleBuffer() {
-                SPLog("读取中")
-//                var outputImage =  CIImage(cvPixelBuffer: CMSampleBufferGetImageBuffer(sample)!)
-//                self.filter.setValue(outputImage, forKey: kCIInputImageKey)
-//                outputImage = self.filter.outputImage!
-//                SPLog(outputImage)
-                Thread.sleep(forTimeInterval: 0.01) 
-                samples.append(sample)
-                CMSampleBufferInvalidate(sample)
-            }
-     
-       
-       
+//            sp_dispatchMainQueue {
+//                asserReader.cancelReading()
+//                SPLog("读取结束")
+//            }
+//        }
 //        while asserReader.status == AVAssetReaderStatus.reading && (videoTrack?.nominalFrameRate)! > nominalFrameRate {
 //            autoreleasepool{
 //                let videoBuffer = trackOutput.copyNextSampleBuffer()
@@ -83,8 +84,7 @@ class  SPVideoEditVC : SPBaseVC {
 //
 //            }
 //        }
-        asserReader.cancelReading()
-        SPLog("读取结束")
+      
     }
     
     deinit {

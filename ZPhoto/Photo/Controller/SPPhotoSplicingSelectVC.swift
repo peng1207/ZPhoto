@@ -36,7 +36,7 @@ class SPPhotoSplicingSelectVC: SPBaseVC {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "NEXT"), for: UIControlState.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
-       btn.frame = CGRect(x: 0, y: 0, width: 60, height: 40)
+        btn.frame = CGRect(x: 0, y: 0, width: 60, height: 40)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
         btn.addTarget(self, action: #selector(sp_clickNext), for: UIControlEvents.touchUpInside)
         return btn

@@ -392,7 +392,6 @@ class SPRecordVideoBtnView: UIView {
     fileprivate func setupTimer (){
         var i = 0;
         sourceTimer = timer({
-            SPLog("sdaasdasdasdasd")
             sp_dispatchMainQueue {
                 self.timeLabel.text = formatForMin(seconds: Float64(i))
             }

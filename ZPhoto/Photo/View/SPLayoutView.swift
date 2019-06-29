@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import SnapKit
-class SPLayerView:  UIView{
+class SPLayoutView:  UIView{
     
     fileprivate lazy var scrollView : UIScrollView = {
         let view = UIScrollView()
