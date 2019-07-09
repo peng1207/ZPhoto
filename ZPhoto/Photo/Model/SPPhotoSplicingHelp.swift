@@ -45,7 +45,66 @@ class SPPhotoSplicingHelp {
             let w = width / 3.0
             let h = height / 3.0
             frame = CGRect(x: CGFloat(index % 3) * w, y:  CGFloat(index / 3) * h, width: w, height: h)
-            
+        case .three:
+            let w : CGFloat = width / 5.0
+            var h : CGFloat = height / 2.0
+            var x : CGFloat = 0
+            var y : CGFloat = 0
+            if index == 0 {
+                x = 0
+                y = 0
+                h = height
+            }else if index < 5{
+                x = CGFloat(index) * w
+            }else if index < 9 {
+                x = CGFloat(index - 4) * w
+                y = h
+            }
+            frame = CGRect(x: x, y: y, width: w, height: h)
+        case .four :
+            var w : CGFloat = width / 3.0
+            var h :  CGFloat = height / 4.0
+            var x : CGFloat = 0
+            var y : CGFloat = 0
+            if index == 0 {
+                w = w * 2
+                h = h * 2
+            }else if index == 1 {
+                x = w  * 2
+            }else if index == 2 {
+                x = w * 2
+                y = h
+            }else if index < 6{
+                x = w *  CGFloat(index - 3)
+                y = h * 2.0
+            }else if index < 9 {
+                 x = w *  CGFloat(index - 6)
+                 y = h * 3.0
+            }
+            frame = CGRect(x: x, y: y, width: w, height: h)
+        case .five:
+            var w : CGFloat = width / 4.0
+            var h : CGFloat = height / 3.0
+            var x : CGFloat = 0
+            var y : CGFloat = 0
+            if index == 0 {
+                h = h * 2.0
+            }else if index < 4 {
+                x = w * CGFloat(index)
+            }else if index < 7 {
+                x = w * CGFloat(index - 3)
+                y = h
+            }else if index < 9 {
+                y = h * 2.0
+                if index == 8 {
+                    x = w + 10.0
+                    w = width - w - 10.0
+                }else{
+                     w = w + 10.0
+                }
+                
+            }
+            frame = CGRect(x: x, y: y, width: w, height: h)
         default:
             SPLog("没有其他")
         }
@@ -133,6 +192,92 @@ class SPPhotoSplicingHelp {
                     right = margin
                 }
             }
+        case .three:
+            if index == 0 {
+                left = margin
+                top = margin
+                bottom = margin
+               
+            }else if index < 5 {
+                left = padding
+                top = margin
+                if index == 4 {
+                     right = margin
+                }
+            }else if index < 9{
+                left = padding
+                bottom = margin
+                top = padding
+                if index == 8 {
+                    right = margin
+                }
+            }
+        case .four :
+            if index == 0 {
+                left = margin
+                top = margin
+                bottom = padding
+                right = 0
+            }else if index == 1 {
+                top = margin
+                right = margin
+                bottom = padding
+                left = padding
+            }else if index == 2 {
+                right = margin
+                bottom = padding
+                left = padding
+            }else if index < 6 {
+                if index == 3 {
+                    left = margin
+                }else {
+                    left = padding
+                }
+                if index == 5 {
+                    right = margin
+                }
+                bottom = padding
+                
+            }else if index < 9 {
+                if index == 6 {
+                    left = margin
+                }else{
+                    left = padding
+                }
+                if index == 8 {
+                    right = margin
+                }
+                bottom = margin
+            }
+        case .five:
+            if index == 0 {
+                left = margin
+                top = margin
+                bottom = padding
+               
+            }else if index < 4 {
+                top = margin
+                left = padding
+                if index == 3 {
+                    right = margin
+                }
+            }else if index < 7{
+                top = padding
+                left = padding
+                bottom = padding
+                if index == 6 {
+                    right = margin
+                }
+            }else if index < 9 {
+                bottom = margin
+                if index == 7 {
+                    left = margin
+                }else {
+                    left = padding
+                    right = margin
+                }
+            }
+            
         default:
             SPLog("没有其他")
         }

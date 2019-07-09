@@ -39,7 +39,7 @@ class SPPhotoSplicingVC: SPBaseVC {
         return view
     }()
     fileprivate var marginSpace : CGFloat = 4
-    fileprivate var paddingSpace : CGFloat = 2
+    fileprivate var paddingSpace : CGFloat = 4
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -118,7 +118,7 @@ class SPPhotoSplicingVC: SPBaseVC {
         }
         self.bgView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
-            maker.centerY.equalTo(self.view.snp.centerY).offset(0)
+            maker.centerY.equalTo(self.view.snp.centerY).offset(-20)
             maker.height.equalTo(self.bgView.snp.width).offset(0)
         }
         self.toolView.snp.makeConstraints { (maker) in
