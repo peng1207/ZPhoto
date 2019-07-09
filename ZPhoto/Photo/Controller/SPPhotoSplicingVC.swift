@@ -11,6 +11,9 @@ import Foundation
 import SnapKit
 class SPPhotoSplicingVC: SPBaseVC {
     var dataArray : [SPPhotoModel]!
+    fileprivate var typeList : [SPSPlicingType]!
+    fileprivate var colorList : [UIColor] = SPPhotoSplicingHelp.sp_getDefaultColor()
+    fileprivate var selectType : SPSPlicingType!
     fileprivate lazy var saveBtn : UIButton = {
         let btn = UIButton(type: UIButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "SAVE"), for: UIControlState.normal)
@@ -35,9 +38,12 @@ class SPPhotoSplicingVC: SPBaseVC {
         view.backgroundColor = sp_getMianColor()
         return view
     }()
+    fileprivate var marginSpace : CGFloat = 4
+    fileprivate var paddingSpace : CGFloat = 2
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        sp_getData()
         sp_setupData()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -71,64 +77,30 @@ class SPPhotoSplicingVC: SPBaseVC {
         self.sp_addConstraint()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.saveBtn)
     }
+    fileprivate func sp_getData(){
+        self.typeList =  SPPhotoSplicingHelp.sp_getSplicingLayout(count: self.dataArray.count)
+        if self.typeList.count > 0  {
+            if let type = self.typeList.first {
+                   self.selectType = type
+            }
+        }
+    }
     fileprivate func sp_setupData(){
+        self.bgView.subviews.forEach { (view) in
+            view.removeFromSuperview()
+        }
         var index = 0
         for model in self.dataArray {
-            let frame = SPPhotoSplicingHelp.sp_getFrame(index: index, count: self.dataArray.count, type: SPSPlicingType.nine(nineType: .one), width: sp_getScreenWidth(), height: sp_getScreenWidth())
+            let frame = SPPhotoSplicingHelp.sp_getFrame(index: index, count: self.dataArray.count, type: self.selectType, width: sp_getScreenWidth(), height: sp_getScreenWidth())
             let view = SPCustomPictureView(frame:frame)
-            // 余数
-            let remainder = index % 3
-            // 除数
-            let divisor = index / 3
-            var left : CGFloat = 0
-            var top : CGFloat = 0
-            var right : CGFloat = 0
-            var bottom : CGFloat = 0
-            if divisor == 0 {
-                left = 4
-                top = 4
-            }else if divisor == 1 {
-                left = 4
-                top = 2
-                bottom = 2
-            }else if divisor == 2 {
-                left = 4
-                bottom = 4
-            }
-           
-            if remainder == 0 {
-                
-            }else if remainder == 1 {
-                if divisor == 0 {
-                    left = 2
-                    right = 2
-                }else if divisor == 1 {
-                    left = 2
-                    right = 2
-                    top = 2
-                    bottom = 2
-                }else if divisor == 2 {
-                    left = 2
-                    right = 2
-                }
-                
-            }else if remainder == 2 {
-                if divisor == 0 {
-                    left = 0
-                    right = 4
-                }else if divisor == 1 {
-                    left = 0
-                    right = 4
-                    top = 2
-                    bottom = 2
-                }else if divisor == 2 {
-                    left = 0
-                    right = 4
-                }
-            }
+            let space : (left : CGFloat , right : CGFloat , top : CGFloat , bottom : CGFloat) = SPPhotoSplicingHelp.sp_borderSpacing(index: index, count: self.dataArray.count, type: self.selectType, margin: marginSpace, padding: paddingSpace)
+            let left : CGFloat = space.left
+            let top : CGFloat = space.top
+            let right : CGFloat = space.right
+            let bottom : CGFloat = space.bottom
             view.sp_update(left: left, top: top, right: right, bottom: bottom)
             view.sp_update(img: model.img)
-            view.layoutType = .rectangle
+            view.layoutType = SPPhotoSplicingHelp.sp_getLayoutType(index: index, count: self.dataArray.count, type: self.selectType)
             view.sp_drawMaskLayer()
             self.bgView.addSubview(view)
             index = index + 1

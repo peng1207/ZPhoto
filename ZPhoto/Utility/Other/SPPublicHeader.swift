@@ -301,7 +301,6 @@ func sp_shareImg(imgs : [UIImage]?,vc : UIViewController?){
     let activityVC = UIActivityViewController(activityItems: shareImg, applicationActivities: nil)
     let popover = activityVC.popoverPresentationController
     if (popover != nil) {
-        
         popover?.permittedArrowDirections = .up
     }
     

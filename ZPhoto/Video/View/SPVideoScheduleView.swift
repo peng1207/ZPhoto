@@ -70,28 +70,25 @@ extension SPVideoScheduleView {
     private func addConstraintView(){
         self.leftPanView.snp.makeConstraints { (make) in
             make.top.bottom.equalTo(self).offset(0)
-         self.leftConstraint = make.left.equalTo(self).offset(5).constraint
+            self.leftConstraint = make.left.equalTo(self).offset(5).constraint
             make.width.equalTo(12)
         }
         self.rightPanView.snp.makeConstraints { (make) in
-           make.top.bottom.equalTo(self).offset(0)
+            make.top.bottom.equalTo(self).offset(0)
             make.width.equalTo(self.leftPanView.snp.width).offset(0);
-           self.rightConstraint = make.right.equalTo(self.snp.right).offset(-5).constraint
+            self.rightConstraint = make.right.equalTo(self.snp.right).offset(-5).constraint
         }
         self.leftShowView.snp.makeConstraints { (make) in
             make.left.equalTo(self).offset(5)
             make.right.equalTo(self.leftPanView.snp.left).offset(0)
             make.top.bottom.equalTo(self).offset(0)
-            
         }
         self.rightShowView.snp.makeConstraints { (make) in
             make.right.equalTo(self).offset(-5)
             make.top.bottom.equalTo(self).offset(0)
             make.left.equalTo(self.rightPanView.snp.right).offset(0)
         }
-        
     }
-    
 }
 // MARK: -- action
 extension SPVideoScheduleView {

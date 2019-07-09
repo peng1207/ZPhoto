@@ -101,6 +101,8 @@ extension SPMainVC {
         self.present(SPPhotoVC(), animated: true, completion: nil)
     }
     @objc fileprivate func sp_clickSet(){
- 
+//        let tempVC  = SPTmpVC()
+//        self.present(tempVC, animated: true, completion: nil)
+        
     }
 }

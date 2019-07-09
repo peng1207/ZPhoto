@@ -182,4 +182,51 @@ extension UIImage{
         }
         return  inputImg
     }
+
+    /// 将 CGImage 转成CVPixelBuffer
+    ///
+    /// - Parameters:
+    ///   - image: CGImage
+    ///   - pixelBufferPool:
+    ///   - pixelFormatType: 类型
+    /// - Returns: CVPixelBuffer
+    class func sp_pixelBuffer(fromImage image:CGImage,pixelBufferPool:CVPixelBufferPool?,pixelFormatType : OSType = kCVPixelFormatType_32BGRA) -> CVPixelBuffer?{
+        let cfnumPointer = UnsafeMutablePointer<UnsafeRawPointer>.allocate(capacity: 1)
+        let cfnum = CFNumberCreate(kCFAllocatorDefault, .intType, cfnumPointer)
+        let keys: [CFString] = [kCVPixelBufferCGImageCompatibilityKey, kCVPixelBufferCGBitmapContextCompatibilityKey, kCVPixelBufferBytesPerRowAlignmentKey]
+        let values: [CFTypeRef] = [kCFBooleanTrue, kCFBooleanTrue, cfnum!]
+        let keysPointer = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: 1)
+        let valuesPointer =  UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: 1)
+        keysPointer.initialize(to: keys)
+        valuesPointer.initialize(to: values)
+        
+        let options = CFDictionaryCreate(kCFAllocatorDefault, keysPointer, valuesPointer, keys.count, nil, nil)
+        
+        let size = screenPixels()
+        let width = size.width
+        let height = size.height
+        var pxbuffer: CVPixelBuffer?
+        // if pxbuffer = nil, you will get status = -6661
+        var status = CVPixelBufferCreate(kCFAllocatorDefault, Int(width), Int(height),
+                                         pixelFormatType, options, &pxbuffer)
+        
+        status = CVPixelBufferLockBaseAddress(pxbuffer!, CVPixelBufferLockFlags(rawValue: 0));
+        
+        let bufferAddress = CVPixelBufferGetBaseAddress(pxbuffer!);
+        
+        let rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+        let bytesperrow = CVPixelBufferGetBytesPerRow(pxbuffer!)
+        let context = CGContext(data: bufferAddress,
+                                width: Int(width),
+                                height: Int(height),
+                                bitsPerComponent: 8,
+                                bytesPerRow: bytesperrow,
+                                space: rgbColorSpace,
+                                bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
+        
+        context?.draw(image, in: CGRect(x:0, y:0, width:width, height: height));
+        status = CVPixelBufferUnlockBaseAddress(pxbuffer!, CVPixelBufferLockFlags(rawValue: 0));
+        return pxbuffer!;
+    }
+    
 }

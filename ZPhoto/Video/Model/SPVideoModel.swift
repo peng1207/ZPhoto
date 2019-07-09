@@ -24,6 +24,7 @@ class SPVideoModel : NSObject{
                 asset = nil
             }else{
                  thumbnailImage = SPVideoHelp.thumbnailImageTo(assesst: asset!, time: CMTimeMakeWithSeconds(0.00, framesPerSecond))
+                self.second = second
                 if thumbnailImage == nil {
                     thumbnailImage = UIImage(named: "default")
                 }
@@ -31,7 +32,7 @@ class SPVideoModel : NSObject{
         }
     }
     var thumbnailImage : UIImage?
-    
+    var second : Float64?
     override init() {
        url = nil
         asset = nil

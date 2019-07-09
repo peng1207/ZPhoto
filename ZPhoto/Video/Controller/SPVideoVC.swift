@@ -169,10 +169,12 @@ extension SPVideoRootVC {
     }
     /// 点击编辑
     fileprivate func sp_clickEdit(){
-        
+        let editVC = SPVideoSelectEditVC()
+        self.navigationController?.pushViewController(editVC, animated: true)
     }
     /// 点击倒放
     fileprivate func sp_clickInversion(){
-        
+        let upendIndexVC = SPVideoUpendIndexVC()
+        self.navigationController?.pushViewController(upendIndexVC, animated: true)
     }
 }

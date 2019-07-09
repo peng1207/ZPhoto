@@ -30,6 +30,7 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
     fileprivate var netRotation : CGFloat = 0//旋转
     fileprivate var lastScaleFactor : CGFloat! = 1  //放大、缩小
     fileprivate let minScale : CGFloat = 0.1 //  最小的缩放
+    fileprivate let maxScale : CGFloat = 2.0
     /// 切割多边形的点
     var points : [CGPoint]?
     var layoutType : SPPictureLayoutType = .rectangle
@@ -85,7 +86,7 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         self.imgView.image = img
         sp_updateImgLayout()
         if let image = img {
-            self.scrollView.contentSize = CGSize(width: image.size.width / SP_DEVICE_SCALE, height: image.size.height / SP_DEVICE_SCALE)
+            self.scrollView.contentSize = CGSize(width: image.size.width / SP_DEVICE_SCALE * 2.0, height: image.size.height / SP_DEVICE_SCALE * 2.0)
         }
     }
     
@@ -157,7 +158,7 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
     }
     /// 画心形
     fileprivate func sp_drawHeart(){
-        sp_drawLayer(bezierPath: sp_getHeartPatg())
+        sp_drawLayer(bezierPath: sp_getHeartPath())
     }
     /// 画水滴
     fileprivate func sp_drawWaterDrop(){
@@ -533,7 +534,7 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
     /// 获取心形路径
     ///
     /// - Returns: 路径
-    fileprivate func sp_getHeartPatg()->UIBezierPath{
+    fileprivate func sp_getHeartPath()->UIBezierPath{
         let bezierPath = UIBezierPath()
         let maxX = self.frame.size.width - self.rightBoder
         let maxY = self.frame.size.height - self.bottomBoder
@@ -546,6 +547,7 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         
         let startPoint = CGPoint(x: centerX, y:  startY)
         let endPoint = CGPoint(x: centerX, y: maxY)
+   
         bezierPath.move(to: startPoint)
         bezierPath.addCurve(to: endPoint, controlPoint1: CGPoint(x: minX, y: minY ), controlPoint2: CGPoint(x: 0, y: centerY + startY))
         bezierPath.move(to: endPoint)
@@ -670,10 +672,13 @@ extension SPCustomPictureView {
         
     }
     @objc fileprivate func sp_handlePinchGesture(sender:UIPinchGestureRecognizer){
-        let factor = sender.scale
+        var factor = sender.scale
         var transform : CGAffineTransform!
         if factor > 1{
             //图片放大
+            if factor > maxScale {
+                factor = maxScale
+            }
             transform = CGAffineTransform(scaleX: lastScaleFactor+factor-1, y: lastScaleFactor+factor-1)
         }else{
             //缩小

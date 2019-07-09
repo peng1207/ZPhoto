@@ -32,6 +32,11 @@ class SPTmpVC: SPBaseVC {
         view.backgroundColor = UIColor.red
         return view
     }()
+    fileprivate lazy var floorView : UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.red
+        return view
+    }()
     fileprivate let K_TUNF_TAG = 1000
     
     fileprivate let scale : CGFloat = 1.0
@@ -57,15 +62,16 @@ class SPTmpVC: SPBaseVC {
         self.scrollView.addSubview(self.officeView)
  
         self.scrollView.addSubview(self.baseView1)
+        self.scrollView.addSubview(self.floorView)
         self.baseView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sp_clickTap)))
         self.sp_addConstraint()
 //        sp_setupSubView()
         sp_setupOfficeSubView()
         sp_setupBase1SubView()
-        
-//        sp_after(time: 5) {
-//            SPLog(self.baseView1.subviews)
-//        }
+        sp_setupFloorSubView()
+        sp_after(time: 5) {
+            SPLog(self.self.floorView.subviews)
+        }
         
     }
     /// 处理有没数据
@@ -103,10 +109,19 @@ class SPTmpVC: SPBaseVC {
             maker.left.equalTo(self.officeView.snp.right).offset( 8 * scale)
             maker.width.equalTo(360 * scale)
             maker.height.equalTo(530 * scale)
-            maker.right.equalTo(self.scrollView).offset(-8 * scale)
+          
             maker.bottom.equalTo(self.scrollView).offset(-50)
             maker.top.equalTo(self.scrollView).offset(100)
         }
+        
+        self.floorView.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.baseView1.snp.right).offset(10 * scale)
+            maker.width.equalTo(46 * scale)
+            maker.height.equalTo(40 * scale)
+            maker.right.equalTo(self.scrollView).offset(-8 * scale)
+            maker.top.equalTo(self.scrollView).offset(100)
+        }
+        
     }
     deinit {
         
@@ -1055,7 +1070,63 @@ extension SPTmpVC{
         return label
     }
     
-    
+    fileprivate func sp_setupFloorSubView(){
+        
+        let view1 = sp_getView(color: UIColor.white, supView: self.floorView)
+        view1.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.floorView).offset(0)
+            maker.width.equalTo(8 * scale)
+            maker.height.equalTo(15 * scale)
+            maker.bottom.equalTo(self.floorView.snp.centerY).offset(0)
+        }
+        let view2 = sp_getView(color: UIColor.blue, supView: self.floorView)
+        view2.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(view1).offset(0)
+            maker.top.equalTo(view1.snp.bottom).offset(0)
+            maker.height.equalTo(view1.snp.height).offset(0)
+        }
+        
+        let view3 = sp_getView(color: UIColor.blue, supView: self.floorView)
+        view3.snp.makeConstraints { (maker) in
+            maker.right.equalTo(self.floorView).offset(0)
+            maker.top.equalTo(view1.snp.top).offset(0)
+            maker.width.height.equalTo(view1).offset(0)
+        }
+        let view4 = sp_getView(color: UIColor.white, supView: self.floorView)
+        view4.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(view3).offset(0)
+            maker.top.equalTo(view3.snp.bottom).offset(0)
+            maker.height.equalTo(view3.snp.height).offset(0)
+        }
+        
+        let view5 = sp_getView(color: UIColor.blue, supView: self.floorView)
+        view5.snp.makeConstraints { (maker) in
+            maker.left.equalTo(view1.snp.right).offset(0)
+            maker.top.equalTo(self.floorView).offset(0)
+            maker.right.equalTo(self.floorView.snp.centerX).offset(0)
+            maker.height.equalTo(8 * scale)
+        }
+        let view6 = sp_getView(color: UIColor.white, supView: self.floorView)
+        view6.snp.makeConstraints { (maker) in
+            maker.left.equalTo(view5.snp.right).offset(0)
+            maker.height.equalTo(view5).offset(0)
+            maker.top.equalTo(view5).offset(0)
+            maker.right.equalTo(view3.snp.left).offset(0)
+        }
+        
+        let view7 = sp_getView(color: UIColor.white, supView: self.floorView)
+        view7.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(view5).offset(0)
+            maker.height.equalTo(view5).offset(0)
+            maker.bottom.equalTo(self.floorView).offset(0)
+        }
+        let view8 = sp_getView(color: UIColor.blue, supView: self.floorView)
+        view8.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(view6).offset(0)
+            maker.height.bottom.equalTo(view7).offset(0)
+        }
+      
+    }
     
     
     @objc fileprivate func sp_clickTap(){

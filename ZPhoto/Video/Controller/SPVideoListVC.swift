@@ -146,7 +146,6 @@ extension SPVideoListVC : UICollectionViewDelegate,UICollectionViewDataSource {
         if indexPath.row < sp_getArrayCount(array: self.videoDataArray){
               cell.videoModel = self.videoDataArray?[indexPath.row]
         }
-      
         cell.clickComplete = {
             [unowned self]  (videoModel:SPVideoModel?) in
             self.clickDetete(videoModel: videoModel)
@@ -156,19 +155,14 @@ extension SPVideoListVC : UICollectionViewDelegate,UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row < sp_getArrayCount(array: self.videoDataArray) {
             let videoModel = self.videoDataArray?[indexPath.row]
-//            let videoPlayVC = SPVideoPlayVC()
-//            videoPlayVC.videoModel = videoModel
-//            self.present(videoPlayVC, animated: true, completion: nil)
-            let upendVC = SPVideoUpendVC()
-            upendVC.videoModel = videoModel
-            self.navigationController?.pushViewController(upendVC, animated: true)
-          
-            //        let videoPlayVC = SPVideoEditVC()
-            //        videoPlayVC.videoModel = videoModel
-            //        self.navigationController?.pushViewController(videoPlayVC, animated: true)
+            let videoPlayVC = SPVideoPlayVC()
+            videoPlayVC.videoModel = videoModel
+            self.present(videoPlayVC, animated: true, completion: nil)
+//            let upendVC = SPVideoUpendVC()
+//            upendVC.videoModel = videoModel
+//            self.navigationController?.pushViewController(upendVC, animated: true)
         }
     }
-    
 }
 // MARK: -- 数据
 extension SPVideoListVC {

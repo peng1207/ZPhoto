@@ -38,3 +38,4 @@
 "SET" = "set";
 "CHOICE" = "choice";
 "FINISH" = "finish";
+"SAVE_VIDEO_MSG" = "Do you want to save it to your mobile photo album?";

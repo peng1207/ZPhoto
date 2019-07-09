@@ -11,7 +11,7 @@ import UIKit
 import AVFoundation
 
 class  SPVideoEditVC : SPBaseVC {
-    lazy fileprivate var scheduleView : SPVideoScheduleView! = {
+    lazy fileprivate var scheduleView : SPVideoScheduleView = {
         let view = SPVideoScheduleView()
         return view
     }()
@@ -22,80 +22,41 @@ class  SPVideoEditVC : SPBaseVC {
         return UIImageView()
     }()
     
-     var videoModel : SPVideoModel?
+    var videoModel : SPVideoModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        sp_setupUI()
+    }
+    /// 添加UI
+    override func sp_setupUI(){
         self.view.addSubview(self.showImage)
+        self.view.addSubview(self.scheduleView)
+        self.sp_addConstraint()
+    }
+    fileprivate func sp_addConstraint(){
         self.showImage.snp.makeConstraints { (maker) in
-            maker.left.top.right.bottom.equalTo(self.view).offset(0)
+            maker.left.top.right.equalTo(self.view).offset(0)
+            maker.bottom.equalTo(self.scheduleView.snp.top).offset(0)
         }
-    
+        self.scheduleView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.equalTo(50)
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+            }
+        }
     }
-   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        self.reader()
-    }
-    func reader(){
-        SPVideoHelp.sp_getVideoBuffer(asset: videoModel?.asset)
-//        let asserReader = try! AVAssetReader(asset: (videoModel?.asset)!)
-//        let videoTrack = videoModel?.asset?.tracks(withMediaType: AVMediaType.video)[0]
-//        let outputSettings :[String:Any] =  [kCVPixelBufferPixelFormatTypeKey as String : Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
-//
-//        let trackOutput = AVAssetReaderTrackOutput(track: videoTrack!, outputSettings: outputSettings)
-//        if asserReader.canAdd(trackOutput) {
-//            asserReader.add(trackOutput)
-//        }
-//        asserReader.startReading()
-////        var  nominalFrameRate : Int = 0
-//          var samples: [CMSampleBuffer] = []
-//
-////            while let sample = trackOutput.copyNextSampleBuffer() {
-////                samples.append(sample)s
-////                SPLog("\(nominalFrameRate)")
-////                nominalFrameRate = nominalFrameRate + 1
-//        //            }
-//        sp_dispatchAsync {
-//            while let sample = trackOutput.copyNextSampleBuffer() {
-//                SPLog("读取中")
-//
-//                Thread.sleep(forTimeInterval: 0.01)
-//
-//                samples.append(sample)
-//                CMSampleBufferInvalidate(sample)
-//            }
-//            sp_dispatchMainQueue {
-//                asserReader.cancelReading()
-//                SPLog("读取结束")
-//            }
-//        }
-//        while asserReader.status == AVAssetReaderStatus.reading && (videoTrack?.nominalFrameRate)! > nominalFrameRate {
-//            autoreleasepool{
-//                let videoBuffer = trackOutput.copyNextSampleBuffer()
-//
-////                var outputImage =  CIImage(cvPixelBuffer: CMSampleBufferGetImageBuffer(videoBuffer!)!)
-////                self.filter.setValue(outputImage, forKey: kCIInputImageKey)
-////                outputImage = self.filter.outputImage!
-////                 CMSampleBufferInvalidate(videoBuffer!)
-////                sp_dispatchMainQueue {
-////                    self.showImage.image = UIImage(ciImage: outputImage)
-////                }
-//
-//            }
-//        }
-      
-    }
-    
     deinit {
         
     }
 }
 // MARK: -- action
 extension SPVideoEditVC {
-    
     func  playVideo(videoModel:SPVideoModel){
-         let videoPalyVC = SPVideoPlayVC()
+        let videoPalyVC = SPVideoPlayVC()
         videoPalyVC.videoModel = videoModel
         self.navigationController?.pushViewController(videoPalyVC, animated: true)
     }

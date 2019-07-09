@@ -97,7 +97,12 @@ class SPVideoHelp: NSObject {
         exporter.exportAsynchronously(completionHandler: {
              complete(AVAsset(url: URL(fileURLWithPath: outputPath)),outputPath)
         })
-        
+    }
+    class func sp_videoAsset(asset : AVAsset,audioAsset:AVAsset,outPath : String,complete : ExportSuccess)->Void{
+        let compostion = AVMutableComposition()
+        let videoTrack = compostion.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: CMPersistentTrackID())
+        let videoAsset = asset.tracks(withMediaType: .video).first
+       
     }
     /**< 根据assesst和time 获取对应的图片 */
     class func thumbnailImageTo(assesst: AVAsset,time : CMTime) -> UIImage?{
@@ -220,38 +225,44 @@ class SPVideoHelp: NSObject {
     ///
     /// - Parameter asset: 视频
     /// - Returns: 视频流数据
-    class func sp_getVideoBuffer(asset : AVAsset?) ->[CMSampleBuffer]?{
+    class func sp_getVideoBuffer(asset : AVAsset?) ->(videoBuffers : [CMSampleBuffer]?,audioBuffers : [CMSampleBuffer]?){
         guard let videoAsset = asset else {
-            return nil
+            return (nil,nil)
         }
         let asserReader = try! AVAssetReader(asset: videoAsset)
         let videoTrack = videoAsset.tracks(withMediaType: AVMediaType.video).first
         let audioTrack = videoAsset.tracks(withMediaType: AVMediaType.audio).first
         if videoTrack == nil {
-            return nil
+            return (nil, nil)
         }
         let outputSettings :[String:Any] =  [kCVPixelBufferPixelFormatTypeKey as String : Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
         let trackOutput = AVAssetReaderTrackOutput(track: videoTrack!, outputSettings: outputSettings)
          asserReader.add(trackOutput)
-        
-//        if let audio = audioTrack {
-//            let audioOutput = AVAssetReaderTrackOutput(track: audio, outputSettings: nil)
-//            if asserReader.canAdd(audioOutput){
-//                asserReader.add(audioOutput)
-//            }
-//
-//
-//        }
+        var audioOutput : AVAssetReaderTrackOutput?
+        if let audio = audioTrack {
+            audioOutput = AVAssetReaderTrackOutput(track: audio, outputSettings: nil)
+            if asserReader.canAdd(audioOutput!){
+                asserReader.add(audioOutput!)
+            }
+        }
         asserReader.startReading()
+        var audioSamples : [CMSampleBuffer] = []
+        if let audioTrackOutput = audioOutput {
+            while let audioSample = audioTrackOutput.copyNextSampleBuffer(){
+                SPLog("读取音频中")
+                audioSamples.append(audioSample)
+            }
+        }
+        
         var samples: [CMSampleBuffer] = []
         while let sample = trackOutput.copyNextSampleBuffer() {
-            SPLog("读取中")
+            SPLog("读取视频中")
             samples.append(sample)
 //            CMSampleBufferInvalidate(sample)
         }
         SPLog("读取结束")
         asserReader.cancelReading()
-        return samples
+        return (samples,audioSamples)
     }
     private class func sp_dealVideoUnpend(asset:AVAsset?,url : String,complete : ExportSuccess? = nil){
         guard let block = complete else {
@@ -272,7 +283,9 @@ class SPVideoHelp: NSObject {
             return
         }
         sp_dispatchAsync {
-            let samples = sp_getVideoBuffer(asset: videoAsset)
+            let data = sp_getVideoBuffer(asset: videoAsset)
+            let samples = data.videoBuffers
+//            let audioSamples = data.audioBuffers
             if sp_getArrayCount(array: samples) > 0 {
                 let  filePath : String = "\(SPVideoHelp.kVideoTempDirectory)/temp.mp4"
                 FileManager.sp_directory(createPath: SPVideoHelp.kVideoTempDirectory)
@@ -304,20 +317,24 @@ class SPVideoHelp: NSObject {
                     videoWriterInput.transform = videoTrack!.preferredTransform
                     let videoWriterPixelbufferInput = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoWriterInput, sourcePixelBufferAttributes: nil)
                     assetWriter.add(videoWriterInput)
-//                    let audioWriterInput = AVAssetWriterInput(mediaType: AVMediaType.audio, outputSettings: [
+//                    [
 //                        AVFormatIDKey: NSNumber(value: kAudioFormatMPEG4AAC),
 //                        AVNumberOfChannelsKey: 1 as AnyObject,
 //                        AVSampleRateKey: 22050 as AnyObject
-//                        ])
-//                    if assetWriter.canAdd(audioWriterInput){
-//                        assetWriter.add(audioWriterInput)
+//                    ]
+//                    let audioWriterInput = AVAssetWriterInput(mediaType: AVMediaType.audio, outputSettings:nil)
+//                    if sp_getArrayCount(array: audioSamples) > 0 {
+//                        if assetWriter.canAdd(audioWriterInput){
+//                            assetWriter.add(audioWriterInput)
+//                        }
 //                    }
-//
-
                     assetWriter.startWriting()
-                
+                    
                     let startTime = CMSampleBufferGetPresentationTimeStamp(samples!.first!)
                     assetWriter.startSession(atSourceTime: startTime)
+                    let group = DispatchGroup()
+                
+                    group.enter()
                     SPLog("开始转换 倒放")
                     for i in 0..<sp_getArrayCount(array: samples){
                         if let samplesBuffer = samples?[i] {
@@ -325,23 +342,26 @@ class SPVideoHelp: NSObject {
                             let dataBuffer = samples?[sp_getArrayCount(array: samples) - i - 1]
                            
                             if  let imageBufferRef = CMSampleBufferGetImageBuffer(dataBuffer!){
-                                while !videoWriterInput.isReadyForMoreMediaData {
+                                while !videoWriterInput.isReadyForMoreMediaData{
                                     Thread.sleep(forTimeInterval: 0.1)
                                 }
                                 videoWriterPixelbufferInput.append(imageBufferRef, withPresentationTime: time)
-                            }else{
-                                SPLog("转换失败")
                             }
                         }
                     }
                     SPLog("结束转换 倒放")
-                    videoWriterInput.markAsFinished()
-//                    audioWriterInput.markAsFinished()
-                    assetWriter.finishWriting {
-                        let newAssert = AVAsset(url: URL(fileURLWithPath: filePath))
-                        SPLog("视频倒放转换成功 \(newAssert)")
-                        sp_dealVideoUnpend(asset: newAssert, url: filePath, complete: complete)
-                    }
+                    group.leave()
+                   
+                    group.notify(queue: .main, execute: {
+                        videoWriterInput.markAsFinished()
+                        //                    audioWriterInput.markAsFinished()
+                        assetWriter.finishWriting {
+                            let newAssert = AVAsset(url: URL(fileURLWithPath: filePath))
+                            SPLog("视频倒放转换成功 \(newAssert)")
+                            sp_dealVideoUnpend(asset: newAssert, url: filePath, complete: complete)
+                        }
+                    })
+                   
                 }else{
                     sp_dealVideoUnpend(asset: nil, url: "", complete: complete)
                 }

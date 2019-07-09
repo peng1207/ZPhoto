@@ -14,10 +14,20 @@ import Photos
 class SPVideoUpendVC: SPBaseVC {
     
     var videoModel : SPVideoModel?
-    lazy var videoPlayView : SPVideoPlayView = {
+    fileprivate lazy var videoPlayView : SPVideoPlayView = {
         let playView = SPVideoPlayView()
         playView.isHidden = true
         return playView
+    }()
+    fileprivate lazy var saveBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.setTitle(SPLanguageChange.sp_getString(key: "SAVE"), for: UIControlState.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.isHidden = true
+        btn.frame = CGRect(x: 0, y: 0, width: 50, height: 40)
+        btn.addTarget(self, action: #selector(sp_clickSave), for: UIControlEvents.touchUpInside)
+        return btn
     }()
     
     override func viewDidLoad() {
@@ -41,6 +51,7 @@ class SPVideoUpendVC: SPBaseVC {
     /// 创建UI
     override func sp_setupUI() {
         self.view.addSubview(self.videoPlayView)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.saveBtn)
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -65,14 +76,29 @@ extension SPVideoUpendVC {
         }
     }
     fileprivate func sp_dealSuccess(asset : AVAsset?,url : String){
-        if let newAsset = asset {
+        if asset != nil {
+            self.saveBtn.isHidden = false
             let model = SPVideoModel()
-            model.asset = newAsset
+            model.url = URL(fileURLWithPath: url)
             self.videoPlayView.isHidden = false
             self.videoPlayView.videoModel = model
         }else{
             self.videoPlayView.isHidden = true
+            self.saveBtn.isHidden = true
         }
+    }
+    @objc fileprivate func sp_clickSave(){
+        let alertVC = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "SAVE_VIDEO_MSG"), preferredStyle: UIAlertControllerStyle.alert)
+        alertVC.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "SAVE"), style: UIAlertActionStyle.default, handler: { [weak self](action) in
+            let path = sp_getString(string: self?.videoPlayView.videoModel?.url?.path)
+            if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(path){
+                UISaveVideoAtPathToSavedPhotosAlbum(path, nil, nil, nil)
+            }
+        }))
+        alertVC.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: { (action) in
+            
+        }))
+        self.present(alertVC, animated: true, completion: nil)
     }
     
 }

@@ -14,7 +14,6 @@ import AVFoundation
 // 按钮点击事件回调
 typealias ButtonClickBlock =  (_ clickType:ButtonClickType,_ button:UIButton) ->Void
 
-
 class SPRecordVideoVC: SPBaseNavVC {
     
     internal init() {

@@ -41,7 +41,7 @@ class SPPhotoSplicingHelp {
                                        height:CGFloat)->CGRect{
         var frame = CGRect.zero
         switch type {
-        case .one:
+        case .one , .two:
             let w = width / 3.0
             let h = height / 3.0
             frame = CGRect(x: CGFloat(index % 3) * w, y:  CGFloat(index / 3) * h, width: w, height: h)
@@ -66,14 +66,84 @@ class SPPhotoSplicingHelp {
                                 type:SPSPlicingType,
                                 margin : CGFloat = 4,
                                 padding : CGFloat = 2)->(left : CGFloat , right : CGFloat , top : CGFloat , bottom : CGFloat){
-        
-        return (0,0,0,0)
+        var borderSpace : (CGFloat,CGFloat,CGFloat,CGFloat) = (0.00,0.00,0.00,0.00)
+        switch type {
+        case .nine(let t):
+            borderSpace = sp_nineBorderSpacing(index: index, count: count, type: t, margin: margin, padding: padding )
+        default:
+            SPLog("没有其他")
+        }
+        return borderSpace
     }
+    private class func sp_nineBorderSpacing(index : Int,
+                                            count : Int,
+                                            type:SPSPlicingType.NineType,
+                                            margin : CGFloat = 4,
+                                            padding : CGFloat = 2)->(left : CGFloat , right : CGFloat , top : CGFloat , bottom : CGFloat){
+        var left : CGFloat = 0
+        var top : CGFloat = 0
+        var right : CGFloat = 0
+        var bottom : CGFloat = 0
+        
+        switch type {
+        case .one , .two:
+            // 余数
+            let remainder = index % 3
+            // 除数
+            let divisor = index / 3
+            if divisor == 0 {
+                left = margin
+                top = margin
+            }else if divisor == 1 {
+                left = margin
+                top = padding
+                bottom = padding
+            }else if divisor == 2 {
+                left = margin
+                bottom = margin
+            }
+            
+            if remainder == 0 {
+                
+            }else if remainder == 1 {
+                if divisor == 0 {
+                    left = padding
+                    right = padding
+                }else if divisor == 1 {
+                    left = padding
+                    right = padding
+                    top = padding
+                    bottom = padding
+                }else if divisor == 2 {
+                    left = padding
+                    right = padding
+                }
+                
+            }else if remainder == 2 {
+                if divisor == 0 {
+                    left = 0
+                    right = margin
+                }else if divisor == 1 {
+                    left = 0
+                    right = margin
+                    top = padding
+                    bottom = padding
+                }else if divisor == 2 {
+                    left = 0
+                    right = margin
+                }
+            }
+        default:
+            SPLog("没有其他")
+        }
+        
+        return (left,right,top,bottom)
+    }
+    
     /// 获取背景颜色
     ///
     /// - Returns: 背景颜色数组
     class func sp_getDefaultColor()->[UIColor]{
-        
         return [ sp_getMianColor(),
                  SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue),
                  SPColorForHexString(hex: SP_HexColor.color_ff3300.rawValue)]
@@ -94,6 +164,29 @@ class SPPhotoSplicingHelp {
     class func sp_getLayoutType(index : Int,
                                 count : Int,
                                 type:SPSPlicingType) -> SPPictureLayoutType{
-        return .rectangle
+        var layoutType : SPPictureLayoutType = .rectangle
+        switch type {
+        case .nine(let t):
+            layoutType = sp_nineLayoutType(index: index, count: count, type: t)
+        default:
+            SPLog("没有其他")
+        }
+        return layoutType
     }
+    private class func sp_nineLayoutType(index : Int,
+                                         count : Int,
+                                         type:SPSPlicingType.NineType) -> SPPictureLayoutType{
+        var layoutType : SPPictureLayoutType = .rectangle
+        switch type {
+        case .one:
+            layoutType = .rectangle
+        case .two:
+            layoutType = .heart
+        default:
+            SPLog("没有其他")
+        }
+        
+        return layoutType
+    }
+    
 }

@@ -463,7 +463,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 if output == self.videoOutput {
                     self.isFirstVideo = true
                     // 写入图像
-                    let newPixelbuffer = self.pixelBuffer(fromImage:   UIImage.convertCIImageToCGImage(ciImage: outputImage!),pixelBufferPool: self.videoWriterPixelbufferInput?.pixelBufferPool)
+                    let newPixelbuffer = UIImage.sp_pixelBuffer(fromImage: UIImage.convertCIImageToCGImage(ciImage: outputImage!), pixelBufferPool: self.videoWriterPixelbufferInput?.pixelBufferPool,pixelFormatType: sp_getCVPixelFormatType())
                     self.writerVideo(toPixelBuffer: newPixelbuffer, time: currentSampleTime)
                 }
                 // 必须第一帧为视频流后才能加入音频
@@ -500,52 +500,6 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             }
         }
     }
-    
-    /**< 将 CGImage 转成CVPixelBuffer */
-    fileprivate func pixelBuffer(fromImage image:CGImage,pixelBufferPool:CVPixelBufferPool?) -> CVPixelBuffer?{
-        let cfnumPointer = UnsafeMutablePointer<UnsafeRawPointer>.allocate(capacity: 1)
-        let cfnum = CFNumberCreate(kCFAllocatorDefault, .intType, cfnumPointer)
-        let keys: [CFString] = [kCVPixelBufferCGImageCompatibilityKey, kCVPixelBufferCGBitmapContextCompatibilityKey, kCVPixelBufferBytesPerRowAlignmentKey]
-        let values: [CFTypeRef] = [kCFBooleanTrue, kCFBooleanTrue, cfnum!]
-        let keysPointer = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: 1)
-        let valuesPointer =  UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: 1)
-        keysPointer.initialize(to: keys)
-        valuesPointer.initialize(to: values)
-        
-        let options = CFDictionaryCreate(kCFAllocatorDefault, keysPointer, valuesPointer, keys.count, nil, nil)
-        
-         let size = screenPixels()
-        let width = size.width
-        let height = size.height
-        var pxbuffer: CVPixelBuffer?
-        // if pxbuffer = nil, you will get status = -6661
-        var status = CVPixelBufferCreate(kCFAllocatorDefault, Int(width), Int(height),
-                                         sp_getCVPixelFormatType(), options, &pxbuffer)
-       
-        status = CVPixelBufferLockBaseAddress(pxbuffer!, CVPixelBufferLockFlags(rawValue: 0));
-        
-        let bufferAddress = CVPixelBufferGetBaseAddress(pxbuffer!);
-        
-        let rgbColorSpace = CGColorSpaceCreateDeviceRGB();
-        let bytesperrow = CVPixelBufferGetBytesPerRow(pxbuffer!)
-        let context = CGContext(data: bufferAddress,
-                                width: Int(width),
-                                height: Int(height),
-                                bitsPerComponent: 8,
-                                bytesPerRow: bytesperrow,
-                                space: rgbColorSpace,
-                                bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue);
-        // 放大
-        //        context?.concatenate(CGAffineTransform(rotationAngle: 360))
-        //        context?.concatenate(__CGAffineTransformMake( 1, 0, 0, -1, 0, CGFloat(height) )) //Flip Vertical
-//        context?.clear(CGRect(x: 0, y: 0, width: CGFloat(width), height: CGFloat(height)))
-       
-        context?.draw(image, in: CGRect(x:0, y:0, width:width, height: height));
-        status = CVPixelBufferUnlockBaseAddress(pxbuffer!, CVPixelBufferLockFlags(rawValue: 0));
-        return pxbuffer!;
-    }
-    
-    
     /**< 点击取消  */
     func sp_cance(){
         if let  assetWriter = assetWriter{
