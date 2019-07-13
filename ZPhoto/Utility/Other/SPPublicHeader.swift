@@ -311,7 +311,7 @@ func sp_shareImg(imgs : [UIImage]?,vc : UIViewController?){
 /// - Parameters:
 ///   - videoUrls: 视频文件路径
 ///   - vc: 当前控制器
-func sp_shareVideo(videoUrls : [String]?,vc : UIViewController?){
+func sp_shareVideo(videoUrls : [URL]?,vc : UIViewController?){
     guard let currentVC = vc else {
         return
     }
@@ -323,7 +323,25 @@ func sp_shareVideo(videoUrls : [String]?,vc : UIViewController?){
     if (popover != nil) {
         popover?.permittedArrowDirections = .up
     }
+    currentVC.present(activityVC, animated: true, completion: nil)
+}
+/// 分享其他数据
+///
+/// - Parameters:
+///   - shareData: 分享数据
+///   - vc: 当前控制器
+func sp_shareOther(shareData:[Any]?,vc : UIViewController?){
+    guard let currentVC = vc else {
+        return
+    }
+    guard let shareList = shareData else {
+        return
+    }
+    let activityVC = UIActivityViewController(activityItems: shareList, applicationActivities: nil)
+    let popover = activityVC.popoverPresentationController
+    if (popover != nil) {
+        popover?.permittedArrowDirections = .up
+    }
     
     currentVC.present(activityVC, animated: true, completion: nil)
 }
-

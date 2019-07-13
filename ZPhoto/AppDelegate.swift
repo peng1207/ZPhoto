@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            SPLog("滤镜名称----\(fileterName)")
 //            SPLog(filter?.attributes)
 //        }
-//        SPLog(sp_limitUp(current: 11.00, count: 5))
+//        SPLog(sp_limitUp(current: 12.00, count: 5))
         // Override point for customization after application launch.
         return true
     }

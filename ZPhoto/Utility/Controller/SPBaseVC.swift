@@ -9,6 +9,9 @@
 import Foundation
 import UIKit
 class SPBaseVC : UIViewController{
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+        return .lightContent
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupBase()

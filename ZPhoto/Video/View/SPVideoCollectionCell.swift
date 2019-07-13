@@ -30,13 +30,20 @@ class SPVideoCollectionCell : UICollectionViewCell{
         button.setTitleColor(UIColor.red, for: UIControlState.normal)
         return button
     }()
+    fileprivate lazy var shareBtn : UIButton = {
+        let btn = UIButton(type: UIButtonType.custom)
+        btn.backgroundColor = UIColor.lightText.withAlphaComponent(0.4)
+        btn.setImage(UIImage(named: "share"), for: UIControlState.normal)
+        btn.addTarget(self, action: #selector(sp_clickShare), for: UIControlEvents.touchUpInside)
+        return btn
+    }()
     var videoModel : SPVideoModel!{
         didSet{
             videoImageView.image = videoModel.thumbnailImage
         }
     }
     var clickComplete : ((_ videoModel : SPVideoModel?) -> Void)?
-    
+    var shareComplete : ((_ videoModel : SPVideoModel?) -> Void)?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setupUI()
@@ -53,13 +60,20 @@ extension SPVideoCollectionCell{
     fileprivate func setupUI(){
         self.contentView.addSubview(videoImageView)
         self.contentView.addSubview(deleteBtn)
+        self.contentView.addSubview(self.shareBtn)
         self.contentView.addSubview(playImageView)
+        
         videoImageView.snp.makeConstraints { (maker) in
             maker.top.right.left.bottom.equalTo(self.contentView).offset(0)
         }
         deleteBtn.snp.makeConstraints { (maker) in
             maker.top.equalTo(self.contentView).offset(5)
             maker.right.equalTo(self.contentView).offset(-5)
+            maker.size.equalTo(CGSize(width: 30, height: 30))
+        }
+        shareBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.contentView).offset(5)
+            maker.top.equalTo(self.contentView).offset(5)
             maker.size.equalTo(CGSize(width: 30, height: 30))
         }
         playImageView.snp.makeConstraints { (maker) in
@@ -73,6 +87,12 @@ extension SPVideoCollectionCell{
 extension SPVideoCollectionCell{
     fileprivate func addAction(){
         deleteBtn.addTarget(self, action: #selector(buttonClick), for: UIControlEvents.touchUpInside)
+    }
+    @objc fileprivate func sp_clickShare(){
+        guard let block = self.shareComplete else {
+            return
+        }
+        block(videoModel)
     }
     
     @objc  fileprivate func buttonClick(){

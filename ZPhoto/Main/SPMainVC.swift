@@ -47,15 +47,21 @@ class SPMainVC: SPBaseVC {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+       
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+     
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+    }
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+        return .default
     }
     /// 创建UI
     override func sp_setupUI() {
@@ -103,6 +109,7 @@ extension SPMainVC {
     @objc fileprivate func sp_clickSet(){
 //        let tempVC  = SPTmpVC()
 //        self.present(tempVC, animated: true, completion: nil)
-        
+        let setNavVC = SPBaseNavVC(rootViewController: SPSetVC())
+        self.present(setNavVC, animated: true, completion: nil)
     }
 }

@@ -29,6 +29,13 @@ class SPBaseNavVC: UINavigationController {
     @objc fileprivate func sp_clickBackAction(){
         self.popViewController(animated: true)
     }
+    /// UINavigationController
+    override var childViewControllerForStatusBarStyle: UIViewController? {
+        return self.topViewController
+    }
+    override var childViewControllerForStatusBarHidden: UIViewController? {
+        return self.topViewController
+    }
 }
 
 extension UINavigationController{

@@ -117,6 +117,15 @@ extension SPVideoListVC {
         }))
         self.present(alert, animated: true, completion: nil)
     }
+    fileprivate func sp_clickShare(videoModel:SPVideoModel?){
+        guard let model = videoModel else {
+            return
+        }
+        if let url = model.url {
+              sp_shareVideo(videoUrls: [url], vc: self)
+        }
+        
+    }
     /*
      处理没有数据的
      */
@@ -149,6 +158,9 @@ extension SPVideoListVC : UICollectionViewDelegate,UICollectionViewDataSource {
         cell.clickComplete = {
             [unowned self]  (videoModel:SPVideoModel?) in
             self.clickDetete(videoModel: videoModel)
+        }
+        cell.shareComplete = { [weak self] (videoModel:SPVideoModel?) in
+            self?.sp_clickShare(videoModel: videoModel)
         }
         return cell
     }

@@ -91,14 +91,11 @@ class SPPhotoSplicingVC: SPBaseVC {
         }
         var index = 0
         for model in self.dataArray {
-            let frame = SPPhotoSplicingHelp.sp_getFrame(index: index, count: self.dataArray.count, type: self.selectType, width: sp_getScreenWidth(), height: sp_getScreenWidth())
+            let value = SPPhotoSplicingHelp.sp_frameAndSpace(tyep: self.selectType, value: SPPhotoSplicingStruct(index: index, count: self.dataArray.count, width: sp_getScreenWidth(), height: sp_getScreenWidth(), margin: marginSpace, padding: paddingSpace))
+            let frame = value.frame
+            let space : SPSpace = value.space
             let view = SPCustomPictureView(frame:frame)
-            let space : (left : CGFloat , right : CGFloat , top : CGFloat , bottom : CGFloat) = SPPhotoSplicingHelp.sp_borderSpacing(index: index, count: self.dataArray.count, type: self.selectType, margin: marginSpace, padding: paddingSpace)
-            let left : CGFloat = space.left
-            let top : CGFloat = space.top
-            let right : CGFloat = space.right
-            let bottom : CGFloat = space.bottom
-            view.sp_update(left: left, top: top, right: right, bottom: bottom)
+            view.sp_update(space: space)
             view.sp_update(img: model.img)
             view.layoutType = SPPhotoSplicingHelp.sp_getLayoutType(index: index, count: self.dataArray.count, type: self.selectType)
             view.sp_drawMaskLayer()
