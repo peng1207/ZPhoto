@@ -179,6 +179,26 @@ class SPPhotoSplicingNine {
                 y = height - h
             }
             frame = CGRect(x: x, y: y, width: w, height: h)
+        case .nine:
+            var w : CGFloat = width / 3.0
+            let h : CGFloat = height / 4.0
+            var x : CGFloat = 0
+            var y : CGFloat = 0
+            if index < 3 {
+                x = CGFloat(index) * w
+            }else {
+                w = width / 2.0
+                x = w * CGFloat((index - 1) % 2 )
+                y = h * CGFloat((index - 1) / 2)
+            }
+            frame = CGRect(x: x, y: y, width: w, height: h)
+        case .ten:
+            var w : CGFloat = width / 2.0
+            var h : CGFloat = height / 4.0
+            var x : CGFloat = 0
+            var y : CGFloat = 0
+            frame = CGRect(x: x, y: y, width: w, height: h)
+            
         default:
             SPLog("没有其他")
         }
@@ -429,6 +449,29 @@ class SPPhotoSplicingNine {
                 left = padding
                 right = margin
                 bottom = margin
+            }
+        case .nine:
+            if index < 3 {
+                top = margin
+                if index == 0 {
+                    left = margin
+                }else if index == 1 {
+                    left = padding
+                    right = padding
+                }else if index == 2 {
+                    right = margin
+                }
+            }else {
+                if (index - 1) % 2 == 0 {
+                    left = margin
+                }else {
+                    left = padding
+                    right = margin
+                }
+                top = padding
+                if index == 7 || index == 8{
+                    bottom = margin
+                }
             }
         default:
             SPLog("没有其他")

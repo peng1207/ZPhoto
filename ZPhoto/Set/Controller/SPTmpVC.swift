@@ -480,7 +480,7 @@ extension SPTmpVC{
             maker.left.right.height.equalTo(road13).offset(0)
             maker.centerY.equalTo(tung5.snp.centerY).offset(0)
         }
-        self.baseView.bringSubview(toFront: maLuLabel)
+        self.baseView.bringSubviewToFront(maLuLabel)
         
         let sport1 = sp_getLabel(text: "篮球、羽毛球 1")
         sport1.backgroundColor = UIColor.purple
@@ -940,7 +940,7 @@ extension SPTmpVC{
                 }
             }
         }
-        self.baseView1.sendSubview(toBack: greenView)
+        self.baseView1.sendSubviewToBack(greenView)
     }
     /// 创建路  0 参照位置上方 1 参照位置右 2 参照位置下 3 参照位置
     ///
@@ -973,7 +973,7 @@ extension SPTmpVC{
                 }
             }
         }
-         self.baseView1.sendSubview(toBack: view)
+        self.baseView1.sendSubviewToBack(view)
     }
     //MARK: - office
     fileprivate func sp_setupOfficeSubView(){
@@ -1147,7 +1147,7 @@ extension SPTmpVC{
         {
             UIAlertController.init(title: nil,
                                    message: "保存成功！",
-                                   preferredStyle: UIAlertControllerStyle.alert).show(self, sender: nil);
+                                   preferredStyle: UIAlertController.Style.alert).show(self, sender: nil);
         }
     }
 }

@@ -14,7 +14,7 @@ class SPSysSet {
     class func  openSetting (){
         //打开设置界面
     
-        if let url = URL(string: UIApplicationOpenSettingsURLString){
+        if let url = URL(string: UIApplication.openSettingsURLString){
             if (UIApplication.shared.canOpenURL(url)){
                 UIApplication.shared.openURL(url)
             }

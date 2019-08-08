@@ -174,7 +174,7 @@ extension SPRecordVideoRootVC {
         self.view.addGestureRecognizer(pinchGesture)
     }
     @objc fileprivate func pinchAction(sender : UIPinchGestureRecognizer) {
-        if sender.state == UIGestureRecognizerState.ended {
+        if sender.state == UIGestureRecognizer.State.ended {
             lastScale = 1.0
             return
         }
@@ -282,11 +282,11 @@ extension SPRecordVideoRootVC {
      处理没有摄像头权限的事件
      */
     fileprivate func dealNOCameraAuthAction(){
-        let alert = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "NO_CAMERA_AUTH_TIPS"), preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: {(action ) in
+        let alert = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "NO_CAMERA_AUTH_TIPS"), preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel, handler: {(action ) in
             self.disMissVC()
         }))
-        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "GO_TO_SET"), style: UIAlertActionStyle.default, handler: { (action) in
+        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "GO_TO_SET"), style: UIAlertAction.Style.default, handler: { (action) in
             SPSysSet.openSetting()
              self.disMissVC()
         }))
@@ -296,9 +296,9 @@ extension SPRecordVideoRootVC {
      处理没有麦克风的事件
      */
     fileprivate func dealNOMicrophoneAuthAction(){
-        let alert = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "NO_MICROPHONE_AUTH_TIPS"), preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "GO_TO_SET"), style: UIAlertActionStyle.default, handler: { (action) in
+        let alert = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "NO_MICROPHONE_AUTH_TIPS"), preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "GO_TO_SET"), style: UIAlertAction.Style.default, handler: { (action) in
             SPSysSet.openSetting()
         }))
         self.present(alert, animated: true, completion: nil)
@@ -352,11 +352,11 @@ class SPRecordVideoBtnView: UIView {
         button.titleLabel?.font = sp_fontSize(fontSize: fontsize)
         button.setTitleColor(UIColor.black.withAlphaComponent(0.5), for: .normal)
         if let image = norImage {
-            button.setImage(image, for: UIControlState.normal)
+            button.setImage(image, for: UIControl.State.normal)
         }
         
         if let sImage = selectImage {
-            button.setImage(sImage, for: UIControlState.selected)
+            button.setImage(sImage, for: UIControl.State.selected)
         }
         
         return button

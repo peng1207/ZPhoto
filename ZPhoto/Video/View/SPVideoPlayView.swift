@@ -38,7 +38,7 @@ class SPVideoPlayView : UIView{
     }
     override init(frame: CGRect) {
         super.init(frame: frame)
-       try!AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+        try!AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
         self.setupUI()
     }
     
@@ -74,11 +74,11 @@ class SPVideoPlayView : UIView{
 extension SPVideoPlayView {
     /**< 添加事件 */
     fileprivate func addAction(){
-        buttonView?.playButton.addTarget(self, action: #selector(playAction), for: UIControlEvents.touchUpInside)
-        buttonView?.progressView.addTarget(self, action: #selector(change(silder:)), for: UIControlEvents.valueChanged)
-        buttonView?.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControlEvents.touchUpInside)
-        buttonView?.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControlEvents.touchCancel)
-         buttonView?.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControlEvents.touchUpOutside)
+        buttonView?.playButton.addTarget(self, action: #selector(playAction), for: UIControl.Event.touchUpInside)
+        buttonView?.progressView.addTarget(self, action: #selector(change(silder:)), for: UIControl.Event.valueChanged)
+        buttonView?.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControl.Event.touchUpInside)
+        buttonView?.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControl.Event.touchCancel)
+         buttonView?.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControl.Event.touchUpOutside)
     }
     /**< 播放按钮点击事件  */
     @objc fileprivate func playAction(){
@@ -105,7 +105,7 @@ extension SPVideoPlayView {
     @objc fileprivate func changeEnd(silder:UISlider){
         if (self.videoPlayer != nil) {
             let seconds  = silder.value
-            let targetTime : CMTime = CMTimeMakeWithSeconds(Float64(seconds), (self.videoPlayer?.currentTime().timescale)!)
+            let targetTime : CMTime = CMTimeMakeWithSeconds(Float64(seconds), preferredTimescale: (self.videoPlayer?.currentTime().timescale)!)
             videoPlayer?.seek(to: targetTime, completionHandler: { [weak self] (finish : Bool) in
                 if self?.videoPlayer?.rate == 0{
                     self?.videoPlayer?.play()
@@ -165,7 +165,7 @@ extension SPVideoPlayView{
 extension SPVideoPlayView {
     /**< 播放结束的通知 */
     @objc func playerDidReachEnd(){
-        videoPlayer?.seek(to: kCMTimeZero, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+        videoPlayer?.seek(to: CMTime.zero, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
         buttonView?.progressView.setValue(0, animated: true)
         buttonView?.playButton.isSelected = false
     }
@@ -175,7 +175,7 @@ extension SPVideoPlayView {
         videoPlayerItem?.addObserver(self, forKeyPath: "loadedTimeRanges", options: NSKeyValueObservingOptions.new, context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidReachEnd), name: Notification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
         self.link = CADisplayLink(target: self, selector: #selector(update))
-        self.link?.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
+        self.link?.add(to: RunLoop.main, forMode:RunLoop.Mode.default)
     }
     /**< 去除观察者 */
     func removeObserver(){
@@ -189,7 +189,7 @@ extension SPVideoPlayView {
 
 class SPVideoPlayButtonView : UIView{
     lazy var playButton : UIButton! = {
-        let button = UIButton(type: UIButtonType.custom)
+        let button = UIButton(type: UIButton.ButtonType.custom)
         button.setImage(UIImage(named: "VideoStop"), for: .normal)
         button.setImage(UIImage(named: "VideoPlay"), for: .selected)
         return button
@@ -204,7 +204,7 @@ class SPVideoPlayButtonView : UIView{
     lazy var progressView : UISlider! = {
         let progress = UISlider()
         let width = 16
-        progress.setThumbImage(UIImage.image(color: UIColor.white, imageSize: CGSize(width: width, height: width))?.circle(), for: UIControlState.normal)
+        progress.setThumbImage(UIImage.image(color: UIColor.white, imageSize: CGSize(width: width, height: width))?.circle(), for: UIControl.State.normal)
         
         return progress
     }()

@@ -37,7 +37,7 @@ class SPCameraManager : NSObject {
     var cameraAuth : Bool = false  // 有没摄像头权限
     lazy var ciContext: CIContext = {
         let eaglContext = EAGLContext(api: EAGLRenderingAPI.openGLES2)
-        let options = [kCIContextWorkingColorSpace : NSNull()]
+        let options = [CIContextOption.workingColorSpace : NSNull()]
         return CIContext(eaglContext: eaglContext!, options: options)
     }()
     /// 初始化相机
@@ -181,8 +181,8 @@ extension SPCameraManager {
     fileprivate func sp_changeCameraAnimation(){
         let animation = CATransition()
         animation.duration = 0.4
-        animation.type = "oglFlip"
-        animation.subtype = kCATransitionFromRight
+        animation.type = CATransitionType(rawValue: "oglFlip")
+        animation.subtype = CATransitionSubtype.fromRight
         videoLayer?.add(animation, forKey: "cameraAnimation")
     }
     func sp_stop(){

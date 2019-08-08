@@ -66,7 +66,7 @@ extension UIImage{
         }
          var outImg : CIImage?
        
-        let context = CIContext(options:[kCIContextUseSoftwareRenderer:true])
+        let context = CIContext(options:[CIContextOption.useSoftwareRenderer:true])
         let detector = CIDetector(ofType: CIDetectorTypeFace,
                                   context: context,
                                   options: [CIDetectorAccuracy: CIDetectorAccuracyHigh])
@@ -137,7 +137,7 @@ extension UIImage{
             let size = inputImg.size
             UIGraphicsBeginImageContext(size)
             inputImg.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-            let textAttributes = [NSAttributedStringKey.foregroundColor : textColor ,NSAttributedStringKey.font : font]
+            let textAttributes = [NSAttributedString.Key.foregroundColor : textColor ,NSAttributedString.Key.font : font]
             let textSize = NSString(string: text).size(withAttributes: textAttributes)
             let textFrame = CGRect(x: point.x, y: point.y, width: textSize.width, height: textSize.height)
             NSString(string: text).draw(in: textFrame, withAttributes: textAttributes)

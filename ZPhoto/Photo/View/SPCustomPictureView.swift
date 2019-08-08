@@ -661,7 +661,7 @@ extension SPCustomPictureView {
         transform = transform.scaledBy(x: lastScaleFactor, y: lastScaleFactor)
         imgView.transform = transform
         //状态结束，保存数据
-        if sender.state == UIGestureRecognizerState.ended{
+        if sender.state == UIGestureRecognizer.State.ended{
             netRotation += rotation
         }
         
@@ -686,7 +686,7 @@ extension SPCustomPictureView {
         transform = transform.rotated(by: netRotation)
         self.imgView.transform = transform
         //状态是否结束，如果结束保存数据
-        if sender.state == UIGestureRecognizerState.ended{
+        if sender.state == UIGestureRecognizer.State.ended{
             if factor > 1{
                 lastScaleFactor = lastScaleFactor + factor - 1
             }else{

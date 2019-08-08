@@ -10,10 +10,10 @@ import Foundation
 import SnapKit
 class SPSetVC: SPBaseVC {
     fileprivate lazy var backBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "public_back"), for: UIControlState.normal)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "public_back"), for: UIControl.State.normal)
         btn.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        btn.addTarget(self, action: #selector(sp_clickBack), for: UIControlEvents.touchUpInside)
+        btn.addTarget(self, action: #selector(sp_clickBack), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate var tableView : UITableView!
@@ -46,9 +46,10 @@ class SPSetVC: SPBaseVC {
     override func sp_setupUI() {
         self.navigationItem.title = SPLanguageChange.sp_getString(key: "SET")
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.backBtn)
-        self.tableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.plain)
+        self.tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.plain)
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        self.tableView.rowHeight = 44
 //        self.tableView.separatorStyle = .none
         self.tableView.backgroundColor = self.view.backgroundColor
         let view = UIView()
@@ -86,7 +87,7 @@ extension SPSetVC{
     /// 点击评分
     @objc fileprivate func sp_clickScore(){
         let urlString = "https://itunes.apple.com/cn/app/id1381058961?action=write-review";
-        UIApplication.shared.open(URL(string: urlString)!, options:[String : Any](), completionHandler: nil)
+        UIApplication.shared.open(URL(string: urlString)!, options:[UIApplication.OpenExternalURLOptionsKey : Any](), completionHandler: nil)
     }
 }
 

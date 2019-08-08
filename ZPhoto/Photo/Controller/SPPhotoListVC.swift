@@ -12,14 +12,14 @@ typealias SPPhotoListSelectComplete = (_ model : SPPhotoModel)->Void
 class SPPhotoListVC: SPBaseVC {
     fileprivate var collectionView : UICollectionView!
     fileprivate lazy var choiceBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle(SPLanguageChange.sp_getString(key: "CHOICE"), for: UIControlState.normal)
-        btn.setTitle(SPLanguageChange.sp_getString(key: "CANCE"), for: UIControlState.selected)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.selected)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setTitle(SPLanguageChange.sp_getString(key: "CHOICE"), for: UIControl.State.normal)
+        btn.setTitle(SPLanguageChange.sp_getString(key: "CANCE"), for: UIControl.State.selected)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.selected)
         btn.titleLabel?.font = sp_getFontSize(size: 16)
         btn.frame = CGRect(x: 0, y: 0, width: 60, height: 30)
-        btn.addTarget(self, action: #selector(sp_clickChoise), for: UIControlEvents.touchUpInside)
+        btn.addTarget(self, action: #selector(sp_clickChoise), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate lazy var editView : SPPhotoListEditView = {
@@ -152,8 +152,8 @@ extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,U
                             self.selectArray.append(m)
                             self.collectionView.reloadData()
                         }else{
-                            let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: "\(SPLanguageChange.sp_getString(key: "MAXSELECT"))\(sp_getString(string: self.selectMaxCount))", preferredStyle: UIAlertControllerStyle.alert)
-                            alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: { (action) in
+                            let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: "\(SPLanguageChange.sp_getString(key: "MAXSELECT"))\(sp_getString(string: self.selectMaxCount))", preferredStyle: UIAlertController.Style.alert)
+                            alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel, handler: { (action) in
                                 
                             }))
                             self.present(alertController, animated: true, completion: nil)
@@ -233,11 +233,11 @@ extension SPPhotoListVC {
     }
     /// 点击删除
     @objc fileprivate func sp_clickDelete(){
-        let actionSheet = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
-        let deleteAction = UIAlertAction(title:  SPLanguageChange.sp_getString(key: "DELETE"), style: UIAlertActionStyle.default, handler: { [weak self](action) in
+        let actionSheet = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+        let deleteAction = UIAlertAction(title:  SPLanguageChange.sp_getString(key: "DELETE"), style: UIAlertAction.Style.default, handler: { [weak self](action) in
             self?.sp_dealFileDelete()
         })
-        let canceAction = UIAlertAction(title:  SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertActionStyle.cancel) { (action) in
+        let canceAction = UIAlertAction(title:  SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel) { (action) in
             
         }
         deleteAction.setValue(SPColorForHexString(hex: SP_HexColor.color_ff3300.rawValue), forKey: "_titleTextColor")
@@ -288,7 +288,7 @@ extension SPPhotoListVC {
         
         path.addQuadCurve(to: CGPoint(x: sp_getScreenWidth() - 10 - 15, y: self.editView.frame.origin.y + 15), controlPoint: curvePoint)
         position.path = path.cgPath
-        position.rotationMode = kCAAnimationRotateAuto
+        position.rotationMode = CAAnimationRotationMode.rotateAuto
         
         groupAnimation.animations = [scaleAnimation,position]
         

@@ -79,7 +79,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     ]
     lazy var ciContext: CIContext = {
         let eaglContext = EAGLContext(api: EAGLRenderingAPI.openGLES2)
-        let options = [kCIContextWorkingColorSpace : NSNull()]
+        let options = [CIContextOption.workingColorSpace : NSNull()]
         return CIContext(eaglContext: eaglContext!, options: options)
     }()
     override init() {
@@ -153,8 +153,8 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
      
         
         self.changeDeviceProperty {
-            self.currentDevice?.activeVideoMinFrameDuration = CMTimeMake(1, 15)
-            self.currentDevice?.activeVideoMaxFrameDuration = CMTimeMake(1, 15)
+            self.currentDevice?.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: 15)
+            self.currentDevice?.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: 15)
         }
         let needAdd : Bool = self.captureSession.outputs.count > 0 ? false : true
         
@@ -238,9 +238,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             
             var videoFormat : CMFormatDescription? = nil
             if #available(iOS 11.0, *) {
-                 CMVideoFormatDescriptionCreate(kCFAllocatorDefault, kCMVideoCodecType_HEVC, Int32(size.width), Int32(size.height), nil, &videoFormat)
+                CMVideoFormatDescriptionCreate(allocator: kCFAllocatorDefault, codecType: kCMVideoCodecType_HEVC, width: Int32(size.width), height: Int32(size.height), extensions: nil, formatDescriptionOut: &videoFormat)
             }else{
-                CMVideoFormatDescriptionCreate(kCFAllocatorDefault, kCMVideoCodecType_H264, Int32(size.width), Int32(size.height), nil, &videoFormat)
+                CMVideoFormatDescriptionCreate(allocator: kCFAllocatorDefault, codecType: kCMVideoCodecType_H264, width: Int32(size.width), height: Int32(size.height), extensions: nil, formatDescriptionOut: &videoFormat)
             }
            
             videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoOutputSettings)
@@ -315,8 +315,8 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         let changeAnimate = CATransition()
         changeAnimate.delegate = self
         changeAnimate.duration = 0.4
-        changeAnimate.type = "oglFlip"
-        changeAnimate.subtype = kCATransitionFromRight
+        changeAnimate.type = CATransitionType(rawValue: "oglFlip")
+        changeAnimate.subtype = CATransitionSubtype.fromRight
         videoLayer?.add(changeAnimate, forKey: "changeAnimate")
     }
     func animationDidStart(_ anim: CAAnimation) {
@@ -452,7 +452,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
                 self.noFilterCIImage = CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
                 // 执行判断人脸 然后增加头像上去
-                outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg: UIImage(named: "filter"))
+//                outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg: UIImage(named: "filter"))
                 if self.filter != nil {
                     self.filter?.setValue(outputImage!, forKey: kCIInputImageKey)
                     outputImage = self.filter?.outputImage

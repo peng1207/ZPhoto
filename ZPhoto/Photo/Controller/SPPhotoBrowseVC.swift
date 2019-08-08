@@ -11,11 +11,11 @@ import SnapKit
 class SPPhotoBrowseVC: SPBaseVC {
      fileprivate var collectionView : UICollectionView!
     fileprivate lazy var editBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle("编辑", for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setTitle("编辑", for: UIControl.State.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.normal)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
-        btn.addTarget(self, action: #selector(sp_clickEdit), for: UIControlEvents.touchUpInside)
+        btn.addTarget(self, action: #selector(sp_clickEdit), for: UIControl.Event.touchUpInside)
         btn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
         return btn
     }()
@@ -53,7 +53,7 @@ class SPPhotoBrowseVC: SPBaseVC {
                 }
                 if index < sp_getArrayCount(array: self.dataArray) {
                     sp_after(time: 0.1) {
-                        self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: UICollectionViewScrollPosition.right, animated: false)
+                        self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: UICollectionView.ScrollPosition.right, animated: false)
                     }
                 }
             }

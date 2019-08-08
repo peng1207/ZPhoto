@@ -38,16 +38,16 @@ class SPVideoVC: SPBaseNavVC {
 
 fileprivate class SPVideoRootVC: SPBaseVC {
     fileprivate lazy var backBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "public_back"), for: UIControlState.normal)
-        btn.addTarget(self, action: #selector(sp_clickBack), for: UIControlEvents.touchUpInside)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "public_back"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_clickBack), for: UIControl.Event.touchUpInside)
         btn.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         return btn
     }()
     fileprivate lazy var recordBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-         btn.setImage(UIImage(named: "add_white"), for: UIControlState.normal)
-        btn.addTarget(self, action: #selector(sp_clickRecord), for: UIControlEvents.touchUpInside)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+         btn.setImage(UIImage(named: "add_white"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_clickRecord), for: UIControl.Event.touchUpInside)
         btn.backgroundColor = sp_getMianColor()
         btn.sp_cornerRadius(cornerRadius: 40)
         return btn

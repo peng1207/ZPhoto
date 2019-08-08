@@ -63,7 +63,7 @@ class SPPhotoSplicingHelp {
     /// - Returns: 布局
     class func sp_getSplicingLayout(count : Int) ->[SPSPlicingType]{
         if count == 9 {
-            return [.nine(nineType: .eight),.nine(nineType: .two),.nine(nineType: .three),.nine(nineType: .four),.nine(nineType: .five),.nine(nineType: .six),.nine(nineType: .seven),.nine(nineType: .eight),.nine(nineType: .nine),.nine(nineType: .ten),.nine(nineType: .eleven)]
+            return [.nine(nineType: .nine),.nine(nineType: .two),.nine(nineType: .three),.nine(nineType: .four),.nine(nineType: .five),.nine(nineType: .six),.nine(nineType: .seven),.nine(nineType: .eight),.nine(nineType: .nine),.nine(nineType: .ten),.nine(nineType: .eleven)]
         }else if count == 8 {
             
         }

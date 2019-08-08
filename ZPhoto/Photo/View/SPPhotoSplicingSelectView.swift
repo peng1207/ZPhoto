@@ -19,11 +19,11 @@ class SPPhotoSplicingSelectView:  UIView{
         return label
     }()
     fileprivate lazy var clearBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle(SPLanguageChange.sp_getString(key: "CLEARSELECT"), for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControlState.normal)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setTitle(SPLanguageChange.sp_getString(key: "CLEARSELECT"), for: UIControl.State.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControl.State.normal)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
-        btn.addTarget(self, action: #selector(sp_clickClear), for: UIControlEvents.touchUpInside)
+        btn.addTarget(self, action: #selector(sp_clickClear), for: UIControl.Event.touchUpInside)
         return btn
     }()
     var dataArray : [SPPhotoModel] = [SPPhotoModel]()
@@ -153,7 +153,7 @@ extension SPPhotoSplicingSelectView {
         self.dataArray.append(model)
         self.collectionView.reloadData()
         sp_after(time: 0.2) {
-              self.collectionView.scrollToItem(at: IndexPath(item: self.dataArray.count - 1, section: 0), at: UICollectionViewScrollPosition.right, animated: true)
+            self.collectionView.scrollToItem(at: IndexPath(item: self.dataArray.count - 1, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
         }
       
         sp_dealNum()
@@ -170,9 +170,9 @@ fileprivate class SPPhotoSplicingSelectCollectionCell: UICollectionViewCell {
         return view
     }()
     fileprivate lazy var deleteBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "public_delete"), for: UIControlState.normal)
-        btn.addTarget(self, action: #selector(sp_clickDelete), for: UIControlEvents.touchUpInside)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "public_delete"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_clickDelete), for: UIControl.Event.touchUpInside)
         return btn
     }()
     var model : SPPhotoModel? {

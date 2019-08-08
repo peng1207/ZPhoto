@@ -162,7 +162,7 @@ fileprivate extension SPCameraRootVC{
             outputImg = UIImage(cgImage: ciImg)
         }
         if let img = outputImg {
-            let imgData = UIImageJPEGRepresentation(img, 0.5)
+            let imgData = img.jpegData(compressionQuality: 0.5)
             if let data = imgData {
                 do {
                     try data.write(to: URL(fileURLWithPath: SPPhotoHelp.SPPhotoDirectory + "/" + SPPhotoHelp.sp_getFileName()), options: Data.WritingOptions.atomic)

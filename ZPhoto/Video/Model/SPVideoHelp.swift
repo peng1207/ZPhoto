@@ -32,15 +32,15 @@ class SPVideoHelp: NSObject {
         //合并视频、音频轨道 
         let firstTrack = compostition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: CMPersistentTrackID())
         let audioTrack = compostition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: CMPersistentTrackID())
-        var insertTime : CMTime = kCMTimeZero
+        var insertTime : CMTime = CMTime.zero
         for asset  in videoAsset {
             do {
-                try firstTrack!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), of: asset.tracks(withMediaType: AVMediaType.video)[0], at: insertTime)
+                try firstTrack!.insertTimeRange(CMTimeRangeMake(start: CMTime.zero, duration: asset.duration), of: asset.tracks(withMediaType: AVMediaType.video)[0], at: insertTime)
             } catch _ {
                 
             }
             do {
-                try audioTrack!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), of: asset.tracks(withMediaType: AVMediaType.audio)[0], at: insertTime)
+                try audioTrack!.insertTimeRange(CMTimeRangeMake(start: CMTime.zero, duration: asset.duration), of: asset.tracks(withMediaType: AVMediaType.audio)[0], at: insertTime)
             } catch _ {
                 
             }
@@ -76,14 +76,14 @@ class SPVideoHelp: NSObject {
                 audioStart = videoStart
             }
             do {
-                try audioTrack!.insertTimeRange(CMTimeRangeMake(audioStart, audioDuration), of: audioAsset, at: kCMTimeZero)
+                try audioTrack!.insertTimeRange(CMTimeRangeMake(start: audioStart, duration: audioDuration), of: audioAsset, at: CMTime.zero)
             } catch _{
                 
             }
         }
         
         do {
-            try videoTrack!.insertTimeRange(CMTimeRangeMake(videoStart, videoDuration), of: videoAsset, at: kCMTimeZero)
+            try videoTrack!.insertTimeRange(CMTimeRangeMake(start: videoStart, duration: videoDuration), of: videoAsset, at: CMTime.zero)
         }catch _{
             
         }
@@ -109,9 +109,9 @@ class SPVideoHelp: NSObject {
         var thumbnailImage : UIImage? = nil
         let assetImageGenerator = AVAssetImageGenerator(asset: assesst)
         assetImageGenerator.appliesPreferredTrackTransform = true
-        assetImageGenerator.requestedTimeToleranceAfter = kCMTimeZero
-        assetImageGenerator.requestedTimeToleranceBefore = kCMTimeZero
-        assetImageGenerator.apertureMode = AVAssetImageGeneratorApertureMode.encodedPixels
+        assetImageGenerator.requestedTimeToleranceAfter = CMTime.zero
+        assetImageGenerator.requestedTimeToleranceBefore = CMTime.zero
+        assetImageGenerator.apertureMode = AVAssetImageGenerator.ApertureMode.encodedPixels
         do {
             
             let thumbnailImageRef = try assetImageGenerator.copyCGImage(at: time, actualTime: nil)
@@ -176,7 +176,7 @@ class SPVideoHelp: NSObject {
         var startSecond = 0.00
         var imageArray = [UIImage]()
         while  startSecond <= assetSecond {
-            let thumbnailImage = self.thumbnailImageTo(assesst: asset!, time: CMTimeMakeWithSeconds(startSecond, 60))
+            let thumbnailImage = self.thumbnailImageTo(assesst: asset!, time: CMTimeMakeWithSeconds(startSecond, preferredTimescale: 60))
             if let image = thumbnailImage {
                 imageArray.append(image)
             }
@@ -198,12 +198,12 @@ class SPVideoHelp: NSObject {
         let videoTrack = compostion.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: CMPersistentTrackID())
         let audioTrack = compostion.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: CMPersistentTrackID())
         do {
-            try videoTrack!.insertTimeRange(timeRange, of: asset.tracks(withMediaType: AVMediaType.video)[0], at: kCMTimeZero)
+            try videoTrack!.insertTimeRange(timeRange, of: asset.tracks(withMediaType: AVMediaType.video)[0], at: CMTime.zero)
         }catch _ {
             
         }
         do {
-            try audioTrack!.insertTimeRange(timeRange, of: asset.tracks(withMediaType: AVMediaType.audio)[0], at: kCMTimeZero)
+            try audioTrack!.insertTimeRange(timeRange, of: asset.tracks(withMediaType: AVMediaType.audio)[0], at: CMTime.zero)
         }catch _ {
             
         }

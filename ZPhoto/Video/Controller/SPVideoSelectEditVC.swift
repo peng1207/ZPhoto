@@ -35,7 +35,7 @@ class SPVideoSelectEditVC: SPBaseVC {
     /// 创建UI
     override func sp_setupUI() {
         self.view.addSubview(self.selectVC.view)
-        self.addChildViewController(self.selectVC)
+        self.addChild(self.selectVC)
         self.sp_addConstraint()
     }
     /// 处理有没数据

@@ -60,7 +60,7 @@ class SPPhotoEditVC: SPBaseVC {
         {
             UIAlertController.init(title: nil,
                                    message: "保存成功！",
-                                   preferredStyle: UIAlertControllerStyle.alert).show(self, sender: nil);
+                                   preferredStyle: UIAlertController.Style.alert).show(self, sender: nil);
         }
     }
     /// 赋值

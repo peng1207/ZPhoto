@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow.init(frame: UIScreen.main.bounds)
         window?.backgroundColor = UIColor.white
         window?.makeKeyAndVisible()
@@ -33,7 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            SPLog("滤镜名称----\(fileterName)")
 //            SPLog(filter?.attributes)
 //        }
-//        SPLog(sp_limitUp(current: 12.00, count: 5))
+//        SPLog(sp_limitUp(current: 10, count: 10))
+        
         // Override point for customization after application launch.
         return true
     }
@@ -47,6 +48,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return totalPrice
     }
+    func sp_total(current : Double,num : Int)->Double{
+          var totalPrice = current
+        for i in 1...num {
+            totalPrice = totalPrice + totalPrice * 0.3
+            SPLog("第\(i * 3)天总额 \(totalPrice)")
+        }
+        return totalPrice
+    }
+    
     
     
     

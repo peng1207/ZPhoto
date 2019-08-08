@@ -23,7 +23,7 @@ class SPVideoModel : NSObject{
             if second <= 0 || asset == nil{
                 asset = nil
             }else{
-                 thumbnailImage = SPVideoHelp.thumbnailImageTo(assesst: asset!, time: CMTimeMakeWithSeconds(0.00, framesPerSecond))
+                thumbnailImage = SPVideoHelp.thumbnailImageTo(assesst: asset!, time: CMTimeMakeWithSeconds(0.00, preferredTimescale: framesPerSecond))
                 self.second = second
                 if thumbnailImage == nil {
                     thumbnailImage = UIImage(named: "default")

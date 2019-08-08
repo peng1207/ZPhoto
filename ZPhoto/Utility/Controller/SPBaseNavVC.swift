@@ -13,8 +13,8 @@ class SPBaseNavVC: UINavigationController {
     
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         if self.viewControllers.count > 0 {
-            let btn = UIButton(type: UIButtonType.custom)
-            btn.setImage(UIImage(named: "public_back"), for: UIControlState.normal)
+            let btn = UIButton(type: UIButton.ButtonType.custom)
+            btn.setImage(UIImage(named: "public_back"), for: UIControl.State.normal)
             btn.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
             if viewController.responds(to: NSSelectorFromString("sp_clickBack")) {
                 btn.addTarget(viewController, action: NSSelectorFromString("sp_clickBack"), for: .touchUpInside)
@@ -30,10 +30,10 @@ class SPBaseNavVC: UINavigationController {
         self.popViewController(animated: true)
     }
     /// UINavigationController
-    override var childViewControllerForStatusBarStyle: UIViewController? {
+    override var childForStatusBarStyle: UIViewController? {
         return self.topViewController
     }
-    override var childViewControllerForStatusBarHidden: UIViewController? {
+    override var childForStatusBarHidden: UIViewController? {
         return self.topViewController
     }
 }
@@ -46,7 +46,7 @@ extension UINavigationController{
 //        navBar.barTintColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
 //        navBar.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         navBar.shadowImage = UIImage()
-        navBar.titleTextAttributes = [NSAttributedStringKey.font : sp_getFontSize(size: 18),NSAttributedStringKey.foregroundColor : UIColor.white]
+        navBar.titleTextAttributes = [NSAttributedString.Key.font : sp_getFontSize(size: 18),NSAttributedString.Key.foregroundColor : UIColor.white]
  
         UIApplication.shared.statusBarStyle = .lightContent
     }

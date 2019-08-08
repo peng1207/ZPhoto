@@ -16,34 +16,34 @@ typealias SPCameraBtnClickBlock = (_ type : ButtonClickType)->Void
 class SPCameraBtnView:  UIView{
     
     fileprivate lazy var backBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "back"), for: UIControlState.normal)
-        btn.addTarget(self, action: #selector(sp_clickBack), for: UIControlEvents.touchUpInside)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "back"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_clickBack), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate lazy var cameraBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "recordStart"), for: UIControlState.normal)
-        btn.addTarget(self, action: #selector(sp_clickTakePhoto), for: UIControlEvents.touchUpInside)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "recordStart"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_clickTakePhoto), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate lazy var flashBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "flashOn"), for: UIControlState.normal)
-        btn.setImage(UIImage(named: "flashOff"), for: UIControlState.selected)
-        btn.addTarget(self, action: #selector(sp_clickFlash), for: UIControlEvents.touchUpInside)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "flashOn"), for: UIControl.State.normal)
+        btn.setImage(UIImage(named: "flashOff"), for: UIControl.State.selected)
+        btn.addTarget(self, action: #selector(sp_clickFlash), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate lazy var filterBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-       btn.setImage(UIImage(named: "filter"), for: UIControlState.normal)
-        btn.addTarget(self, action: #selector(sp_clickFilter), for: UIControlEvents.touchUpInside)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+       btn.setImage(UIImage(named: "filter"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_clickFilter), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate lazy var changeDevBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "switchCamera"), for: UIControlState.normal)
-        btn.addTarget(self, action: #selector(sp_clickChangeDev), for: UIControlEvents.touchUpInside)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "switchCamera"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_clickChangeDev), for: UIControl.Event.touchUpInside)
         return btn
     }()
     var clickBlock : SPCameraBtnClickBlock?

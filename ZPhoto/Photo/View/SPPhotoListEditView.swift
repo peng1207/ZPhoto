@@ -12,17 +12,17 @@ import SnapKit
 class SPPhotoListEditView:  UIView{
     
     fileprivate lazy var shareBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "share_disable"), for: UIControlState.disabled)
-        btn.setImage(UIImage(named: "share"), for: UIControlState.normal)
-        btn.addTarget(self, action: #selector(sp_clickShare), for: UIControlEvents.touchUpInside)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "share_disable"), for: UIControl.State.disabled)
+        btn.setImage(UIImage(named: "share"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_clickShare), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate lazy var deleteBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "delete_trash"), for: UIControlState.normal)
-        btn.setImage(UIImage(named: "delete_disable"), for: UIControlState.disabled)
-        btn.addTarget(self, action: #selector(sp_clickDelete), for: UIControlEvents.touchUpInside)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "delete_trash"), for: UIControl.State.normal)
+        btn.setImage(UIImage(named: "delete_disable"), for: UIControl.State.disabled)
+        btn.addTarget(self, action: #selector(sp_clickDelete), for: UIControl.Event.touchUpInside)
         return btn
     }()
     var shareBlock : SPBtnComplete?

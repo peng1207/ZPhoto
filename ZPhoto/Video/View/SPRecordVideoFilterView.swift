@@ -162,7 +162,7 @@ class SPRecordVideoFilterFlowLayout : UICollectionViewFlowLayout{
         self.itemSize = CGSize(width: itemH, height: itemH)
         //设置边距(让第一张图片与最后一张图片出现在最中央)ps:这里可以进行优化
         let inset = (self.collectionView?.bounds.height ?? 0)  * 0.5 - self.itemSize.height * 0.5
-        self.sectionInset = UIEdgeInsetsMake(inset,0, inset, 0)
+        self.sectionInset = UIEdgeInsets(top: inset,left: 0, bottom: inset, right: 0)
     }
     /**
      用来计算出rect这个范围内所有cell的UICollectionViewLayoutAttributes，

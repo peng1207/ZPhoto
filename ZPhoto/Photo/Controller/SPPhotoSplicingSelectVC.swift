@@ -17,7 +17,7 @@ class SPPhotoSplicingSelectVC: SPBaseVC {
             self?.sp_dealSelectComplete(model: model)
         }
         vc.selectMaxCount = selectMaxCount
-        self.addChildViewController(vc)
+        self.addChild(vc)
         return vc
     }()
     
@@ -33,12 +33,12 @@ class SPPhotoSplicingSelectVC: SPBaseVC {
         return view
     }()
     fileprivate lazy var nextBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle(SPLanguageChange.sp_getString(key: "NEXT"), for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setTitle(SPLanguageChange.sp_getString(key: "NEXT"), for: UIControl.State.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.normal)
         btn.frame = CGRect(x: 0, y: 0, width: 60, height: 40)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
-        btn.addTarget(self, action: #selector(sp_clickNext), for: UIControlEvents.touchUpInside)
+        btn.addTarget(self, action: #selector(sp_clickNext), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate let selectMaxCount : Int = 9
@@ -184,8 +184,8 @@ extension SPPhotoSplicingSelectVC : CAAnimationDelegate{
             vc.dataArray = self.selectView.dataArray
             self.navigationController?.pushViewController(vc, animated: true)
         }else{
-            let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "NO_CHOICE_TIPS"), preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "OK"), style: UIAlertActionStyle.default, handler: { (action) in
+            let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "NO_CHOICE_TIPS"), preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "OK"), style: UIAlertAction.Style.default, handler: { (action) in
                 
             }))
             self.present(alertController, animated: true, completion: nil)

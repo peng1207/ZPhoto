@@ -20,9 +20,9 @@ import CoreImage
         return collectionView
     }()
     fileprivate lazy var backBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setImage(UIImage(named: "public_back"), for: UIControlState.normal)
-        btn.addTarget(self, action: #selector(sp_clickBack), for: UIControlEvents.touchUpInside)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "public_back"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_clickBack), for: UIControl.Event.touchUpInside)
         btn.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         return btn
     }()
@@ -73,7 +73,7 @@ extension SPVideoListVC {
         let addButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         addButton.addTarget(self, action: #selector(clickAdd), for: .touchUpInside)
     
-        addButton.setImage(UIImage(named: "add_white"), for: UIControlState.normal)
+        addButton.setImage(UIImage(named: "add_white"), for: UIControl.State.normal)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: addButton)
     }
     
@@ -108,9 +108,9 @@ extension SPVideoListVC {
         guard let model = videoModel else {
             return
         }
-        let alert = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "DELETE_VIDEO_MSG"), preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertActionStyle.cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "DELETE"), style: UIAlertActionStyle.default, handler: { [weak self](action) in
+        let alert = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "DELETE_VIDEO_MSG"), preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "DELETE"), style: UIAlertAction.Style.default, handler: { [weak self](action) in
             self?.videoDataArray?.remove(object: model)
             SPVideoHelp.remove(fileUrl: model.url!)
             self?.reloadData()

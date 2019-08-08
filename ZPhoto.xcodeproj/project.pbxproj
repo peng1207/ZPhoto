@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0FC82228CAC6295E6E42D4BD /* Pods_ZPhoto_ZPhotoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 581BCD2AA12EA7F29D52DAE0 /* Pods_ZPhoto_ZPhotoUITests.framework */; };
 		145CB29182DB4F0AAA9938A5 /* Pods_ZPhoto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */; };
-		26291E7D822E5F0FB9210A4D /* Pods_ZPhotoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */; };
 		2C4AFCB7EC3DE3B0F56DCA96 /* Pods_ZPhoto_ZPhotoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E09A31056057CB0AB8306CB3 /* Pods_ZPhoto_ZPhotoTests.framework */; };
 		9E07234B22D71CFF00E5068A /* SPSetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E07234A22D71CFF00E5068A /* SPSetVC.swift */; };
 		9E07234D22D722DA00E5068A /* SPSetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E07234C22D722DA00E5068A /* SPSetModel.swift */; };
@@ -82,7 +81,6 @@
 		9ECE7C162227B80300FE6BCD /* UIView+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7C032227B80300FE6BCD /* UIView+extension.swift */; };
 		9ECE7C172227B80300FE6BCD /* SPAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7C042227B80300FE6BCD /* SPAnimationView.swift */; };
 		9ECE7C182227B80300FE6BCD /* SPVideoPreviewLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7C052227B80300FE6BCD /* SPVideoPreviewLayerView.swift */; };
-		F0E618971AA6A17A4645133C /* Pods_ZPhotoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,7 +103,6 @@
 /* Begin PBXFileReference section */
 		07BA85C69A0AADC582A26091 /* Pods-ZPhotoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoUITests/Pods-ZPhotoUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		132C40AACFA72A246818367C /* Pods-ZPhoto-ZPhotoUITests.releaseadhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoUITests.releaseadhoc.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoUITests/Pods-ZPhoto-ZPhotoUITests.releaseadhoc.xcconfig"; sourceTree = "<group>"; };
-		1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhotoUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		37B2953C120C1B91174FA422 /* Pods-ZPhoto.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.debug.xcconfig"; sourceTree = "<group>"; };
 		39F99C17C26D1FD4DA8F8A0C /* Pods-ZPhoto-ZPhotoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests.release.xcconfig"; sourceTree = "<group>"; };
 		3C5C89CA18838367F24DE7CC /* Pods-ZPhoto-ZPhotoTests.releaseadhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoTests.releaseadhoc.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests.releaseadhoc.xcconfig"; sourceTree = "<group>"; };
@@ -194,7 +191,6 @@
 		9ECE7C052227B80300FE6BCD /* SPVideoPreviewLayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoPreviewLayerView.swift; sourceTree = "<group>"; };
 		A48F6C5FB7358C64CE5D01E2 /* Pods-ZPhoto-ZPhotoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.release.xcconfig"; sourceTree = "<group>"; };
-		B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhotoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhoto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C51E104DB0F1870B26D77C6B /* Pods-ZPhotoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhotoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhotoTests/Pods-ZPhotoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E09A31056057CB0AB8306CB3 /* Pods_ZPhoto_ZPhotoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhoto_ZPhotoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -215,7 +211,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0E618971AA6A17A4645133C /* Pods_ZPhotoTests.framework in Frameworks */,
 				2C4AFCB7EC3DE3B0F56DCA96 /* Pods_ZPhoto_ZPhotoTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -224,7 +219,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				26291E7D822E5F0FB9210A4D /* Pods_ZPhotoUITests.framework in Frameworks */,
 				0FC82228CAC6295E6E42D4BD /* Pods_ZPhoto_ZPhotoUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -236,8 +230,6 @@
 			isa = PBXGroup;
 			children = (
 				C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */,
-				B5DEFF642D999A47A6248052 /* Pods_ZPhotoTests.framework */,
-				1A2D1C2694F0076525B1AC9A /* Pods_ZPhotoUITests.framework */,
 				E09A31056057CB0AB8306CB3 /* Pods_ZPhoto_ZPhotoTests.framework */,
 				581BCD2AA12EA7F29D52DAE0 /* Pods_ZPhoto_ZPhotoUITests.framework */,
 			);
@@ -694,16 +686,18 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto-ZPhotoUITests/Pods-ZPhoto-ZPhotoUITests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ZPhoto-ZPhotoUITests/Pods-ZPhoto-ZPhotoUITests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SPCommonLibrary/SPCommonLibrary.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SPCommonLibrary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto-ZPhotoUITests/Pods-ZPhoto-ZPhotoUITests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ZPhoto-ZPhotoUITests/Pods-ZPhoto-ZPhotoUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9CA014F25D585D3EBC367E7B /* [CP] Embed Pods Frameworks */ = {
@@ -712,16 +706,18 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SPCommonLibrary/SPCommonLibrary.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SPCommonLibrary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A6C6DFDEC4510FF0DE551740 /* [CP] Check Pods Manifest.lock */ = {
@@ -748,16 +744,18 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ZPhoto/Pods-ZPhoto-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SPCommonLibrary/SPCommonLibrary.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SPCommonLibrary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ZPhoto/Pods-ZPhoto-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D6FBFBD3C126356C121E9D4F /* [CP] Check Pods Manifest.lock */ = {
@@ -1017,7 +1015,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "e6310527-79c3-45b7-8e15-d49cc71171eb";
 				PROVISIONING_PROFILE_SPECIFIER = ZPhotoDev;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1039,7 +1037,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "3f93c631-f4ac-4374-b173-8a0a25fde743";
 				PROVISIONING_PROFILE_SPECIFIER = ZPhotoAdHoc;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

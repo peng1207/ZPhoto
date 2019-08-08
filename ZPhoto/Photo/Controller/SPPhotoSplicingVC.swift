@@ -15,12 +15,12 @@ class SPPhotoSplicingVC: SPBaseVC {
     fileprivate var colorList : [UIColor] = SPPhotoSplicingHelp.sp_getDefaultColor()
     fileprivate var selectType : SPSPlicingType!
     fileprivate lazy var saveBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.setTitle(SPLanguageChange.sp_getString(key: "SAVE"), for: UIControlState.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControlState.normal)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setTitle(SPLanguageChange.sp_getString(key: "SAVE"), for: UIControl.State.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.normal)
         btn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
         btn.titleLabel?.font = sp_getFontSize(size: 15)
-        btn.addTarget(self, action: #selector(sp_clickSave), for: UIControlEvents.touchUpInside)
+        btn.addTarget(self, action: #selector(sp_clickSave), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate lazy var bgView : UIView = {
@@ -59,11 +59,11 @@ class SPPhotoSplicingVC: SPBaseVC {
         super.viewDidDisappear(animated)
     }
     override func sp_clickBack() {
-        let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "GIVEUP_EDIT_PICTURE_TIPS"), preferredStyle: UIAlertControllerStyle.alert)
-        alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "EDIT"), style: UIAlertActionStyle.default, handler: { (action) in
+        let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "GIVEUP_EDIT_PICTURE_TIPS"), preferredStyle: UIAlertController.Style.alert)
+        alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "EDIT"), style: UIAlertAction.Style.default, handler: { (action) in
             
         }))
-        alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "GIVEUP"), style: UIAlertActionStyle.cancel, handler: { (action) in
+        alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "GIVEUP"), style: UIAlertAction.Style.cancel, handler: { (action) in
                 super.sp_clickBack()
         }))
         self.present(alertController, animated: true, completion: nil)
@@ -151,7 +151,7 @@ extension SPPhotoSplicingVC {
         {
             UIAlertController.init(title: nil,
                                    message: "保存成功！",
-                                   preferredStyle: UIAlertControllerStyle.alert).show(self, sender: nil);
+                                   preferredStyle: UIAlertController.Style.alert).show(self, sender: nil);
         }
     }
 }

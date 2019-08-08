@@ -23,18 +23,19 @@ class SPVideoCollectionCell : UICollectionViewCell{
     }()
     
     lazy public var deleteBtn : UIButton! = {
-        let button = UIButton(type: UIButtonType.custom)
+        let button = UIButton(type: UIButton.ButtonType.custom)
         let image = UIImage(named: "delete.png")
-//        button.setImage(image, for: UIControlState.normal)
+//        button.setImage(image, for: UIControl.State.normal)
         button.setBackgroundImage(image, for: .normal)
-        button.setTitleColor(UIColor.red, for: UIControlState.normal)
+        button.setTitleColor(UIColor.red, for: UIControl.State.normal)
         return button
     }()
     fileprivate lazy var shareBtn : UIButton = {
-        let btn = UIButton(type: UIButtonType.custom)
-        btn.backgroundColor = UIColor.lightText.withAlphaComponent(0.4)
-        btn.setImage(UIImage(named: "share"), for: UIControlState.normal)
-        btn.addTarget(self, action: #selector(sp_clickShare), for: UIControlEvents.touchUpInside)
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+//        btn.backgroundColor = UIColor.lightText.withAlphaComponent(0.2)
+//        btn.sp_cornerRadius(cornerRadius: 5)
+        btn.setImage(UIImage(named: "share"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_clickShare), for: UIControl.Event.touchUpInside)
         return btn
     }()
     var videoModel : SPVideoModel!{
@@ -86,7 +87,7 @@ extension SPVideoCollectionCell{
 //MARK: action
 extension SPVideoCollectionCell{
     fileprivate func addAction(){
-        deleteBtn.addTarget(self, action: #selector(buttonClick), for: UIControlEvents.touchUpInside)
+        deleteBtn.addTarget(self, action: #selector(buttonClick), for: UIControl.Event.touchUpInside)
     }
     @objc fileprivate func sp_clickShare(){
         guard let block = self.shareComplete else {
@@ -112,7 +113,7 @@ class SPVideoCollectionFlowLayout: UICollectionViewFlowLayout {
     override func prepare() {
         self.itemSize = CGSize(width: (self.collectionView?.bounds.size.width)! * 3 / 5.0, height: (self.collectionView?.bounds.size.height)! * 3 / 4.0 )
         self.minimumLineSpacing = 20
-        self.sectionInset = UIEdgeInsetsMake(0, 20, 0, 20)
+        self.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         super.prepare()
     }
     

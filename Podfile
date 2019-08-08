@@ -10,7 +10,8 @@ target 'ZPhoto' do
 
   # Pods for ZPhoto
 #    pod 'SnapKit'
-    pod 'SPCommonLibrary'
+    pod 'SPCommonLibrary/Public'
+
 #    pod 'Firebase/AdMob'
     #pod 'va', '~> 0.10.1'
   target 'ZPhotoTests' do
