@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import AVFoundation
-
+import SPCommonLibrary
 
 class SPVideoPlayVC : SPBaseVC {
     var videoModel : SPVideoModel?
@@ -24,7 +24,7 @@ class SPVideoPlayVC : SPBaseVC {
         button.setBackgroundImage(UIImage(named: "delete"), for: .normal)
         
         
-        button.frame = CGRect(x: 10, y: sp_getStatusBarHeight(), width: 30, height: 30)
+        button.frame = CGRect(x: 10, y: sp_statusBarHeight(), width: 30, height: 30)
        
         button.clipsToBounds = true 
         return button

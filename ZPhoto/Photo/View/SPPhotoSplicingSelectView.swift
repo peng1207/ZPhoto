@@ -9,11 +9,13 @@
 import Foundation
 import UIKit
 import SnapKit
+import SPCommonLibrary
+
 class SPPhotoSplicingSelectView:  UIView{
     
     fileprivate lazy var numLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 15)
+        label.font = sp_fontSize(fontSize:  15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
         label.textAlignment = .left
         return label
@@ -22,7 +24,7 @@ class SPPhotoSplicingSelectView:  UIView{
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "CLEARSELECT"), for: UIControl.State.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControl.State.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.addTarget(self, action: #selector(sp_clickClear), for: UIControl.Event.touchUpInside)
         return btn
     }()
@@ -89,14 +91,14 @@ class SPPhotoSplicingSelectView:  UIView{
 }
 extension SPPhotoSplicingSelectView : UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sp_getArrayCount(array: self.dataArray) > 0 ? 1 : 0
+        return sp_count(array:  self.dataArray) > 0 ? 1 : 0
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sp_getArrayCount(array: self.dataArray)
+        return sp_count(array:  self.dataArray)
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell : SPPhotoSplicingSelectCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellID, for: indexPath) as! SPPhotoSplicingSelectCollectionCell
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_count(array:  self.dataArray) {
             cell.model = self.dataArray[indexPath.row]
         }
            cell.indexPath = indexPath
@@ -112,7 +114,7 @@ extension SPPhotoSplicingSelectView : UICollectionViewDelegate,UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_count(array:  self.dataArray) {
             sp_dealDelete(index: indexPath.row)
         }
     }
@@ -152,15 +154,15 @@ extension SPPhotoSplicingSelectView {
     func sp_add(model : SPPhotoModel){
         self.dataArray.append(model)
         self.collectionView.reloadData()
-        sp_after(time: 0.2) {
-            self.collectionView.scrollToItem(at: IndexPath(item: self.dataArray.count - 1, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
+        sp_asyncAfter(time: 0.2) {
+              self.collectionView.scrollToItem(at: IndexPath(item: self.dataArray.count - 1, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
         }
       
         sp_dealNum()
     }
     /// 处理数据显示
     fileprivate func sp_dealNum(){
-        self.numLabel.text = "\(SPLanguageChange.sp_getString(key: "SELECTED"))\(sp_getArrayCount(array: self.dataArray))/\(sp_getString(string: self.selectMaxCount))"
+        self.numLabel.text = "\(SPLanguageChange.sp_getString(key: "SELECTED"))\(sp_count(array:  self.dataArray))/\(sp_getString(string: self.selectMaxCount))"
     }
     
 }

@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import SnapKit
+import SPCommonLibrary
+
 class SPColorView:  UIView{
     
     fileprivate var collectionView : UICollectionView!
@@ -50,17 +52,17 @@ class SPColorView:  UIView{
 }
 extension SPColorView : UICollectionViewDelegate ,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sp_getArrayCount(array: self.dataArray) > 0 ? 1 : 0
+        return sp_count(array:  self.dataArray) > 0 ? 1 : 0
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sp_getArrayCount(array: self.dataArray)
+        return sp_count(array:  self.dataArray)
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell : UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellID, for: indexPath)
         var view = cell.contentView.viewWithTag(100)
         if view == nil {
             view = UIView()
-            view?.sp_cornerRadius(cornerRadius: 10)
+            view?.sp_cornerRadius(radius: 10)
             view?.sp_border(color: UIColor.white, width: 1)
             view?.tag = 100
             cell.contentView.addSubview(view!)
@@ -72,13 +74,13 @@ extension SPColorView : UICollectionViewDelegate ,UICollectionViewDataSource,UIC
             })
         }
         
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_count(array:  self.dataArray) {
             view?.backgroundColor = self.dataArray?[indexPath.row]
         }
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_count(array:  self.dataArray) {
             
         }
     }

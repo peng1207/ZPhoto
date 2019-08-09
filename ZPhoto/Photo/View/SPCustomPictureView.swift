@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import SPCommonLibrary
 class SPCustomPictureView:  UIView,UIScrollViewDelegate{
     fileprivate lazy var scrollView : UIScrollView = {
         let view = UIScrollView()
@@ -185,9 +186,9 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
     /// - Returns: 路径
     fileprivate func sp_getPointPath()->UIBezierPath{
         let bezierPath = UIBezierPath()
-        if sp_getArrayCount(array: self.points) > 0 {
+        if sp_count(array:  self.points) > 0 {
             bezierPath.move(to: self.points![0])
-            for index in 1..<sp_getArrayCount(array: self.points){
+            for index in 1..<sp_count(array:  self.points){
                 bezierPath.addLine(to: self.points![index])
             }
             bezierPath.addLine(to: self.points![0])
@@ -295,7 +296,7 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
             bezierPath.addLine(to: CGPoint(x: minX, y: maxY))
             bezierPath.addLine(to: CGPoint(x: maxX, y: minY))
         default:
-            SPLog("")
+            sp_log(message: "")
         }
         return bezierPath
     }
@@ -392,7 +393,7 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
             bezizerPath.addLine(to: CGPoint(x: minX, y: minY + radius))
             
         default:
-            SPLog("")
+            sp_log(message: "")
         }
         
         return bezizerPath
@@ -522,7 +523,7 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         case .gear(type: .triangle):
             bezierPath.addLine(to: CGPoint(x: 0, y: 0))
         default:
-            SPLog("")
+            sp_log(message: "")
         }
         return bezierPath
     }
@@ -650,7 +651,7 @@ extension SPCustomPictureView {
     
     
     @objc fileprivate func sp_clickTap(){
-        SPLog("点击view")
+        sp_log(message: "点击view")
     }
     @objc fileprivate func sp_handleRotateGesture(sender : UIRotationGestureRecognizer){
         //浮点类型，得到sender的旋转度数

@@ -8,6 +8,7 @@
 
 import Foundation
 import SnapKit
+import SPCommonLibrary
 typealias SPPhotoListSelectComplete = (_ model : SPPhotoModel)->Void
 class SPPhotoListVC: SPBaseVC {
     fileprivate var collectionView : UICollectionView!
@@ -17,7 +18,7 @@ class SPPhotoListVC: SPBaseVC {
         btn.setTitle(SPLanguageChange.sp_getString(key: "CANCE"), for: UIControl.State.selected)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.selected)
-        btn.titleLabel?.font = sp_getFontSize(size: 16)
+        btn.titleLabel?.font = sp_fontSize(fontSize:  16)
         btn.frame = CGRect(x: 0, y: 0, width: 60, height: 30)
         btn.addTarget(self, action: #selector(sp_clickChoise), for: UIControl.Event.touchUpInside)
         return btn
@@ -59,9 +60,9 @@ class SPPhotoListVC: SPBaseVC {
     }
     /// 赋值
     fileprivate func sp_setupData(){
-        sp_dispatchAsync {
+        sp_sync {
             self.dataArray = SPPhotoHelp.sp_getPhototList()
-            sp_dispatchMainQueue {
+            sp_mainQueue {
                  self.collectionView.reloadData()
             }
            
@@ -112,14 +113,14 @@ class SPPhotoListVC: SPBaseVC {
 }
 extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sp_getArrayCount(array: self.dataArray) > 0 ? 1 : 0
+        return sp_count(array:  self.dataArray) > 0 ? 1 : 0
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sp_getArrayCount(array: self.dataArray)
+        return sp_count(array:  self.dataArray)
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell : SPPhotoListCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! SPPhotoListCollectionCell
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_count(array:  self.dataArray) {
             let model = self.dataArray?[indexPath.row]
             cell.model = model
             var isSelect = false
@@ -134,7 +135,7 @@ extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,U
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_count(array:  self.dataArray) {
               let model = self.dataArray?[indexPath.row]
             if let m = model {
                 if isEdit {
@@ -147,7 +148,7 @@ extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,U
                      sp_dealBtnEnabled()
                 }else{
                     if let block = self.selectBlock {
-                        if sp_getArrayCount(array: self.selectArray) < self.selectMaxCount {
+                        if sp_count(array:  self.selectArray) < self.selectMaxCount {
                             block(m)
                             self.selectArray.append(m)
                             self.collectionView.reloadData()
@@ -228,7 +229,7 @@ extension SPPhotoListVC {
                 imgArray.append(img)
             }
         }
-        sp_shareImg(imgs: imgArray, vc: self)
+        SPShare.sp_share(imgs: imgArray, vc: self)
         
     }
     /// 点击删除
@@ -274,19 +275,19 @@ extension SPPhotoListVC {
          let position = CAKeyframeAnimation(keyPath: "position")
         let path = UIBezierPath()
         path.move(to:startPoint)
-        var curvePoint = CGPoint(x: startPoint.x + sp_getScreenWidth() / 2.0 , y: startPoint.y - 30)
-        if curvePoint.x >= sp_getScreenWidth() {
-            curvePoint.x = startPoint.x - sp_getScreenWidth() / 2.0
+        var curvePoint = CGPoint(x: startPoint.x + sp_screenWidth() / 2.0 , y: startPoint.y - 30)
+        if curvePoint.x >= sp_screenWidth() {
+            curvePoint.x = startPoint.x - sp_screenWidth() / 2.0
         }
         
         if curvePoint.x < 0  {
-            curvePoint.x = sp_getScreenWidth() / 2.0
+            curvePoint.x = sp_screenWidth() / 2.0
         }
         if curvePoint.y < 0  {
             curvePoint.y = 0
         }
         
-        path.addQuadCurve(to: CGPoint(x: sp_getScreenWidth() - 10 - 15, y: self.editView.frame.origin.y + 15), controlPoint: curvePoint)
+        path.addQuadCurve(to: CGPoint(x: sp_screenWidth() - 10 - 15, y: self.editView.frame.origin.y + 15), controlPoint: curvePoint)
         position.path = path.cgPath
         position.rotationMode = CAAnimationRotationMode.rotateAuto
         
@@ -299,7 +300,7 @@ extension SPPhotoListVC {
         imgLayer.masksToBounds = true
         self.view.layer.addSublayer(imgLayer)
         imgLayer.add(groupAnimation, forKey: "")
-        sp_after(time: 1) {
+        sp_asyncAfter(time: 1) {
             imgLayer.removeFromSuperlayer()
         }
     }
@@ -318,7 +319,7 @@ extension SPPhotoListVC {
     }
     /// 处理编辑按钮是否可以点击
     fileprivate func sp_dealBtnEnabled(){
-        if sp_getArrayCount(array: self.selectArray) > 0 {
+        if sp_count(array:  self.selectArray) > 0 {
             self.editView.sp_dealBtn(isEnabled: true)
         }else{
             self.editView.sp_dealBtn(isEnabled: false)

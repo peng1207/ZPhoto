@@ -8,7 +8,7 @@
 
 import Foundation
 import SnapKit
-
+import SPCommonLibrary
 
 class SPPhotoVC: SPBaseNavVC {
   
@@ -51,7 +51,7 @@ fileprivate class SPPhotoRootVC: SPBaseVC {
         btn.setImage(UIImage(named: "add_white"), for: UIControl.State.normal)
         btn.addTarget(self, action: #selector(sp_clickCamera), for: UIControl.Event.touchUpInside)
 //        btn.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        btn.sp_cornerRadius(cornerRadius: 40)
+        btn.sp_cornerRadius(radius: 40)
         btn.backgroundColor = sp_getMianColor()
         return btn
     }()

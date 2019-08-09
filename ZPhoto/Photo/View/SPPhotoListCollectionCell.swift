@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import SPCommonLibrary
 class SPPhotoListCollectionCell: UICollectionViewCell {
   
     fileprivate lazy var iconImgView : UIImageView = {
@@ -17,10 +18,10 @@ class SPPhotoListCollectionCell: UICollectionViewCell {
     }()
     fileprivate lazy var numLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 10)
+        label.font = sp_fontSize(fontSize:  10)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         label.backgroundColor = sp_getMianColor()
-        label.sp_cornerRadius(cornerRadius: 12)
+        label.sp_cornerRadius(radius: 12)
         label.textAlignment = .center
         label.isHidden = true
         return label

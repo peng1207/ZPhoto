@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+import SPCommonLibrary
 class SPBaseNavVC: UINavigationController {
     
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
@@ -42,11 +42,12 @@ extension UINavigationController{
     
     class func sp_initialize(){
         let navBar = UINavigationBar.appearance()
-        navBar.setBackgroundImage(UIImage.sp_getImageWithColor(color: sp_getMianColor()), for: UIBarMetrics.default)
+       
+        navBar.setBackgroundImage( UIImage.sp_image(color: sp_getMianColor()), for: UIBarMetrics.default)
 //        navBar.barTintColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
 //        navBar.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue)
         navBar.shadowImage = UIImage()
-        navBar.titleTextAttributes = [NSAttributedString.Key.font : sp_getFontSize(size: 18),NSAttributedString.Key.foregroundColor : UIColor.white]
+        navBar.titleTextAttributes = [NSAttributedString.Key.font : sp_fontSize(fontSize:  18),NSAttributedString.Key.foregroundColor : UIColor.white]
  
         UIApplication.shared.statusBarStyle = .lightContent
     }

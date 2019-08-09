@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import SPCommonLibrary
 class SPVideoSelectCollectionCell: UICollectionViewCell {
     
     lazy var iconImgView : UIImageView = {
@@ -18,7 +19,7 @@ class SPVideoSelectCollectionCell: UICollectionViewCell {
     
     lazy var timeLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 13)
+        label.font = sp_fontSize(fontSize:  13)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         label.textAlignment = .left
         return label

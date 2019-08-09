@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+import SPCommonLibrary
 /// 获取Documents目录路径
 let kDocumentsPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
 /// 获取Cache目录路径
@@ -22,145 +22,6 @@ let framesPerSecond : Int32 = 60
 typealias SPBtnComplete = ()->Void
 /// 点击回调 回传位置
 typealias SPIndexComplete = (_ index : Int)->Void
-/**
- 获取字体对象
- 
- - parameter fontSize: 字体大小
- 
- - returns: font
- */
-func sp_fontSize(fontSize: CGFloat) -> UIFont{
-    return UIFont.systemFont(ofSize: fontSize)
-}
-/// 获取状态栏高度
-///
-/// - Returns: 高度
-func sp_getStatusBarHeight() -> CGFloat{
-    return UIApplication.shared.statusBarFrame.height
-}
-/// 获取屏幕的宽度
-///
-/// - Returns: 宽度
-func sp_getScreenWidth()->CGFloat{
-    return UIScreen.main.bounds.size.width
-}
-/// 获取屏幕的高度
-///
-/// - Returns: 高度
-func sp_getScreenHeight()->CGFloat{
-    return UIScreen.main.bounds.size.height
-}
-/// 判断是否为数组
-///
-/// - Parameter array: 数据源
-/// - Returns: 返回数组类型
-func sp_isArray(array:Any) -> Array<Any>{
-    let list : Array<Any>? = array as? Array<Any>
-    if let a = list {
-        return a
-    }
-    return []
-}
-/// 获取数组的数量
-///
-/// - Parameter array: 数组
-/// - Returns: 数量
-func sp_getArrayCount(array:Array<Any>?) -> Int{
-    if let listArray = array {
-        return listArray.count
-    }else{
-        return 0
-    }
-}
-/// 是否为数组
-///
-/// - Parameter array: 数据
-/// - Returns: 是否
-func sp_isArray(array:Any?) -> Bool {
-    if let _ : [Any] = array as? [Any]  {
-        return true
-    }else{
-        return false
-    }
-}
-/// 是否为字典
-///
-/// - Parameter dic: 数据
-/// - Returns: 是否
-func sp_isDic(dic : Any?) -> Bool{
-    if let _ : [String : Any] = dic as? [String : Any] {
-        return true
-    }else{
-        return false
-    }
-}
-/// 获取字符串
-///
-/// - Parameter string: 字符串
-/// - Returns: 字符串
-func sp_getString(string:Any?) ->  String{
-    if string == nil{
-        return ""
-    }
-    if string is NSNull {
-        return ""
-    }
-    let str : String? = string as? String
-    
-    if let s = str {
-        return s
-    }
-    if string is NSNumber {
-        let s : NSNumber = string as! NSNumber
-        return s.description
-    }
-    return "\(string ?? "")"
-    
-}
-/**
- 主线程
- */
-func sp_dispatchMainQueue(complete:@escaping ()->Void){
-    DispatchQueue.main.async(execute: {
-         complete()
-    })
-}
-/**
- 多线程
- */
-func sp_dispatchAsync(complete:@escaping ()->Void){
-    DispatchQueue.global().async {
-        complete()
-    }
-}
-///  延迟
-///
-/// - Parameters:
-///   - time: 延迟时间
-///   - complete: 回调
-func sp_after(time:TimeInterval,complete:@escaping ()->Void){
-    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) {
-        complete()
-    }
-}
-
-/**
- 延时操作
- - parameter time:     延时时间
- */
-func  dispatchAfter(time:UInt64,complete:@escaping ()->Void){
-    let queue = DispatchQueue(label: "com.hsp.queue")
-    queue.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: time)) { 
-      complete()
-    }
-}
-func SPLog<T>(_ message:T,file:String = #file,function:String = #function,line:Int=#line){
-    #if DEBUG
-        let fileName = (file as NSString).lastPathComponent
-    
-        print("\(NSDate().timeIntervalSince1970)---\(fileName):\(line)---\(function) \(message)")
-    #endif
-}
  
 /**
  倒计时
@@ -189,8 +50,8 @@ func timer(_ complete:(() -> Void)?) -> DispatchSourceTimer {
     codeTimer.schedule(deadline: .now(), repeating: timeInterval)
     codeTimer.setEventHandler {
         if let com = complete {
-            sp_dispatchMainQueue {
-                 com()
+            sp_mainQueue {
+                com()
             }
         }
     }
@@ -198,10 +59,7 @@ func timer(_ complete:(() -> Void)?) -> DispatchSourceTimer {
     codeTimer.resume()
     return codeTimer
 }
-// 获取屏幕分辨率
-func screenPixels() -> CGSize {
-    return (UIScreen.main.currentMode?.size)!
-}
+
 
 /**
  把秒数转换成时分秒（00:00:00）格式
@@ -247,7 +105,7 @@ func UncaughtExceptionHandler() -> @convention(c) (NSException) -> Void {
         let name = exception.name//异常类型
         
         let content =  String("===异常错误报告===:name:\(name)===\n==reson:\(reason)==\n==ncallStackSymbols:\n\(arr.componentsJoined(by: "\n"))")
-        SPLog("exception type : \(name) \n crash reason : \(reason) \n call stack info : \(arr)====content-->\(content)");
+        sp_log(message: "exception type : \(name) \n crash reason : \(reason) \n call stack info : \(arr)====content-->\(content)");
         do {
             try content.write(to: URL(fileURLWithPath: "\(kCachesPath)/ZPhoteCash/\(Date()).txt"), atomically: false, encoding: String.Encoding.utf8)
         }catch{
@@ -261,13 +119,6 @@ func UncaughtExceptionHandler() -> @convention(c) (NSException) -> Void {
  */
 func createCachePath (){
     FileManager.sp_directory(createPath: "\(kCachesPath)/ZPhoteCash")
-}
-///  获取字体
-///
-/// - Parameter size: 大小
-/// - Returns: 字体
-func sp_getFontSize(size : CGFloat)->UIFont{
-    return UIFont.systemFont(ofSize: size)
 }
 
 /// 根据目录获取该目录下所有的文件 并排序
@@ -285,63 +136,10 @@ func sp_getfile(forDirectory:String) -> [String]?{
     }
     return fileSorted
 }
-/// 分享图片
+
+/// 获取主颜色值
 ///
-/// - Parameters:
-///   - imgs: 分享多个图片
-///   - vc: 当前控制器
-func sp_shareImg(imgs : [UIImage]?,vc : UIViewController?){
-    guard let shareImg = imgs else {
-        return
-    }
-    guard let currentVC = vc else {
-        return
-    }
-    
-    let activityVC = UIActivityViewController(activityItems: shareImg, applicationActivities: nil)
-    let popover = activityVC.popoverPresentationController
-    if (popover != nil) {
-        popover?.permittedArrowDirections = .up
-    }
-    
-    currentVC.present(activityVC, animated: true, completion: nil)
-}
-/// 分享视频
-///
-/// - Parameters:
-///   - videoUrls: 视频文件路径
-///   - vc: 当前控制器
-func sp_shareVideo(videoUrls : [URL]?,vc : UIViewController?){
-    guard let currentVC = vc else {
-        return
-    }
-    guard let shareList = videoUrls else {
-        return
-    }
-    let activityVC = UIActivityViewController(activityItems: shareList, applicationActivities: nil)
-    let popover = activityVC.popoverPresentationController
-    if (popover != nil) {
-        popover?.permittedArrowDirections = .up
-    }
-    currentVC.present(activityVC, animated: true, completion: nil)
-}
-/// 分享其他数据
-///
-/// - Parameters:
-///   - shareData: 分享数据
-///   - vc: 当前控制器
-func sp_shareOther(shareData:[Any]?,vc : UIViewController?){
-    guard let currentVC = vc else {
-        return
-    }
-    guard let shareList = shareData else {
-        return
-    }
-    let activityVC = UIActivityViewController(activityItems: shareList, applicationActivities: nil)
-    let popover = activityVC.popoverPresentationController
-    if (popover != nil) {
-        popover?.permittedArrowDirections = .up
-    }
-    
-    currentVC.present(activityVC, animated: true, completion: nil)
+/// - Returns: 颜色
+func sp_getMianColor()->UIColor{
+    return SPColorForHexString(hex: SP_HexColor.color_2a96fd.rawValue)
 }

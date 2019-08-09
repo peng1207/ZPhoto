@@ -9,6 +9,7 @@
 import Foundation
 import SnapKit
 import AVFoundation
+import SPCommonLibrary
 
 class SPCameraVC : SPBaseNavVC {
     internal init() {
@@ -58,7 +59,7 @@ fileprivate class SPCameraRootVC: SPBaseVC {
         view.collectSelectComplete = { [weak self](model : SPFilterModel)  in
             self?.cameraManmager.filter = model.filter
         }
-        view.sp_cornerRadius(cornerRadius: filterViewWidth / 2.0)
+        view.sp_cornerRadius(radius: filterViewWidth / 2.0)
         return view
     }() //滤镜显示view
     lazy fileprivate var videoData : SPRecordVideoData! = {
@@ -133,22 +134,22 @@ fileprivate extension SPCameraRootVC{
     func sp_dealBtnClick(type:ButtonClickType){
         switch type {
         case .cance:
-            SPLog("点击返回")
+            sp_log(message: "点击返回")
             sp_back()
         case .done:
-            SPLog("点击拍照")
+            sp_log(message: "点击拍照")
             sp_clickCamera()
         case .filter:
-            SPLog("点击滤镜")
+            sp_log(message: "点击滤镜")
             sp_clickFilter()
         case .flash:
-            SPLog("点击闪光灯")
+            sp_log(message: "点击闪光灯")
             sp_clickFlash()
         case .change:
-            SPLog("点击切换镜头")
+            sp_log(message: "点击切换镜头")
             sp_clickChangeDev()
         default:
-            SPLog("没有定义")
+            sp_log(message: "没有定义")
         }
     }
     func sp_back(){
@@ -167,10 +168,10 @@ fileprivate extension SPCameraRootVC{
                 do {
                     try data.write(to: URL(fileURLWithPath: SPPhotoHelp.SPPhotoDirectory + "/" + SPPhotoHelp.sp_getFileName()), options: Data.WritingOptions.atomic)
                 }catch {
-                    SPLog("写入缓存数据失败")
+                    sp_log(message: "写入缓存数据失败")
                 }
             }else{
-                SPLog("转换数据出错")
+                sp_log(message: "转换数据出错")
             }
         }
     }
@@ -187,10 +188,10 @@ fileprivate extension SPCameraRootVC{
      改变滤镜图片的数据
      */
     func sp_changeFilterData(){
-        sp_dispatchMainQueue {
+        sp_mainQueue {
             if (self.filterView.isHidden == false){
                 self.videoData.setup(inputImage: self.cameraManmager.noFilterCIImage, complete: { [weak self] () in
-                    sp_dispatchMainQueue {
+                    sp_mainQueue {
                         self?.filterView.filterList = self?.videoData.getFilterList()
                     }
                 })

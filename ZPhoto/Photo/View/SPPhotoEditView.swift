@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import SPCommonLibrary
 
 typealias SPPhotoEditComplete = (_ type : ButtonClickType)->Void
 
@@ -18,7 +19,7 @@ class SPPhotoEditView:  UIView{
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "CANCE"), for: UIControl.State.normal)
         btn.setTitleColor(sp_getMianColor(), for: UIControl.State.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.addTarget(self, action: #selector(sp_clickCance), for: UIControl.Event.touchUpInside)
         return btn
     }()
@@ -27,7 +28,7 @@ class SPPhotoEditView:  UIView{
         btn.setTitle(SPLanguageChange.sp_getString(key: "FINISH"), for: UIControl.State.normal)
         btn.setTitleColor(sp_getMianColor(), for: UIControl.State.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_999999.rawValue), for: UIControl.State.disabled)
-        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.addTarget(self, action: #selector(sp_clickFinish), for: UIControl.Event.touchUpInside)
         btn.isEnabled = false
         return btn
@@ -37,7 +38,7 @@ class SPPhotoEditView:  UIView{
         btn.setTitle("剪切", for: UIControl.State.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_000000.rawValue), for: UIControl.State.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControl.State.selected)
-        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.addTarget(self, action: #selector(sp_clickShear), for: UIControl.Event.touchUpInside)
         return btn
     }()
@@ -46,7 +47,7 @@ class SPPhotoEditView:  UIView{
         btn.setTitle("滤镜", for: UIControl.State.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_000000.rawValue), for: UIControl.State.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControl.State.selected)
-        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.addTarget(self, action: #selector(sp_clickFilter), for: UIControl.Event.touchUpInside)
         return btn
     }()

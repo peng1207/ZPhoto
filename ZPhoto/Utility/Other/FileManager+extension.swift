@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import SPCommonLibrary
 
 extension FileManager{
     
@@ -17,7 +17,7 @@ extension FileManager{
             try FileManager.default.createDirectory(atPath: createPath, withIntermediateDirectories: true, attributes: nil)
             addSkipBackupAttributeToItem(AtURL: URL(fileURLWithPath: createPath))
         }catch{
-            SPLog("creat directory is  \(error)")
+            sp_log(message: "creat directory is  \(error)")
         }
     }
     class private func addSkipBackupAttributeToItem(AtURL url:URL) {
@@ -47,7 +47,7 @@ extension FileManager{
                 do {
                     try fileManager.removeItem(atPath: path)
                 }catch {
-                    SPLog("delete file is  \(error)")
+                    sp_log(message: "delete file is  \(error)")
                 }
             }
         }

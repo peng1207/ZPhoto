@@ -10,6 +10,7 @@ import Foundation
 import AVFoundation
 import AVKit
 import CoreFoundation
+import SPCommonLibrary
 
 class SPCameraManager : NSObject {
     //捕获会话。它是input和output的桥梁。它协调着intput到output的数据传输
@@ -45,7 +46,8 @@ class SPCameraManager : NSObject {
        sp_checkAuth()
     }
     fileprivate func sp_checkAuth(){
-        SPAuthorizatio.isRightCamera { [weak self](success) in
+       
+        SPAuthorizatio.sp_isCamera { [weak self](success) in
              self?.cameraAuth = success
             if success {
                 //  有权限
@@ -150,7 +152,7 @@ extension SPCameraManager:AVCaptureVideoDataOutputSampleBufferDelegate{
             if let oImg = outputImage {
                 outputImage =  UIImage.sp_picRotating(imgae: oImg)
                 let cgImage = self.ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
-                sp_dispatchMainQueue {
+                sp_mainQueue {
                     self.videoLayer?.contents = cgImage
                     self.filterCGImage = cgImage
                 }

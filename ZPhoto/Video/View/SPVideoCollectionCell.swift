@@ -33,7 +33,7 @@ class SPVideoCollectionCell : UICollectionViewCell{
     fileprivate lazy var shareBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
 //        btn.backgroundColor = UIColor.lightText.withAlphaComponent(0.2)
-//        btn.sp_cornerRadius(cornerRadius: 5)
+//        btn.sp_cornerRadius(radius: 5)
         btn.setImage(UIImage(named: "share"), for: UIControl.State.normal)
         btn.addTarget(self, action: #selector(sp_clickShare), for: UIControl.Event.touchUpInside)
         return btn

@@ -10,6 +10,7 @@ import Foundation
 import SnapKit
 import AVFoundation
 import Photos
+import SPCommonLibrary
 
 class SPVideoUpendVC: SPBaseVC {
     
@@ -23,7 +24,7 @@ class SPVideoUpendVC: SPBaseVC {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "SAVE"), for: UIControl.State.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.isHidden = true
         btn.frame = CGRect(x: 0, y: 0, width: 50, height: 40)
         btn.addTarget(self, action: #selector(sp_clickSave), for: UIControl.Event.touchUpInside)

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import SnapKit
-
+import SPCommonLibrary
 /// 按钮点击回调
 typealias SPCameraBtnClickBlock = (_ type : ButtonClickType)->Void
 

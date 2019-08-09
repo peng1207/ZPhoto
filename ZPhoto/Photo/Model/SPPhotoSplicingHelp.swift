@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+import SPCommonLibrary
 /// 数据源
 struct SPPhotoSplicingStruct {
     /// 当前的位置
@@ -16,9 +16,9 @@ struct SPPhotoSplicingStruct {
     /// 总数量
     var count : Int = 0
     /// 父类的宽度
-    var width:CGFloat = sp_getScreenWidth()
+    var width:CGFloat = sp_screenWidth()
     /// 父类的高度
-    var height:CGFloat = sp_getScreenWidth()
+    var height:CGFloat = sp_screenWidth()
     /// 外边距
     var  margin : CGFloat = 4
     /// 内边距
@@ -44,7 +44,7 @@ class SPPhotoSplicingHelp {
         case .nine(let t):
            retureValue = SPPhotoSplicingNine.sp_frameAndSpace(type: t, value: value)
         default:
-            SPLog("没有其他的布局")
+            sp_log(message: "没有其他的布局")
         }
         return retureValue
     }
@@ -77,7 +77,7 @@ class SPPhotoSplicingHelp {
         case .nine(let t):
             layoutType = sp_nineLayoutType(index: index, count: count, type: t)
         default:
-            SPLog("没有其他")
+            sp_log(message: "没有其他")
         }
         return layoutType
     }
@@ -91,7 +91,7 @@ class SPPhotoSplicingHelp {
         case .two:
             layoutType = .heart
         default:
-            SPLog("没有其他")
+            sp_log(message: "没有其他")
         }
         
         return layoutType

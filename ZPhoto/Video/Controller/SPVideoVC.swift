@@ -8,6 +8,7 @@
 
 import Foundation
 import SnapKit
+import SPCommonLibrary
 
 class SPVideoVC: SPBaseNavVC {
     
@@ -49,7 +50,7 @@ fileprivate class SPVideoRootVC: SPBaseVC {
          btn.setImage(UIImage(named: "add_white"), for: UIControl.State.normal)
         btn.addTarget(self, action: #selector(sp_clickRecord), for: UIControl.Event.touchUpInside)
         btn.backgroundColor = sp_getMianColor()
-        btn.sp_cornerRadius(cornerRadius: 40)
+        btn.sp_cornerRadius(radius: 40)
         return btn
     }()
     fileprivate lazy var fileView : SPPentagonView = {

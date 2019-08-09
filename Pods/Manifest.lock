@@ -1,10 +1,17 @@
 PODS:
-  - SnapKit (4.2.0)
-  - SPCommonLibrary/Public (0.0.1.6):
+  - SnapKit (5.0.0)
+  - SPCommonLibrary/Clip (0.0.1.22):
+    - SnapKit
+    - SPCommonLibrary/Public
+  - SPCommonLibrary/Public (0.0.1.22):
+    - SnapKit
+  - SPCommonLibrary/Share (0.0.1.22):
     - SnapKit
 
 DEPENDENCIES:
+  - SPCommonLibrary/Clip
   - SPCommonLibrary/Public
+  - SPCommonLibrary/Share
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -13,9 +20,9 @@ SPEC REPOS:
     - SPCommonLibrary
 
 SPEC CHECKSUMS:
-  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
-  SPCommonLibrary: 11014f4a93b7c779c3943ab0f90fc589b462720f
+  SnapKit: fd22d10eb9aff484d79a8724eab922c1ddf89bcf
+  SPCommonLibrary: 1d04a9b29f74342fa1f51d6206f8cf3b58275660
 
-PODFILE CHECKSUM: d47cc0368e40982c63c351bff5ca99989ec54aa8
+PODFILE CHECKSUM: 05176d0ec09cdb2fcf0a2fe566d92e2f3745ed3f
 
 COCOAPODS: 1.7.4

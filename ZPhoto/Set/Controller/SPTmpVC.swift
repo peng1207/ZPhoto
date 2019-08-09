@@ -8,6 +8,7 @@
 
 import Foundation
 import SnapKit
+import SPCommonLibrary
 class SPTmpVC: SPBaseVC {
     fileprivate lazy var scrollView : UIScrollView = {
         let view = UIScrollView()
@@ -69,8 +70,8 @@ class SPTmpVC: SPBaseVC {
         sp_setupOfficeSubView()
         sp_setupBase1SubView()
         sp_setupFloorSubView()
-        sp_after(time: 5) {
-            SPLog(self.self.floorView.subviews)
+        sp_asyncAfter(time: 5) {
+            sp_log(message: self.self.floorView.subviews)
         }
         
     }
@@ -1032,7 +1033,7 @@ extension SPTmpVC{
     fileprivate func sp_getLabel(text : String,view : UIView? = nil,tag : Int = 0)-> UILabel{
         let label = UILabel()
         label.text = text
-        label.font = sp_getFontSize(size: 6)
+        label.font = sp_fontSize(fontSize:  6)
         label.numberOfLines = 0
         label.textColor = UIColor.white
         label.textAlignment = .center
@@ -1061,7 +1062,7 @@ extension SPTmpVC{
     fileprivate func sp_getOfficeLabel(text : String)-> UILabel{
         let label = UILabel()
         label.text = text
-        label.font = sp_getFontSize(size: 6)
+        label.font = sp_fontSize(fontSize:  6)
         label.numberOfLines = 0
         label.textColor = UIColor.white
         label.textAlignment = .center
@@ -1130,9 +1131,9 @@ extension SPTmpVC{
     
     
     @objc fileprivate func sp_clickTap(){
-        SPLog("点击保存图片")
+        sp_log(message: "点击保存图片")
 //        let img = UIImage.sp_img(of: self.scrollView)
-//        SPLog(img?.size)
+//        sp_log(message: img?.size)
 //        if let i = img {
 //            UIImageWriteToSavedPhotosAlbum(i, self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
 //        }

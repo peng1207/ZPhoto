@@ -10,6 +10,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import SPCommonLibrary
 
 class SPSplicingToolView:  UIView{
     
@@ -60,14 +61,14 @@ class SPSplicingToolView:  UIView{
 extension SPSplicingToolView : UICollectionViewDelegate , UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sp_getArrayCount(array: self.dataArray) > 0 ? 1 : 0
+        return sp_count(array:  self.dataArray) > 0 ? 1 : 0
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sp_getArrayCount(array: self.dataArray)
+        return sp_count(array:  self.dataArray)
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell : SPSplicingToolCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellID, for: indexPath) as! SPSplicingToolCollectionCell
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_count(array:  self.dataArray) {
             cell.model = self.dataArray[indexPath.row]
         }
         return cell
@@ -87,7 +88,7 @@ class SPSplicingToolCollectionCell: UICollectionViewCell {
     }()
     fileprivate lazy var titleLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 12)
+        label.font =  sp_fontSize(fontSize:  12)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         label.textAlignment = .center
         return label

@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import AVKit
 import CoreFoundation
-
+import SPCommonLibrary
 typealias PropertyChangeBlock = ()->Void
 // 没有相机权限的回调
 typealias NOAuthBlock = () ->Void
@@ -87,7 +87,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     }
     // 设置视频的初始化
     func setupRecord(){
-        SPAuthorizatio.isRightCamera { (authorized) in
+        SPAuthorizatio.sp_isCamera{ (authorized) in
             self.cameraAuth = authorized
             if authorized{
                 // 有权限
@@ -107,7 +107,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
      判断麦克风权限
      */
     fileprivate func isRecordAuth(){
-        SPAuthorizatio.isRightRecord { (authorized) in
+        SPAuthorizatio.sp_isRecord { (authorized) in
              self.setupInit()
             if authorized == false {
                 self.noAuthorizedComplete(noAuthBlock: self.noMicrophoneBlock)
@@ -202,7 +202,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             return
         }
         
-        sp_dispatchMainQueue {
+        sp_mainQueue {
             self.setupAssertWrirer()
             self.isFirstVideo = false
             self.startRecording = true
@@ -216,10 +216,10 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         do {
             if FileManager.default.fileExists(atPath: filePath) {
                 FileManager.remove(path: filePath)
-                SPLog("file is exist ")
+                sp_log(message: "file is exist ")
             }
             
-            let size = screenPixels()
+            let size = sp_screenPixels()
             assetWriter = try AVAssetWriter(url:  URL(fileURLWithPath: filePath), fileType: AVFileType.mp4)
             let videoOutputSettings : [String : Any]
             
@@ -259,19 +259,19 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             if (assetWriter?.canAdd(videoWriterInput!))! {
                 assetWriter?.add(videoWriterInput!)
             }else {
-                SPLog("is no add  videoWriterInput")
+                sp_log(message: "is no add  videoWriterInput")
             }
             audioWriterInput = AVAssetWriterInput(mediaType: AVMediaType.audio, outputSettings: audioSetting)
             audioWriterInput?.expectsMediaDataInRealTime = true
             if (assetWriter?.canAdd(audioWriterInput!))! {
                 assetWriter?.add(audioWriterInput!)
             }else{
-                SPLog("is no add audioWriterInput")
+                sp_log(message: "is no add audioWriterInput")
             }
             self.logWriterStatus()
-            SPLog("setupAssertWrirer end ")
+            sp_log(message: "setupAssertWrirer end ")
         }catch {
-            SPLog("writer is catch \(error)")
+            sp_log(message: "writer is catch \(error)")
         }
     }
     
@@ -289,7 +289,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             audioWriterInput?.markAsFinished()
         }
         assetWriter?.finishWriting(completionHandler: { [weak self] () in
-            SPLog("assetwriter error is \(String(describing: self?.assetWriter?.error.debugDescription))")
+            sp_log(message: "assetwriter error is \(String(describing: self?.assetWriter?.error.debugDescription))")
             if self?.assetWriter?.error != nil{
                 //                FileManager.remove(path: self.filePath)
             }else{
@@ -326,7 +326,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     func sp_zoomIn(scale : CGFloat = 1.0){
         
         if let zoomFactor = self.currentDevice?.videoZoomFactor{
-            SPLog("\(zoomFactor)")
+            sp_log(message: "\(zoomFactor)")
             if zoomFactor < maxZoomActore {
                 let newZoomFactor = min(zoomFactor + scale, maxZoomActore)
                 self.changeDeviceProperty(propertyBlock: {  [weak self]()  in
@@ -340,7 +340,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     //缩小
     func sp_zoomOut(scale : CGFloat = 1.0) {
         if let zoomFactor = currentDevice?.videoZoomFactor {
-            SPLog("\(zoomFactor)")
+            sp_log(message: "\(zoomFactor)")
             if zoomFactor > minZoomActore {
                 let newZoomFactor = max(zoomFactor - scale, minZoomActore)
                 self.changeDeviceProperty(propertyBlock: { [weak self]()  in
@@ -475,7 +475,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             if outputImage != nil {
                 outputImage =  UIImage.sp_picRotating(imgae: outputImage)
                 let cgImage = self.ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
-                sp_dispatchMainQueue {
+                sp_mainQueue {
                     self.videoLayer?.contents = cgImage
                 }
             }
@@ -487,7 +487,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         if self.startRecording == true,self.assetWriter != nil ,self.assetWriter?.status == .writing,self.videoWriterPixelbufferInput != nil , (self.videoWriterPixelbufferInput?.assetWriterInput.isReadyForMoreMediaData)! , pixelBuffer != nil , time != nil {
             let success = self.videoWriterPixelbufferInput?.append(pixelBuffer!, withPresentationTime: time!)
             if success == false{
-                SPLog("video append failur is \(String(describing: self.assetWriter?.error.debugDescription))")
+                sp_log(message: "video append failur is \(String(describing: self.assetWriter?.error.debugDescription))")
             }
         }
     }
@@ -496,7 +496,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         if startRecording == true ,self.assetWriter != nil ,self.assetWriter?.status == .writing,sampleBuffer != nil , audioWriterInput != nil ,(audioWriterInput?.isReadyForMoreMediaData)!  {
             let success = audioWriterInput?.append(sampleBuffer!)
             if success == false{
-                SPLog("audio append is failure \(String(describing: assetWriter?.error.debugDescription))")
+                sp_log(message: "audio append is failure \(String(describing: assetWriter?.error.debugDescription))")
             }
         }
     }
@@ -512,24 +512,24 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         self.assetWriter = nil
     }
     deinit {
-        SPLog("销毁对象 ")
+        sp_log(message: "销毁对象 ")
         self.sp_cance()
     }
     /**< 打印 writerStatus */
     fileprivate func logWriterStatus(){
         switch self.assetWriter?.status {
         case .none:
-            SPLog("none")
+            sp_log(message: "none")
         case .some(.unknown):
-            SPLog("unkonwn")
+            sp_log(message: "unkonwn")
         case .some(.writing):
-            SPLog("writer")
+            sp_log(message: "writer")
         case .some(.completed):
-            SPLog("completed")
+            sp_log(message: "completed")
         case .some(.failed):
-            SPLog("failed \(String(describing: self.assetWriter?.error))")
+            sp_log(message: "failed \(String(describing: self.assetWriter?.error))")
         case .some(.cancelled):
-            SPLog("cancelled")
+            sp_log(message: "cancelled")
         }
     }
     

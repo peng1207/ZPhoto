@@ -9,7 +9,7 @@
 
 import Foundation
 import UIKit
-
+import SPCommonLibrary
 
 class SPPhotoSplicingNine {
     
@@ -200,7 +200,7 @@ class SPPhotoSplicingNine {
             frame = CGRect(x: x, y: y, width: w, height: h)
             
         default:
-            SPLog("没有其他")
+            sp_log(message: "没有其他")
         }
         return frame
     }
@@ -474,7 +474,7 @@ class SPPhotoSplicingNine {
                 }
             }
         default:
-            SPLog("没有其他")
+            sp_log(message: "没有其他")
         }
         
         return (left,right,top,bottom)

@@ -8,7 +8,7 @@
 
 import Foundation
 import SnapKit
-
+import SPCommonLibrary
 class SPMainVC: SPBaseVC {
   
     fileprivate lazy var videoView : SPPentagonView = {

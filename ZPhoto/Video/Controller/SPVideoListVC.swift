@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import CoreImage
-
+import SPCommonLibrary
 // MARK: -- 视频列表
   class SPVideoListVC : SPBaseVC {
     
@@ -32,7 +32,7 @@ import CoreImage
         let label = UILabel()
         label.text = SPLanguageChange.sp_getString(key: "NO_VIDEO_TIP")
         label.numberOfLines = 0;
-        label.font = sp_fontSize(fontSize: 14)
+        label.font =  sp_fontSize(fontSize: 14)
         label.isHidden = true
         label.textAlignment = .center
         return label
@@ -122,7 +122,7 @@ extension SPVideoListVC {
             return
         }
         if let url = model.url {
-              sp_shareVideo(videoUrls: [url], vc: self)
+            SPShare.sp_share(videoUrls:  [url], vc: self)
         }
         
     }
@@ -143,16 +143,16 @@ extension SPVideoListVC {
 // MARK: -- delegate
 extension SPVideoListVC : UICollectionViewDelegate,UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sp_getArrayCount(array: self.videoDataArray)
+        return sp_count(array:  self.videoDataArray)
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sp_getArrayCount(array: self.videoDataArray) > 0  ? 1 : 0
+        return sp_count(array:  self.videoDataArray) > 0  ? 1 : 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.identify, for: indexPath) as! SPVideoCollectionCell
-        if indexPath.row < sp_getArrayCount(array: self.videoDataArray){
+        if indexPath.row < sp_count(array:  self.videoDataArray){
               cell.videoModel = self.videoDataArray?[indexPath.row]
         }
         cell.clickComplete = {
@@ -165,7 +165,7 @@ extension SPVideoListVC : UICollectionViewDelegate,UICollectionViewDataSource {
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row < sp_getArrayCount(array: self.videoDataArray) {
+        if indexPath.row < sp_count(array:  self.videoDataArray) {
             let videoModel = self.videoDataArray?[indexPath.row]
             let videoPlayVC = SPVideoPlayVC()
             videoPlayVC.videoModel = videoModel
@@ -180,9 +180,9 @@ extension SPVideoListVC : UICollectionViewDelegate,UICollectionViewDataSource {
 extension SPVideoListVC {
     /**< 获取视频数据  */
     @objc fileprivate func videoData(){
-        sp_dispatchAsync {
+        sp_sync {
             let array = SPVideoHelp.videoFile()
-            sp_dispatchMainQueue {
+            sp_mainQueue {
                 self.videoDataArray = array
                 self.reloadData()
             }
@@ -192,7 +192,7 @@ extension SPVideoListVC {
      刷新数据
      */
     fileprivate func reloadData(){
-        sp_dispatchMainQueue {
+        sp_mainQueue {
             self.videoCollectionView.reloadData()
             self.dealNoData()
         }

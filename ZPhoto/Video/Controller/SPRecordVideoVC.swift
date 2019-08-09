@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 import AVFoundation
-
+import SPCommonLibrary
 
 // 按钮点击事件回调
 typealias ButtonClickBlock =  (_ clickType:ButtonClickType,_ button:UIButton) ->Void
@@ -57,7 +57,7 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
         let view =  SPRecordVideoFilterView()
         view.isHidden = true
         view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        view.sp_cornerRadius(cornerRadius: filterViewWidth / 2.0)
+        view.sp_cornerRadius(radius: filterViewWidth / 2.0)
         return view
     } () //滤镜显示view
     fileprivate var pinchGesture : UIPinchGestureRecognizer!  // 手势
@@ -108,7 +108,7 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
         self.dealOrientation(toInterfaceOrientation: toInterfaceOrientation)
     }
     deinit {
-        SPLog("销毁对象")
+        sp_log(message: "销毁对象")
         videoManager.removeObserver(self, forKeyPath: kVideoManagerKVOKey)
         recordVideoView.removeFromSuperview()
         recordVideoView = nil
@@ -180,13 +180,13 @@ extension SPRecordVideoRootVC {
         }
         let scale = 1.0 - (lastScale - sender.scale)
         if lastScale >= sender.scale {
-            SPLog("缩小")
+            sp_log(message: "缩小")
             videoManager.sp_zoomOut(scale: 0.1)
         }else{
-            SPLog("放大")
+            sp_log(message: "放大")
             videoManager.sp_zoomIn(scale:0.1)
         }
-        SPLog("\(scale)----\(lastScale)----\(sender.velocity)")
+        sp_log(message: "\(scale)----\(lastScale)----\(sender.velocity)")
         lastScale = sender.scale
         
     }
@@ -196,30 +196,30 @@ extension SPRecordVideoRootVC {
     fileprivate func dealButtonClickAction(clickType : ButtonClickType,button:UIButton){
         switch clickType {
         case .cance:
-            SPLog("点击取消")
+            sp_log(message: "点击取消")
            self.clickCance()
         case .done:
             
             if button.isSelected {
-                SPLog("点击结束")
+                sp_log(message: "点击结束")
                 self.videoManager.sp_stopRecord()
             }else {
-                SPLog("点击录制")
+                sp_log(message: "点击录制")
                 self.videoManager.sp_startRecord()
             }
             button.isSelected = !button.isSelected
         case .flash:
-            SPLog("点击闪光灯")
+            sp_log(message: "点击闪光灯")
             button.isSelected = !button.isSelected
             self.videoManager.sp_flashlight()
         case .change:
-            SPLog("点击切换镜头")
+            sp_log(message: "点击切换镜头")
             self.videoManager.sp_changeVideoDevice()
         case .filter:
             self.clickFilterAction();
-             SPLog("点击滤镜 ")
+             sp_log(message: "点击滤镜 ")
         default:
-            SPLog("其他没有定义")
+            sp_log(message: "其他没有定义")
         }
     }
     fileprivate func clickCance(){
@@ -260,10 +260,10 @@ extension SPRecordVideoRootVC {
      改变滤镜图片的数据
      */
     fileprivate func changeFilterData(){
-        sp_dispatchMainQueue {
+        sp_mainQueue {
             if (self.filterView.isHidden == false){
                 self.videoData.setup(inputImage: self.videoManager.noFilterCIImage, complete: { [weak self] () in
-                    sp_dispatchMainQueue {
+                    sp_mainQueue {
                         self?.filterView.filterList = self?.videoData.getFilterList()
                     }
                 })
@@ -287,7 +287,7 @@ extension SPRecordVideoRootVC {
             self.disMissVC()
         }))
         alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "GO_TO_SET"), style: UIAlertAction.Style.default, handler: { (action) in
-            SPSysSet.openSetting()
+            sp_sysOpen()
              self.disMissVC()
         }))
         self.present(alert, animated: true, completion: nil)
@@ -299,7 +299,7 @@ extension SPRecordVideoRootVC {
         let alert = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "NO_MICROPHONE_AUTH_TIPS"), preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel, handler: nil))
         alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "GO_TO_SET"), style: UIAlertAction.Style.default, handler: { (action) in
-            SPSysSet.openSetting()
+            sp_sysOpen()
         }))
         self.present(alert, animated: true, completion: nil)
     }
@@ -331,7 +331,7 @@ class SPRecordVideoBtnView: UIView {
     }()
     lazy fileprivate var timeLabel : UILabel! = {
         let label = UILabel();
-        label.font = sp_fontSize(fontSize: 14);
+        label.font =  sp_fontSize(fontSize: 14);
         label.textAlignment = NSTextAlignment.center;
         label.text = "00:00"
         label.backgroundColor = UIColor.white.withAlphaComponent(0.3)
@@ -349,7 +349,7 @@ class SPRecordVideoBtnView: UIView {
         if let select = selectTitle {
             button.setTitle(select, for: .selected)
         }
-        button.titleLabel?.font = sp_fontSize(fontSize: fontsize)
+        button.titleLabel?.font =  sp_fontSize(fontSize: fontsize)
         button.setTitleColor(UIColor.black.withAlphaComponent(0.5), for: .normal)
         if let image = norImage {
             button.setImage(image, for: UIControl.State.normal)
@@ -391,7 +391,7 @@ class SPRecordVideoBtnView: UIView {
     fileprivate func setupTimer (){
         var i = 0;
         sourceTimer = timer({
-            sp_dispatchMainQueue {
+            sp_mainQueue {
                 self.timeLabel.text = formatForMin(seconds: Float64(i))
             }
             i = i + 1

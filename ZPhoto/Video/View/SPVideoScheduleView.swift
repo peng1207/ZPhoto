@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import AVKit
 import SnapKit
+import SPCommonLibrary
 // MARK: -- 进度view  主要用来切割视频的
 class SPVideoScheduleView : UIView {
     fileprivate let maxSpace : CGFloat = 20.00
@@ -124,9 +125,9 @@ extension SPVideoScheduleView {
         }
         let point = panGesture.translation(in: panGesture.view)
         var x = point.x - lastright_X
-        x =  -(self.sp_width() - self.rightPanView.sp_MaxX()) + x
-        if self.sp_width() - (-x + self.rightPanView.sp_width()) - self.leftPanView.sp_MaxX() < maxSpace {
-            x = -(self.sp_width() - self.leftPanView.sp_MaxX() - maxSpace - self.rightPanView.sp_width())
+        x =  -(self.sp_width() - self.rightPanView.sp_maxX()) + x
+        if self.sp_width() - (-x + self.rightPanView.sp_width()) - self.leftPanView.sp_maxX() < maxSpace {
+            x = -(self.sp_width() - self.leftPanView.sp_maxX() - maxSpace - self.rightPanView.sp_width())
         }
         if x > -5 {
             x = -5

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SPCommonLibrary
 fileprivate let  itemH: CGFloat = 60
 class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
  
@@ -44,7 +45,7 @@ class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionView
     }
     fileprivate func sp_reload(){
        
-        if sp_getArrayCount(array: self.filterList) > 0 {
+        if sp_count(array:  self.filterList) > 0 {
             UIView.performWithoutAnimation {
                 filterCollectionView?.reloadSections([0])
             }
@@ -88,7 +89,7 @@ extension SPRecordVideoFilterView{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell  = collectionView.dequeueReusableCell(withReuseIdentifier: self.identify, for: indexPath) as! SPRecordVideoFilterCell
-        if indexPath.row <  sp_getArrayCount(array: self.filterList){
+        if indexPath.row <  sp_count(array:  self.filterList){
             let model = filterList?[indexPath.row]
             cell.imageView.image = model?.showImage
         }
@@ -100,7 +101,7 @@ extension SPRecordVideoFilterView{
         let pInView = self.convert((self.filterCollectionView?.center)!, to: self.filterCollectionView)
         
         let indexPath = self.filterCollectionView?.indexPathForItem(at: pInView)
-        SPLog("indexPath row \(String(describing: indexPath?.row))")
+        sp_log(message: "indexPath row \(String(describing: indexPath?.row))")
         completeBlock(indexPath: indexPath)
     }
     /*

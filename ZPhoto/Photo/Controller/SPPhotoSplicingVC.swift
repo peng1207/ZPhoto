@@ -9,6 +9,7 @@
 
 import Foundation
 import SnapKit
+import SPCommonLibrary
 class SPPhotoSplicingVC: SPBaseVC {
     var dataArray : [SPPhotoModel]!
     fileprivate var typeList : [SPSPlicingType]!
@@ -19,7 +20,7 @@ class SPPhotoSplicingVC: SPBaseVC {
         btn.setTitle(SPLanguageChange.sp_getString(key: "SAVE"), for: UIControl.State.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.normal)
         btn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
-        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.addTarget(self, action: #selector(sp_clickSave), for: UIControl.Event.touchUpInside)
         return btn
     }()
@@ -91,7 +92,7 @@ class SPPhotoSplicingVC: SPBaseVC {
         }
         var index = 0
         for model in self.dataArray {
-            let value = SPPhotoSplicingHelp.sp_frameAndSpace(tyep: self.selectType, value: SPPhotoSplicingStruct(index: index, count: self.dataArray.count, width: sp_getScreenWidth(), height: sp_getScreenWidth(), margin: marginSpace, padding: paddingSpace))
+            let value = SPPhotoSplicingHelp.sp_frameAndSpace(tyep: self.selectType, value: SPPhotoSplicingStruct(index: index, count: self.dataArray.count, width: sp_screenWidth(), height: sp_screenWidth(), margin: marginSpace, padding: paddingSpace))
             let frame = value.frame
             let space : SPSpace = value.space
             let view = SPCustomPictureView(frame:frame)
@@ -135,8 +136,8 @@ class SPPhotoSplicingVC: SPBaseVC {
 extension SPPhotoSplicingVC {
     
     @objc fileprivate func sp_clickSave(){
-    
-        let img = UIImage.sp_img(of: self.bgView)
+       
+        let img = UIImage.sp_image(view: self.bgView)
         if  let i = img {
             UIImageWriteToSavedPhotosAlbum(i, self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
         }

@@ -8,6 +8,7 @@
 
 import Foundation
 import SnapKit
+import SPCommonLibrary
 class SPPhotoEditVC: SPBaseVC {
     
     fileprivate lazy var scrollView : UIScrollView = {
@@ -54,7 +55,7 @@ class SPPhotoEditVC: SPBaseVC {
     {
         if let e = error as NSError?
         {
-            SPLog(e)
+            sp_log(message: e)
         }
         else
         {
@@ -122,7 +123,7 @@ extension SPPhotoEditVC : UIScrollViewDelegate{
         //实时修改imageView的center属性 保持其居中
        
         self.iconImgView.center = CGPoint(x: scrollView.contentSize.width/2 + delta_x, y: scrollView.contentSize.height/2 + delta_y)
-         SPLog(self.iconImgView.frame)
+         sp_log(message: self.iconImgView.frame)
     }
     
 }
@@ -138,7 +139,7 @@ extension SPPhotoEditVC {
         case .done:
             sp_clickFinish()
         default:
-            SPLog("点击没有定义的")
+            sp_log(message: "点击没有定义的")
         }
     }
     fileprivate func sp_clickFinish(){

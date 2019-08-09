@@ -9,6 +9,7 @@
 
 import Foundation
 import SnapKit
+import SPCommonLibrary
 class SPPhotoSplicingSelectVC: SPBaseVC {
 
     fileprivate lazy var photoListVC : SPPhotoListVC = {
@@ -37,7 +38,7 @@ class SPPhotoSplicingSelectVC: SPBaseVC {
         btn.setTitle(SPLanguageChange.sp_getString(key: "NEXT"), for: UIControl.State.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.normal)
         btn.frame = CGRect(x: 0, y: 0, width: 60, height: 40)
-        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.addTarget(self, action: #selector(sp_clickNext), for: UIControl.Event.touchUpInside)
         return btn
     }()
@@ -143,14 +144,14 @@ extension SPPhotoSplicingSelectVC : CAAnimationDelegate{
         let startPoint = point
         let path = UIBezierPath()
         // 随机数
-        let randomX = arc4random() % (UInt32(sp_getScreenWidth()) + 1)
+        let randomX = arc4random() % (UInt32(sp_screenWidth()) + 1)
         let randomY = arc4random() % UInt32(self.selectView.frame.origin.y - 100) + UInt32(layerW)
         if isDow {
             path.move(to: startPoint)
             path.addLine(to: CGPoint(x: CGFloat(randomX), y: CGFloat(randomY)))
-            path.addLine(to: CGPoint(x: sp_getScreenWidth() / 2.0, y: self.selectView.frame.origin.y + layerW))
+            path.addLine(to: CGPoint(x: sp_screenWidth() / 2.0, y: self.selectView.frame.origin.y + layerW))
         }else{
-            path.move(to: CGPoint(x: sp_getScreenWidth() / 2.0, y: self.selectView.frame.origin.y + layerW))
+            path.move(to: CGPoint(x: sp_screenWidth() / 2.0, y: self.selectView.frame.origin.y + layerW))
             path.addLine(to: CGPoint(x: CGFloat(randomX), y:CGFloat(randomY)))
             path.addLine(to: startPoint)
         }
@@ -161,9 +162,9 @@ extension SPPhotoSplicingSelectVC : CAAnimationDelegate{
         
         let imgLayer = CALayer()
         if isDow {
-             imgLayer.frame = CGRect(x:  sp_getScreenWidth() / 2.0, y: -layerW, width: layerW, height: layerW)
+             imgLayer.frame = CGRect(x:  sp_screenWidth() / 2.0, y: -layerW, width: layerW, height: layerW)
         }else{
-             imgLayer.frame = CGRect(x:  sp_getScreenWidth() / 2.0, y: sp_getScreenHeight()  + layerW, width: layerW, height: layerW)
+             imgLayer.frame = CGRect(x:  sp_screenWidth() / 2.0, y: sp_screenHeight()  + layerW, width: layerW, height: layerW)
         }
        
         imgLayer.contents = image.cgImage
@@ -171,7 +172,7 @@ extension SPPhotoSplicingSelectVC : CAAnimationDelegate{
         imgLayer.masksToBounds = true
         self.view.layer.addSublayer(imgLayer)
         imgLayer.add(animationGroup, forKey: "")
-        sp_after(time: duration) {
+        sp_asyncAfter(time: duration) {
             imgLayer.isHidden = true
             imgLayer.removeAllAnimations()
             imgLayer.removeFromSuperlayer()
@@ -179,7 +180,7 @@ extension SPPhotoSplicingSelectVC : CAAnimationDelegate{
     }
     /// 点击下一步
     @objc func sp_clickNext(){
-        if sp_getArrayCount(array: self.selectView.dataArray) > 0 {
+        if sp_count(array:  self.selectView.dataArray) > 0 {
             let vc = SPPhotoSplicingVC()
             vc.dataArray = self.selectView.dataArray
             self.navigationController?.pushViewController(vc, animated: true)

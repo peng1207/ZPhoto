@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import SPCommonLibrary
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -19,21 +19,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = UIColor.white
         window?.makeKeyAndVisible()
         UINavigationController.sp_initialize()
-         SPLanguageChange.shareInstance.initLanguage()
         let recordVideoVC = SPMainVC()
         window?.rootViewController = recordVideoVC
         createCachePath()
         setUncaughtExceptionHandler()
-     
-        SPLog("preferredLanguages is \(NSLocale.preferredLanguages)")
+      
 //        let properties = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
 //        for fileterName : String in properties {
 //            let filter = CIFilter(name: fileterName)
 //            // 滤镜的参数
-//            SPLog("滤镜名称----\(fileterName)")
-//            SPLog(filter?.attributes)
+//            sp_log(message: "滤镜名称----\(fileterName)")
+//            sp_log(message: filter?.attributes)
 //        }
-//        SPLog(sp_limitUp(current: 10, count: 10))
+//        sp_log(message: sp_limitUp(current: 10, count: 10))
         
         // Override point for customization after application launch.
         return true
@@ -44,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         for i in 1...count {
             totalPrice = totalPrice + totalPrice * 0.1
-            SPLog("第\(i)涨停的价格 \(totalPrice)")
+            sp_log(message: "第\(i)涨停的价格 \(totalPrice)")
         }
         return totalPrice
     }
@@ -52,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
           var totalPrice = current
         for i in 1...num {
             totalPrice = totalPrice + totalPrice * 0.3
-            SPLog("第\(i * 3)天总额 \(totalPrice)")
+            sp_log(message: "第\(i * 3)天总额 \(totalPrice)")
         }
         return totalPrice
     }
@@ -80,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        SPLog("app is kill")
+        sp_log(message: "app is kill")
         
     }
 

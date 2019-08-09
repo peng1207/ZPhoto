@@ -8,7 +8,7 @@
 
 import Foundation
 import SnapKit
-
+import SPCommonLibrary
 typealias SPVideoSelectComplete = (_ model : SPVideoModel?)->Void
 
 class SPVideoSelectVC: SPBaseVC {
@@ -35,9 +35,9 @@ class SPVideoSelectVC: SPBaseVC {
         super.viewDidDisappear(animated)
     }
     fileprivate func sp_setupData(){
-        sp_dispatchAsync {
+        sp_sync {
             let array = SPVideoHelp.videoFile()
-            sp_dispatchMainQueue {
+            sp_mainQueue {
                 self.dataArray = array
                 self.collectionView.reloadData()
             }
@@ -81,14 +81,14 @@ class SPVideoSelectVC: SPBaseVC {
 }
 extension SPVideoSelectVC : UICollectionViewDelegate ,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sp_getArrayCount(array: self.dataArray) > 0 ? 1 : 0
+        return sp_count(array:  self.dataArray) > 0 ? 1 : 0
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sp_getArrayCount(array: self.dataArray)
+        return sp_count(array:  self.dataArray)
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell : SPVideoSelectCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellID, for: indexPath) as! SPVideoSelectCollectionCell
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_count(array:  self.dataArray) {
             let model = self.dataArray?[indexPath.row]
             cell.iconImgView.image = model?.thumbnailImage
             if let second = model?.second {
@@ -100,7 +100,7 @@ extension SPVideoSelectVC : UICollectionViewDelegate ,UICollectionViewDataSource
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_count(array:  self.dataArray) {
             guard let block = selectBlock else{
                 return
             }

@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import AVFoundation
+import SPCommonLibrary
 
 class SPVideoPlayView : UIView{
     
@@ -197,14 +198,14 @@ class SPVideoPlayButtonView : UIView{
     lazy var timeLabel: UILabel! = {
         let label = UILabel()
         label.text = "00.00"
-        label.font = sp_fontSize(fontSize: 14)
+        label.font =  sp_fontSize(fontSize: 14)
         label.textColor = UIColor.white
         return label
     }()
     lazy var progressView : UISlider! = {
         let progress = UISlider()
         let width = 16
-        progress.setThumbImage(UIImage.image(color: UIColor.white, imageSize: CGSize(width: width, height: width))?.circle(), for: UIControl.State.normal)
+        progress.setThumbImage( UIImage.sp_image(color: UIColor.white, size: CGSize(width: width, height: width))?.sp_circle(), for: UIControl.State.normal)
         
         return progress
     }()

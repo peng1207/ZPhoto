@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import Photos
+import SPCommonLibrary
 
 /// 导出成功
 typealias ExportSuccess = (_ assert : AVAsset?,_ url : String)-> Void
@@ -118,7 +119,7 @@ class SPVideoHelp: NSObject {
             thumbnailImage = UIImage(cgImage: thumbnailImageRef)
             return thumbnailImage
         } catch {
-            SPLog("thumbnailImageTo error is \(error)")
+            sp_log(message: "thumbnailImageTo error is \(error)")
             return nil
         }
     }
@@ -249,18 +250,18 @@ class SPVideoHelp: NSObject {
         var audioSamples : [CMSampleBuffer] = []
         if let audioTrackOutput = audioOutput {
             while let audioSample = audioTrackOutput.copyNextSampleBuffer(){
-                SPLog("读取音频中")
+                sp_log(message: "读取音频中")
                 audioSamples.append(audioSample)
             }
         }
         
         var samples: [CMSampleBuffer] = []
         while let sample = trackOutput.copyNextSampleBuffer() {
-            SPLog("读取视频中")
+            sp_log(message: "读取视频中")
             samples.append(sample)
 //            CMSampleBufferInvalidate(sample)
         }
-        SPLog("读取结束")
+        sp_log(message: "读取结束")
         asserReader.cancelReading()
         return (samples,audioSamples)
     }
@@ -268,7 +269,7 @@ class SPVideoHelp: NSObject {
         guard let block = complete else {
             return
         }
-        sp_dispatchMainQueue {
+        sp_mainQueue {
             block(asset,url)
         }
        
@@ -282,11 +283,11 @@ class SPVideoHelp: NSObject {
             sp_dealVideoUnpend(asset: nil, url: "", complete: complete)
             return
         }
-        sp_dispatchAsync {
+        sp_sync {
             let data = sp_getVideoBuffer(asset: videoAsset)
             let samples = data.videoBuffers
 //            let audioSamples = data.audioBuffers
-            if sp_getArrayCount(array: samples) > 0 {
+            if sp_count(array:  samples) > 0 {
                 let  filePath : String = "\(SPVideoHelp.kVideoTempDirectory)/temp.mp4"
                 FileManager.sp_directory(createPath: SPVideoHelp.kVideoTempDirectory)
                 if FileManager.default.fileExists(atPath: filePath) {
@@ -323,7 +324,7 @@ class SPVideoHelp: NSObject {
 //                        AVSampleRateKey: 22050 as AnyObject
 //                    ]
 //                    let audioWriterInput = AVAssetWriterInput(mediaType: AVMediaType.audio, outputSettings:nil)
-//                    if sp_getArrayCount(array: audioSamples) > 0 {
+//                    if sp_count(array:  audioSamples) > 0 {
 //                        if assetWriter.canAdd(audioWriterInput){
 //                            assetWriter.add(audioWriterInput)
 //                        }
@@ -335,11 +336,11 @@ class SPVideoHelp: NSObject {
                     let group = DispatchGroup()
                 
                     group.enter()
-                    SPLog("开始转换 倒放")
-                    for i in 0..<sp_getArrayCount(array: samples){
+                    sp_log(message: "开始转换 倒放")
+                    for i in 0..<sp_count(array:  samples){
                         if let samplesBuffer = samples?[i] {
                             let time = CMSampleBufferGetPresentationTimeStamp(samplesBuffer)
-                            let dataBuffer = samples?[sp_getArrayCount(array: samples) - i - 1]
+                            let dataBuffer = samples?[sp_count(array:  samples) - i - 1]
                            
                             if  let imageBufferRef = CMSampleBufferGetImageBuffer(dataBuffer!){
                                 while !videoWriterInput.isReadyForMoreMediaData{
@@ -349,7 +350,7 @@ class SPVideoHelp: NSObject {
                             }
                         }
                     }
-                    SPLog("结束转换 倒放")
+                    sp_log(message: "结束转换 倒放")
                     group.leave()
                    
                     group.notify(queue: .main, execute: {
@@ -357,7 +358,7 @@ class SPVideoHelp: NSObject {
                         //                    audioWriterInput.markAsFinished()
                         assetWriter.finishWriting {
                             let newAssert = AVAsset(url: URL(fileURLWithPath: filePath))
-                            SPLog("视频倒放转换成功 \(newAssert)")
+                            sp_log(message: "视频倒放转换成功 \(newAssert)")
                             sp_dealVideoUnpend(asset: newAssert, url: filePath, complete: complete)
                         }
                     })

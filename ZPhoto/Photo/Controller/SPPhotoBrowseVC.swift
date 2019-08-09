@@ -8,13 +8,14 @@
 // 浏览图片的控制器
 import Foundation
 import SnapKit
+import SPCommonLibrary
 class SPPhotoBrowseVC: SPBaseVC {
      fileprivate var collectionView : UICollectionView!
     fileprivate lazy var editBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setTitle("编辑", for: UIControl.State.normal)
         btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.normal)
-        btn.titleLabel?.font = sp_getFontSize(size: 15)
+        btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.addTarget(self, action: #selector(sp_clickEdit), for: UIControl.Event.touchUpInside)
         btn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
         return btn
@@ -42,7 +43,7 @@ class SPPhotoBrowseVC: SPBaseVC {
     }
     /// 赋值
     fileprivate func sp_setupData(){
-        if let model = selectModel ,sp_getArrayCount(array: self.dataArray) > 0  {
+        if let model = selectModel ,sp_count(array:  self.dataArray) > 0  {
             if let isExist = self.dataArray?.contains(model) ,isExist {
                     var index = 0
                 for m in self.dataArray!{
@@ -51,9 +52,9 @@ class SPPhotoBrowseVC: SPBaseVC {
                     }
                     index = index + 1
                 }
-                if index < sp_getArrayCount(array: self.dataArray) {
-                    sp_after(time: 0.1) {
-                        self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: UICollectionView.ScrollPosition.right, animated: false)
+                if index < sp_count(array:  self.dataArray) {
+                    sp_asyncAfter(time: 0.1) {
+                         self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: UICollectionView.ScrollPosition.right, animated: false)
                     }
                 }
             }
@@ -98,14 +99,14 @@ class SPPhotoBrowseVC: SPBaseVC {
 }
 extension SPPhotoBrowseVC : UICollectionViewDelegate ,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sp_getArrayCount(array: self.dataArray) > 0 ? 1 : 0
+        return sp_count(array:  self.dataArray) > 0 ? 1 : 0
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sp_getArrayCount(array: self.dataArray)
+        return sp_count(array:  self.dataArray)
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell : SPPhotoListCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellID, for: indexPath) as! SPPhotoListCollectionCell
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_count(array:  self.dataArray) {
             cell.model = self.dataArray?[indexPath.row]
         }
         return cell
@@ -114,7 +115,7 @@ extension SPPhotoBrowseVC : UICollectionViewDelegate ,UICollectionViewDataSource
         return collectionView.frame.size
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row < sp_getArrayCount(array: self.dataArray) {
+        if indexPath.row < sp_count(array:  self.dataArray) {
 //            let model = self.dataArray?[indexPath.row]
 //            let vc = SPPhotoEditVC()
 //            vc.photoModel = model
@@ -127,7 +128,7 @@ extension SPPhotoBrowseVC {
     @objc fileprivate func sp_clickEdit(){
         
         let index = Int(self.collectionView.contentOffset.x / self.collectionView.frame.size.width)
-        if index < sp_getArrayCount(array: self.dataArray) {
+        if index < sp_count(array:  self.dataArray) {
             let model = self.dataArray?[index]
             let vc = SPPhotoEditVC()
             vc.photoModel = model

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SPCommonLibrary
 class SPPhotoModel : NSObject {
     var filePath : String?{
         didSet{

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import SnapKit
-
+import SPCommonLibrary
 /// 设置五边形顶角的位置
 ///
 /// - top: 上
@@ -26,7 +26,7 @@ enum SPPentagonCorners : Int {
 class SPPentagonView:  UIView{
      lazy var titleLabel : UILabel = {
         let label = UILabel()
-        label.font = sp_getFontSize(size: 15)
+        label.font = sp_fontSize(fontSize:  15)
         label.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
         label.textAlignment = .center
         label.isUserInteractionEnabled = true

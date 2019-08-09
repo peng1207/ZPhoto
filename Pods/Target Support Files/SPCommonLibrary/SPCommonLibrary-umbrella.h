@@ -10,6 +10,8 @@
 #endif
 #endif
 
+#import "SPCommonLibrary_Bridge_Header.h"
+#import "SPCubeMap.h"
 
 FOUNDATION_EXPORT double SPCommonLibraryVersionNumber;
 FOUNDATION_EXPORT const unsigned char SPCommonLibraryVersionString[];

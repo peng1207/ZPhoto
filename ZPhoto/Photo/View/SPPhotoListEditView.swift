@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import SPCommonLibrary
 class SPPhotoListEditView:  UIView{
     
     fileprivate lazy var shareBtn : UIButton = {

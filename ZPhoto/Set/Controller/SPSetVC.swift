@@ -8,6 +8,7 @@
 
 import Foundation
 import SnapKit
+import SPCommonLibrary
 class SPSetVC: SPBaseVC {
     fileprivate lazy var backBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
@@ -53,7 +54,7 @@ class SPSetVC: SPBaseVC {
 //        self.tableView.separatorStyle = .none
         self.tableView.backgroundColor = self.view.backgroundColor
         let view = UIView()
-        view.frame = CGRect(x: 0, y: 0, width: sp_getScreenWidth(), height: 0)
+        view.frame = CGRect(x: 0, y: 0, width: sp_screenWidth(), height: 0)
         self.tableView.tableFooterView = view
         
         self.view.addSubview(self.tableView)
@@ -82,7 +83,15 @@ extension SPSetVC{
     /// 点击分享
     @objc fileprivate func sp_clickShare(){
         let shareUrl = "https://apps.apple.com/cn/app/id1381058961"
-        sp_shareOther(shareData: ["分享",shareUrl], vc: self)
+       
+        var list = [Any]()
+        list.append("分享")
+        list.append(shareUrl)
+        if  let img = sp_appLogoImg() {
+            list.append(img)
+        }
+        
+        SPShare.sp_share(shareData: list, vc: self)
     }
     /// 点击评分
     @objc fileprivate func sp_clickScore(){
