@@ -22,6 +22,7 @@
 "FIlE" = "FILE";
 "SPLICING" = "Splicing";
 "EDIT" = "Edit";
+"FIlE" = "File";
 "INVERSION" = "Inversion";
 "NEXT" = "Next";
 "CLEARSELECT" = "clear select";
@@ -36,6 +37,9 @@
 "PHOTO" = "photo";
 "VIDEO" = "video";
 "SET" = "set";
-"CHOICE" = "choice";
+"CHOICE" = "Choice";
 "FINISH" = "finish";
 "SAVE_VIDEO_MSG" = "Do you want to save it to your mobile photo album?";
+"zoom" = "Zoom";
+"background_color" = "BackgroundColor";
+"layout" = "Layout";

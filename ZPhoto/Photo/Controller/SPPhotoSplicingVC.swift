@@ -14,7 +14,7 @@ class SPPhotoSplicingVC: SPBaseVC {
     var dataArray : [SPPhotoModel]!
     fileprivate var typeList : [SPSPlicingType]!
     fileprivate var colorList : [UIColor] = SPPhotoSplicingHelp.sp_getDefaultColor()
-    fileprivate var selectType : SPSPlicingType!
+    fileprivate var selectType : SPSPlicingType?
     fileprivate lazy var saveBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "SAVE"), for: UIControl.State.normal)
@@ -37,10 +37,24 @@ class SPPhotoSplicingVC: SPBaseVC {
     fileprivate lazy var toolView : SPSplicingToolView = {
         let view = SPSplicingToolView()
         view.backgroundColor = sp_getMianColor()
+        view.selectBlock = { [weak self](type) in
+            self?.sp_deal(toolType: type)
+        }
+        return view
+    }()
+    fileprivate lazy var layoutView : SPLayoutView = {
+        let view = SPLayoutView()
+        view.backgroundColor = sp_getMianColor()
+        view.selectBlock = { [weak self](type) in
+            self?.sp_deal(type: type)
+        }
+        view.isHidden = true
         return view
     }()
     fileprivate var marginSpace : CGFloat = 4
     fileprivate var paddingSpace : CGFloat = 4
+    fileprivate let viewTag = 1000
+    fileprivate var ratio : CGFloat = 1
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -75,6 +89,7 @@ class SPPhotoSplicingVC: SPBaseVC {
         self.view.addSubview(self.hiddenView)
         self.view.addSubview(self.bgView)
         self.view.addSubview(self.toolView)
+        self.view.addSubview(self.layoutView)
         self.sp_addConstraint()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.saveBtn)
     }
@@ -85,22 +100,31 @@ class SPPhotoSplicingVC: SPBaseVC {
                    self.selectType = type
             }
         }
+        self.layoutView.sp_update(typeList: self.typeList, count: sp_count(array: self.dataArray))
     }
     fileprivate func sp_setupData(){
-        self.bgView.subviews.forEach { (view) in
-            view.removeFromSuperview()
+        guard let type = self.selectType else {
+            return
         }
+        
         var index = 0
         for model in self.dataArray {
-            let value = SPPhotoSplicingHelp.sp_frameAndSpace(tyep: self.selectType, value: SPPhotoSplicingStruct(index: index, count: self.dataArray.count, width: sp_screenWidth(), height: sp_screenWidth(), margin: marginSpace, padding: paddingSpace))
+            let value = SPPhotoSplicingHelp.sp_frameAndSpace(tyep: type, value: SPPhotoSplicingStruct(index: index, count: self.dataArray.count, width: sp_screenWidth(), height: sp_screenWidth() / self.ratio, margin: marginSpace, padding: paddingSpace))
             let frame = value.frame
             let space : SPSpace = value.space
-            let view = SPCustomPictureView(frame:frame)
-            view.sp_update(space: space)
-            view.sp_update(img: model.img)
-            view.layoutType = SPPhotoSplicingHelp.sp_getLayoutType(index: index, count: self.dataArray.count, type: self.selectType)
-            view.sp_drawMaskLayer()
-            self.bgView.addSubview(view)
+            var view : SPCustomPictureView? = self.bgView.viewWithTag(viewTag + index) as? SPCustomPictureView
+            if view == nil {
+                view = SPCustomPictureView(frame:frame)
+                self.bgView.addSubview(view!)
+            }else{
+                view?.frame = frame
+            }
+            view?.tag = viewTag + index
+            view?.sp_update(space: space)
+            view?.sp_update(img: model.img)
+            view?.layoutType = SPPhotoSplicingHelp.sp_getLayoutType(index: index, count: self.dataArray.count, type: type)
+            view?.sp_drawMaskLayer()
+            
             index = index + 1
         }
     }
@@ -128,12 +152,32 @@ class SPPhotoSplicingVC: SPBaseVC {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
+        self.layoutView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.equalTo(60)
+            maker.bottom.equalTo(self.toolView.snp.top).offset(0)
+        }
     }
     deinit {
         
     }
 }
 extension SPPhotoSplicingVC {
+    
+    fileprivate func sp_deal(type : SPSPlicingType){
+       
+        self.selectType = type
+        sp_setupData()
+    
+    }
+    fileprivate func sp_deal(toolType : SPSplicingToolType){
+        switch toolType {
+        case .layout:
+            self.layoutView.isHidden = false
+        default:
+            sp_log(message: "没有")
+        }
+    }
     
     @objc fileprivate func sp_clickSave(){
        

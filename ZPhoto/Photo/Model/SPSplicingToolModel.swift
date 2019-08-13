@@ -8,10 +8,12 @@
 
 import Foundation
 import UIKit
+import SPCommonLibrary
 
 enum SPSplicingToolType {
     case layout
     case background
+    case zoom
 }
 
 class SPSplicingToolModel {
@@ -23,11 +25,14 @@ class SPSplicingToolModel {
     fileprivate func sp_setupData(){
         switch type {
         case .layout:
-            self.title = "布局"
+            self.title = SPLanguageChange.sp_getString(key: "layout")
             self.img = UIImage(named: "public_layout")
         case .background:
-            self.title = "背景"
+            self.title = SPLanguageChange.sp_getString(key: "background_color")
             self.img = UIImage(named: "public_background")
+        case .zoom:
+            self.title = SPLanguageChange.sp_getString(key: "zoom")
+            self.img = UIImage(named: "public_zoom")
             //        default:
             //            self.title = ""
         }

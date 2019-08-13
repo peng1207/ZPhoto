@@ -11,12 +11,13 @@ import Foundation
 import UIKit
 import SnapKit
 import SPCommonLibrary
-
+typealias SPSplicingToolComplete = (_ type : SPSplicingToolType)->Void
 class SPSplicingToolView:  UIView{
     
     fileprivate var collectionView : UICollectionView!
     fileprivate let cellID = "SPSplicingToolCollectionCellID"
     fileprivate var dataArray : [SPSplicingToolModel] = [SPSplicingToolModel]()
+    var selectBlock : SPSplicingToolComplete?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -29,6 +30,7 @@ class SPSplicingToolView:  UIView{
     fileprivate func sp_setupData(){
         self.dataArray.append(SPSplicingToolModel.sp_init(type: .layout))
         self.dataArray.append( SPSplicingToolModel.sp_init(type: .background))
+          self.dataArray.append( SPSplicingToolModel.sp_init(type: .zoom))
         self.collectionView.reloadData()
     }
     /// 添加UI
@@ -42,9 +44,10 @@ class SPSplicingToolView:  UIView{
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.backgroundColor = sp_getMianColor()
-        self.collectionView.alwaysBounceVertical = true
+//        self.collectionView.alwaysBounceVertical = true
         self.collectionView.register(SPSplicingToolCollectionCell.self, forCellWithReuseIdentifier: self.cellID)
         self.collectionView.showsVerticalScrollIndicator = false
+        self.collectionView.showsHorizontalScrollIndicator = false
         self.addSubview(self.collectionView)
         self.sp_addConstraint()
     }
@@ -77,7 +80,18 @@ extension SPSplicingToolView : UICollectionViewDelegate , UICollectionViewDataSo
         let height = self.frame.size.height - 5
         return CGSize(width: height - 20, height: height)
     }
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.row < sp_count(array: self.dataArray){
+            let model = self.dataArray[indexPath.row]
+            sp_dealSelect(type: model.type)
+        }
+    }
+    fileprivate func sp_dealSelect(type : SPSplicingToolType){
+        guard let block = self.selectBlock else {
+            return
+        }
+        block(type)
+    }
 }
 
 class SPSplicingToolCollectionCell: UICollectionViewCell {

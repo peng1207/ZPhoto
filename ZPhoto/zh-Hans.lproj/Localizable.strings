@@ -39,3 +39,6 @@
 "CHOICE" = "选择";
 "FINISH" = "完成";
 "SAVE_VIDEO_MSG" = "是否保存到手机相册?";
+"zoom" = "比例";
+"background_color" = "背景";
+"layout" = "布局";

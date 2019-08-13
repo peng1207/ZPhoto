@@ -179,9 +179,97 @@ enum SPPictureLayoutType  {
 }
 
 enum SPSPlicingType {
+    case one(tyep : SPPictureLayoutType)
     
+    enum TwoType {
+        case one
+    }
+    case two(type : TwoType)
+    enum ThreeType {
+        case one
+    }
+    case three(type : ThreeType)
+    enum FourType {
+        case one
+        case two
+        case three
+        case four
+        case five
+        case six
+        case seven
+        case eight
+        case nine
+        case ten
+        case eleven
+        case twelve
+        case thirteen
+        case fourteen
+        case fifteen
+        case sixteen
+        case seventeen
+    }
+    case four(type : FourType)
+    enum FiveType {
+        case one
+        case two
+        case three
+        case four
+        case five
+        case six
+        case seven
+        case eight
+        case nine
+        case ten
+        case eleven
+        case twelve
+        case thirteen
+        case fourteen
+        case fifteen
+        case sixteen
+        case seventeen
+        case eighteen
+    }
+    case five(type : FiveType)
+    enum SixType {
+        case one
+        case two
+        case three
+        case four
+        case five
+        case six
+        case seven
+        case eight
+        case nine
+        case ten
+        case eleven
+        case twelve
+    }
+    case six(type : SixType)
+    enum SevenType {
+        case one
+        case two
+        case three
+        case four
+        case five
+        case six
+        case seven
+        case eight
+         
+    }
+    case seven(tyep : SevenType)
     enum EightType {
-        
+        case one
+        case two
+        case three
+        case four
+        case five
+        case six
+        case seven
+        case eight
+        case nine
+        case ten
+        case eleven
+        case twelve
     }
     
     case eight(type : EightType)

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	
+    <string>000000</string>    <string>000033</string>    <string>000066</string>    <string>000099</string>    <string>0000CC</string>    <string>0000FF</string>
+    <string>003300</string>    <string>003333</string>    <string>003366</string>    <string>003399</string>    <string>0033CC</string>    <string>0033FF</string>
+    <string>006600</string>    <string>006633</string>    <string>006666</string>    <string>006699</string>    <string>0066CC</string>    <string>0066FF</string>
+    <string>009900</string>    <string>009933</string>    <string>009966</string>    <string>009999</string>    <string>0099CC</string>    <string>0099FF</string>
+    <string>00CC00</string>    <string>00CC33</string>    <string>00CC66</string>    <string>00CC99</string>    <string>00CCCC</string>    <string>00CCFF</string>
+    <string>00FF00</string>    <string>00FF33</string>    <string>00FF66</string>    <string>00FF99</string>    <string>00FFCC</string>    <string>00FFFF</string>
+    <string>330000</string>    <string>330033</string>    <string>330066</string>    <string>330099</string>    <string>3300CC</string>    <string>3300FF</string>
+    <string>333300</string>    <string>333333</string>    <string>333366</string>    <string>333399</string>    <string>3333CC</string>    <string>3333FF</string>
+    <string>336600</string>    <string>336633</string>    <string>336666</string>    <string>336699</string>    <string>3366CC</string>    <string>3366FF</string>
+    <string>339900</string>    <string>339933</string>    <string>339966</string>    <string>339999</string>    <string>3399CC</string>    <string>3399FF</string>
+    <string>33CC00</string>    <string>33CC33</string>    <string>33CC66</string>    <string>33CC99</string>    <string>33CCCC</string>    <string>33CCFF</string>
+    <string>33FF00</string>    <string>33FF33</string>    <string>33FF66</string>    <string>33FF99</string>    <string>33FFCC</string>    <string>33FFFF</string>
+    <string>660000</string>    <string>660033</string>    <string>660066</string>    <string>660099</string>    <string>6600CC</string>    <string>6600FF</string>
+    <string>663300</string>    <string>663333</string>    <string>663366</string>    <string>663399</string>    <string>6633CC</string>    <string>6633FF</string>
+    <string>666600</string>    <string>666633</string>    <string>666666</string>    <string>666699</string>    <string>6666CC</string>    <string>6666FF</string>
+    <string>669900</string>    <string>669933</string>    <string>669966</string>    <string>669999</string>    <string>6699CC</string>    <string>6699FF</string>
+    <string>66CC00</string>    <string>66CC33</string>    <string>66CC66</string>    <string>66CC99</string>    <string>66CCCC</string>    <string>66CCFF</string>
+    <string>66FF00</string>    <string>66FF33</string>    <string>66FF66</string>    <string>66FF99</string>    <string>66FFCC</string>    <string>66FFFF</string>
+    <string>990000</string>    <string>990033</string>    <string>990066</string>    <string>990099</string>    <string>9900CC</string>    <string>9900FF</string>
+    <string>993300</string>    <string>993333</string>    <string>993366</string>    <string>993399</string>    <string>9933CC</string>    <string>9933FF</string>
+    <string>996600</string>    <string>996633</string>    <string>996666</string>    <string>996699</string>    <string>9966CC</string>    <string>9966FF</string>
+    <string>999900</string>    <string>999933</string>    <string>999966</string>    <string>999999</string>    <string>9999CC</string>    <string>9999FF</string>
+    <string>99CC00</string>    <string>99CC33</string>    <string>99CC66</string>    <string>99CC99</string>    <string>99CCCC</string>    <string>99CCFF</string>
+    <string>99FF00</string>    <string>99FF33</string>    <string>99FF66</string>    <string>99FF99</string>    <string>99FFCC</string>    <string>99FFFF</string>
+    <string>CC0000</string>    <string>CC0033</string>    <string>CC0066</string>    <string>CC0099</string>    <string>CC00CC</string>    <string>CC00FF</string>
+    <string>CC3300</string>    <string>CC3333</string>    <string>CC3366</string>    <string>CC3399</string>    <string>CC33CC</string>    <string>CC33FF</string>
+    <string>CC6600</string>    <string>CC6633</string>    <string>CC6666</string>    <string>CC6699</string>    <string>CC66CC</string>    <string>CC66FF</string>
+    <string>CC9900</string>    <string>CC9933</string>    <string>CC9966</string>    <string>CC9999</string>    <string>CC99CC</string>    <string>CC99FF</string>
+    <string>CCCC00</string>    <string>CCCC33</string>    <string>CCCC66</string>    <string>CCCC99</string>    <string>CCCCCC</string>    <string>CCCCFF</string>
+    <string>CCFF00</string>    <string>CCFF33</string>    <string>CCFF66</string>    <string>CCFF99</string>    <string>CCFFCC</string>    <string>CCFFFF</string>
+    <string>FF0000</string>    <string>FF0033</string>    <string>FF0066</string>    <string>FF0099</string>    <string>FF00CC</string>    <string>FF00FF</string>
+    <string>FF3300</string>    <string>FF3333</string>    <string>FF3366</string>    <string>FF3399</string>    <string>FF33CC</string>    <string>FF33FF</string>
+    <string>FF6600</string>    <string>FF6633</string>    <string>FF6666</string>    <string>FF6699</string>    <string>FF66CC</string>    <string>FF66FF</string>
+    <string>FF9900</string>    <string>FF9933</string>    <string>FF9966</string>    <string>FF9999</string>    <string>FF99CC</string>    <string>FF99FF</string>
+    <string>FFCC00</string>    <string>FFCC33</string>    <string>FFCC66</string>    <string>FFCC99</string>    <string>FFCCCC</string>    <string>FFCCFF</string>
+    <string>FFFF00</string>    <string>FFFF33</string>    <string>FFFF66</string>    <string>FFFF99</string>    <string>FFFFCC</string>    <string>FFFFFF</string>
+    
+</array>
+</plist>

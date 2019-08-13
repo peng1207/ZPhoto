@@ -31,31 +31,91 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            sp_log(message: "滤镜名称----\(fileterName)")
 //            sp_log(message: filter?.attributes)
 //        }
-//        sp_log(message: sp_limitUp(current: 10, count: 10))
+//        for _ in 0...4 {
+//             sp_log(message: sp_getOneGroupValue())
+//        }
+//        for _ in 0...4 {
+//            sp_log(message: sp_getShuangSeQiu())
+//        }
         
         // Override point for customization after application launch.
         return true
     }
-
-    func sp_limitUp(current:Double,count : Int)->Double{
-        var totalPrice = current
+    
+    fileprivate func sp_getOneGroupValue()->String{
+        var dataValue = ""
+        var frontList = ["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35"]
+        var afterList = ["01","02","03","04","05","06","07","08","09","10","11","12"]
+        dataValue.append("前区: ")
+        var resultValue = [String]()
+        for _ in 0..<5 {
+            frontList = sp_upset(list: frontList)
+            let index = arc4random() % UInt32(frontList.count)
+            let value = frontList[Int(index)]
+            frontList.remove(at: Int(index))
+            resultValue.append(value)
+        }
+        resultValue = resultValue.sorted()
+        dataValue.append(resultValue.joined(separator: "  "))
+        dataValue.append("  后区: ")
+        resultValue.removeAll()
+        for _ in 0..<2 {
+            afterList = sp_upset(list: afterList)
+            let index = arc4random() % UInt32(afterList.count)
+            let value = afterList[Int(index)]
+            afterList.remove(at: Int(index))
+            resultValue.append(value)
+        }
+        resultValue = resultValue.sorted()
+        dataValue.append(resultValue.joined(separator: "  "))
+        return dataValue
+    }
+    
+    fileprivate func sp_getShuangSeQiu()->String{
+        var dataValue = ""
+        var frontList = ["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33"]
+        var afterList = ["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16"]
+        dataValue.append("红区: ")
         
-        for i in 1...count {
-            totalPrice = totalPrice + totalPrice * 0.1
-            sp_log(message: "第\(i)涨停的价格 \(totalPrice)")
+        var resultValue = [String]()
+        for _ in 0...5 {
+            frontList = sp_upset(list: frontList)
+            let index = arc4random() % UInt32(frontList.count)
+            let value = frontList[Int(index)]
+            frontList.remove(at: Int(index))
+            resultValue.append(value)
         }
-        return totalPrice
-    }
-    func sp_total(current : Double,num : Int)->Double{
-          var totalPrice = current
-        for i in 1...num {
-            totalPrice = totalPrice + totalPrice * 0.3
-            sp_log(message: "第\(i * 3)天总额 \(totalPrice)")
+        resultValue = resultValue.sorted()
+        dataValue.append(resultValue.joined(separator: "  "))
+        dataValue.append("  蓝区: ")
+        resultValue.removeAll()
+        for _ in 0..<1 {
+            afterList = sp_upset(list: afterList)
+            let index = arc4random() % UInt32(afterList.count)
+            let value = afterList[Int(index)]
+            afterList.remove(at: Int(index))
+            resultValue.append(value)
         }
-        return totalPrice
+        resultValue = resultValue.sorted()
+        dataValue.append(resultValue.joined(separator: "  "))
+        return dataValue
     }
     
-    
+    fileprivate func sp_upset(list : [String])->[String]{
+        var data = list
+        for _ in 0..<7 {
+            //arc4random() 随机数
+            let count = arc4random() % UInt32(data.count) + 1
+            for _ in 0..<count{
+                let index = arc4random() % UInt32(data.count)
+                let value = data[Int(index)]
+                data.remove(at: Int(index))
+                data.insert(value, at: 0)
+            }
+            
+        }
+        return data
+    }
     
     
     func applicationWillResignActive(_ application: UIApplication) {

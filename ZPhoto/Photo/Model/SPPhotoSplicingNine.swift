@@ -26,9 +26,30 @@ class SPPhotoSplicingNine {
         let index = value.index
         switch type {
         case .one , .two:
-            let w = width / 3.0
-            let h = height / 3.0
-            frame = CGRect(x: CGFloat(index % 3) * w, y:  CGFloat(index / 3) * h, width: w, height: h)
+            var w = (width - value.margin * 2.0 - value.padding * 2.0 ) / 3.0
+            var h = (height - value.margin * 2.0 - value.padding * 2.0 ) / 3.0
+            var x : CGFloat = 0
+            var y : CGFloat = 0
+            if index / 3 == 1 {
+                y = h + value.margin
+                h = h + value.padding * 2.0
+            }else {
+                h = h + value.margin
+                if index / 3 != 0 {
+                    y = height - h
+                }
+            }
+            if index % 3 == 1 {
+                 x = w + value.margin
+                w = w + value.padding * 2.0
+            }else{
+                w = w + value.margin
+                if index % 3 != 0 {
+                    x = width - w
+                }
+            }
+            frame = CGRect(x: x, y: y, width: w, height: h)
+            
         case .three:
             let w : CGFloat = width / 5.0
             var h : CGFloat = height / 2.0
@@ -86,7 +107,6 @@ class SPPhotoSplicingNine {
                 }else{
                     w = w + 10.0
                 }
-                
             }
             frame = CGRect(x: x, y: y, width: w, height: h)
         case .six:
@@ -197,8 +217,56 @@ class SPPhotoSplicingNine {
             var h : CGFloat = height / 4.0
             var x : CGFloat = 0
             var y : CGFloat = 0
+            if index < 2 {
+                x = w * CGFloat(index)
+            }else if index == 2 {
+                y = h
+                w = width * 2.0 / 3.0
+                h = height / 2.0
+            }else if index < 6{
+                y = h
+                h = height / 2.0 / 3.0
+                y = y + h * CGFloat(index - 3)
+                w = width / 3.0
+                x = width * 2.0 / 3.0
+            }else if index < 9 {
+                w = width / 3.0
+                x = w * CGFloat(index - 6)
+                y = height - h
+            }
             frame = CGRect(x: x, y: y, width: w, height: h)
+        case .eleven:
+            var w : CGFloat = width / 3.0
+            var h : CGFloat = height / 4.0
+            var x : CGFloat = 0
+            var y : CGFloat = 0
+            if index < 3 {
+                x = w * CGFloat(index)
+            }else if index < 5 {
+                y = h
+                if index == 3 {
+                    h = height / 3.0
+                }else if index == 4 {
+                    y = h + height / 3.0
+                    h = height / 2.0 / 3.0
+                }
+            }else if index < 7 {
+                y = h
+                x = w
+                w = w * 2.0
+                if index == 5 {
+                    h = height / 2.0 / 3.0
+                }else {
+                    y = h + height / 2.0 / 3.0
+                    h = height / 3.0
+                }
+            }else if index < 9 {
+                w = width / 2.0
+                x = w * CGFloat(index - 7)
+                y = height - h
+            }
             
+            frame = CGRect(x: x, y: y, width: w, height: h)
         default:
             sp_log(message: "没有其他")
         }
@@ -471,6 +539,68 @@ class SPPhotoSplicingNine {
                 top = padding
                 if index == 7 || index == 8{
                     bottom = margin
+                }
+            }
+        case .ten:
+            if index == 0 {
+                left = margin
+                top = margin
+                right = padding
+            }else if index == 1 {
+                top = margin
+                right = margin
+            }else if index == 2 {
+                left = margin
+                top = padding
+                right = padding
+                bottom = padding
+            }else if index == 3 {
+                top = padding
+                right = margin
+            }else if index == 4 {
+                top = padding
+                right = margin
+            }else if index == 5 {
+                top = padding
+                right = margin
+                bottom = padding
+            }else if index == 6 {
+                left = margin
+                bottom = margin
+                right = padding
+            }else if index == 7 {
+                bottom = margin
+                right = padding
+            }else if index == 8 {
+                bottom = margin
+                right = margin
+            }
+        case .eleven:
+            if index == 0 {
+                left = margin
+                top = margin
+                right = padding
+            }else if index == 1 {
+                top = margin
+                right = padding
+            }else if index == 2 {
+                top = margin
+                right = margin
+            }else if index == 3 || index == 4 {
+                left = margin
+                top = padding
+                right = padding
+            }else if index == 5 || index == 6{
+                top = padding
+                right = margin
+            }else if index < 9 {
+                bottom = margin
+                top = padding
+                if index == 7 {
+                    left = margin
+                    right = padding
+                }else {
+                    right = margin
                 }
             }
         default:

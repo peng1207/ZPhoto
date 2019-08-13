@@ -42,7 +42,7 @@ class SPPhotoSplicingSelectVC: SPBaseVC {
         btn.addTarget(self, action: #selector(sp_clickNext), for: UIControl.Event.touchUpInside)
         return btn
     }()
-    fileprivate let selectMaxCount : Int = 9
+    fileprivate let selectMaxCount : Int = 4
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()

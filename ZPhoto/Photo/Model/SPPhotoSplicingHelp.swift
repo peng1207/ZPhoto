@@ -42,7 +42,23 @@ class SPPhotoSplicingHelp {
         var retureValue : SPPhotoSplicingLayout = (CGRect.zero,(0,0,0,0))
         switch tyep {
         case .nine(let t):
-           retureValue = SPPhotoSplicingNine.sp_frameAndSpace(type: t, value: value)
+            retureValue = SPPhotoSplicingNine.sp_frameAndSpace(type: t, value: value)
+        case .eight(let t):
+            retureValue = SPPhotoSplicingEight.sp_frameAndSpace(type: t, value: value)
+        case .seven(let t):
+            retureValue = SPPhotoSplicingSeven.sp_frameAndSpace(type: t, value: value)
+        case .six(let t):
+            retureValue = SPPhotoSplicingSix.sp_frameAndSpace(type: t, value: value)
+        case .five(let t):
+            retureValue = SPPhotoSplicingFive.sp_frameAndSpace(type: t, value: value)
+        case .four(let t):
+            retureValue = SPPhotoSplicingFour.sp_frameAndSpace(type: t, value: value)
+        case .three(let t):
+            retureValue = SPPhotoSplicingThree.sp_frameAndSpace(type: t, value: value)
+        case .two(let t):
+            retureValue = SPPhotoSplicingTwo.sp_frameAndSpace(type: t, value: value)
+        case .one(_):
+            retureValue = (CGRect(x: 0, y: 0, width: value.width, height: value.height),(value.margin,value.margin,value.margin,value.margin))
         default:
             sp_log(message: "没有其他的布局")
         }
@@ -63,9 +79,17 @@ class SPPhotoSplicingHelp {
     /// - Returns: 布局
     class func sp_getSplicingLayout(count : Int) ->[SPSPlicingType]{
         if count == 9 {
-            return [.nine(nineType: .nine),.nine(nineType: .two),.nine(nineType: .three),.nine(nineType: .four),.nine(nineType: .five),.nine(nineType: .six),.nine(nineType: .seven),.nine(nineType: .eight),.nine(nineType: .nine),.nine(nineType: .ten),.nine(nineType: .eleven)]
+            return [.nine(nineType: .one),.nine(nineType: .two),.nine(nineType: .three),.nine(nineType: .four),.nine(nineType: .five),.nine(nineType: .six),.nine(nineType: .seven),.nine(nineType: .eight),.nine(nineType: .nine),.nine(nineType: .ten),.nine(nineType: .eleven)]
         }else if count == 8 {
-            
+            return [.eight(type: .one),.eight(type: .two),.eight(type: .three),.eight(type: .four),.eight(type: .five),.eight(type: .six),.eight(type: .seven),.eight(type: .eight),.eight(type: .nine),.eight(type: .ten),.eight(type: .eleven),.eight(type: .twelve)]
+        }else if count == 7{
+            return [.seven(tyep: .one),.seven(tyep: .two),.seven(tyep: .three),.seven(tyep: .four),.seven(tyep: .five),.seven(tyep: .six),.seven(tyep: .seven),.seven(tyep: .eight)]
+        }else if count == 6 {
+            return [.six(type: .one),.six(type: .two),.six(type: .three),.six(type: .four),.six(type: .five),.six(type: .six),.six(type: .seven),.six(type: .eight),.six(type: .nine),.six(type: .ten),.six(type: .eleven),.six(type: .twelve)]
+        }else if count == 5 {
+            return [.five(type: .one),.five(type: .two),.five(type: .three),.five(type: .four),.five(type: .five),.five(type: .six),.five(type: .seven),.five(type: .eight),.five(type: .nine),.five(type: .ten),.five(type: .eleven),.five(type: .twelve),.five(type: .thirteen),.five(type: .fourteen),.five(type: .fifteen),.five(type: .sixteen),.five(type: .seventeen)]
+        }else if count == 4 {
+             return [.four(type: .one),.four(type: .two),.four(type: .three),.four(type: .four),.four(type: .five),.four(type: .six),.four(type: .seven),.four(type: .eight),.four(type: .nine),.four(type: .ten),.four(type: .eleven),.four(type: .twelve),.four(type: .thirteen),.four(type: .fourteen),.four(type: .fifteen),.four(type: .sixteen),.four(type: .seventeen)]
         }
         return []
     }
@@ -76,6 +100,8 @@ class SPPhotoSplicingHelp {
         switch type {
         case .nine(let t):
             layoutType = sp_nineLayoutType(index: index, count: count, type: t)
+        case .one(let t):
+            layoutType = t
         default:
             sp_log(message: "没有其他")
         }
