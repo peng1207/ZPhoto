@@ -183,10 +183,22 @@ enum SPSPlicingType {
     
     enum TwoType {
         case one
+        case two
+        case three
+        case four
+        case five
+        case six
+        case seven
     }
     case two(type : TwoType)
     enum ThreeType {
         case one
+        case two
+        case three
+        case four
+        case five
+        case six
+  
     }
     case three(type : ThreeType)
     enum FourType {
@@ -207,6 +219,7 @@ enum SPSPlicingType {
         case fifteen
         case sixteen
         case seventeen
+        case eighteen
     }
     case four(type : FourType)
     enum FiveType {

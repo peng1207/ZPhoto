@@ -112,7 +112,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 data.remove(at: Int(index))
                 data.insert(value, at: 0)
             }
-            
         }
         return data
     }

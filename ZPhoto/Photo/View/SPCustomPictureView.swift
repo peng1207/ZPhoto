@@ -32,12 +32,15 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
     /// 切割多边形的点
     var points : [CGPoint]?
     var layoutType : SPPictureLayoutType = .rectangle
-    
+    var canTap : Bool = false{
+        didSet{
+            self.sp_dealCanTap()
+        }
+    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
-        
-        sp_addGesture()
+       
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -576,6 +579,9 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         return bezierPath
     }
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if self.canTap == false {
+            return nil
+        }
         if points != nil {
             if (super.hitTest(point, with: event) == scrollView){
                 print(self,point)
@@ -636,12 +642,19 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
     }
 }
 extension SPCustomPictureView {
+    fileprivate func sp_dealCanTap(){
+        if self.canTap {
+            sp_addGesture()
+        }else{
+            
+        }
+    }
     
     fileprivate func sp_addGesture(){
         // 点击手势
         let tap = UITapGestureRecognizer(target: self, action: #selector(sp_clickTap))
         self.addGestureRecognizer(tap)
-        // 旋转手势
+//         旋转手势
         let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(sp_handleRotateGesture(sender:)))
         self.addGestureRecognizer(rotateGesture)
         // 缩放手势

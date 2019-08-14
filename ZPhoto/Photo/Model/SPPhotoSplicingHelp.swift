@@ -89,7 +89,13 @@ class SPPhotoSplicingHelp {
         }else if count == 5 {
             return [.five(type: .one),.five(type: .two),.five(type: .three),.five(type: .four),.five(type: .five),.five(type: .six),.five(type: .seven),.five(type: .eight),.five(type: .nine),.five(type: .ten),.five(type: .eleven),.five(type: .twelve),.five(type: .thirteen),.five(type: .fourteen),.five(type: .fifteen),.five(type: .sixteen),.five(type: .seventeen)]
         }else if count == 4 {
-             return [.four(type: .one),.four(type: .two),.four(type: .three),.four(type: .four),.four(type: .five),.four(type: .six),.four(type: .seven),.four(type: .eight),.four(type: .nine),.four(type: .ten),.four(type: .eleven),.four(type: .twelve),.four(type: .thirteen),.four(type: .fourteen),.four(type: .fifteen),.four(type: .sixteen),.four(type: .seventeen)]
+             return [.four(type: .one),.four(type: .two),.four(type: .three),.four(type: .four),.four(type: .five),.four(type: .six),.four(type: .seven),.four(type: .eight),.four(type: .nine),.four(type: .ten),.four(type: .eleven),.four(type: .twelve),.four(type: .thirteen),.four(type: .fourteen),.four(type: .fifteen),.four(type: .sixteen),.four(type: .seventeen),.four(type: .eighteen)]
+        }else if count == 3 {
+            return [.three(type: .one),.three(type: .two),.three(type: .three),.three(type: .four),.three(type: .five),.three(type: .six)]
+        }else if count == 2 {
+            return [.two(type: .one),.two(type: .two),.two(type: .three),.two(type: .four),.two(type: .five),.two(type: .six),.two(type: .seven)]
+        }else if count == 1 {
+            return [.one(tyep: .circular),.one(tyep: .rectangle),.one(tyep: .heart),.one(tyep: .waterDrop)]
         }
         return []
     }

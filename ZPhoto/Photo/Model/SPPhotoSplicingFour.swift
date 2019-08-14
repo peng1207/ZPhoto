@@ -289,6 +289,79 @@ class  SPPhotoSplicingFour {
                 w = w * 2.0 + value.margin + value.padding * 2.0
                 h = h * 2.0 + value.margin + value.padding * 2.0
             }
+        case .fifteen:
+            h = (height - value.margin * 2.0 - value.padding * 3.0) / 4.0
+            w = width
+            if index == 0 {
+                h = h + value.margin
+            }else {
+                y = h + value.margin
+                h = h + value.padding
+                y = y + h * CGFloat(index - 1)
+                if index == 3 {
+                    h = h + value.margin
+                }
+                
+            }
+        case .sixteen:
+            w = (width - value.margin * 2.0 - value.padding) / 3.0
+            h = (height - value.margin * 2.0 - value.padding * 2.0) / 3.0
+            if index == 0 {
+                w = w * 2.0 + value.margin + value.padding
+                h = h * 2.0 + value.margin + value.padding
+            }else if index == 3 {
+                w = width
+                h = h + value.margin + value.padding
+                y = height - h
+            }else{
+                w = w + value.margin
+                x = width - w
+                if index == 1 {
+                    h = h + value.margin
+                }else {
+                    y = h + value.margin
+                    h = h + value.padding
+                }
+            }
+        case .seventeen:
+            w = (width - value.margin * 2.0 - value.padding) / 3.0
+            h = (height - value.margin * 2.0 - value.padding * 2.0) / 3.0
+            if index == 0 {
+                w = width
+                h = h + value.margin + value.padding
+            }else if index == 3{
+                w = w * 2.0 + value.margin + value.padding
+                h = h * 2.0 + value.margin + value.padding
+                y = height - h
+                x = width - w
+            }else{
+                w = w + value.margin
+                if index == 1 {
+                    y = h + value.margin + value.padding
+                    h = h + value.padding
+                }else{
+                    h = h + value.margin
+                    y = height - h
+                }
+            }
+        case .eighteen:
+            h = (height - value.margin * 2.0 - value.padding * 3.0) / 4.0
+            w = (width - value.margin * 2.0  - value.padding) / 2.0
+            if index == 0 || index == 3 {
+                w = width
+                h = h + value.margin
+                if index == 3{
+                    y = height - h
+                }
+            }else{
+                y = h + value.margin
+                h = h * 2.0 + value.padding * 3.0
+                w = w + value.margin
+                if index == 2 {
+                    w = w + value.padding
+                    x = width - w
+                }
+            }
         default:
             sp_log(message: "没有")
         }
@@ -540,6 +613,72 @@ class  SPPhotoSplicingFour {
             }else{
                 right = margin
                 bottom = margin
+            }
+        case .fifteen:
+            left = margin
+            right = margin
+            if index == 0 {
+                top = margin
+            }else{
+                top = padding
+                if index == 3 {
+                    bottom = margin
+                }
+            }
+        case .sixteen:
+            if index == 0 {
+                left = margin
+                right = padding
+                top = margin
+            }else if index == 3 {
+                left = margin
+                right = margin
+                bottom = margin
+                top = padding
+            }else{
+                right = margin
+                if index == 1 {
+                    top = margin
+                }else{
+                    top = padding
+                }
+            }
+        case .seventeen:
+            if index == 0 {
+                left = margin
+                top = margin
+                right = margin
+                bottom = padding
+            }else if index == 3 {
+                right = margin
+                bottom = margin
+                left = padding
+            }else{
+                left = margin
+                if index == 1 {
+                    bottom = padding
+                }else{
+                    bottom = margin
+                }
+            }
+        case .eighteen:
+            if index == 0 || index == 3 {
+                left = margin
+                right = margin
+                if index == 0 {
+                    top = margin
+                }else{
+                    bottom = margin
+                }
+            }else{
+                top = padding
+                bottom = padding
+                if index == 1 {
+                    left = margin
+                }else{
+                    left = padding
+                    right = margin
+                }
             }
         default:
             sp_log(message: "没有")

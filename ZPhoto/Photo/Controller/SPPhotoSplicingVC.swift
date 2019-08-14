@@ -115,6 +115,7 @@ class SPPhotoSplicingVC: SPBaseVC {
             var view : SPCustomPictureView? = self.bgView.viewWithTag(viewTag + index) as? SPCustomPictureView
             if view == nil {
                 view = SPCustomPictureView(frame:frame)
+                view?.canTap = true
                 self.bgView.addSubview(view!)
             }else{
                 view?.frame = frame

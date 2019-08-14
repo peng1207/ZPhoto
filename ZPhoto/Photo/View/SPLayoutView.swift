@@ -115,10 +115,12 @@ class SPLayoutCollectionCell: UICollectionViewCell {
         if self.count > 0 {
             for i in 0..<count{
                 let value = SPPhotoSplicingHelp.sp_frameAndSpace(tyep: selectType, value: SPPhotoSplicingStruct(index: i, count: self.count, width: 50, height: 50, margin: 4, padding: 4))
-                if  let view = self.contentView.viewWithTag(LayoutTag + i ){
+                if  let view = self.contentView.viewWithTag(LayoutTag + i ) as? SPCustomPictureView{
                     
                     view.frame = CGRect(x: value.frame.origin.x + value.space.left, y: value.frame.origin.y + value.space.top, width: value.frame.size.width - value.space.left - value.space.right, height: value.frame.size.height - value.space.top - value.space.bottom)
                     view.isHidden = false
+                    view.layoutType = SPPhotoSplicingHelp.sp_getLayoutType(index: i, count: self.count, type: selectType)
+                    view.sp_drawMaskLayer()
                 }
             }
         }
@@ -126,7 +128,7 @@ class SPLayoutCollectionCell: UICollectionViewCell {
     /// 添加UI
     fileprivate func sp_setupUI(){
         for i in 0..<9 {
-            let view = UIView()
+            let view = SPCustomPictureView()
             view.tag = LayoutTag + i
             view.isHidden = true
             view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue)
