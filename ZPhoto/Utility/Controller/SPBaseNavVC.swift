@@ -50,6 +50,8 @@ extension UINavigationController{
         navBar.titleTextAttributes = [NSAttributedString.Key.font : sp_fontSize(fontSize:  18),NSAttributedString.Key.foregroundColor : UIColor.white]
  
         UIApplication.shared.statusBarStyle = .lightContent
+        navBar.tintColor = UIColor.white
+        
     }
     
 }

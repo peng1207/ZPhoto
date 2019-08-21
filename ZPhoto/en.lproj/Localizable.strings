@@ -40,6 +40,9 @@
 "CHOICE" = "Choice";
 "FINISH" = "finish";
 "SAVE_VIDEO_MSG" = "Do you want to save it to your mobile photo album?";
-"zoom" = "Zoom";
-"background_color" = "BackgroundColor";
-"layout" = "Layout";
+"ZOOM" = "Zoom";
+"BACKGROUND" = "Background";
+"LAYOUT" = "Layout";
+"LONG_GRAPH"  = "Long graph";
+"PICTURES" = "pictures";
+"SAVE_SUCCESS" = "Saved successfully, please check in the album";

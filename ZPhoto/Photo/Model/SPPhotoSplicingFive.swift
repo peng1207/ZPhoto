@@ -248,7 +248,7 @@ class  SPPhotoSplicingFive {
                 }
             }else{
                 w = w * 2.0 + value.margin + value.padding
-                h = h * 2.0 + value.margin + value.padding
+                h = h * 2.0 + value.margin + value.padding * 2.0
                 x = width - w
                 y = height - h
             }
@@ -319,7 +319,7 @@ class  SPPhotoSplicingFive {
             w = (width - value.margin * 2.0 - value.padding * 3.0) / 4.0
             h = (height - value.margin * 2.0 - value.padding * 3.0) / 4.0
             if index == 0 {
-                w = w * 3.0 + value.padding * 3.0
+                w = w * 3.0 + value.padding * 3.0 + value.margin
                 h = height
             }else{
                 w = w + value.margin

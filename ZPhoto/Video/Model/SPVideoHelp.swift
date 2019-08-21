@@ -222,7 +222,7 @@ class SPVideoHelp: NSObject {
             completionHandler(exportUrl)
         })
     }
-    /// 获取视频流数据
+    /// 获取音\视频流数据
     ///
     /// - Parameter asset: 视频
     /// - Returns: 视频流数据

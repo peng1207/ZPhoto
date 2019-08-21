@@ -1,12 +1,12 @@
 {
   "name": "SPCommonLibrary",
-  "version": "0.0.1.21",
+  "version": "0.0.1.23",
   "summary": "公共库 提供基础的功能，对第三方请求的封装功能，增加分享功能",
   "description": "功能有",
   "homepage": "https://github.com/peng1207/SPCommonLibrary",
   "license": "MIT",
   "authors": {
-    "peng1207": "email@address.com"
+    "peng1207": "825844231@qq.com"
   },
   "platforms": {
     "ios": "10.0"
@@ -14,7 +14,7 @@
   "swift_versions": "4.2",
   "source": {
     "git": "https://github.com/peng1207/SPCommonLibrary.git",
-    "tag": "0.0.1.21"
+    "tag": "0.0.1.23"
   },
   "dependencies": {
     "SnapKit": [
@@ -45,12 +45,22 @@
     {
       "name": "Clip",
       "source_files": "Sources/Clip/**/*",
-      "resources": "Sources/Resource/Clip/*.png",
+      "resources": "Sources/Resource/*.bundle",
       "dependencies": {
         "SPCommonLibrary/Public": [
 
         ]
       }
+    },
+    {
+      "name": "ImagePicker",
+      "source_files": "Sources/ImagePicker/**/*",
+      "dependencies": {
+        "SPCommonLibrary/Public": [
+
+        ]
+      },
+      "resources": "Sources/Resource/*.bundle"
     }
   ],
   "swift_version": "4.2"

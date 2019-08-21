@@ -25,13 +25,13 @@ class SPSplicingToolModel {
     fileprivate func sp_setupData(){
         switch type {
         case .layout:
-            self.title = SPLanguageChange.sp_getString(key: "layout")
+            self.title = SPLanguageChange.sp_getString(key: "LAYOUT")
             self.img = UIImage(named: "public_layout")
         case .background:
-            self.title = SPLanguageChange.sp_getString(key: "background_color")
+            self.title = SPLanguageChange.sp_getString(key: "BACKGROUND")
             self.img = UIImage(named: "public_background")
         case .zoom:
-            self.title = SPLanguageChange.sp_getString(key: "zoom")
+            self.title = SPLanguageChange.sp_getString(key: "ZOOM")
             self.img = UIImage(named: "public_zoom")
             //        default:
             //            self.title = ""

@@ -41,6 +41,7 @@ class SPPhotoListVC: SPBaseVC {
     fileprivate var editHeight : Constraint!
     var selectBlock : SPPhotoListSelectComplete?
     var selectMaxCount : Int = 9
+    var isCanAddOther : Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -72,8 +73,8 @@ class SPPhotoListVC: SPBaseVC {
     /// 创建UI
     override func sp_setupUI() {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 1
-        layout.minimumInteritemSpacing = 1
+        layout.minimumLineSpacing = 2
+        layout.minimumInteritemSpacing = 2
         layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
         self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         self.collectionView.delegate = self
@@ -113,13 +114,14 @@ class SPPhotoListVC: SPBaseVC {
 }
 extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sp_count(array:  self.dataArray) > 0 ? 1 : 0
+        return sp_count(array:  self.dataArray) > 0 || self.isCanAddOther ? 1 : 0
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sp_count(array:  self.dataArray)
+        return sp_count(array:  self.dataArray) + (self.isCanAddOther ? 1 : 0)
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell : SPPhotoListCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! SPPhotoListCollectionCell
+        cell.contentView.backgroundColor = UIColor.white
         if indexPath.row < sp_count(array:  self.dataArray) {
             let model = self.dataArray?[indexPath.row]
             cell.model = model
@@ -131,6 +133,9 @@ extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,U
                 cell.num = 0
             }
             cell.isSelect = isSelect;
+        }else{
+            cell.model = nil
+            cell.isSelect = false
         }
         return cell
     }
@@ -148,17 +153,8 @@ extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,U
                      sp_dealBtnEnabled()
                 }else{
                     if let block = self.selectBlock {
-                        if sp_count(array:  self.selectArray) < self.selectMaxCount {
-                            block(m)
-                            self.selectArray.append(m)
-                            self.collectionView.reloadData()
-                        }else{
-                            let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: "\(SPLanguageChange.sp_getString(key: "MAXSELECT"))\(sp_getString(string: self.selectMaxCount))", preferredStyle: UIAlertController.Style.alert)
-                            alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel, handler: { (action) in
-                                
-                            }))
-                            self.present(alertController, animated: true, completion: nil)
-                        }
+                        sp_dealSelect(block: block, m: m)
+                       
                     }else{
                         let vc = SPPhotoBrowseVC()
                         vc.dataArray = self.dataArray
@@ -167,15 +163,61 @@ extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,U
                     }
                 }
             }
+        }else{
+            sp_pushSelectImg()
         }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = NSInteger( (collectionView.frame.size.width - 3.0) / 4.0)
+        let width = NSInteger( (collectionView.frame.size.width - 6.0) / 4.0)
         return CGSize(width: width, height: width)
     }
 }
 extension SPPhotoListVC {
+    fileprivate func sp_pushSelectImg(){
+        if sp_count(array:  self.selectArray) < self.selectMaxCount || self.selectMaxCount == 0{
+            let imageVC = SPImagePickerVC(maxSelectNum: self.selectMaxCount > 0 ? self.selectMaxCount - sp_count(array: self.selectArray) : 1) { [weak self](images, assets) in
+                self?.sp_dealAddOther(images: images)
+            }
+            self.present(imageVC, animated: true, completion: nil)
+        }else{
+            sp_maxNumTips()
+        }
+      
+    }
+    fileprivate func sp_dealAddOther(images : [UIImage]?){
+        if let list = images , sp_count(array: list) > 0, let block = self.selectBlock{
+            for image in list {
+                let model = SPPhotoModel()
+                model.img = image
+                self.selectArray.append(model)
+                block(model)
+            }
+            
+            
+        }
+    }
     
+    /// 处理选择的
+    ///
+    /// - Parameters:
+    ///   - block: 回调
+    ///   - m: 选择的数据
+    fileprivate func sp_dealSelect(block : SPPhotoListSelectComplete,m : SPPhotoModel){
+        if sp_count(array:  self.selectArray) < self.selectMaxCount || self.selectMaxCount == 0{
+            block(m)
+            self.selectArray.append(m)
+            self.collectionView.reloadData()
+        }else{
+            self.sp_maxNumTips()
+        }
+    }
+    fileprivate func sp_maxNumTips(){
+        let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: "\(SPLanguageChange.sp_getString(key: "MAXSELECT"))\(sp_getString(string: self.selectMaxCount))\(SPLanguageChange.sp_getString(key: "PICTURES"))", preferredStyle: UIAlertController.Style.alert)
+        alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel, handler: { (action) in
+            
+        }))
+        self.present(alertController, animated: true, completion: nil)
+    }
     /// 删除选择的
     ///
     /// - Parameter model: 选择的model
@@ -207,6 +249,8 @@ extension SPPhotoListVC {
                 point.x = point.x + cell.frame.size.width / 2.0
                 point.y = point.y + cell.frame.size.height / 2.0
             }
+        }else{
+            point = CGPoint(x: self.view.sp_width() / 2.0, y: 0)
         }
         return point
     }

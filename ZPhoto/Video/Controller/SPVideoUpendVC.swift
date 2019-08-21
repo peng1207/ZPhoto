@@ -34,7 +34,9 @@ class SPVideoUpendVC: SPBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
-        sp_setupData()
+        sp_asyncAfter(time: 0.1) {
+            self.sp_setupData()
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

@@ -48,8 +48,8 @@ class  SPPhotoSplicingTwo {
                 w = width
                 h = height
             }else {
-                w = width / 4.0
-                h = height / 4.0
+                w = width  / 4.0 + value.margin  * 2.0 
+                h = height / 4.0 + value.padding * 2.0
                 y = height - h - value.margin - 4
                 x = width - w - value.margin - 4
             }

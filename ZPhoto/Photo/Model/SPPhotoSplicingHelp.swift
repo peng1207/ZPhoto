@@ -95,7 +95,7 @@ class SPPhotoSplicingHelp {
         }else if count == 2 {
             return [.two(type: .one),.two(type: .two),.two(type: .three),.two(type: .four),.two(type: .five),.two(type: .six),.two(type: .seven)]
         }else if count == 1 {
-            return [.one(tyep: .circular),.one(tyep: .rectangle),.one(tyep: .heart),.one(tyep: .waterDrop)]
+            return [.one(tyep: .circular),.one(tyep: .rectangle),.one(tyep: .heart),.one(tyep: .waterDrop),.one(tyep: .diamond),.one(tyep: .polygon(polygon: .six)),.one(tyep: .polygon(polygon: .eight))]
         }
         return []
     }
@@ -109,7 +109,7 @@ class SPPhotoSplicingHelp {
         case .one(let t):
             layoutType = t
         default:
-            sp_log(message: "没有其他")
+            sp_log(message: "")
         }
         return layoutType
     }

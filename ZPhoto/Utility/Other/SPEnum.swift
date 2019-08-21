@@ -139,12 +139,10 @@ enum SPPictureLayoutType  {
     case rectangleCornerInner(type:RectangleCornerInner)
     ///  多边形
     enum Polygon {
-        /// 五边形
-        case five
         /// 六边形
         case six
         /// 七边形
-        case seven
+        case eight
     }
     case polygon(polygon : Polygon)
     /// 三角形

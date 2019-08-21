@@ -38,6 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            sp_log(message: sp_getShuangSeQiu())
 //        }
         
+//        var price : CGFloat = 7.68
+//        for _ in 0..<10 {
+//            price = price + price * 0.1
+//        }
+//        sp_log(message: price)
         // Override point for customization after application launch.
         return true
     }

@@ -16,6 +16,11 @@ class SPPhotoListCollectionCell: UICollectionViewCell {
         let view = UIImageView()
         return view
     }()
+    fileprivate lazy var addImgView : UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "public_add_blue")
+        return view
+    }()
     fileprivate lazy var numLabel : UILabel = {
         let label = UILabel()
         label.font = sp_fontSize(fontSize:  10)
@@ -68,12 +73,21 @@ class SPPhotoListCollectionCell: UICollectionViewCell {
     }
     /// 赋值
     fileprivate func sp_setupData(){
-     self.iconImgView.image = self.model?.img
+        if let m = model {
+            self.iconImgView.image = m.img
+            self.iconImgView.isHidden = false
+            self.addImgView.isHidden = true
+        }else{
+            self.iconImgView.image = nil
+            self.iconImgView.isHidden = true
+           self.addImgView.isHidden = false
+        }
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
       
         self.contentView.addSubview(self.iconImgView)
+        self.contentView.addSubview(self.addImgView)
         self.contentView.addSubview(self.maskHView)
         self.contentView.addSubview(self.numLabel)
         self.sp_addConstraint()
@@ -82,6 +96,11 @@ class SPPhotoListCollectionCell: UICollectionViewCell {
     fileprivate func sp_addConstraint(){
         self.iconImgView.snp.makeConstraints { (maker) in
             maker.left.right.top.bottom.equalTo(self.contentView).offset(0)
+        }
+        self.addImgView.snp.makeConstraints { (maker) in
+            maker.width.height.equalTo(30)
+            maker.centerX.equalTo(self.contentView.snp.centerX).offset(0)
+            maker.centerY.equalTo(self.contentView.snp.centerY).offset(0)
         }
         self.maskHView.snp.makeConstraints { (maker) in
             maker.left.right.bottom.top.equalTo(self.contentView).offset(0)

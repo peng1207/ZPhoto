@@ -10,7 +10,7 @@
 import Foundation
 import SnapKit
 import SPCommonLibrary
-class SPPhotoSplicingSelectVC: SPBaseVC {
+class SPPhotoSelectVC: SPBaseVC {
 
     fileprivate lazy var photoListVC : SPPhotoListVC = {
         let vc = SPPhotoListVC()
@@ -18,12 +18,13 @@ class SPPhotoSplicingSelectVC: SPBaseVC {
             self?.sp_dealSelectComplete(model: model)
         }
         vc.selectMaxCount = selectMaxCount
+        vc.isCanAddOther = true
         self.addChild(vc)
         return vc
     }()
     
-    fileprivate lazy var selectView : SPPhotoSplicingSelectView = {
-        let view = SPPhotoSplicingSelectView()
+    fileprivate lazy var selectView : SPPhotoSelectView = {
+        let view = SPPhotoSelectView()
         view.clearBlock = { [weak self] in
            self?.sp_clearAll()
         }
@@ -43,6 +44,8 @@ class SPPhotoSplicingSelectVC: SPBaseVC {
         return btn
     }()
     fileprivate let selectMaxCount : Int = 9
+    var isLong : Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -90,7 +93,7 @@ class SPPhotoSplicingSelectVC: SPBaseVC {
         
     }
 }
-extension SPPhotoSplicingSelectVC : CAAnimationDelegate{
+extension SPPhotoSelectVC : CAAnimationDelegate{
     
     /// 处理选择的图片
     ///
@@ -181,9 +184,16 @@ extension SPPhotoSplicingSelectVC : CAAnimationDelegate{
     /// 点击下一步
     @objc func sp_clickNext(){
         if sp_count(array:  self.selectView.dataArray) > 0 {
-            let vc = SPPhotoSplicingVC()
-            vc.dataArray = self.selectView.dataArray
-            self.navigationController?.pushViewController(vc, animated: true)
+            if self.isLong {
+                let vc = SPLongGraphVC()
+                vc.dataArray = self.selectView.dataArray
+                self.navigationController?.pushViewController(vc, animated: true)
+            }else{
+                let vc = SPPhotoSplicingVC()
+                vc.dataArray = self.selectView.dataArray
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+           
         }else{
             let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "NO_CHOICE_TIPS"), preferredStyle: UIAlertController.Style.alert)
             alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "OK"), style: UIAlertAction.Style.default, handler: { (action) in

@@ -51,6 +51,15 @@ class SPPhotoSplicingVC: SPBaseVC {
         view.isHidden = true
         return view
     }()
+    fileprivate lazy var colorView : SPBackgroundView = {
+        let view = SPBackgroundView()
+        view.backgroundColor = sp_getMianColor()
+        view.isHidden = true
+        view.selectBlock = { [weak self](color) in
+            self?.sp_deal(color: color)
+        }
+        return view
+    }()
     fileprivate var marginSpace : CGFloat = 4
     fileprivate var paddingSpace : CGFloat = 4
     fileprivate let viewTag = 1000
@@ -90,6 +99,7 @@ class SPPhotoSplicingVC: SPBaseVC {
         self.view.addSubview(self.bgView)
         self.view.addSubview(self.toolView)
         self.view.addSubview(self.layoutView)
+        self.view.addSubview(self.colorView)
         self.sp_addConstraint()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.saveBtn)
     }
@@ -155,7 +165,12 @@ class SPPhotoSplicingVC: SPBaseVC {
         }
         self.layoutView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
-            maker.height.equalTo(60)
+            maker.height.greaterThanOrEqualTo(0)
+            maker.bottom.equalTo(self.toolView.snp.top).offset(0)
+        }
+        self.colorView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.toolView.snp.top).offset(0)
         }
     }
@@ -166,15 +181,20 @@ class SPPhotoSplicingVC: SPBaseVC {
 extension SPPhotoSplicingVC {
     
     fileprivate func sp_deal(type : SPSPlicingType){
-       
         self.selectType = type
         sp_setupData()
-    
+    }
+    fileprivate func sp_deal(color : UIColor){
+        self.bgView.backgroundColor = color
     }
     fileprivate func sp_deal(toolType : SPSplicingToolType){
         switch toolType {
         case .layout:
             self.layoutView.isHidden = false
+            self.colorView.isHidden = true
+        case .background:
+            self.colorView.isHidden = false
+            self.layoutView.isHidden = true
         default:
             sp_log(message: "没有")
         }
@@ -195,9 +215,11 @@ extension SPPhotoSplicingVC {
         }
         else
         {
-            UIAlertController.init(title: nil,
-                                   message: "保存成功！",
-                                   preferredStyle: UIAlertController.Style.alert).show(self, sender: nil);
+            let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "SAVE_SUCCESS"), preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "OK"), style: UIAlertAction.Style.default, handler: { (action) in
+                
+            }))
+            self.present(alertController, animated: true, completion: nil)
         }
     }
 }

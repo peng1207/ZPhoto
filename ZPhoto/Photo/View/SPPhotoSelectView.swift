@@ -11,7 +11,7 @@ import UIKit
 import SnapKit
 import SPCommonLibrary
 
-class SPPhotoSplicingSelectView:  UIView{
+class SPPhotoSelectView:  UIView{
     
     fileprivate lazy var numLabel : UILabel = {
         let label = UILabel()
@@ -33,7 +33,7 @@ class SPPhotoSplicingSelectView:  UIView{
     fileprivate let cellID = "SPPhotoSplicingSelectCollectionCellID"
     var clearBlock : SPBtnComplete?
     var indexBlock : SPIndexComplete?
-    var selectMaxCount : Int!{
+    var selectMaxCount : Int = 0{
         didSet{
             self.sp_dealNum()
         }
@@ -89,7 +89,7 @@ class SPPhotoSplicingSelectView:  UIView{
         
     }
 }
-extension SPPhotoSplicingSelectView : UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+extension SPPhotoSelectView : UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sp_count(array:  self.dataArray) > 0 ? 1 : 0
     }
@@ -120,7 +120,7 @@ extension SPPhotoSplicingSelectView : UICollectionViewDelegate,UICollectionViewD
     }
 }
 
-extension SPPhotoSplicingSelectView {
+extension SPPhotoSelectView {
     
     fileprivate func sp_dealDelete(index: Int){
         if let block = self.indexBlock {
@@ -162,7 +162,11 @@ extension SPPhotoSplicingSelectView {
     }
     /// 处理数据显示
     fileprivate func sp_dealNum(){
-        self.numLabel.text = "\(SPLanguageChange.sp_getString(key: "SELECTED"))\(sp_count(array:  self.dataArray))/\(sp_getString(string: self.selectMaxCount))"
+        if self.selectMaxCount > 0 {
+             self.numLabel.text = "\(SPLanguageChange.sp_getString(key: "SELECTED"))\(sp_count(array:  self.dataArray))/\(sp_getString(string: self.selectMaxCount))"
+        }else{
+             self.numLabel.text = "\(SPLanguageChange.sp_getString(key: "SELECTED"))\(sp_count(array:  self.dataArray))"
+        }
     }
     
 }

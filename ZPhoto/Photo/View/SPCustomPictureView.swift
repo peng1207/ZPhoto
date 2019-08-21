@@ -22,7 +22,6 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         view.isUserInteractionEnabled = true
         return view
     }()
-    var boderColor : UIColor = UIColor.white
     fileprivate var space : SPSpace = (0,0,0,0)
     fileprivate var netRotation : CGFloat = 0//旋转
     fileprivate var lastScaleFactor : CGFloat! = 1  //放大、缩小
@@ -104,8 +103,8 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
             sp_drawRectangleCorner(type: type, radius: CGFloat(radius))
         case .rectangleCornerInner(_):
             sp_drawRectangleCornerInner()
-        case .polygon(_):
-            sp_drawPolygon()
+        case .polygon(let type):
+            sp_drawPolygon(type: type)
         case .heart:
             sp_drawHeart()
         case .waterDrop:
@@ -140,8 +139,8 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         sp_drawLayer(bezierPath: sp_getTrianglePath())
     }
     /// 画多边形
-    fileprivate func sp_drawPolygon(){
-        sp_drawLayer(bezierPath: sp_getPolygonPath())
+    fileprivate func sp_drawPolygon(type : SPPictureLayoutType.Polygon){
+        sp_drawLayer(bezierPath: sp_getPolygonPath(type: type))
     }
     /// 画矩形 中带用圆角 圆形朝内
     fileprivate func sp_drawRectangleCornerInner(){
@@ -306,8 +305,43 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
     /// 获取多边形的路径
     ///
     /// - Returns: 路径
-    fileprivate func sp_getPolygonPath()->UIBezierPath{
+    fileprivate func sp_getPolygonPath(type : SPPictureLayoutType.Polygon)->UIBezierPath{
         let bezierPath = UIBezierPath()
+        
+        switch type {
+        case .six:
+            let w = (self.frame.size.width - space.left - space.right) / 2.0
+            let centerY = self.frame.size.height  / 2.0
+            let x = (self.frame.size.width - w) / 2.0
+            bezierPath.move(to: CGPoint(x: x, y: space.top))
+            bezierPath.addLine(to: CGPoint(x: space.left, y: centerY))
+            bezierPath.addLine(to: CGPoint(x: x, y: self.frame.height - space.bottom))
+            bezierPath.addLine(to: CGPoint(x: x + w, y: self.frame.height - space.bottom))
+            bezierPath.addLine(to: CGPoint(x: self.frame.size.width - space.right, y: centerY))
+            bezierPath.addLine(to: CGPoint(x: x + w, y: space.top))
+            bezierPath.addLine(to: CGPoint(x: x, y: space.top))
+        case .eight:
+            let w = (self.frame.size.width - space.left - space.right) / 2.0
+            let h = (self.frame.size.width - space.top - space.bottom) / 2.0
+            let x = (self.frame.size.width - w) / 2.0
+            let y =  (self.frame.size.height - h ) / 2.0
+            let minX = space.left
+            let minY = space.top
+            let maxX = self.frame.size.width - space.right
+            let maxY = self.frame.size.height - space.bottom
+            bezierPath.move(to: CGPoint(x: x, y: minY))
+            bezierPath.addLine(to: CGPoint(x: minX, y: y))
+            bezierPath.addLine(to: CGPoint(x: minX, y: y + h))
+            bezierPath.addLine(to: CGPoint(x: x, y: maxY))
+            bezierPath.addLine(to: CGPoint(x: x + w, y: maxY))
+            bezierPath.addLine(to: CGPoint(x: maxX, y: y + h))
+            bezierPath.addLine(to: CGPoint(x: maxX, y: y))
+            bezierPath.addLine(to: CGPoint(x: x + w, y: minY))
+            bezierPath.addLine(to: CGPoint(x: x, y: minY))
+        default:
+            sp_log(message: "")
+        }
+        
         return bezierPath
     }
     /// 获取矩形 中带用圆角 圆形朝内的路径
@@ -542,7 +576,7 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         let centerY = self.frame.size.height / 2.0
         let centerX = self.frame.size.width / 2.0
         
-        let startY = self.frame.size.height / 3.0
+        let startY = self.frame.size.height / 5.0
         
         let startPoint = CGPoint(x: centerX, y:  startY)
         let endPoint = CGPoint(x: centerX, y: maxY)

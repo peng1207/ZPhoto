@@ -85,7 +85,7 @@ fileprivate class SPPhotoRootVC: SPBaseVC {
     fileprivate lazy var editView : SPPentagonView = {
         let view = SPPentagonView()
         view.corners = .left
-        view.titleLabel.text = SPLanguageChange.sp_getString(key: "EDIT")
+        view.titleLabel.text = SPLanguageChange.sp_getString(key: "LONG_GRAPH")
         view.clickBlock = { [weak self] in
             self?.sp_clickEdit()
         }
@@ -172,13 +172,19 @@ extension SPPhotoRootVC {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     fileprivate func sp_clickSplicing(){
-        let vc = SPPhotoSplicingSelectVC()
+        let vc = SPPhotoSelectVC()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     fileprivate func sp_clickGif(){
-        
+        let imagePickerVC =  SPImagePickerVC(maxSelectNum: 2) { (images, assets) in
+            
+        }
+        self.present(imagePickerVC, animated: true, completion: nil)
+       
     }
     fileprivate func sp_clickEdit(){
-        
+        let vc = SPPhotoSelectVC()
+        vc.isLong = true
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }

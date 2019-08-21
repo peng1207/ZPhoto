@@ -19,6 +19,13 @@ class SPLayoutView:  UIView{
     fileprivate let cellID = "layoutCellID"
     fileprivate var typeList : [SPSPlicingType]?
     fileprivate var totalCount : Int = 0
+    fileprivate lazy var closeBtn : UIButton = {
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "public_close"), for: UIControl.State.normal)
+        btn.setImage(UIImage(named: "public_close"), for: UIControl.State.highlighted)
+        btn.addTarget(self, action: #selector(sp_clickClose), for: UIControl.Event.touchUpInside)
+        return btn
+    }()
     var selectBlock : SPLayoutSelectComplete?
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,8 +39,12 @@ class SPLayoutView:  UIView{
         self.totalCount = count
         self.collectionView.reloadData()
     }
+    @objc fileprivate func sp_clickClose(){
+        self.isHidden = true
+    }
     /// 添加UI
     fileprivate func sp_setupUI(){
+        self.addSubview(self.closeBtn)
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 5
@@ -51,8 +62,15 @@ class SPLayoutView:  UIView{
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
+        self.closeBtn.snp.makeConstraints { (maker) in
+            maker.width.height.equalTo(30)
+            maker.top.equalTo(self).offset(10)
+            maker.left.equalTo(self).offset(10)
+        }
         self.collectionView.snp.makeConstraints { (maker) in
-            maker.left.right.top.bottom.equalTo(self).offset(0)
+            maker.height.equalTo(60)
+            maker.top.equalTo(self.closeBtn.snp.bottom).offset(10)
+            maker.left.right.bottom.equalTo(self).offset(0)
         }
     }
     deinit {
@@ -117,10 +135,12 @@ class SPLayoutCollectionCell: UICollectionViewCell {
                 let value = SPPhotoSplicingHelp.sp_frameAndSpace(tyep: selectType, value: SPPhotoSplicingStruct(index: i, count: self.count, width: 50, height: 50, margin: 4, padding: 4))
                 if  let view = self.contentView.viewWithTag(LayoutTag + i ) as? SPCustomPictureView{
                     
-                    view.frame = CGRect(x: value.frame.origin.x + value.space.left, y: value.frame.origin.y + value.space.top, width: value.frame.size.width - value.space.left - value.space.right, height: value.frame.size.height - value.space.top - value.space.bottom)
+                    view.frame = CGRect(x: value.frame.origin.x , y: value.frame.origin.y , width: value.frame.size.width, height: value.frame.size.height)
                     view.isHidden = false
+                    view.sp_update(space: value.space)
                     view.layoutType = SPPhotoSplicingHelp.sp_getLayoutType(index: i, count: self.count, type: selectType)
                     view.sp_drawMaskLayer()
+                    view.bringSubviewToFront(self.contentView)
                 }
             }
         }
@@ -131,7 +151,7 @@ class SPLayoutCollectionCell: UICollectionViewCell {
             let view = SPCustomPictureView()
             view.tag = LayoutTag + i
             view.isHidden = true
-            view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue)
+            view.imgView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue)
             self.contentView.addSubview(view)
         }
         self.contentView.backgroundColor = UIColor.white

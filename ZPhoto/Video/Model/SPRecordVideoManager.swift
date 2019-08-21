@@ -141,7 +141,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         let audioInput = try? AVCaptureDeviceInput(device: self.audioDevice!)
         self.captureSession.beginConfiguration()
         for input in self.captureSession.inputs {
-            self.captureSession.removeInput((input as? AVCaptureInput)!)
+            self.captureSession.removeInput(input)
         }
         if self.captureSession.canAddInput(videoInput!) {
             self.captureSession.addInput(videoInput!)
@@ -149,9 +149,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         if self.captureSession.canAddInput(audioInput!) {
             self.captureSession.addInput(audioInput!)
         }
-    
      
-        
         self.changeDeviceProperty {
             self.currentDevice?.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: 15)
             self.currentDevice?.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: 15)
@@ -255,7 +253,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 ] as [String : Any]
             
             videoWriterPixelbufferInput = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoWriterInput!, sourcePixelBufferAttributes: sourcePixelBufferAttributesDictionary)
-           
+        
             if (assetWriter?.canAdd(videoWriterInput!))! {
                 assetWriter?.add(videoWriterInput!)
             }else {

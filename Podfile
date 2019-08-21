@@ -10,12 +10,12 @@ target 'ZPhoto' do
 
   # Pods for ZPhoto
 #    pod 'SnapKit'
-  pod 'SPCommonLibrary/Public'
-  pod 'SPCommonLibrary/Share'
-  pod 'SPCommonLibrary/Clip'
+#  pod 'SPCommonLibrary/Public'
+#  pod 'SPCommonLibrary/Share'
+#  pod 'SPCommonLibrary/Clip'
 #  pod 'SPCommonLibrary/Request'
 #    pod 'SPCommonLibrary'
-#  pod 'SPCommonLibrary', :path => "/Users/huangshupeng/Documents/git/SPCommonLibrary"
+  pod 'SPCommonLibrary', :path => "/Users/huangshupeng/Documents/git/SPCommonLibrary"
 
 #    pod 'Firebase/AdMob'
     #pod 'va', '~> 0.10.1'
