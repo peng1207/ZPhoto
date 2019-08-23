@@ -12,7 +12,7 @@ import AVFoundation
 import AVKit
 
 class SPRecordVideoData : NSObject {
-    fileprivate var filterList : Array<SPFilterModel>? = nil
+    fileprivate var filterList : [SPFilterModel]? = nil
     
     override init() {
         super.init()
@@ -24,7 +24,7 @@ class SPRecordVideoData : NSObject {
     /**
      获取滤镜数据
      */
-    func getFilterList () ->  Array<SPFilterModel>? {
+    func getFilterList () ->  [SPFilterModel]? {
         return filterList
     }
     func setup(inputImage:CIImage?, complete:(()->Void)?) {

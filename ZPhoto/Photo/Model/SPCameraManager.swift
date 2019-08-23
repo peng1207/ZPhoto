@@ -145,6 +145,7 @@ extension SPCameraManager:AVCaptureVideoDataOutputSampleBufferDelegate{
             noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
             self.noFilterCIImage =  CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
 //            outputImage =  UIImage.sp_detectFace(inputImg: outputImage!, coverImg: UIImage(named: "filter"))
+          
             if self.filter != nil {
                 self.filter?.setValue(outputImage!, forKey: kCIInputImageKey)
                 outputImage = self.filter?.outputImage

@@ -34,7 +34,7 @@ class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionView
     }
     var collectSelectComplete : ((_ model : SPFilterModel) ->  Void)?
      fileprivate let identify:String = "filterViewCell"
-    
+    fileprivate var isScroll : Bool = false
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setupUI()
@@ -45,6 +45,10 @@ class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionView
     }
     fileprivate func sp_reload(){
        
+        guard !self.isScroll else {
+            return
+        }
+        
         if sp_count(array:  self.filterList) > 0 {
             UIView.performWithoutAnimation {
                 filterCollectionView?.reloadSections([0])
@@ -95,14 +99,26 @@ extension SPRecordVideoFilterView{
         }
         return cell
     }
- 
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.isScroll = true
+    }
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        self.isScroll = true
+    }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pInView = self.convert((self.filterCollectionView?.center)!, to: self.filterCollectionView)
         
         let indexPath = self.filterCollectionView?.indexPathForItem(at: pInView)
-        sp_log(message: "indexPath row \(String(describing: indexPath?.row))")
         completeBlock(indexPath: indexPath)
+        let  scrollToScrollStop : Bool = !scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating
+        if scrollToScrollStop {
+            sp_asyncAfter(time: 0.5) {
+                self.isScroll = false
+                sp_log(message: "滚动结束")
+                
+            }
+        }
     }
     /*
      选中的滤镜回调

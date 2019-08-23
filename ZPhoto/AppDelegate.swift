@@ -23,14 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = recordVideoVC
         createCachePath()
         setUncaughtExceptionHandler()
-      
-//        let properties = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
-//        for fileterName : String in properties {
-//            let filter = CIFilter(name: fileterName)
-//            // 滤镜的参数
-//            sp_log(message: "滤镜名称----\(fileterName)")
-//            sp_log(message: filter?.attributes)
-//        }
+        
+        let properties = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
+        for fileterName : String in properties {
+            let filter = CIFilter(name: fileterName)
+            // 滤镜的参数
+            sp_log(message: "滤镜名称----\(fileterName)")
+            sp_log(message: filter?.attributes)
+        }
 //        for _ in 0...4 {
 //             sp_log(message: sp_getOneGroupValue())
 //        }
@@ -43,6 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            price = price + price * 0.1
 //        }
 //        sp_log(message: price)
+        
         // Override point for customization after application launch.
         return true
     }
