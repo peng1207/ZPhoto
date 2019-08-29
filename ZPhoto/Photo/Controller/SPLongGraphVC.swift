@@ -26,8 +26,40 @@ class SPLongGraphVC: SPBaseVC {
         }
         return view
     }()
+    fileprivate lazy var layoutView : SPLongGraphLayoutView = {
+        let view = SPLongGraphLayoutView()
+        view.backgroundColor = sp_getMianColor()
+        view.clickBlock = { [weak self] in
+            self?.sp_setupData()
+        }
+        view.isHidden = true
+        return view
+    }()
+    fileprivate lazy var bgView : SPBackgroundView = {
+        let view = SPBackgroundView()
+        view.backgroundColor = sp_getMianColor()
+        view.isHidden = true
+        view.selectBlock = { [weak self] (color , image)in
+            self?.sp_deal(color: color, image: image)
+        }
+        return view
+    }()
+    fileprivate lazy var frameView : SPPhotoFrameView = {
+        let view = SPPhotoFrameView()
+        view.backgroundColor = sp_getMianColor()
+        view.isHidden = true
+        view.sp_setMax(abroad: (sp_screenWidth() - 100 ) / 2.0, inside: sp_screenWidth())
+        view.block = { [weak self] (margin,padding) in
+            self?.marginSpace = margin
+            self?.padding = padding
+            self?.sp_setupData()
+        }
+        return view
+    }()
     fileprivate let imageViewTag : Int = 1000
-    fileprivate var direction : SPDirection = .vertical
+   
+    fileprivate var marginSpace : CGFloat = 2
+    fileprivate var padding : CGFloat = 2
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -47,57 +79,61 @@ class SPLongGraphVC: SPBaseVC {
     }
     /// 赋值
     fileprivate func sp_setupData(){
+        let direction : SPDirection = self.layoutView.direction
         if sp_count(array: self.dataArray) > 0 {
             var tmpView : UIView?
             var index = 0
             for model in self.dataArray! {
                 
-                let imgView = UIImageView()
-                imgView.image = model.img
+                var imgView : UIImageView
+                
+                if let view = self.scrollView.viewWithTag(imageViewTag + index) as? UIImageView {
+                    imgView = view
+                }else{
+                    imgView = UIImageView()
+                    imgView.image = model.img
+                    self.scrollView.addSubview(imgView)
+                }
+               
                 imgView.tag = imageViewTag + index
-                self.scrollView.addSubview(imgView)
+               
                 var size : CGSize = CGSize.zero
                 if let s = model.img?.size {
                     size = s
                 }
-                imgView.snp.makeConstraints { (maker) in
-                    if self.direction == .vertical {
-                        maker.width.equalTo(self.scrollView.snp.width).offset(-4)
+                imgView.snp.remakeConstraints { (maker) in
+                    if direction == .vertical {
+                        maker.width.equalTo(self.scrollView.snp.width).offset(-marginSpace * 2.0 )
                         maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
-                        maker.left.equalTo(self.scrollView).offset(2)
+                        maker.left.equalTo(self.scrollView).offset(marginSpace)
                         if index == sp_count(array: self.dataArray) - 1 {
-                            maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-2)
+                            maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-marginSpace)
                         }
                         if let v = tmpView{
-                            maker.top.equalTo(v.snp.bottom).offset(2)
+                            maker.top.equalTo(v.snp.bottom).offset(padding)
                         }else{
-                            maker.top.equalTo(self.scrollView.snp.top).offset(2)
+                            maker.top.equalTo(self.scrollView.snp.top).offset(marginSpace)
                         }
                         maker.height.equalTo(imgView.snp.width).multipliedBy(size.height / size.width)
                     }else{
-                        maker.height.equalTo(self.scrollView.snp.height).offset(-4)
+                        maker.height.equalTo(self.scrollView.snp.height).offset(-marginSpace * 2.0 )
                         maker.centerY.equalTo(self.scrollView.snp.centerY).offset(0)
-                        maker.top.equalTo(self.scrollView).offset(2)
+                        maker.top.equalTo(self.scrollView).offset(marginSpace)
                         if let v = tmpView {
-                            maker.left.equalTo(v.snp.right).offset(2)
+                            maker.left.equalTo(v.snp.right).offset(padding)
                         }else{
-                            maker.left.equalTo(self.scrollView.snp.left).offset(2)
+                            maker.left.equalTo(self.scrollView.snp.left).offset(marginSpace)
                         }
                         maker.width.equalTo(imgView.snp.height).multipliedBy(size.width / size.height)
                         if index == sp_count(array: self.dataArray) - 1 {
-                            maker.right.equalTo(self.scrollView.snp.right).offset(-2)
+                            maker.right.equalTo(self.scrollView.snp.right).offset(-marginSpace)
                         }
                     }
-                    
-                  
                 }
                 tmpView = imgView
                 index = index + 1
             }
         }
-        
-      
-        
     }
     
     /// 创建UI
@@ -106,6 +142,9 @@ class SPLongGraphVC: SPBaseVC {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: SPLanguageChange.sp_getString(key: "SAVE"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(sp_clickSave))
         self.view.addSubview(self.safeView)
         self.view.addSubview(self.toolView)
+        self.view.addSubview(self.layoutView)
+        self.view.addSubview(self.bgView)
+        self.view.addSubview(self.frameView)
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -127,10 +166,26 @@ class SPLongGraphVC: SPBaseVC {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
         }
+        self.layoutView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.equalTo(40)
+            maker.bottom.equalTo(self.toolView.snp.top).offset(0)
+        }
+        self.bgView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.greaterThanOrEqualTo(0)
+            maker.bottom.equalTo(self.toolView.snp.top).offset(0)
+        }
+        self.frameView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.greaterThanOrEqualTo(0)
+            maker.bottom.equalTo(self.toolView.snp.top).offset(0)
+        }
         self.safeView.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self.toolView).offset(0)
             maker.bottom.equalTo(self.view.snp.bottom).offset(0)
         }
+        
     }
     deinit {
         
@@ -161,16 +216,48 @@ extension SPLongGraphVC{
         }
     }
     fileprivate func sp_deal(toolType : SPSplicingToolType){
-//        switch toolType {
-//        case .layout:
-//            self.layoutView.isHidden = false
-//            self.colorView.isHidden = true
-//        case .background:
-//            self.colorView.isHidden = false
-//            self.layoutView.isHidden = true
-//        default:
-//            sp_log(message: "没有")
-//        }
+        
+        switch toolType {
+        case .layout:
+            sp_allHidden(otherView: self.layoutView)
+            sp_dealLayout()
+        case .background:
+            sp_allHidden(otherView: self.bgView)
+            sp_dealBg()
+        case .frame:
+            sp_allHidden(otherView: self.frameView)
+            sp_dealFrame()
+        default:
+             sp_log(message: "")
+        }
+        
+    }
+    fileprivate func sp_dealLayout(){
+        self.layoutView.isHidden = !self.layoutView.isHidden
+    }
+    fileprivate func sp_dealBg(){
+        self.bgView.isHidden = !self.bgView.isHidden
+    }
+    fileprivate func sp_dealFrame(){
+        self.frameView.isHidden = !self.frameView.isHidden
+    }
+    fileprivate func sp_deal(color : UIColor? , image : UIImage?){
+        if let i = image {
+            self.scrollView.layer.contents = i.cgImage
+        }else{
+            self.scrollView.backgroundColor = color
+        }
+    }
+    fileprivate func sp_allHidden(otherView : UIView?){
+        if self.layoutView != otherView{
+            self.layoutView.isHidden = true
+        }
+        if self.bgView != otherView {
+            self.bgView.isHidden = true
+        }
+        if self.frameView != otherView {
+            self.frameView.isHidden = true
+        }
     }
     
 }

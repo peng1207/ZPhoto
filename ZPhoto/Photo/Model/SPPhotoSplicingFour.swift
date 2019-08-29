@@ -31,7 +31,7 @@ class  SPPhotoSplicingFour {
             if index % 2 == 0 {
                 w = w + value.margin + value.padding
             }else{
-                w = w + value.padding
+                w = w + value.margin
                 x = width - w
             }
             if index < 2 {

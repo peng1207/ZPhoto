@@ -24,7 +24,7 @@ class SPPhotoSplicingVC: SPBaseVC {
         btn.addTarget(self, action: #selector(sp_clickSave), for: UIControl.Event.touchUpInside)
         return btn
     }()
-    fileprivate lazy var bgView : UIView = {
+    fileprivate lazy var conetentView : UIView = {
         let view = UIView()
         view.layer.backgroundColor = UIColor.white.cgColor
         return view
@@ -59,12 +59,24 @@ class SPPhotoSplicingVC: SPBaseVC {
         view.isHidden = true
         return view
     }()
-    fileprivate lazy var colorView : SPBackgroundView = {
+    fileprivate lazy var bgView : SPBackgroundView = {
         let view = SPBackgroundView()
         view.backgroundColor = sp_getMianColor()
         view.isHidden = true
         view.selectBlock = { [weak self](color,image) in
             self?.sp_deal(color: color,image: image)
+        }
+        return view
+    }()
+    fileprivate lazy var frameView : SPPhotoFrameView = {
+        let view = SPPhotoFrameView()
+        view.backgroundColor = sp_getMianColor()
+        view.isHidden = true
+        view.sp_setMax(abroad: 10, inside: 10)
+        view.block = { [weak self] (margin,padding) in
+            self?.marginSpace = margin
+            self?.paddingSpace = padding
+            self?.sp_setupData()
         }
         return view
     }()
@@ -104,10 +116,11 @@ class SPPhotoSplicingVC: SPBaseVC {
     override func sp_setupUI() {
         self.view.backgroundColor = sp_getMianColor()
         self.view.addSubview(self.hiddenView)
-        self.view.addSubview(self.bgView)
+        self.view.addSubview(self.conetentView)
         self.view.addSubview(self.toolView)
         self.view.addSubview(self.layoutView)
-        self.view.addSubview(self.colorView)
+        self.view.addSubview(self.bgView)
+        self.view.addSubview(self.frameView)
         self.sp_addConstraint()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.saveBtn)
     }
@@ -130,11 +143,11 @@ class SPPhotoSplicingVC: SPBaseVC {
             let value = SPPhotoSplicingHelp.sp_frameAndSpace(tyep: type, value: SPPhotoSplicingStruct(index: index, count: self.dataArray.count, width: sp_screenWidth(), height: sp_screenWidth() / self.ratio, margin: marginSpace, padding: paddingSpace))
             let frame = value.frame
             let space : SPSpace = value.space
-            var view : SPCustomPictureView? = self.bgView.viewWithTag(viewTag + index) as? SPCustomPictureView
+            var view : SPCustomPictureView? = self.conetentView.viewWithTag(viewTag + index) as? SPCustomPictureView
             if view == nil {
                 view = SPCustomPictureView(frame:frame)
                 view?.canTap = true
-                self.bgView.addSubview(view!)
+                self.conetentView.addSubview(view!)
             }else{
                 view?.frame = frame
             }
@@ -157,10 +170,10 @@ class SPPhotoSplicingVC: SPBaseVC {
             maker.left.right.top.equalTo(self.view).offset(0)
             maker.bottom.equalTo(self.toolView.snp.top).offset(0)
         }
-        self.bgView.snp.makeConstraints { (maker) in
+        self.conetentView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
             maker.centerY.equalTo(self.view.snp.centerY).offset(-20)
-            maker.height.equalTo(self.bgView.snp.width).offset(0)
+            maker.height.equalTo(self.conetentView.snp.width).offset(0)
         }
         self.toolView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
@@ -176,7 +189,12 @@ class SPPhotoSplicingVC: SPBaseVC {
             maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.toolView.snp.top).offset(0)
         }
-        self.colorView.snp.makeConstraints { (maker) in
+        self.bgView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.greaterThanOrEqualTo(0)
+            maker.bottom.equalTo(self.toolView.snp.top).offset(0)
+        }
+        self.frameView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
             maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.toolView.snp.top).offset(0)
@@ -194,30 +212,52 @@ extension SPPhotoSplicingVC {
     }
     fileprivate func sp_deal(color : UIColor?,image : UIImage? ){
         if let c = color {
-            self.bgView.backgroundColor = c
-            self.bgView.layer.contents = nil
+            self.conetentView.backgroundColor = c
+            self.conetentView.layer.contents = nil
         }
         if let img = image?.sp_resizeImg(size: CGSize(width: sp_screenWidth(), height: sp_screenWidth())) {
-            self.bgView.layer.contents = img.cgImage
-            self.bgView.backgroundColor = nil
+            self.conetentView.layer.contents = img.cgImage
+            self.conetentView.backgroundColor = nil
         }
     }
     fileprivate func sp_deal(toolType : SPSplicingToolType){
         switch toolType {
         case .layout:
-            self.layoutView.isHidden = false
-            self.colorView.isHidden = true
+            sp_allHidden(otherView: self.layoutView)
+            sp_dealLayout()
         case .background:
-            self.colorView.isHidden = false
-            self.layoutView.isHidden = true
+            sp_allHidden(otherView: self.bgView)
+            sp_dealBg()
+        case .frame :
+            sp_allHidden(otherView: self.frameView)
+            sp_dealFrame()
         default:
             sp_log(message: "没有")
         }
     }
-    
+    fileprivate func sp_dealFrame(){
+        self.frameView.isHidden = !self.frameView.isHidden
+    }
+    fileprivate func sp_dealLayout(){
+        self.layoutView.isHidden = !self.layoutView.isHidden
+    }
+    fileprivate func sp_dealBg(){
+        self.bgView.isHidden = !self.bgView.isHidden
+    }
+    fileprivate func sp_allHidden(otherView : UIView?){
+        if self.layoutView != otherView{
+            self.layoutView.isHidden = true
+        }
+        if self.bgView != otherView {
+            self.bgView.isHidden = true
+        }
+        if self.frameView != otherView {
+            self.frameView.isHidden = true
+        }
+    }
     @objc fileprivate func sp_clickSave(){
        
-        let img = UIImage.sp_image(view: self.bgView)
+        let img = UIImage.sp_image(view: self.conetentView)
         if  let i = img {
             UIImageWriteToSavedPhotosAlbum(i, self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
         }
