@@ -10,13 +10,19 @@ import Foundation
 import UIKit
 import SnapKit
 import SPCommonLibrary
-typealias SPBackgroundSelectComplete = (_ color : UIColor)->Void
+typealias SPBackgroundSelectComplete = (_ color : UIColor?, _ image : UIImage?)->Void
 class SPBackgroundView:  UIView{
     fileprivate lazy var closeBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setImage(UIImage(named: "public_close"), for: UIControl.State.normal)
         btn.setImage(UIImage(named: "public_close"), for: UIControl.State.highlighted)
         btn.addTarget(self, action: #selector(sp_clickClose), for: UIControl.Event.touchUpInside)
+        return btn
+    }()
+    fileprivate lazy var albumBtn : UIButton = {
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "public_album"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_clickAlbum), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate var collectionView : UICollectionView!
@@ -40,6 +46,7 @@ class SPBackgroundView:  UIView{
     /// 添加UI
     fileprivate func sp_setupUI(){
         self.addSubview(self.closeBtn)
+        self.addSubview(self.albumBtn)
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 5
@@ -62,6 +69,11 @@ class SPBackgroundView:  UIView{
             maker.width.height.equalTo(30)
             maker.top.equalTo(self).offset(10)
             maker.left.equalTo(self).offset(10)
+        }
+        self.albumBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.closeBtn.snp.right).offset(10)
+            maker.centerY.equalTo(self.closeBtn.snp.centerY).offset(0)
+            maker.width.height.equalTo(30)
         }
         self.collectionView.snp.makeConstraints { (maker) in
             maker.height.equalTo(60)
@@ -94,7 +106,9 @@ extension SPBackgroundView : UICollectionViewDelegate ,UICollectionViewDataSourc
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row < sp_count(array:  self.dataList) {
-            sp_dealComplete(color: SPColorForHexString(hex: self.dataList[indexPath.row]))
+            let colorHX =  self.dataList[indexPath.row]
+            sp_dealComplete(color: SPColorForHexString(hex: colorHX),image: nil)
+            sp_log(message: colorHX)
         }
     }
 }
@@ -102,10 +116,18 @@ extension SPBackgroundView {
     @objc fileprivate func sp_clickClose(){
         self.isHidden = true
     }
-    fileprivate func sp_dealComplete(color : UIColor){
+    fileprivate func sp_dealComplete(color : UIColor?,image : UIImage?){
         guard let block = self.selectBlock else {
             return
         }
-        block(color)
+        block(color,image)
+    }
+    @objc fileprivate func sp_clickAlbum(){
+        if let topVC = sp_topVC() {
+            let imagePicker = SPImagePickerVC(maxSelectNum: 1) { [weak self](images, data) in
+                self?.sp_dealComplete(color: nil, image: images?.first)
+            }
+            topVC.present(imagePicker, animated: true, completion: nil)
+        }
     }
 }

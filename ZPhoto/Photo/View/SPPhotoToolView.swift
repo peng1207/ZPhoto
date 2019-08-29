@@ -11,28 +11,26 @@ import Foundation
 import UIKit
 import SnapKit
 import SPCommonLibrary
-typealias SPSplicingToolComplete = (_ type : SPSplicingToolType)->Void
-class SPSplicingToolView:  UIView{
+typealias SPPhotoToolComplete = (_ type : SPSplicingToolType)->Void
+class SPPhotoToolView:  UIView{
     
     fileprivate var collectionView : UICollectionView!
     fileprivate let cellID = "SPSplicingToolCollectionCellID"
-    fileprivate var dataArray : [SPSplicingToolModel] = [SPSplicingToolModel]()
-    var selectBlock : SPSplicingToolComplete?
+    var dataArray : [SPToolModel]?{
+        didSet{
+            self.collectionView.reloadData()
+        }
+    }
+    var selectBlock : SPPhotoToolComplete?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
-        sp_setupData()
+        
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    /// 赋值
-    fileprivate func sp_setupData(){
-        self.dataArray.append(SPSplicingToolModel.sp_init(type: .layout))
-        self.dataArray.append( SPSplicingToolModel.sp_init(type: .background))
-          self.dataArray.append( SPSplicingToolModel.sp_init(type: .zoom))
-        self.collectionView.reloadData()
-    }
+  
     /// 添加UI
     fileprivate func sp_setupUI(){
         let layout = UICollectionViewFlowLayout()
@@ -44,7 +42,6 @@ class SPSplicingToolView:  UIView{
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.backgroundColor = sp_getMianColor()
-//        self.collectionView.alwaysBounceVertical = true
         self.collectionView.register(SPSplicingToolCollectionCell.self, forCellWithReuseIdentifier: self.cellID)
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.showsHorizontalScrollIndicator = false
@@ -61,7 +58,7 @@ class SPSplicingToolView:  UIView{
         
     }
 }
-extension SPSplicingToolView : UICollectionViewDelegate , UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+extension SPPhotoToolView : UICollectionViewDelegate , UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sp_count(array:  self.dataArray) > 0 ? 1 : 0
@@ -72,7 +69,7 @@ extension SPSplicingToolView : UICollectionViewDelegate , UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell : SPSplicingToolCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellID, for: indexPath) as! SPSplicingToolCollectionCell
         if indexPath.row < sp_count(array:  self.dataArray) {
-            cell.model = self.dataArray[indexPath.row]
+            cell.model = self.dataArray?[indexPath.row]
         }
         return cell
     }
@@ -82,8 +79,9 @@ extension SPSplicingToolView : UICollectionViewDelegate , UICollectionViewDataSo
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row < sp_count(array: self.dataArray){
-            let model = self.dataArray[indexPath.row]
-            sp_dealSelect(type: model.type)
+            if let model = self.dataArray?[indexPath.row] {
+                 sp_dealSelect(type: model.type)
+            }
         }
     }
     fileprivate func sp_dealSelect(type : SPSplicingToolType){
@@ -107,7 +105,7 @@ class SPSplicingToolCollectionCell: UICollectionViewCell {
         label.textAlignment = .center
         return label
     }()
-    var model : SPSplicingToolModel? {
+    var model : SPToolModel? {
         didSet{
             self.sp_setupData()
         }

@@ -24,22 +24,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         createCachePath()
         setUncaughtExceptionHandler()
         
-        let properties = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
-        for fileterName : String in properties {
-            let filter = CIFilter(name: fileterName)
-            // 滤镜的参数
-            sp_log(message: "滤镜名称----\(fileterName)")
-            sp_log(message: filter?.attributes)
-        }
+//        let properties = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
+//        for fileterName : String in properties {
+//            let filter = CIFilter(name: fileterName)
+//            // 滤镜的参数
+//            sp_log(message: "滤镜名称----\(fileterName)")
+//            sp_log(message: filter?.attributes)
+//        }
 //        for _ in 0...4 {
 //             sp_log(message: sp_getOneGroupValue())
 //        }
 //        for _ in 0...4 {
 //            sp_log(message: sp_getShuangSeQiu())
 //        }
-        
-//        var price : CGFloat = 7.68
-//        for _ in 0..<10 {
+//        
+//        var price : CGFloat = 8
+//        for _ in 0..<9 {
 //            price = price + price * 0.1
 //        }
 //        sp_log(message: price)

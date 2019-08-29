@@ -86,11 +86,11 @@ extension SPSetVC{
        
         var list = [Any]()
         list.append("分享")
-        list.append(shareUrl)
+       
         if  let img = sp_appLogoImg() {
             list.append(img)
         }
-        
+         list.append(shareUrl)
         SPShare.sp_share(shareData: list, vc: self)
     }
     /// 点击评分

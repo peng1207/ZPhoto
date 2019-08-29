@@ -101,7 +101,7 @@ extension SPPhotoSelectView : UICollectionViewDelegate,UICollectionViewDataSourc
         if indexPath.row < sp_count(array:  self.dataArray) {
             cell.model = self.dataArray[indexPath.row]
         }
-           cell.indexPath = indexPath
+        cell.indexPath = indexPath
         cell.indexBlock = { [weak self](index) in
             self?.sp_dealDelete(index: index)
         }

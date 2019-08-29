@@ -23,8 +23,8 @@ class SPPhotoListVC: SPBaseVC {
         btn.addTarget(self, action: #selector(sp_clickChoise), for: UIControl.Event.touchUpInside)
         return btn
     }()
-    fileprivate lazy var editView : SPPhotoListEditView = {
-        let view = SPPhotoListEditView()
+    fileprivate lazy var editView : SPPhotoListToolView = {
+        let view = SPPhotoListToolView()
         view.deleteBlock = { [weak self] in
             self?.sp_clickDelete()
         }
@@ -42,6 +42,7 @@ class SPPhotoListVC: SPBaseVC {
     var selectBlock : SPPhotoListSelectComplete?
     var selectMaxCount : Int = 9
     var isCanAddOther : Bool = false
+    var pushEditVC : Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -185,15 +186,23 @@ extension SPPhotoListVC {
       
     }
     fileprivate func sp_dealAddOther(images : [UIImage]?){
-        if let list = images , sp_count(array: list) > 0, let block = self.selectBlock{
-            for image in list {
+        if self.pushEditVC {
+            if let list = images {
                 let model = SPPhotoModel()
-                model.img = image
-                self.selectArray.append(model)
-                block(model)
+                model.img = list.first
+                let editVC = SPPhotoEditVC()
+                editVC.photoModel = model
+                self.navigationController?.pushViewController(editVC, animated: true)
             }
-            
-            
+        }else{
+            if let list = images , sp_count(array: list) > 0, let block = self.selectBlock{
+                for image in list {
+                    let model = SPPhotoModel()
+                    model.img = image
+                    self.selectArray.append(model)
+                    block(model)
+                }
+            }
         }
     }
     

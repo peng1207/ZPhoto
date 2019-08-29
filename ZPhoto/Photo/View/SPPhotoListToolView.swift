@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SnapKit
 import SPCommonLibrary
-class SPPhotoListEditView:  UIView{
+class SPPhotoListToolView:  UIView{
     
     fileprivate lazy var shareBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)

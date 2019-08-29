@@ -262,11 +262,13 @@ extension SPRecordVideoRootVC {
     fileprivate func changeFilterData(){
         sp_mainQueue {
             if (self.filterView.isHidden == false){
-                self.videoData.setup(inputImage: self.videoManager.noFilterCIImage, complete: { [weak self] () in
-                    sp_mainQueue {
-                        self?.filterView.filterList = self?.videoData.getFilterList()
-                    }
-                })
+                sp_sync {
+                    self.videoData.setup(inputImage: self.videoManager.noFilterCIImage, complete: { [weak self] () in
+                        sp_mainQueue {
+                            self?.filterView.filterList = self?.videoData.getFilterList()
+                        }
+                    })
+                }
             }
         }
     }

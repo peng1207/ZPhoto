@@ -10,6 +10,11 @@ import Foundation
 import UIKit
 import SPCommonLibrary
 class SPBaseVC : UIViewController{
+    lazy var safeView : UIView = {
+        let view = UIView()
+        view.backgroundColor = sp_getMianColor()
+        return view
+    }()
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .lightContent
     }

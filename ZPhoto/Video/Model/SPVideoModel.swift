@@ -10,7 +10,7 @@ import Foundation
 import AVFoundation
 import AVKit
 import Photos
-
+import SPCommonLibrary
 class SPVideoModel : NSObject{
     var url : URL?{
         didSet{
@@ -26,7 +26,7 @@ class SPVideoModel : NSObject{
                 thumbnailImage = SPVideoHelp.thumbnailImageTo(assesst: asset!, time: CMTimeMakeWithSeconds(0.00, preferredTimescale: framesPerSecond))
                 self.second = second
                 if thumbnailImage == nil {
-                    thumbnailImage = UIImage(named: "default")
+                    thumbnailImage = sp_appLaunchImg()
                 }
             }
         }

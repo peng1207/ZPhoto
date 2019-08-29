@@ -11,12 +11,23 @@ import UIKit
 import SPCommonLibrary
 
 enum SPSplicingToolType {
+    /// 布局
     case layout
+    /// 背景
     case background
+    /// 比例
     case zoom
+    /// 边框
+    case frame
+    /// 文字
+    case text
+    /// 滤镜
+    case filter
+    /// 裁剪
+    case shear
 }
 
-class SPSplicingToolModel {
+class SPToolModel {
     
     var title : String?
     var img : UIImage?
@@ -33,13 +44,24 @@ class SPSplicingToolModel {
         case .zoom:
             self.title = SPLanguageChange.sp_getString(key: "ZOOM")
             self.img = UIImage(named: "public_zoom")
-            //        default:
-            //            self.title = ""
+        case .frame:
+            self.title = SPLanguageChange.sp_getString(key: "FRAME")
+            self.img = UIImage(named: "public_frame")
+        case .text:
+            self.title = SPLanguageChange.sp_getString(key: "TEXT")
+            self.img = UIImage(named: "public_text")
+        case .filter:
+            self.title = SPLanguageChange.sp_getString(key: "FILTER")
+            self.img = UIImage(named: "filter")
+        case .shear:
+            self.title = SPLanguageChange.sp_getString(key: "SHEAR")
+            self.img = UIImage(named: "public_shear")
+            
         }
         
     }
-    class func sp_init(type:SPSplicingToolType)->SPSplicingToolModel{
-        let model = SPSplicingToolModel()
+    class func sp_init(type:SPSplicingToolType)->SPToolModel{
+        let model = SPToolModel()
         model.type = type
         model.sp_setupData()
         return model

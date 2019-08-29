@@ -45,3 +45,6 @@
 "LONG_GRAPH"  = "长图";
 "PICTURES" = "张图片";
 "SAVE_SUCCESS" = "保存成功，请到相册中查看";
+"SHEAR" = "裁剪";
+"TEXT" = "文字";
+"FRAME" = "边框";

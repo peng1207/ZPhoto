@@ -67,7 +67,7 @@ fileprivate class SPCameraRootVC: SPBaseVC {
     }()
     fileprivate var filterRightConstraint : Constraint!
     fileprivate let filterViewWidth :  CGFloat = 60
-     fileprivate let kCameraManagerKVOKey = "noFilterCIImage"
+    fileprivate let kCameraManagerKVOKey = "noFilterCIImage"
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -163,6 +163,7 @@ fileprivate extension SPCameraRootVC{
             outputImg = UIImage(cgImage: ciImg)
         }
         if let img = outputImg {
+            
             let imgData = img.jpegData(compressionQuality: 0.5)
             if let data = imgData {
                 do {
@@ -188,13 +189,16 @@ fileprivate extension SPCameraRootVC{
      改变滤镜图片的数据
      */
     func sp_changeFilterData(){
+      
         sp_mainQueue {
             if (self.filterView.isHidden == false){
-                self.videoData.setup(inputImage: self.cameraManmager.noFilterCIImage, complete: { [weak self] () in
-                    sp_mainQueue {
-                        self?.filterView.filterList = self?.videoData.getFilterList()
-                    }
-                })
+                sp_sync {
+                    self.videoData.setup(inputImage: self.cameraManmager.noFilterCIImage, complete: { [weak self] () in
+                        sp_mainQueue {
+                            self?.filterView.filterList = self?.videoData.getFilterList()
+                        }
+                    })
+                }
             }
         }
     }

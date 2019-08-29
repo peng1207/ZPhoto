@@ -303,4 +303,10 @@ enum SPSPlicingType {
     
     
 }
-
+/// 方向
+enum SPDirection {
+    /// 垂直
+    case vertical
+    /// 水平
+    case horizontal
+}

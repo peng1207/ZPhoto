@@ -34,9 +34,17 @@ class SPPhotoSplicingVC: SPBaseVC {
         view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue).withAlphaComponent(0.1)
         return view
     }()
-    fileprivate lazy var toolView : SPSplicingToolView = {
-        let view = SPSplicingToolView()
+    fileprivate lazy var toolView : SPPhotoToolView = {
+        let view = SPPhotoToolView()
         view.backgroundColor = sp_getMianColor()
+        view.dataArray = [
+            SPToolModel.sp_init(type: .layout)
+            ,SPToolModel.sp_init(type: .background)
+            ,SPToolModel.sp_init(type: .frame)
+            ,SPToolModel.sp_init(type: .zoom)
+            ,SPToolModel.sp_init(type: .text)
+            ,SPToolModel.sp_init(type: .filter)
+        ]
         view.selectBlock = { [weak self](type) in
             self?.sp_deal(toolType: type)
         }
@@ -55,8 +63,8 @@ class SPPhotoSplicingVC: SPBaseVC {
         let view = SPBackgroundView()
         view.backgroundColor = sp_getMianColor()
         view.isHidden = true
-        view.selectBlock = { [weak self](color) in
-            self?.sp_deal(color: color)
+        view.selectBlock = { [weak self](color,image) in
+            self?.sp_deal(color: color,image: image)
         }
         return view
     }()
@@ -184,8 +192,15 @@ extension SPPhotoSplicingVC {
         self.selectType = type
         sp_setupData()
     }
-    fileprivate func sp_deal(color : UIColor){
-        self.bgView.backgroundColor = color
+    fileprivate func sp_deal(color : UIColor?,image : UIImage? ){
+        if let c = color {
+            self.bgView.backgroundColor = c
+            self.bgView.layer.contents = nil
+        }
+        if let img = image?.sp_resizeImg(size: CGSize(width: sp_screenWidth(), height: sp_screenWidth())) {
+            self.bgView.layer.contents = img.cgImage
+            self.bgView.backgroundColor = nil
+        }
     }
     fileprivate func sp_deal(toolType : SPSplicingToolType){
         switch toolType {

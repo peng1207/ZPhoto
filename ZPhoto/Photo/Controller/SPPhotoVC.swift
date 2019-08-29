@@ -169,6 +169,9 @@ extension SPPhotoRootVC {
     }
     fileprivate func sp_clickFile(){
         let vc = SPPhotoListVC()
+        vc.selectMaxCount = 1
+        vc.isCanAddOther = true
+        vc.pushEditVC = true
         self.navigationController?.pushViewController(vc, animated: true)
     }
     fileprivate func sp_clickSplicing(){
@@ -176,11 +179,8 @@ extension SPPhotoRootVC {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     fileprivate func sp_clickGif(){
-        let imagePickerVC =  SPImagePickerVC(maxSelectNum: 2) { (images, assets) in
-            
-        }
-        self.present(imagePickerVC, animated: true, completion: nil)
-       
+        
+ 
     }
     fileprivate func sp_clickEdit(){
         let vc = SPPhotoSelectVC()

@@ -5,7 +5,7 @@
 //  Created by 黄树鹏 on 2019/6/17.
 //  Copyright © 2019 huangshupeng. All rights reserved.
 //
-
+// 裁剪 滤镜
 import Foundation
 import UIKit
 import SnapKit
@@ -13,7 +13,7 @@ import SPCommonLibrary
 
 typealias SPPhotoEditComplete = (_ type : ButtonClickType)->Void
 
-class SPPhotoEditView:  UIView{
+class SPPhotoEditToolView:  UIView{
     
     fileprivate lazy var canceBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
@@ -35,20 +35,20 @@ class SPPhotoEditView:  UIView{
     }()
     fileprivate lazy var shearBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
-        btn.setTitle("剪切", for: UIControl.State.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_000000.rawValue), for: UIControl.State.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControl.State.selected)
-        btn.titleLabel?.font = sp_fontSize(fontSize:  15)
+        btn.setImage(UIImage(named: "public_shear"), for: UIControl.State.normal)
         btn.addTarget(self, action: #selector(sp_clickShear), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate lazy var filterBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
-        btn.setTitle("滤镜", for: UIControl.State.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_000000.rawValue), for: UIControl.State.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControl.State.selected)
-        btn.titleLabel?.font = sp_fontSize(fontSize:  15)
+        btn.setImage(UIImage(named: "filter"), for: UIControl.State.normal)
         btn.addTarget(self, action: #selector(sp_clickFilter), for: UIControl.Event.touchUpInside)
+        return btn
+    }()
+    fileprivate lazy var textBtn : UIButton = {
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "public_text"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_clickText), for: UIControl.Event.touchUpInside)
         return btn
     }()
     var clickBlock : SPPhotoEditComplete?
@@ -63,6 +63,8 @@ class SPPhotoEditView:  UIView{
     fileprivate func sp_setupUI(){
         self.addSubview(self.canceBtn)
         self.addSubview(self.finishBtn)
+        self.addSubview(self.shearBtn)
+        self.addSubview(self.filterBtn)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -75,12 +77,22 @@ class SPPhotoEditView:  UIView{
             maker.right.top.bottom.equalTo(self).offset(0)
             maker.width.equalTo(50)
         }
+        self.shearBtn.snp.makeConstraints { (maker) in
+            maker.top.bottom.equalTo(self).offset(0)
+            maker.width.equalTo(self.shearBtn.snp.height).offset(0)
+            maker.right.equalTo(self.snp.centerX).offset(-30)
+        }
+        self.filterBtn.snp.makeConstraints { (maker) in
+            maker.top.bottom.equalTo(self).offset(0)
+            maker.width.equalTo(self.filterBtn.snp.height).offset(0)
+            maker.left.equalTo(self.snp.centerX).offset(30)
+        }
     }
     deinit {
         
     }
 }
-extension SPPhotoEditView{
+extension SPPhotoEditToolView{
     
     @objc fileprivate func sp_clickCance(){
             sp_dealBtnClick(type: .cance)
@@ -93,6 +105,9 @@ extension SPPhotoEditView{
     }
     @objc fileprivate func sp_clickFilter(){
         sp_dealBtnClick(type: .filter)
+    }
+    @objc fileprivate func sp_clickText(){
+        
     }
     fileprivate func sp_dealBtnClick(type : ButtonClickType){
         guard let block = self.clickBlock else {
