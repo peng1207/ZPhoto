@@ -20,12 +20,8 @@ class SPVideoPlayVC : SPBaseVC {
     }()
     lazy fileprivate var closeBtn : UIButton = {
         let button = UIButton(type: .custom)
-        
         button.setBackgroundImage(UIImage(named: "delete"), for: .normal)
-        
-        
         button.frame = CGRect(x: 10, y: sp_statusBarHeight(), width: 30, height: 30)
-       
         button.clipsToBounds = true 
         return button
     }()

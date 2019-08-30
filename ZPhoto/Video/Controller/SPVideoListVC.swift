@@ -80,12 +80,12 @@ extension SPVideoListVC {
     private func addConstraintToView (){
         self.videoCollectionView.snp.makeConstraints { (maker) in
             maker.left.top.right.equalTo(self.view).offset(0)
-            
-            if #available(iOS 11.0, *) {
-                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
-            } else {
-                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
-            }
+            maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+//            if #available(iOS 11.0, *) {
+//                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+//            } else {
+//                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+//            }
         }
         self.noDataView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.view).offset(20)

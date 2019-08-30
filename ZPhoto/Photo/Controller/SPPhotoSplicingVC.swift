@@ -10,6 +10,7 @@
 import Foundation
 import SnapKit
 import SPCommonLibrary
+
 class SPPhotoSplicingVC: SPBaseVC {
     var dataArray : [SPPhotoModel]!
     fileprivate var typeList : [SPSPlicingType]!
@@ -29,11 +30,7 @@ class SPPhotoSplicingVC: SPBaseVC {
         view.layer.backgroundColor = UIColor.white.cgColor
         return view
     }()
-    fileprivate lazy var hiddenView : UIView = {
-        let view = UIView()
-        view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue).withAlphaComponent(0.1)
-        return view
-    }()
+    
     fileprivate lazy var toolView : SPPhotoToolView = {
         let view = SPPhotoToolView()
         view.backgroundColor = sp_getMianColor()
@@ -43,7 +40,7 @@ class SPPhotoSplicingVC: SPBaseVC {
             ,SPToolModel.sp_init(type: .frame)
             ,SPToolModel.sp_init(type: .zoom)
             ,SPToolModel.sp_init(type: .text)
-            ,SPToolModel.sp_init(type: .filter)
+//            ,SPToolModel.sp_init(type: .filter)
         ]
         view.selectBlock = { [weak self](type) in
             self?.sp_deal(toolType: type)
@@ -114,14 +111,16 @@ class SPPhotoSplicingVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
-        self.view.backgroundColor = sp_getMianColor()
-        self.view.addSubview(self.hiddenView)
+ 
         self.view.addSubview(self.conetentView)
+        self.view.addSubview(self.safeView)
+        self.safeView.backgroundColor = self.toolView.backgroundColor
         self.view.addSubview(self.toolView)
         self.view.addSubview(self.layoutView)
         self.view.addSubview(self.bgView)
         self.view.addSubview(self.frameView)
         self.sp_addConstraint()
+        self.navigationItem.title = SPLanguageChange.sp_getString(key: "SPLICING")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.saveBtn)
     }
     fileprivate func sp_getData(){
@@ -140,7 +139,7 @@ class SPPhotoSplicingVC: SPBaseVC {
         
         var index = 0
         for model in self.dataArray {
-            let value = SPPhotoSplicingHelp.sp_frameAndSpace(tyep: type, value: SPPhotoSplicingStruct(index: index, count: self.dataArray.count, width: sp_screenWidth(), height: sp_screenWidth() / self.ratio, margin: marginSpace, padding: paddingSpace))
+            let value = SPPhotoSplicingHelp.sp_frameAndSpace(tyep: type, value: SPPhotoSplicingStruct(index: index, count: self.dataArray.count, width: sp_screenWidth(), height: sp_screenWidth() * self.ratio, margin: marginSpace, padding: paddingSpace))
             let frame = value.frame
             let space : SPSpace = value.space
             var view : SPCustomPictureView? = self.conetentView.viewWithTag(viewTag + index) as? SPCustomPictureView
@@ -166,15 +165,11 @@ class SPPhotoSplicingVC: SPBaseVC {
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
-        self.hiddenView.snp.makeConstraints { (maker) in
-            maker.left.right.top.equalTo(self.view).offset(0)
-            maker.bottom.equalTo(self.toolView.snp.top).offset(0)
-        }
-        self.conetentView.snp.makeConstraints { (maker) in
-            maker.left.right.equalTo(self.view).offset(0)
-            maker.centerY.equalTo(self.view.snp.centerY).offset(-20)
-            maker.height.equalTo(self.conetentView.snp.width).offset(0)
-        }
+//        self.hiddenView.snp.makeConstraints { (maker) in
+//            maker.left.right.top.equalTo(self.view).offset(0)
+//            maker.bottom.equalTo(self.toolView.snp.top).offset(0)
+//        }
+        sp_contentLayout()
         self.toolView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
             maker.height.equalTo(70)
@@ -183,6 +178,10 @@ class SPPhotoSplicingVC: SPBaseVC {
             }else{
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
+        }
+        self.safeView.snp.makeConstraints { (maker) in
+            maker.left.right.top.equalTo(self.toolView).offset(0)
+            maker.bottom.equalTo(self.view).offset(0)
         }
         self.layoutView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
@@ -198,6 +197,15 @@ class SPPhotoSplicingVC: SPBaseVC {
             maker.left.right.equalTo(self.view).offset(0)
             maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.toolView.snp.top).offset(0)
+        }
+    }
+    fileprivate func sp_contentLayout(){
+        self.conetentView.snp.remakeConstraints { (maker) in
+            maker.top.greaterThanOrEqualTo(self.view).offset(0)
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.centerY.equalTo(self.view.snp.centerY).offset(-30)
+            maker.height.equalTo(self.conetentView.snp.width).multipliedBy(self.ratio)
+            
         }
     }
     deinit {
@@ -231,6 +239,9 @@ extension SPPhotoSplicingVC {
         case .frame :
             sp_allHidden(otherView: self.frameView)
             sp_dealFrame()
+        case .zoom:
+            sp_allHidden(otherView: nil)
+            sp_dealZoom()
         default:
             sp_log(message: "没有")
         }
@@ -243,6 +254,39 @@ extension SPPhotoSplicingVC {
     }
     fileprivate func sp_dealBg(){
         self.bgView.isHidden = !self.bgView.isHidden
+    }
+    fileprivate func sp_dealZoom(){
+        let actionSheetVC = UIAlertController(title: SPLanguageChange.sp_getString(key: "ZOOM"), message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+        actionSheetVC.addAction(UIAlertAction(title: "1:1", style: UIAlertAction.Style.default, handler: { [weak self](action) in
+            self?.sp_update(ratio: 1.0)
+        }))
+        actionSheetVC.addAction(UIAlertAction(title: "2:1", style: UIAlertAction.Style.default, handler: { [weak self](action) in
+            self?.sp_update(ratio: 0.5)
+        }))
+        actionSheetVC.addAction(UIAlertAction(title: "16:9", style: UIAlertAction.Style.default, handler: { [weak self](action) in
+            self?.sp_update(ratio: 9.0 / 16.0)
+        }))
+        actionSheetVC.addAction(UIAlertAction(title: "4:5", style: UIAlertAction.Style.default, handler: { [weak self](action) in
+            self?.sp_update(ratio: 5.0 / 4.0)
+        }))
+        actionSheetVC.addAction(UIAlertAction(title: "4:3", style: UIAlertAction.Style.default, handler: { [weak self](action) in
+            self?.sp_update(ratio: 3.0 / 4.0)
+        }))
+        actionSheetVC.addAction(UIAlertAction(title: "7:5", style: UIAlertAction.Style.default, handler: { [weak self](action) in
+            self?.sp_update(ratio: 5.0 / 7.0)
+        }))
+        actionSheetVC.addAction(UIAlertAction(title: "3:2", style: UIAlertAction.Style.default, handler: { [weak self](action) in
+            self?.sp_update(ratio: 2.0 / 3.0)
+        }))
+        actionSheetVC.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel, handler: { (action) in
+            
+        }))
+        self.present(actionSheetVC, animated: true, completion: nil)
+    }
+    fileprivate func sp_update(ratio : CGFloat){
+        self.ratio = ratio
+        self.sp_setupData()
+        self.sp_contentLayout()
     }
     fileprivate func sp_allHidden(otherView : UIView?){
         if self.layoutView != otherView{

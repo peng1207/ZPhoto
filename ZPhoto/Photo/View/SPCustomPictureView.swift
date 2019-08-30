@@ -70,7 +70,7 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
                 maker.width.equalTo(img.size.width / SP_DEVICE_SCALE)
                 maker.height.equalTo(img.size.height / SP_DEVICE_SCALE)
                 maker.width.greaterThanOrEqualTo(self.scrollView.snp.width).offset(0)
-                maker.height.greaterThanOrEqualTo(self.scrollView.snp.width).offset(0)
+                maker.height.greaterThanOrEqualTo(self.scrollView.snp.height).offset(0)
             }else{
                 maker.width.equalTo(self.scrollView.snp.width).offset(0)
                 maker.height.equalTo(self.scrollView.snp.height).offset(0)
@@ -87,7 +87,9 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
             self.scrollView.contentSize = CGSize(width: image.size.width / SP_DEVICE_SCALE * 2.0, height: image.size.height / SP_DEVICE_SCALE * 2.0)
         }
     }
-    
+    func sp_update(filterImg : UIImage?){
+        self.imgView.image = filterImg
+    }
     func sp_drawMaskLayer(){
         
         switch self.layoutType {

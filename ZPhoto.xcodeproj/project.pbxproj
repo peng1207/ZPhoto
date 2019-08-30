@@ -67,7 +67,7 @@
 		9EAD4BA222C74973007D7BB3 /* SPVideoScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD4B9422C74972007D7BB3 /* SPVideoScheduleView.swift */; };
 		9EAD4BA322C74973007D7BB3 /* SPVideoPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD4B9522C74972007D7BB3 /* SPVideoPlayView.swift */; };
 		9EAD4BA422C74973007D7BB3 /* SPVideoCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD4B9622C74972007D7BB3 /* SPVideoCollectionCell.swift */; };
-		9EAD4BA522C74973007D7BB3 /* SPRecordVideoFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD4B9722C74972007D7BB3 /* SPRecordVideoFilterView.swift */; };
+		9EAD4BA522C74973007D7BB3 /* SPFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD4B9722C74972007D7BB3 /* SPFilterView.swift */; };
 		9EAD4BA722C74A16007D7BB3 /* SPVideoSelectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD4BA622C74A16007D7BB3 /* SPVideoSelectVC.swift */; };
 		9EAD4BAF22C9DD71007D7BB3 /* SPVideoSelectCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD4BAE22C9DD71007D7BB3 /* SPVideoSelectCollectionCell.swift */; };
 		9EAD4BB122C9E096007D7BB3 /* SPVideoUpendIndexVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD4BB022C9E096007D7BB3 /* SPVideoUpendIndexVC.swift */; };
@@ -180,7 +180,7 @@
 		9EAD4B9422C74972007D7BB3 /* SPVideoScheduleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoScheduleView.swift; sourceTree = "<group>"; };
 		9EAD4B9522C74972007D7BB3 /* SPVideoPlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoPlayView.swift; sourceTree = "<group>"; };
 		9EAD4B9622C74972007D7BB3 /* SPVideoCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoCollectionCell.swift; sourceTree = "<group>"; };
-		9EAD4B9722C74972007D7BB3 /* SPRecordVideoFilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPRecordVideoFilterView.swift; sourceTree = "<group>"; };
+		9EAD4B9722C74972007D7BB3 /* SPFilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPFilterView.swift; sourceTree = "<group>"; };
 		9EAD4BA622C74A16007D7BB3 /* SPVideoSelectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoSelectVC.swift; sourceTree = "<group>"; };
 		9EAD4BAE22C9DD71007D7BB3 /* SPVideoSelectCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoSelectCollectionCell.swift; sourceTree = "<group>"; };
 		9EAD4BB022C9E096007D7BB3 /* SPVideoUpendIndexVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoUpendIndexVC.swift; sourceTree = "<group>"; };
@@ -490,7 +490,7 @@
 				9EAD4B9422C74972007D7BB3 /* SPVideoScheduleView.swift */,
 				9EAD4B9522C74972007D7BB3 /* SPVideoPlayView.swift */,
 				9EAD4B9622C74972007D7BB3 /* SPVideoCollectionCell.swift */,
-				9EAD4B9722C74972007D7BB3 /* SPRecordVideoFilterView.swift */,
+				9EAD4B9722C74972007D7BB3 /* SPFilterView.swift */,
 				9EAD4BAE22C9DD71007D7BB3 /* SPVideoSelectCollectionCell.swift */,
 			);
 			path = View;
@@ -796,7 +796,7 @@
 				9E2D90A7225C849600299C15 /* SPPhotoHelp.swift in Sources */,
 				9EAD4B9A22C74973007D7BB3 /* SPRecordVideoVC.swift in Sources */,
 				9EAD4BAF22C9DD71007D7BB3 /* SPVideoSelectCollectionCell.swift in Sources */,
-				9EAD4BA522C74973007D7BB3 /* SPRecordVideoFilterView.swift in Sources */,
+				9EAD4BA522C74973007D7BB3 /* SPFilterView.swift in Sources */,
 				9E07234D22D722DA00E5068A /* SPSetModel.swift in Sources */,
 				9EAD4BA122C74973007D7BB3 /* SPVideoHelp.swift in Sources */,
 				9E5E27AF22C4C2C4006F9E66 /* SPBackgroundView.swift in Sources */,

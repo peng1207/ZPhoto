@@ -56,8 +56,21 @@ class SPLongGraphVC: SPBaseVC {
         }
         return view
     }()
+    fileprivate lazy var filterView : SPFilterView = {
+        let view =  SPFilterView()
+        view.isHidden = true
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        view.collectSelectComplete = { [weak self](model : SPFilterModel)  in
+            self?.sp_deal(filterModel: model)
+        }
+        view.sp_cornerRadius(radius: filterViewWidth / 2.0)
+        return view
+    }() //滤镜显示view
+    fileprivate lazy var videoData : SPRecordVideoData! = {
+        return SPRecordVideoData()
+    }()
     fileprivate let imageViewTag : Int = 1000
-   
+    fileprivate let filterViewWidth :  CGFloat = 60
     fileprivate var marginSpace : CGFloat = 2
     fileprivate var padding : CGFloat = 2
     override func viewDidLoad() {
@@ -138,6 +151,7 @@ class SPLongGraphVC: SPBaseVC {
     
     /// 创建UI
     override func sp_setupUI() {
+        self.navigationItem.title = SPLanguageChange.sp_getString(key: "LONG_GRAPH")
         self.view.addSubview(self.scrollView)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: SPLanguageChange.sp_getString(key: "SAVE"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(sp_clickSave))
         self.view.addSubview(self.safeView)
@@ -145,6 +159,7 @@ class SPLongGraphVC: SPBaseVC {
         self.view.addSubview(self.layoutView)
         self.view.addSubview(self.bgView)
         self.view.addSubview(self.frameView)
+        self.view.addSubview(self.filterView)
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -180,6 +195,12 @@ class SPLongGraphVC: SPBaseVC {
             maker.left.right.equalTo(self.view).offset(0)
             maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.toolView.snp.top).offset(0)
+        }
+        self.filterView.snp.makeConstraints { (maker) in
+            maker.right.equalTo(self.view).offset(0)
+            maker.height.equalTo(self.view.snp.height).multipliedBy(0.5)
+            maker.centerY.equalTo(self.view.snp.centerY).offset(0)
+            maker.width.equalTo(filterViewWidth)
         }
         self.safeView.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self.toolView).offset(0)
@@ -227,10 +248,12 @@ extension SPLongGraphVC{
         case .frame:
             sp_allHidden(otherView: self.frameView)
             sp_dealFrame()
+        case .filter:
+            sp_allHidden(otherView: self.filterView)
+            sp_dealFilter()
         default:
              sp_log(message: "")
         }
-        
     }
     fileprivate func sp_dealLayout(){
         self.layoutView.isHidden = !self.layoutView.isHidden
@@ -241,13 +264,63 @@ extension SPLongGraphVC{
     fileprivate func sp_dealFrame(){
         self.frameView.isHidden = !self.frameView.isHidden
     }
+    fileprivate func sp_dealFilter(){
+        self.filterView.isHidden = !self.filterView.isHidden
+        if (self.filterView.isHidden == false && sp_count(array: self.filterView.filterList) == 0){
+            sp_sync {
+                self.videoData.setup(inputImage: CIImage(image: sp_appLogoImg()!), complete: { [weak self] () in
+                    sp_mainQueue {
+                        self?.filterView.filterList = self?.videoData.getFilterList()
+                    }
+                })
+            }
+        }
+    }
     fileprivate func sp_deal(color : UIColor? , image : UIImage?){
         if let i = image {
             self.scrollView.layer.contents = i.cgImage
         }else{
+            self.scrollView.layer.contents = nil
             self.scrollView.backgroundColor = color
         }
     }
+    fileprivate func sp_deal(filterModel : SPFilterModel?){
+        guard let model = filterModel else {
+            return
+        }
+        sp_deal(img: model, isAll: true, index: 0)
+    }
+    fileprivate func sp_deal(img filterModel : SPFilterModel,isAll : Bool, index : NSInteger){
+        
+        guard let filter = filterModel.filter else {
+            return
+        }
+        self.scrollView.subviews.forEach { (view) in
+            if let imageView = view as? UIImageView {
+                let tag = imageView.tag
+                let index = tag - imageViewTag
+                if index >= 0 , index < sp_count(array: self.dataArray){
+                    let model = self.dataArray?[tag - imageViewTag]
+                    if let image = model?.img {
+                        var ciImg : CIImage?
+                        if isAll {
+                            filter.setDefaults()
+                            filter.setValue(CIImage(image: image), forKey: kCIInputImageKey)
+                            ciImg = filter.outputImage
+                        }else if tag == index {
+                            filter.setDefaults()
+                            filter.setValue(CIImage(image: image), forKey: kCIInputImageKey)
+                            ciImg = filter.outputImage
+                        }
+                        if let ci = ciImg {
+                            imageView.image =  UIImage(ciImage: ci)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     fileprivate func sp_allHidden(otherView : UIView?){
         if self.layoutView != otherView{
             self.layoutView.isHidden = true
@@ -257,6 +330,9 @@ extension SPLongGraphVC{
         }
         if self.frameView != otherView {
             self.frameView.isHidden = true
+        }
+        if self.filterView != otherView {
+            self.filterView.isHidden = true
         }
     }
     

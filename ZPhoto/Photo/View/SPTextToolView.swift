@@ -19,7 +19,6 @@ class SPTextToolView:  UIView{
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
-        
         self.sp_addConstraint()
     }
     /// 添加约束

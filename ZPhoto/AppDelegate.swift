@@ -37,8 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        for _ in 0...4 {
 //            sp_log(message: sp_getShuangSeQiu())
 //        }
-//        
-//        var price : CGFloat = 8
+//
+//        var price : CGFloat = 7.90
 //        for _ in 0..<9 {
 //            price = price + price * 0.1
 //        }

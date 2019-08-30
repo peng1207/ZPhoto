@@ -61,7 +61,7 @@ class SPMainVC: SPBaseVC {
         super.viewDidDisappear(animated)
     }
     override var preferredStatusBarStyle: UIStatusBarStyle{
-        return .default
+        return .lightContent
     }
     /// 创建UI
     override func sp_setupUI() {

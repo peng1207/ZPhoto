@@ -10,10 +10,10 @@ import Foundation
 import UIKit
 import SPCommonLibrary
 fileprivate let  itemH: CGFloat = 60
-class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+class SPFilterView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
  
     lazy fileprivate  var filterCollectionView : UICollectionView? =  {
-        let layout = SPRecordVideoFilterFlowLayout()
+        let layout = SPFilterFlowLayout()
         let collectionView = UICollectionView(frame: CGRect(), collectionViewLayout:layout)
         collectionView.backgroundColor = self.backgroundColor
  
@@ -65,7 +65,7 @@ class SPRecordVideoFilterView: UIView ,UICollectionViewDelegate,UICollectionView
     
 }
 
-extension  SPRecordVideoFilterView {
+extension  SPFilterView {
     /**
      创建UI
      */
@@ -79,11 +79,11 @@ extension  SPRecordVideoFilterView {
         
         filterCollectionView?.delegate  = self
         filterCollectionView?.dataSource = self
-        filterCollectionView?.register(SPRecordVideoFilterCell.self , forCellWithReuseIdentifier: self.identify)
+        filterCollectionView?.register(SPFilterCell.self , forCellWithReuseIdentifier: self.identify)
     }
 }
 //MARK: delete
-extension SPRecordVideoFilterView{
+extension SPFilterView{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let  list = filterList else {
             return 0
@@ -92,7 +92,7 @@ extension SPRecordVideoFilterView{
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell  = collectionView.dequeueReusableCell(withReuseIdentifier: self.identify, for: indexPath) as! SPRecordVideoFilterCell
+        let cell  = collectionView.dequeueReusableCell(withReuseIdentifier: self.identify, for: indexPath) as! SPFilterCell
         if indexPath.row <  sp_count(array:  self.filterList){
             let model = filterList?[indexPath.row]
             cell.imageView.image = model?.showImage
@@ -115,8 +115,6 @@ extension SPRecordVideoFilterView{
         if scrollToScrollStop {
             sp_asyncAfter(time: 0.5) {
                 self.isScroll = false
-                sp_log(message: "滚动结束")
-                
             }
         }
     }
@@ -133,7 +131,7 @@ extension SPRecordVideoFilterView{
     }
 }
 
-class SPRecordVideoFilterCell : UICollectionViewCell{
+class SPFilterCell : UICollectionViewCell{
     
     var imageView : UIImageView!
     
@@ -146,7 +144,7 @@ class SPRecordVideoFilterCell : UICollectionViewCell{
         fatalError("init(coder:) has not been implemented")
     }
 }
-extension SPRecordVideoFilterCell {
+extension SPFilterCell {
     /**
      创建UI
      */
@@ -162,7 +160,7 @@ extension SPRecordVideoFilterCell {
 
 
 
-class SPRecordVideoFilterFlowLayout : UICollectionViewFlowLayout{
+class SPFilterFlowLayout : UICollectionViewFlowLayout{
     
     override init() {
         super.init()
@@ -188,6 +186,7 @@ class SPRecordVideoFilterFlowLayout : UICollectionViewFlowLayout{
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         
         let ret = super.layoutAttributesForElements(in: rect)
+ 
 //        //可见矩阵
 //        let visiableRect = CGRect(x:self.collectionView!.contentOffset.x,y: self.collectionView!.contentOffset.y, width:self.collectionView!.frame.width,height:self.collectionView!.frame.height)
 //

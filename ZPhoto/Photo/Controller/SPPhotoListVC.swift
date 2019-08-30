@@ -85,6 +85,9 @@ class SPPhotoListVC: SPBaseVC {
         self.collectionView.register(SPPhotoListCollectionCell.self, forCellWithReuseIdentifier: cellID)
         self.collectionView.showsVerticalScrollIndicator = false
         self.view.addSubview(self.collectionView)
+        self.view.addSubview(self.safeView)
+        self.safeView.backgroundColor = self.editView.backgroundColor
+        self.safeView.isHidden = true
         self.view.addSubview(self.editView)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.choiceBtn)
         self.sp_addConstraint()
@@ -107,6 +110,10 @@ class SPPhotoListVC: SPBaseVC {
             } else {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
+        }
+        self.safeView.snp.makeConstraints { (maker) in
+            maker.left.right.top.equalTo(self.editView).offset(0)
+            maker.bottom.equalTo(self.view).offset(0)
         }
     }
     deinit {
@@ -319,8 +326,6 @@ extension SPPhotoListVC {
         let groupAnimation = CAAnimationGroup()
         groupAnimation.duration = 1
         
-        
-        
          let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
         scaleAnimation.fromValue = 1.0
         scaleAnimation.toValue = 0.2
@@ -365,9 +370,11 @@ extension SPPhotoListVC {
         if self.choiceBtn.isSelected {
             self.editHeight.update(offset: 50)
             self.editView.isHidden = false
+            self.safeView.isHidden = false
         }else{
             self.editHeight.update(offset: 0)
             self.editView.isHidden = true
+            self.safeView.isHidden = true
         }
     }
     /// 处理编辑按钮是否可以点击

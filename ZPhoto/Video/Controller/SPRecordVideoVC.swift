@@ -53,8 +53,8 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
     lazy fileprivate var videoData : SPRecordVideoData! = {
         return SPRecordVideoData()
     }()
-   lazy fileprivate var filterView : SPRecordVideoFilterView! = {
-        let view =  SPRecordVideoFilterView()
+   lazy fileprivate var filterView : SPFilterView! = {
+        let view =  SPFilterView()
         view.isHidden = true
         view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         view.sp_cornerRadius(radius: filterViewWidth / 2.0)

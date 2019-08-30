@@ -21,8 +21,8 @@ class SPPhotoEditVC: SPBaseVC {
         let view = UIImageView()
         return view
     }()
-    fileprivate lazy var filterView : SPRecordVideoFilterView = {
-        let view =  SPRecordVideoFilterView()
+    fileprivate lazy var filterView : SPFilterView = {
+        let view =  SPFilterView()
         view.isHidden = true
         view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         view.collectSelectComplete = { [weak self](model : SPFilterModel)  in

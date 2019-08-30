@@ -52,8 +52,8 @@ fileprivate class SPCameraRootVC: SPBaseVC {
         }
         return view
     }()
-    fileprivate lazy var filterView : SPRecordVideoFilterView = {
-        let view =  SPRecordVideoFilterView()
+    fileprivate lazy var filterView : SPFilterView = {
+        let view =  SPFilterView()
         view.isHidden = true
         view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         view.collectSelectComplete = { [weak self](model : SPFilterModel)  in
@@ -62,7 +62,7 @@ fileprivate class SPCameraRootVC: SPBaseVC {
         view.sp_cornerRadius(radius: filterViewWidth / 2.0)
         return view
     }() //滤镜显示view
-    lazy fileprivate var videoData : SPRecordVideoData! = {
+    fileprivate lazy var videoData : SPRecordVideoData! = {
         return SPRecordVideoData()
     }()
     fileprivate var filterRightConstraint : Constraint!

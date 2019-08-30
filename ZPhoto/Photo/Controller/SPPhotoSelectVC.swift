@@ -10,6 +10,14 @@
 import Foundation
 import SnapKit
 import SPCommonLibrary
+
+enum SPPushVCType {
+    /// 拼接
+    case splicing
+    /// 长图
+    case longGraph
+}
+
 class SPPhotoSelectVC: SPBaseVC {
 
     fileprivate lazy var photoListVC : SPPhotoListVC = {
@@ -43,9 +51,8 @@ class SPPhotoSelectVC: SPBaseVC {
         btn.addTarget(self, action: #selector(sp_clickNext), for: UIControl.Event.touchUpInside)
         return btn
     }()
-    fileprivate let selectMaxCount : Int = 9
-    var isLong : Bool = false
-    
+    var selectMaxCount : Int = 9
+    var pushVCType : SPPushVCType = .splicing
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -64,8 +71,11 @@ class SPPhotoSelectVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
+        self.navigationItem.title = SPLanguageChange.sp_getString(key: "SELECT_PICTURES")
         self.view.addSubview(self.photoListVC.view)
+        self.view.addSubview(self.safeView)
         self.view.addSubview(self.selectView)
+        self.safeView.backgroundColor = self.selectView.backgroundColor
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.nextBtn)
         self.sp_addConstraint()
     }
@@ -87,6 +97,11 @@ class SPPhotoSelectVC: SPBaseVC {
             } else {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
+        }
+        self.safeView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.bottom.equalTo(self.view).offset(0)
+            maker.top.equalTo(self.selectView.snp.top).offset(0)
         }
     }
     deinit {
@@ -184,14 +199,17 @@ extension SPPhotoSelectVC : CAAnimationDelegate{
     /// 点击下一步
     @objc func sp_clickNext(){
         if sp_count(array:  self.selectView.dataArray) > 0 {
-            if self.isLong {
-                let vc = SPLongGraphVC()
-                vc.dataArray = self.selectView.dataArray
-                self.navigationController?.pushViewController(vc, animated: true)
-            }else{
+            switch self.pushVCType {
+            case .splicing:
                 let vc = SPPhotoSplicingVC()
                 vc.dataArray = self.selectView.dataArray
                 self.navigationController?.pushViewController(vc, animated: true)
+            case .longGraph:
+                let vc = SPLongGraphVC()
+                vc.dataArray = self.selectView.dataArray
+                self.navigationController?.pushViewController(vc, animated: true)
+            default:
+                sp_log(message: "")
             }
            
         }else{

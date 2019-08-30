@@ -184,7 +184,7 @@ extension SPPhotoRootVC {
     }
     fileprivate func sp_clickEdit(){
         let vc = SPPhotoSelectVC()
-        vc.isLong = true
+        vc.pushVCType = .longGraph
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
