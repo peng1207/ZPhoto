@@ -89,7 +89,7 @@ class SPPhotoEditVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
-        self.view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_000000.rawValue)
+        self.view.backgroundColor = SPColorForHexString(hex: SPHexColor.color_000000.rawValue)
         self.view.addSubview(self.scrollView)
         self.scrollView.delegate = self
         self.scrollView.addSubview(self.iconImgView)
@@ -152,7 +152,7 @@ extension SPPhotoEditVC : UIScrollViewDelegate{
 }
 
 extension SPPhotoEditVC {
-    fileprivate func sp_dealBtnClick(type : ButtonClickType){
+    fileprivate func sp_dealBtnClick(type : SPButtonClickType){
         switch type {
         case .cance:
             sp_clickBack()

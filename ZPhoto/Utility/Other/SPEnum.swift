@@ -31,7 +31,7 @@ enum SP_TimeFormat: String {
 }
 
 ///  颜色十六进制
-enum SP_HexColor : String {
+enum SPHexColor : String {
     case color_333333   = "#333333"
     case color_000000   = "#000000"
     case color_c11f2f   = "#c11f2f"
@@ -60,7 +60,7 @@ enum SP_HexColor : String {
 }
 
 ///  按钮点击事件
-public enum ButtonClickType : Int {
+public enum SPButtonClickType : Int {
     /// 点击完成
     case done
     /// 点击取消\返回
@@ -73,6 +73,12 @@ public enum ButtonClickType : Int {
     case filter
     /// 剪切
     case shear
+    /// 点击编辑
+    case edit
+    /// 点击关闭
+    case close
+    /// 选择
+    case select
 }
 
 ///  图片布局类型
@@ -299,9 +305,6 @@ enum SPSPlicingType {
         case eleven
     }
     case nine(nineType:NineType)
-    
-    
-    
 }
 /// 方向
 enum SPDirection {
@@ -309,4 +312,19 @@ enum SPDirection {
     case vertical
     /// 水平
     case horizontal
+}
+
+
+/// 动画类型
+enum SPAnimationType {
+    /// 没有动画
+    case none
+    /// 淡出
+    case fadeOut
+    /// 推出
+    case push
+    /// 覆盖
+    case cover
+    /// 翻书
+    case toBook
 }

@@ -49,3 +49,8 @@
 "TEXT" = "文字";
 "FRAME" = "边框";
 "SELECT_PICTURES" = "选择图片";
+"FILM" = "影片";
+"TEXT_COLOR" = "颜色";
+"FONT_NAME" = "字体";
+"FONT_SIZE" = "大小";
+

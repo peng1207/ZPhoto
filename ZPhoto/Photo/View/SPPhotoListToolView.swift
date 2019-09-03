@@ -32,7 +32,7 @@ class SPPhotoListToolView:  UIView{
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        self.backgroundColor = SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue)
         self.sp_setupUI()
     }
     required init?(coder aDecoder: NSCoder) {

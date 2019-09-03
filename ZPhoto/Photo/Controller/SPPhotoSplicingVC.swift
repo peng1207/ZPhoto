@@ -19,7 +19,7 @@ class SPPhotoSplicingVC: SPBaseVC {
     fileprivate lazy var saveBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "SAVE"), for: UIControl.State.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue), for: UIControl.State.normal)
         btn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
         btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.addTarget(self, action: #selector(sp_clickSave), for: UIControl.Event.touchUpInside)
@@ -165,10 +165,6 @@ class SPPhotoSplicingVC: SPBaseVC {
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
-//        self.hiddenView.snp.makeConstraints { (maker) in
-//            maker.left.right.top.equalTo(self.view).offset(0)
-//            maker.bottom.equalTo(self.toolView.snp.top).offset(0)
-//        }
         sp_contentLayout()
         self.toolView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
@@ -214,10 +210,18 @@ class SPPhotoSplicingVC: SPBaseVC {
 }
 extension SPPhotoSplicingVC {
     
+    /// 处理选择的布局类型
+    ///
+    /// - Parameter type: 类型
     fileprivate func sp_deal(type : SPSPlicingType){
         self.selectType = type
         sp_setupData()
     }
+    /// 处理view的背景颜色或背景图片
+    ///
+    /// - Parameters:
+    ///   - color: 颜色
+    ///   - image: 图片
     fileprivate func sp_deal(color : UIColor?,image : UIImage? ){
         if let c = color {
             self.conetentView.backgroundColor = c
@@ -228,6 +232,9 @@ extension SPPhotoSplicingVC {
             self.conetentView.backgroundColor = nil
         }
     }
+    /// 处理点击的工具类型
+    ///
+    /// - Parameter toolType: 类型
     fileprivate func sp_deal(toolType : SPSplicingToolType){
         switch toolType {
         case .layout:
@@ -246,15 +253,19 @@ extension SPPhotoSplicingVC {
             sp_log(message: "没有")
         }
     }
+    /// 处理边框
     fileprivate func sp_dealFrame(){
         self.frameView.isHidden = !self.frameView.isHidden
     }
+    /// 处理布局
     fileprivate func sp_dealLayout(){
         self.layoutView.isHidden = !self.layoutView.isHidden
     }
+    /// 处理背景
     fileprivate func sp_dealBg(){
         self.bgView.isHidden = !self.bgView.isHidden
     }
+    /// 处理比例
     fileprivate func sp_dealZoom(){
         let actionSheetVC = UIAlertController(title: SPLanguageChange.sp_getString(key: "ZOOM"), message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         actionSheetVC.addAction(UIAlertAction(title: "1:1", style: UIAlertAction.Style.default, handler: { [weak self](action) in
@@ -283,11 +294,17 @@ extension SPPhotoSplicingVC {
         }))
         self.present(actionSheetVC, animated: true, completion: nil)
     }
+    /// 更新view的宽高
+    ///
+    /// - Parameter ratio: 比例
     fileprivate func sp_update(ratio : CGFloat){
         self.ratio = ratio
         self.sp_setupData()
         self.sp_contentLayout()
     }
+    /// 设置view 是否隐藏 （除了要展示的view）
+    ///
+    /// - Parameter otherView: 当前的需要展示的view
     fileprivate func sp_allHidden(otherView : UIView?){
         if self.layoutView != otherView{
             self.layoutView.isHidden = true
@@ -299,6 +316,7 @@ extension SPPhotoSplicingVC {
             self.frameView.isHidden = true
         }
     }
+    /// 点击保存
     @objc fileprivate func sp_clickSave(){
        
         let img = UIImage.sp_image(view: self.conetentView)

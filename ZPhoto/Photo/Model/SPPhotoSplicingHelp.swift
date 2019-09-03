@@ -69,8 +69,8 @@ class SPPhotoSplicingHelp {
     /// - Returns: 背景颜色数组
     class func sp_getDefaultColor()->[UIColor]{
         return [ sp_getMianColor(),
-                 SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue),
-                 SPColorForHexString(hex: SP_HexColor.color_ff3300.rawValue)]
+                 SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue),
+                 SPColorForHexString(hex: SPHexColor.color_ff3300.rawValue)]
         
     }
     /// 根据数量展示布局
@@ -121,7 +121,7 @@ class SPPhotoSplicingHelp {
         case .one:
             layoutType = .rectangle
         case .two:
-            layoutType = .heart
+            layoutType = .waterDrop
         default:
             sp_log(message: "没有其他")
         }

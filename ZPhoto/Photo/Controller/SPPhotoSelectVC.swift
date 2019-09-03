@@ -16,6 +16,8 @@ enum SPPushVCType {
     case splicing
     /// 长图
     case longGraph
+    /// 影片
+    case film
 }
 
 class SPPhotoSelectVC: SPBaseVC {
@@ -45,7 +47,7 @@ class SPPhotoSelectVC: SPBaseVC {
     fileprivate lazy var nextBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "NEXT"), for: UIControl.State.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue), for: UIControl.State.normal)
         btn.frame = CGRect(x: 0, y: 0, width: 60, height: 40)
         btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.addTarget(self, action: #selector(sp_clickNext), for: UIControl.Event.touchUpInside)
@@ -206,6 +208,10 @@ extension SPPhotoSelectVC : CAAnimationDelegate{
                 self.navigationController?.pushViewController(vc, animated: true)
             case .longGraph:
                 let vc = SPLongGraphVC()
+                vc.dataArray = self.selectView.dataArray
+                self.navigationController?.pushViewController(vc, animated: true)
+            case .film:
+                let vc = SPFilmVC()
                 vc.dataArray = self.selectView.dataArray
                 self.navigationController?.pushViewController(vc, animated: true)
             default:

@@ -240,10 +240,9 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             }else{
                 CMVideoFormatDescriptionCreate(allocator: kCFAllocatorDefault, codecType: kCMVideoCodecType_H264, width: Int32(size.width), height: Int32(size.height), extensions: nil, formatDescriptionOut: &videoFormat)
             }
-           
             videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoOutputSettings)
             videoWriterInput?.expectsMediaDataInRealTime = true
-            videoWriterInput?.transform =  CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
+            videoWriterInput?.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
             
             let sourcePixelBufferAttributesDictionary = [
                 String(kCVPixelBufferPixelFormatTypeKey) : Int(sp_getCVPixelFormatType()),

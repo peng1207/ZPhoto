@@ -15,13 +15,19 @@ typealias SPPhotoToolComplete = (_ type : SPSplicingToolType)->Void
 class SPPhotoToolView:  UIView{
     
     fileprivate var collectionView : UICollectionView!
-    fileprivate let cellID = "SPSplicingToolCollectionCellID"
+    fileprivate let cellID = "SPToolCollectionCellID"
+    var selectType : SPSplicingToolType?{
+        didSet{
+            self.collectionView.reloadData()
+        }
+    }
     var dataArray : [SPToolModel]?{
         didSet{
             self.collectionView.reloadData()
         }
     }
     var selectBlock : SPPhotoToolComplete?
+    var isAverage : Bool = false
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -41,7 +47,7 @@ class SPPhotoToolView:  UIView{
         self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
-        self.collectionView.backgroundColor = sp_getMianColor()
+        self.collectionView.backgroundColor = self.backgroundColor
         self.collectionView.register(SPSplicingToolCollectionCell.self, forCellWithReuseIdentifier: self.cellID)
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.showsHorizontalScrollIndicator = false
@@ -69,18 +75,37 @@ extension SPPhotoToolView : UICollectionViewDelegate , UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell : SPSplicingToolCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellID, for: indexPath) as! SPSplicingToolCollectionCell
         if indexPath.row < sp_count(array:  self.dataArray) {
-            cell.model = self.dataArray?[indexPath.row]
+            if let model = self.dataArray?[indexPath.row] {
+                if let select = self.selectType , select == model.type {
+                    cell.isSelect = true
+                }else{
+                    cell.isSelect = false
+                }
+                cell.model = model
+            }
         }
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let height = self.frame.size.height - 5
-        return CGSize(width: height - 20, height: height)
+        if self.isAverage {
+            let height = self.frame.size.height - 5
+            let width = (self.frame.size.width - 20 - CGFloat((sp_count(array: self.dataArray) - 1)) * 5.0 ) / CGFloat(sp_count(array: self.dataArray))
+            return CGSize(width: width, height: height)
+        }else{
+            let height = self.frame.size.height - 5
+            return CGSize(width: height - 20, height: height)
+        }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row < sp_count(array: self.dataArray){
             if let model = self.dataArray?[indexPath.row] {
-                 sp_dealSelect(type: model.type)
+                if let select = self.selectType , select == model.type {
+                    self.selectType = nil
+                }else{
+                    self.selectType = model.type
+                }
+                sp_dealSelect(type: model.type)
+              
             }
         }
     }
@@ -101,7 +126,7 @@ class SPSplicingToolCollectionCell: UICollectionViewCell {
     fileprivate lazy var titleLabel : UILabel = {
         let label = UILabel()
         label.font =  sp_fontSize(fontSize:  12)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        label.textColor = SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue)
         label.textAlignment = .center
         return label
     }()
@@ -110,6 +135,7 @@ class SPSplicingToolCollectionCell: UICollectionViewCell {
             self.sp_setupData()
         }
     }
+    var isSelect : Bool = false
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -120,7 +146,11 @@ class SPSplicingToolCollectionCell: UICollectionViewCell {
     /// 赋值
     fileprivate func sp_setupData(){
         self.titleLabel.text = sp_getString(string: self.model?.title)
-        self.iconImgView.image = self.model?.img
+        if let selectImg = self.model?.selectImg , self.isSelect == true{
+             self.iconImgView.image = selectImg
+        }else{
+             self.iconImgView.image = self.model?.img
+        }
     }
     /// 添加UI
     fileprivate func sp_setupUI(){

@@ -11,7 +11,7 @@ import UIKit
 import SnapKit
 import SPCommonLibrary
 
-typealias SPPhotoEditComplete = (_ type : ButtonClickType)->Void
+typealias SPPhotoEditComplete = (_ type : SPButtonClickType)->Void
 
 class SPPhotoEditToolView:  UIView{
     
@@ -27,7 +27,7 @@ class SPPhotoEditToolView:  UIView{
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "FINISH"), for: UIControl.State.normal)
         btn.setTitleColor(sp_getMianColor(), for: UIControl.State.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_999999.rawValue), for: UIControl.State.disabled)
+        btn.setTitleColor(SPColorForHexString(hex: SPHexColor.color_999999.rawValue), for: UIControl.State.disabled)
         btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.addTarget(self, action: #selector(sp_clickFinish), for: UIControl.Event.touchUpInside)
         btn.isEnabled = false
@@ -109,7 +109,7 @@ extension SPPhotoEditToolView{
     @objc fileprivate func sp_clickText(){
         
     }
-    fileprivate func sp_dealBtnClick(type : ButtonClickType){
+    fileprivate func sp_dealBtnClick(type : SPButtonClickType){
         guard let block = self.clickBlock else {
             return
         }

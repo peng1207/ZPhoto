@@ -16,8 +16,8 @@ class SPPhotoListVC: SPBaseVC {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "CHOICE"), for: UIControl.State.normal)
         btn.setTitle(SPLanguageChange.sp_getString(key: "CANCE"), for: UIControl.State.selected)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.selected)
+        btn.setTitleColor(SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue), for: UIControl.State.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue), for: UIControl.State.selected)
         btn.titleLabel?.font = sp_fontSize(fontSize:  16)
         btn.frame = CGRect(x: 0, y: 0, width: 60, height: 30)
         btn.addTarget(self, action: #selector(sp_clickChoise), for: UIControl.Event.touchUpInside)
@@ -301,7 +301,7 @@ extension SPPhotoListVC {
         let canceAction = UIAlertAction(title:  SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel) { (action) in
             
         }
-        deleteAction.setValue(SPColorForHexString(hex: SP_HexColor.color_ff3300.rawValue), forKey: "_titleTextColor")
+        deleteAction.setValue(SPColorForHexString(hex: SPHexColor.color_ff3300.rawValue), forKey: "_titleTextColor")
         actionSheet.addAction(deleteAction)
         actionSheet.addAction(canceAction)
         self.present(actionSheet, animated: true, completion: nil)

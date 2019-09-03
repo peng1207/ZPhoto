@@ -76,7 +76,7 @@ fileprivate class SPPhotoRootVC: SPBaseVC {
     fileprivate lazy var gifView : SPPentagonView = {
         let view = SPPentagonView()
         view.corners = .right
-        view.titleLabel.text = "gif"
+        view.titleLabel.text = SPLanguageChange.sp_getString(key: "FILM")
         view.clickBlock = { [weak self] in
             self?.sp_clickGif()
         }
@@ -179,8 +179,10 @@ extension SPPhotoRootVC {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     fileprivate func sp_clickGif(){
-        
- 
+        let vc = SPPhotoSelectVC()
+        vc.pushVCType = .film
+        vc.selectMaxCount = 20
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     fileprivate func sp_clickEdit(){
         let vc = SPPhotoSelectVC()

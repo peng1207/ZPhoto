@@ -65,7 +65,19 @@ class SPLongGraphVC: SPBaseVC {
         }
         view.sp_cornerRadius(radius: filterViewWidth / 2.0)
         return view
-    }() //滤镜显示view
+    }()
+    fileprivate lazy var textView : SPTextView = {
+        let view = SPTextView()
+        view.showKeyboardBlock = { [weak self] in
+            self?.sp_showKeyboard()
+        }
+        view.toolView.btnBlock = { [weak self] (type ) in
+            self?.sp_deal(btnType: type)
+        }
+//        view.backgroundColor = sp_getMianColor()
+        view.isHidden = true
+        return view
+    }()
     fileprivate lazy var videoData : SPRecordVideoData! = {
         return SPRecordVideoData()
     }()
@@ -73,6 +85,7 @@ class SPLongGraphVC: SPBaseVC {
     fileprivate let filterViewWidth :  CGFloat = 60
     fileprivate var marginSpace : CGFloat = 2
     fileprivate var padding : CGFloat = 2
+    fileprivate var tmpEditTextView : SPTextEditView?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -89,6 +102,16 @@ class SPLongGraphVC: SPBaseVC {
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+    }
+    override func sp_clickBack() {
+        let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "GIVEUP_EDIT_PICTURE_TIPS"), preferredStyle: UIAlertController.Style.alert)
+        alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "EDIT"), style: UIAlertAction.Style.default, handler: { (action) in
+            
+        }))
+        alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "GIVEUP"), style: UIAlertAction.Style.cancel, handler: { (action) in
+            super.sp_clickBack()
+        }))
+        self.present(alertController, animated: true, completion: nil)
     }
     /// 赋值
     fileprivate func sp_setupData(){
@@ -160,6 +183,7 @@ class SPLongGraphVC: SPBaseVC {
         self.view.addSubview(self.bgView)
         self.view.addSubview(self.frameView)
         self.view.addSubview(self.filterView)
+        self.view.addSubview(self.textView)
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -206,6 +230,15 @@ class SPLongGraphVC: SPBaseVC {
             maker.left.right.top.equalTo(self.toolView).offset(0)
             maker.bottom.equalTo(self.view.snp.bottom).offset(0)
         }
+        self.textView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.greaterThanOrEqualTo(0)
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+            }
+        }
         
     }
     deinit {
@@ -215,11 +248,9 @@ class SPLongGraphVC: SPBaseVC {
 extension SPLongGraphVC{
     
     @objc fileprivate func sp_clickSave(){
-        
         if let image = UIImage.sp_image(view: self.scrollView) {
             UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
         }
-        
     }
     @objc func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer)
     {
@@ -236,6 +267,9 @@ extension SPLongGraphVC{
             self.present(alertController, animated: true, completion: nil)
         }
     }
+    /// 处理不同类型的事件
+    ///
+    /// - Parameter toolType: 类型
     fileprivate func sp_deal(toolType : SPSplicingToolType){
         
         switch toolType {
@@ -251,19 +285,26 @@ extension SPLongGraphVC{
         case .filter:
             sp_allHidden(otherView: self.filterView)
             sp_dealFilter()
+        case .text:
+            sp_allHidden(otherView: self.textView)
+            sp_dealText()
         default:
              sp_log(message: "")
         }
     }
+    /// 处理布局
     fileprivate func sp_dealLayout(){
         self.layoutView.isHidden = !self.layoutView.isHidden
     }
+    /// 处理背景颜色和背景图片
     fileprivate func sp_dealBg(){
         self.bgView.isHidden = !self.bgView.isHidden
     }
+    /// 处理边框
     fileprivate func sp_dealFrame(){
         self.frameView.isHidden = !self.frameView.isHidden
     }
+    /// 处理滤镜
     fileprivate func sp_dealFilter(){
         self.filterView.isHidden = !self.filterView.isHidden
         if (self.filterView.isHidden == false && sp_count(array: self.filterView.filterList) == 0){
@@ -276,6 +317,30 @@ extension SPLongGraphVC{
             }
         }
     }
+    /// 处理文本
+    fileprivate func sp_dealText(){
+        self.textView.isHidden = !self.textView.isHidden
+        self.textView.toolView.toolView.selectType = .edit
+        sp_addEditTextView()
+    }
+    /// 增加文字编辑
+    fileprivate func sp_addEditTextView(){
+        let view = SPTextEditView()
+        self.scrollView.addSubview(view)
+        view.snp.makeConstraints { (maker) in
+            maker.left.equalTo(100)
+            maker.width.greaterThanOrEqualTo(0)
+            maker.height.greaterThanOrEqualTo(0)
+            maker.top.equalTo(self.scrollView).offset(100)
+        }
+        self.tmpEditTextView = view
+        view.sp_edit()
+    }
+    /// 处理scrollview的背景颜色或背景图片
+    ///
+    /// - Parameters:
+    ///   - color: 背景颜色
+    ///   - image: 图片
     fileprivate func sp_deal(color : UIColor? , image : UIImage?){
         if let i = image {
             self.scrollView.layer.contents = i.cgImage
@@ -284,14 +349,22 @@ extension SPLongGraphVC{
             self.scrollView.backgroundColor = color
         }
     }
+    /// 处理选择滤镜后的回调
+    ///
+    /// - Parameter filterModel: 滤镜
     fileprivate func sp_deal(filterModel : SPFilterModel?){
         guard let model = filterModel else {
             return
         }
         sp_deal(img: model, isAll: true, index: 0)
     }
+    /// 处理图片的滤镜
+    ///
+    /// - Parameters:
+    ///   - filterModel: 滤镜
+    ///   - isAll: 是否全部的图片
+    ///   - index: 不是全部图片是哪个图片
     fileprivate func sp_deal(img filterModel : SPFilterModel,isAll : Bool, index : NSInteger){
-        
         guard let filter = filterModel.filter else {
             return
         }
@@ -321,6 +394,9 @@ extension SPLongGraphVC{
         }
     }
     
+    /// 处理工具view是否隐藏
+    ///
+    /// - Parameter otherView: 当前展示哪个view
     fileprivate func sp_allHidden(otherView : UIView?){
         if self.layoutView != otherView{
             self.layoutView.isHidden = true
@@ -334,6 +410,36 @@ extension SPLongGraphVC{
         if self.filterView != otherView {
             self.filterView.isHidden = true
         }
+        if self.textView != otherView {
+            self.textView.isHidden = true
+        }
     }
-    
+    /// 弹出键盘可以编辑
+    fileprivate func sp_showKeyboard(){
+        guard let view = self.tmpEditTextView else {
+            return
+        }
+        view.sp_edit()
+    }
+    /// 处理按钮点击事件
+    ///
+    /// - Parameter btnType: 按钮类型
+    fileprivate func sp_deal(btnType : SPButtonClickType){
+        switch btnType {
+        case .close:
+            self.tmpEditTextView?.removeFromSuperview()
+            self.sp_dealEditText()
+        case .select:
+            self.tmpEditTextView?.sp_isBoard(isShow: false)
+            self.sp_dealEditText()
+        default:
+            sp_log(message: "")
+        }
+    }
+    /// 处理编辑文本框 隐藏键盘和临时view设置为nil 
+    fileprivate func sp_dealEditText(){
+        self.tmpEditTextView?.sp_noEdit()
+        self.tmpEditTextView = nil
+        self.textView.isHidden = true
+    }
 }

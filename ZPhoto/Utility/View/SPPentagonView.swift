@@ -27,7 +27,7 @@ class SPPentagonView:  UIView{
      lazy var titleLabel : UILabel = {
         let label = UILabel()
         label.font = sp_fontSize(fontSize:  15)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        label.textColor = SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue)
         label.textAlignment = .center
         label.isUserInteractionEnabled = true
         return label

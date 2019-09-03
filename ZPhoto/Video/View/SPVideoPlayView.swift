@@ -185,6 +185,7 @@ extension SPVideoPlayView {
         NotificationCenter.default.removeObserver(self, name:  Notification.Name.AVPlayerItemDidPlayToEndTime, object: videoPlayerItem)
         videoPlayerItem = nil
         videoPlayer = nil
+        
     }
 }
 

@@ -50,3 +50,7 @@
 "TEXT" = "Text";
 "FRAME" = "Frame";
 "SELECT_PICTURES" = "Select Pictures";
+"FILM" = "Film";
+"TEXT_COLOR" = "Color";
+"FONT_NAME" = "Family";
+"FONT_SIZE" = "Size";

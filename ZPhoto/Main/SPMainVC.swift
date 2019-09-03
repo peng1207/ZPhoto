@@ -15,7 +15,6 @@ class SPMainVC: SPBaseVC {
         let view = SPPentagonView()
         view.corners = .left
         view.titleLabel.text = SPLanguageChange.sp_getString(key: "VIDEO")
-        view.backgroundColor = UIColor.clear
         view.clickBlock = { [weak self] in
             self?.sp_clickVideo()
         }
@@ -25,7 +24,6 @@ class SPMainVC: SPBaseVC {
         let view = SPPentagonView()
         view.corners = .left
         view.titleLabel.text = SPLanguageChange.sp_getString(key: "PHOTO")
-        view.backgroundColor = UIColor.clear
         view.clickBlock = { [weak self] in
             self?.sp_clickPhoto()
         }
@@ -34,7 +32,6 @@ class SPMainVC: SPBaseVC {
     fileprivate lazy var setView : SPPentagonView = {
         let view = SPPentagonView()
         view.titleLabel.text = SPLanguageChange.sp_getString(key: "SET")
-        view.backgroundColor = UIColor.clear
         view.clickBlock = { [weak self] in
             self?.sp_clickSet()
         }

@@ -38,7 +38,7 @@ class SPBaseVC : UIViewController{
     fileprivate func setupBase(){
         // UI适配
         self.edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
-        self.view.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue)
+        self.view.backgroundColor = SPColorForHexString(hex: SPHexColor.color_eeeeee.rawValue)
         let gradientLayer = CAGradientLayer()
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 0, y: 1)

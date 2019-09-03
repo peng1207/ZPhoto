@@ -601,15 +601,13 @@ class SPCustomPictureView:  UIView,UIScrollViewDelegate{
         let maxY = self.frame.size.height - space.bottom
         
         let minY = space.top
-        let centerY = self.frame.size.height / 2.0
         let centerX = self.frame.size.width / 2.0
-        let startX = self.frame.size.width / 4.0
         let startPoint = CGPoint(x: centerX, y: minY)
         let endPoint = CGPoint(x: centerX, y: maxY)
         bezierPath.move(to: startPoint)
-        bezierPath.addCurve(to: endPoint, controlPoint1: CGPoint(x: 0, y: centerX), controlPoint2: CGPoint(x: startX, y: maxY))
+        bezierPath.addQuadCurve(to: endPoint, controlPoint: CGPoint(x: -endPoint.x + space.left * 2.0, y: endPoint.y))
         bezierPath.move(to: endPoint)
-        bezierPath.addCurve(to: startPoint, controlPoint1: CGPoint(x:  startX + centerX, y: maxY), controlPoint2: CGPoint(x: self.frame.size.width, y: centerY))
+        bezierPath.addQuadCurve(to: startPoint, controlPoint:  CGPoint(x: self.frame.size.width + endPoint.x - space.right * 2.0, y:endPoint.y))
         bezierPath.lineCapStyle = .round
         bezierPath.lineJoinStyle = .round
         return bezierPath

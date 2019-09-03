@@ -131,7 +131,10 @@ fileprivate class SPCameraRootVC: SPBaseVC {
 }
 fileprivate extension SPCameraRootVC{
     
-    func sp_dealBtnClick(type:ButtonClickType){
+    /// 处理按钮点击类型
+    ///
+    /// - Parameter type: 类型
+    func sp_dealBtnClick(type:SPButtonClickType){
         switch type {
         case .cance:
             sp_log(message: "点击返回")
@@ -152,10 +155,12 @@ fileprivate extension SPCameraRootVC{
             sp_log(message: "没有定义")
         }
     }
+    /// 点击返回
     func sp_back(){
         self.cameraManmager.sp_cane()
         self.dismiss(animated: true, completion: nil)
     }
+    /// 点击拍照
     func sp_clickCamera(){
         let outputCIImg = self.cameraManmager.filterCGImage
         var outputImg : UIImage?
@@ -176,6 +181,7 @@ fileprivate extension SPCameraRootVC{
             }
         }
     }
+    /// 点击滤镜
     func sp_clickFilter(){
         if(self.filterView.isHidden){
             self.filterRightConstraint.update(offset: 0)
@@ -202,9 +208,11 @@ fileprivate extension SPCameraRootVC{
             }
         }
     }
+    /// 点击闪光灯
     func sp_clickFlash(){
         self.cameraManmager.sp_flashlight()
     }
+    /// 更改前后摄像头
     func sp_clickChangeDev(){
         self.cameraManmager.sp_changeCamera()
     }

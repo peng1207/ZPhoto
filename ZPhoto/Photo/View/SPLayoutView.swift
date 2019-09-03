@@ -132,7 +132,7 @@ class SPLayoutCollectionCell: UICollectionViewCell {
         }
         if self.count > 0 {
             for i in 0..<count{
-                let value = SPPhotoSplicingHelp.sp_frameAndSpace(tyep: selectType, value: SPPhotoSplicingStruct(index: i, count: self.count, width: 50, height: 50, margin: 4, padding: 4))
+                let value = SPPhotoSplicingHelp.sp_frameAndSpace(tyep: selectType, value: SPPhotoSplicingStruct(index: i, count: self.count, width: 50, height: 50, margin: 2, padding: 2))
                 if  let view = self.contentView.viewWithTag(LayoutTag + i ) as? SPCustomPictureView{
                     
                     view.frame = CGRect(x: value.frame.origin.x , y: value.frame.origin.y , width: value.frame.size.width, height: value.frame.size.height)
@@ -151,7 +151,7 @@ class SPLayoutCollectionCell: UICollectionViewCell {
             let view = SPCustomPictureView()
             view.tag = LayoutTag + i
             view.isHidden = true
-            view.imgView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_eeeeee.rawValue)
+            view.imgView.backgroundColor = SPColorForHexString(hex: SPHexColor.color_eeeeee.rawValue)
             self.contentView.addSubview(view)
         }
         self.contentView.backgroundColor = UIColor.white

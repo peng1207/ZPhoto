@@ -11,7 +11,7 @@ import UIKit
 import SnapKit
 import SPCommonLibrary
 /// 按钮点击回调
-typealias SPCameraBtnClickBlock = (_ type : ButtonClickType)->Void
+typealias SPCameraBtnClickBlock = (_ type : SPButtonClickType)->Void
 
 class SPCameraBtnView:  UIView{
     
@@ -128,7 +128,7 @@ extension SPCameraBtnView {
     /// 处理回调
     ///
     /// - Parameter type: 点击类型
-    fileprivate func sp_dealComplete(type : ButtonClickType){
+    fileprivate func sp_dealComplete(type : SPButtonClickType){
         guard let block = self.clickBlock else {
             return
         }

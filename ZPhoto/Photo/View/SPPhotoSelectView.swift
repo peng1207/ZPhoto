@@ -16,14 +16,14 @@ class SPPhotoSelectView:  UIView{
     fileprivate lazy var numLabel : UILabel = {
         let label = UILabel()
         label.font = sp_fontSize(fontSize:  15)
-        label.textColor = SPColorForHexString(hex: SP_HexColor.color_666666.rawValue)
+        label.textColor = SPColorForHexString(hex: SPHexColor.color_666666.rawValue)
         label.textAlignment = .left
         return label
     }()
     fileprivate lazy var clearBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "CLEARSELECT"), for: UIControl.State.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_b31f3f.rawValue), for: UIControl.State.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SPHexColor.color_b31f3f.rawValue), for: UIControl.State.normal)
         btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.addTarget(self, action: #selector(sp_clickClear), for: UIControl.Event.touchUpInside)
         return btn
@@ -40,7 +40,7 @@ class SPPhotoSelectView:  UIView{
     }
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        self.backgroundColor = SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue)
         self.sp_setupUI()
          sp_dealNum()
     }
@@ -59,7 +59,7 @@ class SPPhotoSelectView:  UIView{
         self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
-        self.collectionView.backgroundColor = SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue)
+        self.collectionView.backgroundColor = SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue)
 //        self.collectionView.alwaysBounceVertical = true
         self.collectionView.register(SPPhotoSplicingSelectCollectionCell.self, forCellWithReuseIdentifier: self.cellID)
         self.collectionView.showsVerticalScrollIndicator = false

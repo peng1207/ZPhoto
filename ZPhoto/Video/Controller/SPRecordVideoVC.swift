@@ -12,7 +12,7 @@ import AVFoundation
 import SPCommonLibrary
 
 // 按钮点击事件回调
-typealias ButtonClickBlock =  (_ clickType:ButtonClickType,_ button:UIButton) ->Void
+typealias ButtonClickBlock =  (_ clickType:SPButtonClickType,_ button:UIButton) ->Void
 
 class SPRecordVideoVC: SPBaseNavVC {
     
@@ -161,7 +161,7 @@ extension SPRecordVideoRootVC {
 extension SPRecordVideoRootVC {
     // 添加事件到按钮
     fileprivate func addActionToButton(){
-        self.recordVideoView.buttonClickBlock = { [weak self](clickType : ButtonClickType,button:UIButton) in
+        self.recordVideoView.buttonClickBlock = { [weak self](clickType : SPButtonClickType,button:UIButton) in
             self?.dealButtonClickAction(clickType: clickType, button: button)
         }
         self.filterView.collectSelectComplete = { [weak self](model : SPFilterModel)  in
@@ -193,7 +193,7 @@ extension SPRecordVideoRootVC {
     /*
       处理按钮点击事件的
      */
-    fileprivate func dealButtonClickAction(clickType : ButtonClickType,button:UIButton){
+    fileprivate func dealButtonClickAction(clickType : SPButtonClickType,button:UIButton){
         switch clickType {
         case .cance:
             sp_log(message: "点击取消")
@@ -444,7 +444,7 @@ class SPRecordVideoBtnView: UIView {
         self.dealAction(clickType: .filter, button: filterButton)
     }
     
-    func dealAction(clickType:ButtonClickType,button : UIButton) {
+    func dealAction(clickType:SPButtonClickType,button : UIButton) {
         buttonClickBlock?(clickType,button)
     }
     

@@ -141,5 +141,5 @@ func sp_getfile(forDirectory:String) -> [String]?{
 ///
 /// - Returns: 颜色
 func sp_getMianColor()->UIColor{
-    return SPColorForHexString(hex: SP_HexColor.color_2a96fd.rawValue)
+    return SPColorForHexString(hex: SPHexColor.color_2a96fd.rawValue)
 }

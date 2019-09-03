@@ -23,7 +23,7 @@ class SPVideoUpendVC: SPBaseVC {
     fileprivate lazy var saveBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "SAVE"), for: UIControl.State.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SP_HexColor.color_ffffff.rawValue), for: UIControl.State.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue), for: UIControl.State.normal)
         btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.isHidden = true
         btn.frame = CGRect(x: 0, y: 0, width: 50, height: 40)
