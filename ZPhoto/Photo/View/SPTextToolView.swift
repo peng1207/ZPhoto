@@ -27,7 +27,7 @@ class SPTextToolView:  UIView{
         let view = SPPhotoToolView()
         view.isAverage = true
         view.dataArray = [
-            SPToolModel.sp_init(type: SPSplicingToolType.edit)
+            SPToolModel.sp_init(type: SPToolType.edit)
             ,SPToolModel.sp_init(type: .textColor)
             ,SPToolModel.sp_init(type: .fontName)
             ,SPToolModel.sp_init(type: .fontSize)

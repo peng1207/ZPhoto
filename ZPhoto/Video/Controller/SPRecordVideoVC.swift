@@ -60,6 +60,20 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
         view.sp_cornerRadius(radius: filterViewWidth / 2.0)
         return view
     } () //滤镜显示view
+    fileprivate lazy var backBtn : UIButton = {
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "back"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(clickCance), for: UIControl.Event.touchUpInside)
+        return btn
+    }()
+    fileprivate lazy var layoutView : SPVideoLayoutView = {
+        let view = SPVideoLayoutView()
+        view.isHidden = true
+        view.selectBlock = { [weak self] (type) in
+            self?.sp_deal(videoLayoutType: type)
+        }
+        return view
+    }()
     fileprivate var pinchGesture : UIPinchGestureRecognizer!  // 手势
     fileprivate var lastScale : CGFloat = 1.00
     
@@ -130,6 +144,8 @@ extension SPRecordVideoRootVC {
         self.preView.backgroundColor = UIColor.black
         self.view .addSubview(self.recordVideoView)
         self.view.addSubview(self.filterView)
+        self.view.addSubview(self.layoutView)
+        self.view.addSubview(self.backBtn)
         self.addConstraintToView()
     }
     /**< 添加约束到view  */
@@ -153,6 +169,16 @@ extension SPRecordVideoRootVC {
             maker.height.equalTo(self.view.snp.height).multipliedBy(0.5)
             maker.centerY.equalTo(self.view.snp.centerY).offset(0)
             maker.width.equalTo(filterViewWidth)
+        }
+        self.backBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.view).offset(10)
+            maker.width.height.equalTo(40)
+            maker.top.equalTo(self.view).offset(sp_statusBarHeight() + 2)
+        }
+        self.layoutView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.bottom.equalTo(self.recordVideoView.snp.top).offset(0)
+            maker.height.equalTo(40)
         }
     }
 }
@@ -199,7 +225,6 @@ extension SPRecordVideoRootVC {
             sp_log(message: "点击取消")
            self.clickCance()
         case .done:
-            
             if button.isSelected {
                 sp_log(message: "点击结束")
                 self.videoManager.sp_stopRecord()
@@ -218,11 +243,13 @@ extension SPRecordVideoRootVC {
         case .filter:
             self.clickFilterAction();
              sp_log(message: "点击滤镜 ")
+        case .layout:
+            self.layoutView.isHidden = !self.layoutView.isHidden
         default:
             sp_log(message: "其他没有定义")
         }
     }
-    fileprivate func clickCance(){
+   @objc fileprivate func clickCance(){
         self.videoManager.sp_cance()
         self.videoManager.sp_flashOff()
         self.disMissVC()
@@ -312,12 +339,15 @@ extension SPRecordVideoRootVC {
     fileprivate func disMissVC (){
         self.dismiss(animated: true, completion: nil)
     }
+    fileprivate func sp_deal(videoLayoutType : SPVideoLayoutType){
+        self.videoManager.videoLayoutType = videoLayoutType
+    }
 }
 
 class SPRecordVideoBtnView: UIView {
     
-    lazy fileprivate var canceButton : UIButton! = {
-        return SPRecordVideoBtnView.setupButton(title:"",selectTitle: nil, fontsize: 14,norImage: UIImage(named: "back"))
+    lazy fileprivate var layoutButton : UIButton! = {
+        return SPRecordVideoBtnView.setupButton(title:"",selectTitle: nil, fontsize: 14,norImage: UIImage(named: "public_layout"))
     }()
     lazy fileprivate var recordButton : UIButton! = {
         return SPRecordVideoBtnView.setupButton(title: "",selectTitle: nil, fontsize: 14,norImage: UIImage(named: "recordStart"),selectImage: UIImage(named: "recordStop"))
@@ -378,7 +408,7 @@ class SPRecordVideoBtnView: UIView {
     }
     
     fileprivate func setupUI(){
-        self .addSubview(canceButton)
+        self .addSubview(layoutButton)
         self.addSubview(recordButton)
         if !SP_IS_IPAD {
              self.addSubview(flashLampButton)
@@ -410,7 +440,7 @@ class SPRecordVideoBtnView: UIView {
     
     // 添加按钮点击事件
     fileprivate func addActionToButton (){
-        canceButton.addTarget(self, action: #selector(clickCanceAction), for: .touchUpInside)
+        layoutButton.addTarget(self, action: #selector(clickLayoutAction), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(clickDoneAction), for: .touchUpInside)
         if !SP_IS_IPAD {
          flashLampButton.addTarget(self, action: #selector(clickOpenAction), for: .touchUpInside)
@@ -419,8 +449,8 @@ class SPRecordVideoBtnView: UIView {
         filterButton.addTarget(self, action: #selector(clickFilterAction), for: .touchUpInside)
     }
     // 点击取消
-    @objc func clickCanceAction(){
-        self.dealAction(clickType: .cance, button: canceButton)
+    @objc func clickLayoutAction(){
+        self.dealAction(clickType: .layout, button: layoutButton)
     }
     // 点击完成
     @objc func clickDoneAction(){
@@ -449,41 +479,41 @@ class SPRecordVideoBtnView: UIView {
     }
     
     fileprivate func addConstraintToView(){
-        self.canceButton.snp.makeConstraints { (maker) in
+        self.layoutButton.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.snp.left).offset(12)
             maker.height.equalTo(40)
             maker.width.equalTo(40)
             maker.top.equalTo(self).offset(10)
         }
         self.recordButton.snp.makeConstraints { (maker) in
-            maker.top.equalTo(self.canceButton.snp.top)
-            maker.height.equalTo(self.canceButton.snp.height)
-            maker.width.equalTo(self.canceButton)
+            maker.top.equalTo(self.layoutButton.snp.top)
+            maker.height.equalTo(self.layoutButton.snp.height)
+            maker.width.equalTo(self.layoutButton)
             maker.centerX.equalTo(self.snp.centerX).offset(0)
         }
         if !SP_IS_IPAD {
             self.flashLampButton.snp.makeConstraints { (maker) in
-                maker.height.equalTo(self.canceButton.snp.height)
-                maker.top.equalTo(self.canceButton.snp.top)
-                maker.width.equalTo(self.canceButton)
+                maker.height.equalTo(self.layoutButton.snp.height)
+                maker.top.equalTo(self.layoutButton.snp.top)
+                maker.width.equalTo(self.layoutButton)
                 maker.right.equalTo(self.snp.right).offset(-12)
             }
         }
         
         self.filterButton.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.recordButton.snp.left).multipliedBy(0.5)
-            maker.height.equalTo(self.canceButton.snp.height)
-            maker.width.equalTo(self.canceButton.snp.width).offset(0)
-            maker.top.equalTo(self.canceButton.snp.top).offset(0)
+            maker.height.equalTo(self.layoutButton.snp.height)
+            maker.width.equalTo(self.layoutButton.snp.width).offset(0)
+            maker.top.equalTo(self.layoutButton.snp.top).offset(0)
         }
         self.changeButton.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.recordButton.snp.left).multipliedBy(1.5)
-            maker.height.equalTo(self.canceButton.snp.height).offset(0)
-            maker.width.equalTo(self.canceButton.snp.width).offset(0)
+            maker.height.equalTo(self.layoutButton.snp.height).offset(0)
+            maker.width.equalTo(self.layoutButton.snp.width).offset(0)
             maker.top.equalTo(self.filterButton.snp.top).offset(0)
         }
         self.timeLabel.snp.makeConstraints { (maker) in
-            maker.top.equalTo(self.canceButton.snp.bottom).offset(10)
+            maker.top.equalTo(self.layoutButton.snp.bottom).offset(10)
             maker.centerX.equalTo(self.snp.centerX).offset(0)
             maker.width.equalTo(120)
             maker.height.equalTo(self.filterButton.snp.height)

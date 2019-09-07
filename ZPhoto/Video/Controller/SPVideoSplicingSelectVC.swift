@@ -1,15 +1,16 @@
 //
-//  SPVideoUpendIndexVC.swift
+//  SPVideoSplicingSelectVC.swift
 //  ZPhoto
 //
-//  Created by 黄树鹏 on 2019/7/1.
+//  Created by 黄树鹏 on 2019/9/6.
 //  Copyright © 2019 huangshupeng. All rights reserved.
 //
 
 import Foundation
 import SnapKit
 import SPCommonLibrary
-class SPVideoUpendIndexVC: SPBaseVC {
+/// 视频拼接选择的视频
+class SPVideoSplicingSelectVC: SPBaseVC {
     
     fileprivate lazy var selectVC : SPVideoSelectVC = {
         let vc = SPVideoSelectVC()
@@ -18,6 +19,7 @@ class SPVideoUpendIndexVC: SPBaseVC {
         }
         return vc
     }()
+    fileprivate var selectArray : [SPVideoModel] = [SPVideoModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +39,8 @@ class SPVideoUpendIndexVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
-        self.navigationItem.title = SPLanguageChange.sp_getString(key: "CHOOSE_VIDEO")
+         self.navigationItem.title = SPLanguageChange.sp_getString(key: "CHOOSE_VIDEO")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: SPLanguageChange.sp_getString(key: "NEXT"), style: UIBarButtonItem.Style.done, target: self, action: #selector(sp_clickNext))
         self.view.addSubview(self.selectVC.view)
         self.addChild(self.selectVC)
         self.sp_addConstraint()
@@ -61,14 +64,21 @@ class SPVideoUpendIndexVC: SPBaseVC {
         
     }
 }
-
-extension SPVideoUpendIndexVC{
+extension SPVideoSplicingSelectVC{
     
     fileprivate func sp_dealSelect(model : SPVideoModel?){
-        let upendVC = SPVideoUpendVC()
-        upendVC.videoModel = model
-        self.navigationController?.pushViewController(upendVC, animated: true)
+        guard let m = model else {
+            return
+        }
+        self.selectArray.append(m)
+        self.selectVC.selectArray = self.selectArray
     }
-    
+    @objc fileprivate func sp_clickNext(){
+        if self.selectArray.count > 0 {
+            let vc = SPVideoSplicingVC()
+            vc.selectArray = self.selectArray
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
     
 }

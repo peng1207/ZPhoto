@@ -20,17 +20,15 @@ class SPVideoUpendVC: SPBaseVC {
         playView.isHidden = true
         return playView
     }()
-    fileprivate lazy var saveBtn : UIButton = {
-        let btn = UIButton(type: UIButton.ButtonType.custom)
-        btn.setTitle(SPLanguageChange.sp_getString(key: "SAVE"), for: UIControl.State.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue), for: UIControl.State.normal)
-        btn.titleLabel?.font = sp_fontSize(fontSize:  15)
-        btn.isHidden = true
-        btn.frame = CGRect(x: 0, y: 0, width: 50, height: 40)
-        btn.addTarget(self, action: #selector(sp_clickSave), for: UIControl.Event.touchUpInside)
-        return btn
+    fileprivate lazy var rightItemView : SPNavItemBtnView = {
+        let view = SPNavItemBtnView()
+        view.isHidden = true
+        view.frame = CGRect(x: 0, y: 0, width: 80, height: 44)
+        view.clickBlock = { [weak self] (type) in
+            self?.sp_deal(btnType: type)
+        }
+        return view
     }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -54,7 +52,7 @@ class SPVideoUpendVC: SPBaseVC {
     /// 创建UI
     override func sp_setupUI() {
         self.view.addSubview(self.videoPlayView)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.saveBtn)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.rightItemView)
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -80,22 +78,38 @@ extension SPVideoUpendVC {
     }
     fileprivate func sp_dealSuccess(asset : AVAsset?,url : String){
         if asset != nil {
-            self.saveBtn.isHidden = false
+            self.rightItemView.isHidden = false
             let model = SPVideoModel()
             model.url = URL(fileURLWithPath: url)
             self.videoPlayView.isHidden = false
             self.videoPlayView.videoModel = model
         }else{
             self.videoPlayView.isHidden = true
-            self.saveBtn.isHidden = true
+            self.rightItemView.isHidden = true
         }
     }
+    fileprivate func sp_deal(btnType : SPButtonClickType){
+        switch btnType {
+        case .save:
+            sp_clickSave()
+        case .share:
+            sp_clickShare()
+        default:
+            sp_log(message: "")
+        }
+    }
+    fileprivate func sp_clickShare(){
+        if let url = self.videoPlayView.videoModel?.url {
+            SPShare.sp_share(videoUrls: [url], vc: self)
+        }
+    }
+    
     @objc fileprivate func sp_clickSave(){
         let alertVC = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "SAVE_VIDEO_MSG"), preferredStyle: UIAlertController.Style.alert)
         alertVC.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "SAVE"), style: UIAlertAction.Style.default, handler: { [weak self](action) in
             let path = sp_getString(string: self?.videoPlayView.videoModel?.url?.path)
             if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(path){
-                UISaveVideoAtPathToSavedPhotosAlbum(path, nil, nil, nil)
+                UISaveVideoAtPathToSavedPhotosAlbum(path, self, #selector(self!.sp_video(path:error:contextInfo:)), nil)
             }
         }))
         alertVC.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel, handler: { (action) in
@@ -103,5 +117,19 @@ extension SPVideoUpendVC {
         }))
         self.present(alertVC, animated: true, completion: nil)
     }
-    
+    @objc func sp_video(path : String?,error : NSError?,contextInfo : Any?){
+        
+        if let e = error as NSError?
+        {
+            print(e)
+        }
+        else
+        {
+            let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "SAVE_SUCCESS"), preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "OK"), style: UIAlertAction.Style.default, handler: { (action) in
+                
+            }))
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
 }

@@ -16,6 +16,11 @@ class SPVideoSelectVC: SPBaseVC {
     fileprivate var collectionView : UICollectionView!
     fileprivate let cellID = "videoSelectCellID"
     fileprivate var dataArray : [SPVideoModel]?
+    var selectArray : [SPVideoModel]? {
+        didSet{
+            self.collectionView.reloadData()
+        }
+    }
     var selectBlock : SPVideoSelectComplete?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,6 +100,12 @@ extension SPVideoSelectVC : UICollectionViewDelegate ,UICollectionViewDataSource
                  cell.timeLabel.text = formatForMin(seconds:second)
             }else{
                 cell.timeLabel.text = "00:00"
+            }
+            if let selectList = self.selectArray,let m = model ,selectList.contains(m){
+                cell.numLabel.isHidden = false
+                cell.numLabel.text = sp_getString(string: selectList.sp_number(of: m))
+            }else{
+                cell.numLabel.isHidden = true
             }
         }
         return cell

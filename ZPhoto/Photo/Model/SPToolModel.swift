@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SPCommonLibrary
 
-enum SPSplicingToolType {
+enum SPToolType {
     /// 布局
     case layout
     /// 背景
@@ -33,6 +33,10 @@ enum SPSplicingToolType {
     case fontSize
     /// 字体名称
     case fontName
+    /// 时间
+    case time
+    /// 动画
+    case animation
 }
 
 class SPToolModel {
@@ -40,7 +44,7 @@ class SPToolModel {
     var title : String?
     var img : UIImage?
     var selectImg : UIImage?
-    var type : SPSplicingToolType = .layout
+    var type : SPToolType = .layout
     
     fileprivate func sp_setupData(){
         switch type {
@@ -81,12 +85,19 @@ class SPToolModel {
             self.title = SPLanguageChange.sp_getString(key: "FONT_SIZE")
             self.img = UIImage(named: "public_fontsize")
             self.selectImg = UIImage(named: "public_fontsize_select")
+        case .time:
+            self.title = SPLanguageChange.sp_getString(key: "TIME")
+            self.img = UIImage(named: "public_time")
+        case .animation:
+            self.title = SPLanguageChange.sp_getString(key: "ANIMATION")
+            self.img = UIImage(named: "public_animation")
+ 
         default:
             sp_log(message: "")
         }
         
     }
-    class func sp_init(type:SPSplicingToolType)->SPToolModel{
+    class func sp_init(type:SPToolType)->SPToolModel{
         let model = SPToolModel()
         model.type = type
         model.sp_setupData()

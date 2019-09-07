@@ -33,9 +33,11 @@ class SPCameraManager : NSObject {
     fileprivate var output:  AVCaptureVideoDataOutput! /// 图像流输出
     let videoDataOutputQueue :DispatchQueue = DispatchQueue(label: "com.hsp.videoDataOutputQueue")
     @objc dynamic  var noFilterCIImage : CIImage?
-    var filterCGImage : CGImage?
+    var showOutputCGImage : CGImage?
     var filter : CIFilter?
+    var faceCoverImg : UIImage?
     var cameraAuth : Bool = false  // 有没摄像头权限
+    var videoLayoutType : SPVideoLayoutType = .none
     lazy var ciContext: CIContext = {
         let eaglContext = EAGLContext(api: EAGLRenderingAPI.openGLES2)
         let options = [CIContextOption.workingColorSpace : NSNull()]
@@ -144,22 +146,27 @@ extension SPCameraManager:AVCaptureVideoDataOutputSampleBufferDelegate{
             var noFilterOutputImage  : CIImage? = outputImage
             noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
             self.noFilterCIImage =  CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
-//            outputImage =  UIImage.sp_detectFace(inputImg: outputImage!, coverImg: UIImage(named: "filter"))
-          
-            if self.filter != nil {
-                self.filter?.setValue(outputImage!, forKey: kCIInputImageKey)
+           // 滤镜
+            if self.filter != nil , let ciImg = outputImage{
+                self.filter?.setValue(ciImg, forKey: kCIInputImageKey)
                 outputImage = self.filter?.outputImage
             }
+            // 执行判断人脸 然后增加头像上去
+            outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg:self.faceCoverImg)
+            // 视频帧布局
+            outputImage = UIImage.sp_video(layoutType: self.videoLayoutType, outputImg: outputImage)
+            
             if let oImg = outputImage {
                 outputImage =  UIImage.sp_picRotating(imgae: oImg)
                 let cgImage = self.ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
                 sp_mainQueue {
                     self.videoLayer?.contents = cgImage
-                    self.filterCGImage = cgImage
+                    self.showOutputCGImage = cgImage
                 }
             }
         }
     }
+  
 }
 
 extension SPCameraManager {

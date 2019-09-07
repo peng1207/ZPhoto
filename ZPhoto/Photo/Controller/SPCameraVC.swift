@@ -10,7 +10,7 @@ import Foundation
 import SnapKit
 import AVFoundation
 import SPCommonLibrary
-
+/// 相机
 class SPCameraVC : SPBaseNavVC {
     internal init() {
         super.init(rootViewController: SPCameraRootVC());
@@ -62,8 +62,22 @@ fileprivate class SPCameraRootVC: SPBaseVC {
         view.sp_cornerRadius(radius: filterViewWidth / 2.0)
         return view
     }() //滤镜显示view
+    fileprivate lazy var layoutView : SPVideoLayoutView = {
+        let view = SPVideoLayoutView()
+        view.isHidden = true
+        view.selectBlock = { [weak self] (type) in
+            self?.sp_deal(videoLayoutType: type)
+        }
+        return view
+    }()
     fileprivate lazy var videoData : SPRecordVideoData! = {
         return SPRecordVideoData()
+    }()
+    fileprivate lazy var backBtn : UIButton = {
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+         btn.setImage(UIImage(named: "back"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_back), for: UIControl.Event.touchUpInside)
+        return btn
     }()
     fileprivate var filterRightConstraint : Constraint!
     fileprivate let filterViewWidth :  CGFloat = 60
@@ -98,6 +112,8 @@ fileprivate class SPCameraRootVC: SPBaseVC {
         self.preView.backgroundColor = UIColor.black
         self.view.addSubview(self.btnView)
          self.view.addSubview(self.filterView)
+        self.view.addSubview(self.layoutView)
+        self.view.addSubview(self.backBtn)
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -123,6 +139,16 @@ fileprivate class SPCameraRootVC: SPBaseVC {
             maker.height.equalTo(self.view.snp.height).multipliedBy(0.5)
             maker.centerY.equalTo(self.view.snp.centerY).offset(0)
             maker.width.equalTo(filterViewWidth)
+        }
+        self.backBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.view).offset(10)
+            maker.width.height.equalTo(40)
+            maker.top.equalTo(self.view).offset(sp_statusBarHeight() + 2)
+        }
+        self.layoutView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.bottom.equalTo(self.btnView.snp.top).offset(0)
+            maker.height.equalTo(40)
         }
     }
     deinit {
@@ -151,18 +177,23 @@ fileprivate extension SPCameraRootVC{
         case .change:
             sp_log(message: "点击切换镜头")
             sp_clickChangeDev()
+        case .layout:
+            self.layoutView.isHidden = !self.layoutView.isHidden
         default:
             sp_log(message: "没有定义")
         }
     }
+     func sp_deal(videoLayoutType:SPVideoLayoutType){
+        self.cameraManmager.videoLayoutType = videoLayoutType
+    }
     /// 点击返回
-    func sp_back(){
+   @objc func sp_back(){
         self.cameraManmager.sp_cane()
         self.dismiss(animated: true, completion: nil)
     }
     /// 点击拍照
     func sp_clickCamera(){
-        let outputCIImg = self.cameraManmager.filterCGImage
+        let outputCIImg = self.cameraManmager.showOutputCGImage
         var outputImg : UIImage?
         if let ciImg = outputCIImg {
             outputImg = UIImage(cgImage: ciImg)

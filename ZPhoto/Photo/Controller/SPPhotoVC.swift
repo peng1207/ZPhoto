@@ -181,7 +181,7 @@ extension SPPhotoRootVC {
     fileprivate func sp_clickGif(){
         let vc = SPPhotoSelectVC()
         vc.pushVCType = .film
-        vc.selectMaxCount = 20
+        vc.selectMaxCount = 12
         self.navigationController?.pushViewController(vc, animated: true)
     }
     fileprivate func sp_clickEdit(){

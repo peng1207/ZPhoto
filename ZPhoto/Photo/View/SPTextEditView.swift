@@ -22,7 +22,7 @@ class SPTextEditView:  UIView{
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.isHidden = true
         btn.setImage(UIImage(named: "public_edit"), for: UIControl.State.normal)
-        btn.addTarget(self, action: #selector(sp_edit), for: UIControl.Event.touchUpInside)
+        btn.addTarget(self, action: #selector(sp_clickEdit), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate lazy var textView : UITextView = {
@@ -39,7 +39,7 @@ class SPTextEditView:  UIView{
         view.isScrollEnabled = false
         return view
     }()
-    
+    var clickBlock : SPBtnTypeComplete?
     fileprivate var textHeight : Constraint!
     fileprivate var textWidth : Constraint!
     fileprivate var font : UIFont = sp_fontSize(fontSize: 30)
@@ -76,13 +76,13 @@ class SPTextEditView:  UIView{
     /// 添加约束
     fileprivate func sp_addConstraint(){
         self.closeBtn.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self).offset(-10)
-            maker.top.equalTo(self).offset(-10)
+            maker.left.equalTo(self).offset(-5)
+            maker.top.equalTo(self).offset(-5)
             maker.width.height.equalTo(25)
         }
         self.editBtn.snp.makeConstraints { (maker) in
             maker.top.width.height.equalTo(self.closeBtn).offset(0)
-            maker.right.equalTo(self.snp.right).offset(10)
+            maker.right.equalTo(self).offset(5)
         }
         self.textView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self).offset(10)
@@ -92,38 +92,6 @@ class SPTextEditView:  UIView{
             maker.right.equalTo(self).offset(-15)
             maker.bottom.equalTo(self).offset(-10)
         }
-    }
-    fileprivate func sp_addLineView(){
-        let topView = sp_lineView()
-        topView.snp.makeConstraints { (maker) in
-            maker.left.right.top.equalTo(self).offset(0)
-            maker.height.equalTo(sp_scale(value: 1))
-            
-        }
-        let rightView = sp_lineView()
-        rightView.snp.makeConstraints { (maker) in
-            maker.right.top.bottom.equalTo(self).offset(0)
-            maker.width.equalTo(sp_scale(value: 1))
-        }
-     
-        let leftView = sp_lineView()
-        leftView.snp.makeConstraints { (maker) in
-            maker.top.bottom.width.equalTo(rightView).offset(0)
-            maker.left.equalTo(self).offset(0)
-        }
-        let bottomView = sp_lineView()
-        bottomView.snp.makeConstraints { (maker) in
-            maker.left.equalTo(leftView).offset(0)
-            maker.right.equalTo(rightView).offset(0)
-            maker.bottom.equalTo(self).offset(0)
-            maker.height.equalTo(sp_scale(value: 1))
-        }
-    }
-    fileprivate func sp_lineView()->UIView{
-        let view = UIView()
-        view.backgroundColor = sp_getMianColor()
-        self.addSubview(view)
-        return view
     }
     deinit {
         self.textView.delegate = nil
@@ -160,7 +128,18 @@ extension SPTextEditView : UITextViewDelegate {
 }
 extension SPTextEditView {
     @objc fileprivate func sp_close(){
+        sp_dealComplete(type: .close)
         self.removeFromSuperview()
+    }
+    @objc fileprivate func sp_clickEdit(){
+        sp_dealComplete(type: .edit)
+        sp_edit()
+    }
+    fileprivate func sp_dealComplete(type : SPButtonClickType){
+        guard let block = self.clickBlock else {
+            return
+        }
+        block(type)
     }
     @objc func sp_edit(){
         self.textView.isEditable = true
@@ -204,11 +183,53 @@ extension SPTextEditView {
         if self.textView.isEditable {
             return
         }
-        let point = pagGest.location(in: pagGest.view)
+        guard let sView = self.superview else {
+            return
+        }
+        
+        let point = pagGest.location(in: pagGest.view?.superview)
         if pagGest.state == .began {
             lastPoint = point
         }
-     
+        let x = point.x - lastPoint.x
+        let y = point.y - lastPoint.y
+        var contentSize = sView.frame.size
+        if let scrollView = sView as? UIScrollView {
+            contentSize = scrollView.contentSize
+        }
+        if contentSize.width <= 0 {
+            contentSize.width = sView.sp_width()
+        }
+        if contentSize.height <= 0 {
+            contentSize.height = sView.sp_height()
+        }
+        let w = self.sp_width()
+        let h = self.sp_height()
+        var newFrame = self.frame
+        newFrame.origin.x = newFrame.origin.x + x
+        newFrame.origin.y = newFrame.origin.y + y
+        
+        if newFrame.origin.x + w - 5 >= contentSize.width {
+            newFrame.origin.x = contentSize.width - w + 5
+        }
+        if newFrame.origin.y + h - 10 >= contentSize.height {
+            newFrame.origin.y = contentSize.height - h + 10
+        }
+        if newFrame.origin.x <= 0  {
+            newFrame.origin.x = 0
+        }
+        if  newFrame.origin.y <= 0 {
+            newFrame.origin.y = 0
+        }
+
+        self.snp.remakeConstraints { (maker) in
+            maker.left.equalTo(sView).offset(newFrame.origin.x)
+            maker.top.equalTo(sView).offset(newFrame.origin.y)
+            maker.width.greaterThanOrEqualTo(0)
+            maker.height.greaterThanOrEqualTo(0)
+        }
+        lastPoint = point
+        
     }
 
     func sp_isBoard(isShow : Bool){

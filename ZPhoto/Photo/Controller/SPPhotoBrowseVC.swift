@@ -5,10 +5,11 @@
 //  Created by 黄树鹏 on 2019/3/18.
 //  Copyright © 2019 huangshupeng. All rights reserved.
 //
-// 浏览图片的控制器
+
 import Foundation
 import SnapKit
 import SPCommonLibrary
+/// 浏览图片的控制器
 class SPPhotoBrowseVC: SPBaseVC {
      fileprivate var collectionView : UICollectionView!
     fileprivate lazy var editBtn : UIButton = {

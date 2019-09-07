@@ -78,6 +78,14 @@ class SPLongGraphVC: SPBaseVC {
         view.isHidden = true
         return view
     }()
+    fileprivate lazy var rightItemView : SPNavItemBtnView = {
+        let view = SPNavItemBtnView()
+        view.frame = CGRect(x: 0, y: 0, width: 80, height: 44)
+        view.clickBlock = { [weak self] (type) in
+            self?.sp_deal(btnType: type)
+        }
+        return view
+    }()
     fileprivate lazy var videoData : SPRecordVideoData! = {
         return SPRecordVideoData()
     }()
@@ -176,7 +184,7 @@ class SPLongGraphVC: SPBaseVC {
     override func sp_setupUI() {
         self.navigationItem.title = SPLanguageChange.sp_getString(key: "LONG_GRAPH")
         self.view.addSubview(self.scrollView)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: SPLanguageChange.sp_getString(key: "SAVE"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(sp_clickSave))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.rightItemView)
         self.view.addSubview(self.safeView)
         self.view.addSubview(self.toolView)
         self.view.addSubview(self.layoutView)
@@ -252,6 +260,12 @@ extension SPLongGraphVC{
             UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
         }
     }
+    fileprivate func sp_clickShare(){
+        if let image = UIImage.sp_image(view: self.scrollView) {
+              SPShare.sp_share(imgs: [image], vc: self)
+        }
+      
+    }
     @objc func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer)
     {
         if let e = error as NSError?
@@ -270,7 +284,7 @@ extension SPLongGraphVC{
     /// 处理不同类型的事件
     ///
     /// - Parameter toolType: 类型
-    fileprivate func sp_deal(toolType : SPSplicingToolType){
+    fileprivate func sp_deal(toolType : SPToolType){
         
         switch toolType {
         case .layout:
@@ -326,6 +340,9 @@ extension SPLongGraphVC{
     /// 增加文字编辑
     fileprivate func sp_addEditTextView(){
         let view = SPTextEditView()
+        view.clickBlock = { [weak self] (type) in
+            self?.sp_deal(btnType: type)
+        }
         self.scrollView.addSubview(view)
         view.snp.makeConstraints { (maker) in
             maker.left.equalTo(100)
@@ -365,9 +382,6 @@ extension SPLongGraphVC{
     ///   - isAll: 是否全部的图片
     ///   - index: 不是全部图片是哪个图片
     fileprivate func sp_deal(img filterModel : SPFilterModel,isAll : Bool, index : NSInteger){
-        guard let filter = filterModel.filter else {
-            return
-        }
         self.scrollView.subviews.forEach { (view) in
             if let imageView = view as? UIImageView {
                 let tag = imageView.tag
@@ -376,18 +390,24 @@ extension SPLongGraphVC{
                     let model = self.dataArray?[tag - imageViewTag]
                     if let image = model?.img {
                         var ciImg : CIImage?
-                        if isAll {
-                            filter.setDefaults()
-                            filter.setValue(CIImage(image: image), forKey: kCIInputImageKey)
-                            ciImg = filter.outputImage
-                        }else if tag == index {
-                            filter.setDefaults()
-                            filter.setValue(CIImage(image: image), forKey: kCIInputImageKey)
-                            ciImg = filter.outputImage
+                        if let filter = filterModel.filter {
+                            if isAll {
+                                filter.setDefaults()
+                                filter.setValue(CIImage(image: image), forKey: kCIInputImageKey)
+                                ciImg = filter.outputImage
+                            }else if tag == index {
+                                filter.setDefaults()
+                                filter.setValue(CIImage(image: image), forKey: kCIInputImageKey)
+                                ciImg = filter.outputImage
+                            }
+                            if let ci = ciImg {
+                                imageView.image =  UIImage(ciImage: ci)
+                            }
+                        }else{
+                            imageView.image = image
                         }
-                        if let ci = ciImg {
-                            imageView.image =  UIImage(ciImage: ci)
-                        }
+                        
+                       
                     }
                 }
             }
@@ -413,6 +433,7 @@ extension SPLongGraphVC{
         if self.textView != otherView {
             self.textView.isHidden = true
         }
+        
     }
     /// 弹出键盘可以编辑
     fileprivate func sp_showKeyboard(){
@@ -432,6 +453,12 @@ extension SPLongGraphVC{
         case .select:
             self.tmpEditTextView?.sp_isBoard(isShow: false)
             self.sp_dealEditText()
+        case .edit:
+            sp_dealText()
+        case .save:
+            sp_clickSave()
+        case .share:
+            sp_clickShare()
         default:
             sp_log(message: "")
         }

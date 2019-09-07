@@ -54,3 +54,16 @@
 "TEXT_COLOR" = "Color";
 "FONT_NAME" = "Family";
 "FONT_SIZE" = "Size";
+"TIME" = "Time";
+"ANIMATION" = "Animation";
+"OTHER" = "other";
+"FONTSIZE" = "Font size";
+"PICDURATION" = "Photo duration";
+"ANIMATIONDURATION" = "Animation duration";
+"ANIMATION_NONE" = "none";
+"ANIMATION_FADEOUT" = "Fade out";
+"ANIMATION_PUSH" = "Push";
+"ANIMATION_COVER" = "cover";
+"ANIMATION_TOBOOK" = "PULL";
+"ANIMATION_HOLE" = "hole";
+"CHOOSE_VIDEO" = "Choose Video";

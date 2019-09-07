@@ -10,6 +10,7 @@ import Foundation
 import SnapKit
 import SPCommonLibrary
 typealias SPPhotoListSelectComplete = (_ model : SPPhotoModel)->Void
+/// 图片列表
 class SPPhotoListVC: SPBaseVC {
     fileprivate var collectionView : UICollectionView!
     fileprivate lazy var choiceBtn : UIButton = {

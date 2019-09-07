@@ -11,12 +11,12 @@ import Foundation
 import UIKit
 import SnapKit
 import SPCommonLibrary
-typealias SPPhotoToolComplete = (_ type : SPSplicingToolType)->Void
+typealias SPPhotoToolComplete = (_ type : SPToolType)->Void
 class SPPhotoToolView:  UIView{
     
     fileprivate var collectionView : UICollectionView!
     fileprivate let cellID = "SPToolCollectionCellID"
-    var selectType : SPSplicingToolType?{
+    var selectType : SPToolType?{
         didSet{
             self.collectionView.reloadData()
         }
@@ -109,7 +109,7 @@ extension SPPhotoToolView : UICollectionViewDelegate , UICollectionViewDataSourc
             }
         }
     }
-    fileprivate func sp_dealSelect(type : SPSplicingToolType){
+    fileprivate func sp_dealSelect(type : SPToolType){
         guard let block = self.selectBlock else {
             return
         }

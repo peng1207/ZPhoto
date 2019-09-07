@@ -38,7 +38,8 @@ class SPTextView:  UIView{
     }()
     fileprivate lazy var fontSizeView : SPSliderView = {
         let view = SPSliderView()
-        view.backgroundColor = UIColor.white
+        view.title = SPLanguageChange.sp_getString(key: "FONTSIZE")
+        view.backgroundColor = sp_getMianColor()
         return view
     }()
     
@@ -154,7 +155,7 @@ extension SPTextView {
             }
         }
     }
-    fileprivate func sp_deal(toolType : SPSplicingToolType){
+    fileprivate func sp_deal(toolType : SPToolType){
         guard self.toolView.toolView.selectType != nil else {
             sp_update(scrollview: 0)
             sp_updateSuperView(isBottom: false)

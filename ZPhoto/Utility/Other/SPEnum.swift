@@ -79,6 +79,12 @@ public enum SPButtonClickType : Int {
     case close
     /// 选择
     case select
+    /// 布局
+    case layout
+    /// 分享
+    case share
+    /// 保存
+    case save
 }
 
 ///  图片布局类型
@@ -327,4 +333,18 @@ enum SPAnimationType {
     case cover
     /// 翻书
     case toBook
+    /// 打洞
+    case hole
+}
+enum SPVideoLayoutType {
+    /// 没有布局
+    case none
+    /// 二等分
+    case bisection
+    /// 四等分
+    case quadrature
+    /// 六等分
+    case sextant
+    /// 九等分
+    case nineEqualparts
 }

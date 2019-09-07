@@ -61,15 +61,3 @@ extension SPVideoEditVC {
         self.navigationController?.pushViewController(videoPalyVC, animated: true)
     }
 }
-// MARK: -- 通知 观察者
-extension SPVideoEditVC {
-    
-}
-// MARK: -- delegate
-extension SPVideoEditVC  {
-    
-}
-// MARK: -- UI
-extension SPVideoEditVC {
-    
-}

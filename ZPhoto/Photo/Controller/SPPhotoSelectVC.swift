@@ -19,7 +19,7 @@ enum SPPushVCType {
     /// 影片
     case film
 }
-
+/// 选择图片
 class SPPhotoSelectVC: SPBaseVC {
 
     fileprivate lazy var photoListVC : SPPhotoListVC = {

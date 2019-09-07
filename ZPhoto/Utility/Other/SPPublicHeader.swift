@@ -15,11 +15,18 @@ let kDocumentsPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathD
 let kCachesPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
 /// 获取Tmp目录路径
 let kTmpPath = NSTemporaryDirectory()
+
+// 保存视频的位置目录
+let kVideoDirectory = "\(kDocumentsPath)/video"
+// 保存视频的临时位置目录
+let kVideoTempDirectory = "\(kTmpPath)/video"
+
 /* 帧数
  */
-let framesPerSecond : Int32 = 60
+let framesPerSecond : Int32 = 30
 /// 按钮点击回调
 typealias SPBtnComplete = ()->Void
+typealias SPBtnTypeComplete = (_ type : SPButtonClickType)->Void
 /// 点击回调 回传位置
 typealias SPIndexComplete = (_ index : Int)->Void
  

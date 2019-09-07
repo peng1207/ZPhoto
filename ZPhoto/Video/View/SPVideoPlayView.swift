@@ -24,6 +24,7 @@ class SPVideoPlayView : UIView{
     }()
     var videoModel : SPVideoModel? {
         didSet{
+            self.sp_removeObserver()
             videoPlayerItem = AVPlayerItem(asset: (videoModel?.asset)!)
             videoPlayer = AVPlayer(playerItem: videoPlayerItem)
             let layer = self.layer as! AVPlayerLayer
@@ -31,6 +32,7 @@ class SPVideoPlayView : UIView{
             layer.videoGravity = AVLayerVideoGravity.resize
             
             let second = CMTimeGetSeconds((videoModel?.asset?.duration)!)
+            sp_log(message: "second  \(second)")
             buttonView?.timeLabel.text = formatPlayTime(seconds: second)
             buttonView?.progressView.maximumValue = Float(second)
             self.addVideoObserver()
@@ -47,7 +49,8 @@ class SPVideoPlayView : UIView{
         fatalError("init(coder:) has not been implemented")
     }
     deinit {
-        removeObserver()
+        sp_removeObserver()
+        sp_log(message: "播放view销毁")
     }
     override class var layerClass: Swift.AnyClass {
         return AVPlayerLayer.self
@@ -82,7 +85,7 @@ extension SPVideoPlayView {
          buttonView?.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControl.Event.touchUpOutside)
     }
     /**< 播放按钮点击事件  */
-    @objc fileprivate func playAction(){
+    @objc func playAction(){
         if (buttonView?.playButton.isSelected)! {
             videoPlayer?.pause()
             canRun = false
@@ -179,10 +182,11 @@ extension SPVideoPlayView {
         self.link?.add(to: RunLoop.main, forMode:RunLoop.Mode.default)
     }
     /**< 去除观察者 */
-    func removeObserver(){
+    func sp_removeObserver(){
         videoPlayerItem?.removeObserver(self, forKeyPath: "status")
         videoPlayerItem?.removeObserver(self, forKeyPath: "loadedTimeRanges")
         NotificationCenter.default.removeObserver(self, name:  Notification.Name.AVPlayerItemDidPlayToEndTime, object: videoPlayerItem)
+        videoPlayer?.pause()
         videoPlayerItem = nil
         videoPlayer = nil
         

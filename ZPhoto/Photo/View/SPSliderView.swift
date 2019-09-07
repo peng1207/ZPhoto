@@ -27,6 +27,7 @@ class SPSliderView:  UIView{
         view.addTarget(self, action: #selector(sp_sliderChange), for: UIControl.Event.valueChanged)
         view.minimumValue = 15
         view.maximumValue = 40
+        view.minimumTrackTintColor = UIColor.white
         return view
     }()
     var value : Float = 15{

@@ -10,7 +10,7 @@
 import Foundation
 import SnapKit
 import SPCommonLibrary
-
+/// 拼接
 class SPPhotoSplicingVC: SPBaseVC {
     var dataArray : [SPPhotoModel]!
     fileprivate var typeList : [SPSPlicingType]!
@@ -24,6 +24,18 @@ class SPPhotoSplicingVC: SPBaseVC {
         btn.titleLabel?.font = sp_fontSize(fontSize:  15)
         btn.addTarget(self, action: #selector(sp_clickSave), for: UIControl.Event.touchUpInside)
         return btn
+    }()
+    fileprivate lazy var textView : SPTextView = {
+        let view = SPTextView()
+        view.showKeyboardBlock = { [weak self] in
+            self?.sp_showKeyboard()
+        }
+        view.toolView.btnBlock = { [weak self] (type ) in
+            self?.sp_deal(btnType: type)
+        }
+        //        view.backgroundColor = sp_getMianColor()
+        view.isHidden = true
+        return view
     }()
     fileprivate lazy var conetentView : UIView = {
         let view = UIView()
@@ -77,10 +89,19 @@ class SPPhotoSplicingVC: SPBaseVC {
         }
         return view
     }()
+    fileprivate lazy var rightItemView : SPNavItemBtnView = {
+        let view = SPNavItemBtnView()
+        view.frame = CGRect(x: 0, y: 0, width: 80, height: 44)
+        view.clickBlock = { [weak self] (type) in
+            self?.sp_deal(btnType: type)
+        }
+        return view
+    }()
     fileprivate var marginSpace : CGFloat = 4
     fileprivate var paddingSpace : CGFloat = 4
     fileprivate let viewTag = 1000
     fileprivate var ratio : CGFloat = 1
+     fileprivate var tmpEditTextView : SPTextEditView?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -119,9 +140,10 @@ class SPPhotoSplicingVC: SPBaseVC {
         self.view.addSubview(self.layoutView)
         self.view.addSubview(self.bgView)
         self.view.addSubview(self.frameView)
+         self.view.addSubview(self.textView)
         self.sp_addConstraint()
         self.navigationItem.title = SPLanguageChange.sp_getString(key: "SPLICING")
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.saveBtn)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.rightItemView)
     }
     fileprivate func sp_getData(){
         self.typeList =  SPPhotoSplicingHelp.sp_getSplicingLayout(count: self.dataArray.count)
@@ -194,6 +216,15 @@ class SPPhotoSplicingVC: SPBaseVC {
             maker.height.greaterThanOrEqualTo(0)
             maker.bottom.equalTo(self.toolView.snp.top).offset(0)
         }
+        self.textView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.greaterThanOrEqualTo(0)
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+            }
+        }
     }
     fileprivate func sp_contentLayout(){
         self.conetentView.snp.remakeConstraints { (maker) in
@@ -235,7 +266,7 @@ extension SPPhotoSplicingVC {
     /// 处理点击的工具类型
     ///
     /// - Parameter toolType: 类型
-    fileprivate func sp_deal(toolType : SPSplicingToolType){
+    fileprivate func sp_deal(toolType : SPToolType){
         switch toolType {
         case .layout:
             sp_allHidden(otherView: self.layoutView)
@@ -249,6 +280,9 @@ extension SPPhotoSplicingVC {
         case .zoom:
             sp_allHidden(otherView: nil)
             sp_dealZoom()
+        case .text:
+            sp_allHidden(otherView: self.textView)
+            sp_dealText()
         default:
             sp_log(message: "没有")
         }
@@ -294,6 +328,60 @@ extension SPPhotoSplicingVC {
         }))
         self.present(actionSheetVC, animated: true, completion: nil)
     }
+    /// 处理文本
+    fileprivate func sp_dealText(){
+        self.textView.isHidden = !self.textView.isHidden
+        self.textView.toolView.toolView.selectType = .edit
+        sp_addEditTextView()
+    }
+    /// 增加文字编辑
+    fileprivate func sp_addEditTextView(){
+        let view = SPTextEditView()
+        view.clickBlock = { [weak self] (type) in
+            self?.sp_deal(btnType: type)
+        }
+        self.conetentView.addSubview(view)
+        view.snp.makeConstraints { (maker) in
+            maker.centerX.equalTo(self.conetentView).offset(0)
+            maker.width.greaterThanOrEqualTo(0)
+            maker.height.greaterThanOrEqualTo(0)
+            maker.top.equalTo(self.conetentView).offset(100)
+        }
+        self.tmpEditTextView = view
+        view.sp_edit()
+    }
+    /// 弹出键盘可以编辑
+    fileprivate func sp_showKeyboard(){
+        guard let view = self.tmpEditTextView else {
+            return
+        }
+        view.sp_edit()
+    }
+    /// 处理按钮点击事件
+    ///
+    /// - Parameter btnType: 按钮类型
+    fileprivate func sp_deal(btnType : SPButtonClickType){
+        switch btnType {
+        case .close:
+            self.tmpEditTextView?.removeFromSuperview()
+            self.sp_dealEditText()
+        case .select:
+            self.tmpEditTextView?.sp_isBoard(isShow: false)
+            self.sp_dealEditText()
+        case .save:
+            sp_clickSave()
+        case .share:
+            sp_clickShare()
+        default:
+            sp_log(message: "")
+        }
+    }
+    /// 处理编辑文本框 隐藏键盘和临时view设置为nil
+    fileprivate func sp_dealEditText(){
+        self.tmpEditTextView?.sp_noEdit()
+        self.tmpEditTextView = nil
+        self.textView.isHidden = true
+    }
     /// 更新view的宽高
     ///
     /// - Parameter ratio: 比例
@@ -314,6 +402,14 @@ extension SPPhotoSplicingVC {
         }
         if self.frameView != otherView {
             self.frameView.isHidden = true
+        }
+        if self.textView != otherView {
+            self.textView.isHidden = true
+        }
+    }
+    fileprivate func sp_clickShare(){
+        if let img = UIImage.sp_image(view: self.conetentView) {
+            SPShare.sp_share(imgs: [img], vc: self)
         }
     }
     /// 点击保存

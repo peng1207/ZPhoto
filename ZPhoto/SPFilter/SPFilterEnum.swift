@@ -63,7 +63,7 @@ extension SPFilterPhoto : EnumeratableEnumType{
             ,.straightenFilter
             ,.bumpDistortionLinear
 //            ,.circularWrap
-            ,.perspectiveTransform
+//            ,.perspectiveTransform
         ]
     }
 }

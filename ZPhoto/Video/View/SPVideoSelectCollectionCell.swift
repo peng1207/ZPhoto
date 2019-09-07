@@ -24,7 +24,16 @@ class SPVideoSelectCollectionCell: UICollectionViewCell {
         label.textAlignment = .left
         return label
     }()
-    
+    lazy var numLabel : UILabel = {
+        let label = UILabel()
+        label.font = sp_fontSize(fontSize:  10)
+        label.textColor = SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue)
+        label.backgroundColor = sp_getMianColor()
+        label.sp_cornerRadius(radius: 12)
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
+    }()
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -36,6 +45,7 @@ class SPVideoSelectCollectionCell: UICollectionViewCell {
     fileprivate func sp_setupUI(){
         self.contentView.addSubview(self.iconImgView)
         self.contentView.addSubview(self.timeLabel)
+        self.contentView.addSubview(self.numLabel)
         self.sp_addConstraint()
     }
     /// 添加约束
@@ -49,6 +59,11 @@ class SPVideoSelectCollectionCell: UICollectionViewCell {
             maker.height.greaterThanOrEqualTo(0)
             maker.width.greaterThanOrEqualTo(0)
             maker.left.greaterThanOrEqualTo(self.contentView.snp.left).offset(3)
+        }
+        self.numLabel.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.contentView).offset(5)
+            maker.bottom.equalTo(self.contentView).offset(-5)
+            maker.width.height.equalTo(24)
         }
     }
     deinit {

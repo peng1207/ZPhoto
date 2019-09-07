@@ -53,6 +53,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     // 放大最大的倍数
     var maxZoomActore :CGFloat = 5.00
     var minZoomActore : CGFloat = 1.00
+   
     // 开始录制
     var startRecording : Bool = false
     var isFirstVideo : Bool = false
@@ -62,12 +63,12 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     var videoWriterPixelbufferInput : AVAssetWriterInputPixelBufferAdaptor?
     var currentVideoDimensions: CMVideoDimensions?
     var lastSampleTime : CMTime?
-    let  filePath : String = "\(SPVideoHelp.kVideoTempDirectory)/temp.mp4"
+    let  filePath : String = "\(kVideoTempDirectory)/temp.mp4"
     var filter : CIFilter?
     @objc dynamic  var noFilterCIImage : CIImage?
     var cameraAuth : Bool = false  // 有没摄像头权限
-    
-    
+    var videoLayoutType : SPVideoLayoutType = .none
+    var faceCoverImg : UIImage?
     let videoDataOutputQueue :DispatchQueue = DispatchQueue(label: "com.hsp.videoDataOutputQueue")
     
     let audioDataOutputQueue : DispatchQueue = DispatchQueue(label: "com.hsp.audioDataOutputQueue")
@@ -151,8 +152,8 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         }
      
         self.changeDeviceProperty {
-            self.currentDevice?.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: 15)
-            self.currentDevice?.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: 15)
+            self.currentDevice?.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: framesPerSecond)
+            self.currentDevice?.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: framesPerSecond)
         }
         let needAdd : Bool = self.captureSession.outputs.count > 0 ? false : true
         
@@ -210,7 +211,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     }
     /**< 初始化writer  */
     fileprivate func setupAssertWrirer(){
-        FileManager.sp_directory(createPath: SPVideoHelp.kVideoTempDirectory)
+        FileManager.sp_directory(createPath: kVideoTempDirectory)
         do {
             if FileManager.default.fileExists(atPath: filePath) {
                 FileManager.remove(path: filePath)
@@ -220,17 +221,29 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             let size = sp_screenPixels()
             assetWriter = try AVAssetWriter(url:  URL(fileURLWithPath: filePath), fileType: AVFileType.mp4)
             let videoOutputSettings : [String : Any]
+//            // //写入视频大小
+//            let numPixels = sp_screenWidth() * sp_screenHeight()
+//            //每像素比特
+//            let bitsPerPixel : CGFloat = 6.0
+//            let bitsPerSecond = bitsPerPixel * numPixels
+//            let compressionProperties = [AVVideoAverageBitRateKey : bitsPerSecond,
+//                                         AVVideoExpectedSourceFrameRateKey : 15,
+//                                         AVVideoMaxKeyFrameIntervalKey : 15,
+//                                         AVVideoProfileLevelKey : AVVideoProfileLevelH264BaselineAutoLevel
+//                ] as [String : Any]
             
             if #available(iOS 11.0, *) {
                 videoOutputSettings = [AVVideoCodecKey : AVVideoCodecHEVC,
                                        AVVideoWidthKey : size.width,
                                        AVVideoHeightKey : size.height,
+//                                       AVVideoCompressionPropertiesKey : compressionProperties
                         ]
             } else {
                 // Fallback on earlier versions
                 videoOutputSettings = [AVVideoCodecKey : AVVideoCodecH264,
                                        AVVideoWidthKey : size.width,
                                        AVVideoHeightKey : size.height,
+//                                       AVVideoCompressionPropertiesKey : compressionProperties
                     ]
             }
             
@@ -291,7 +304,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 //                FileManager.remove(path: self.filePath)
             }else{
                 let asset = AVAsset(url: URL(fileURLWithPath: (self?.filePath)!))
-                SPVideoHelp.recordForDeal(asset: asset, outputPath: "\(SPVideoHelp.kVideoDirectory)/\(SPVideoHelp.getVideoName())") { (newAsset ,url) in
+                SPVideoHelp.recordForDeal(asset: asset, outputPath: "\(kVideoDirectory)/\(SPVideoHelp.getVideoName())") { (newAsset ,url) in
                     SPVideoHelp.sendNotification(notificationName: kVideoChangeNotification)
                 }
             }
@@ -448,12 +461,14 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 var noFilterOutputImage  : CIImage? = outputImage
                 noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
                 self.noFilterCIImage = CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
-                // 执行判断人脸 然后增加头像上去
-//                outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg: UIImage(named: "filter"))
-                if self.filter != nil {
-                    self.filter?.setValue(outputImage!, forKey: kCIInputImageKey)
+                if self.filter != nil , let ciImg = outputImage{
+                    self.filter?.setValue(ciImg, forKey: kCIInputImageKey)
                     outputImage = self.filter?.outputImage
                 }
+                // 执行判断人脸 然后增加头像上去
+                outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg: self.faceCoverImg)
+                /// 布局
+                outputImage = UIImage.sp_video(layoutType: self.videoLayoutType, outputImg: outputImage)
             }
             
             if startRecording == true && self.assetWriter != nil{
@@ -482,6 +497,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     /**< 写入视频文件 */
     fileprivate func writerVideo(toPixelBuffer pixelBuffer:CVPixelBuffer?, time :CMTime? ){
         if self.startRecording == true,self.assetWriter != nil ,self.assetWriter?.status == .writing,self.videoWriterPixelbufferInput != nil , (self.videoWriterPixelbufferInput?.assetWriterInput.isReadyForMoreMediaData)! , pixelBuffer != nil , time != nil {
+            sp_log(message: pixelBuffer)
             let success = self.videoWriterPixelbufferInput?.append(pixelBuffer!, withPresentationTime: time!)
             if success == false{
                 sp_log(message: "video append failur is \(String(describing: self.assetWriter?.error.debugDescription))")

@@ -91,6 +91,11 @@
 		9ECE7C152227B80300FE6BCD /* SPPentagonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7C022227B80300FE6BCD /* SPPentagonView.swift */; };
 		9ECE7C172227B80300FE6BCD /* SPAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7C042227B80300FE6BCD /* SPAnimationView.swift */; };
 		9ECE7C182227B80300FE6BCD /* SPVideoPreviewLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECE7C052227B80300FE6BCD /* SPVideoPreviewLayerView.swift */; };
+		9EECDB332320F926008F6CBE /* SPFilmTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EECDB322320F926008F6CBE /* SPFilmTimeView.swift */; };
+		9EECDB3523226104008F6CBE /* SPVideoSplicingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EECDB3423226104008F6CBE /* SPVideoSplicingVC.swift */; };
+		9EECDB372322611F008F6CBE /* SPVideoSplicingSelectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EECDB362322611F008F6CBE /* SPVideoSplicingSelectVC.swift */; };
+		9EECDB392323555D008F6CBE /* SPNavItemBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EECDB382323555D008F6CBE /* SPNavItemBtnView.swift */; };
+		9EECDB3B2323880C008F6CBE /* SPVideoLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EECDB3A2323880C008F6CBE /* SPVideoLayoutView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -210,6 +215,11 @@
 		9ECE7C022227B80300FE6BCD /* SPPentagonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPPentagonView.swift; sourceTree = "<group>"; };
 		9ECE7C042227B80300FE6BCD /* SPAnimationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPAnimationView.swift; sourceTree = "<group>"; };
 		9ECE7C052227B80300FE6BCD /* SPVideoPreviewLayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVideoPreviewLayerView.swift; sourceTree = "<group>"; };
+		9EECDB322320F926008F6CBE /* SPFilmTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFilmTimeView.swift; sourceTree = "<group>"; };
+		9EECDB3423226104008F6CBE /* SPVideoSplicingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoSplicingVC.swift; sourceTree = "<group>"; };
+		9EECDB362322611F008F6CBE /* SPVideoSplicingSelectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoSplicingSelectVC.swift; sourceTree = "<group>"; };
+		9EECDB382323555D008F6CBE /* SPNavItemBtnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPNavItemBtnView.swift; sourceTree = "<group>"; };
+		9EECDB3A2323880C008F6CBE /* SPVideoLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoLayoutView.swift; sourceTree = "<group>"; };
 		A48F6C5FB7358C64CE5D01E2 /* Pods-ZPhoto-ZPhotoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.release.xcconfig"; sourceTree = "<group>"; };
 		C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhoto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -343,6 +353,7 @@
 				9EA443292317D00B00B4E1FE /* SPTextView.swift */,
 				9EA4432B2317D06000B4E1FE /* SPTextToolView.swift */,
 				9EA4432D231CAE1700B4E1FE /* SPTextEditView.swift */,
+				9EECDB322320F926008F6CBE /* SPFilmTimeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -487,6 +498,8 @@
 				9EAD4B8D22C74972007D7BB3 /* SPVideoEditVC.swift */,
 				9EAD4BB222C9E347007D7BB3 /* SPVideoSelectEditVC.swift */,
 				9EAD4BA622C74A16007D7BB3 /* SPVideoSelectVC.swift */,
+				9EECDB3423226104008F6CBE /* SPVideoSplicingVC.swift */,
+				9EECDB362322611F008F6CBE /* SPVideoSplicingSelectVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -510,6 +523,7 @@
 				9EAD4B9622C74972007D7BB3 /* SPVideoCollectionCell.swift */,
 				9EAD4B9722C74972007D7BB3 /* SPFilterView.swift */,
 				9EAD4BAE22C9DD71007D7BB3 /* SPVideoSelectCollectionCell.swift */,
+				9EECDB3A2323880C008F6CBE /* SPVideoLayoutView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -551,6 +565,7 @@
 				9ECE7C022227B80300FE6BCD /* SPPentagonView.swift */,
 				9ECE7C042227B80300FE6BCD /* SPAnimationView.swift */,
 				9ECE7C052227B80300FE6BCD /* SPVideoPreviewLayerView.swift */,
+				9EECDB382323555D008F6CBE /* SPNavItemBtnView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -788,6 +803,7 @@
 				9ECE7C152227B80300FE6BCD /* SPPentagonView.swift in Sources */,
 				9EA4432C2317D06000B4E1FE /* SPTextToolView.swift in Sources */,
 				9ECE7C082227B80300FE6BCD /* CIFilter+extension.swift in Sources */,
+				9EECDB372322611F008F6CBE /* SPVideoSplicingSelectVC.swift in Sources */,
 				9E622E18225D8EAB00722FD8 /* SPCustomPictureView.swift in Sources */,
 				9EA44336231D20E300B4E1FE /* SPFilmVC.swift in Sources */,
 				9E2D90A1225C849600299C15 /* SPCameraVC.swift in Sources */,
@@ -802,6 +818,8 @@
 				9E2D90AA225C849600299C15 /* SPPhotoListCollectionCell.swift in Sources */,
 				9ECE7C092227B80300FE6BCD /* UIImageManager.swift in Sources */,
 				9E07234B22D71CFF00E5068A /* SPSetVC.swift in Sources */,
+				9EECDB3B2323880C008F6CBE /* SPVideoLayoutView.swift in Sources */,
+				9EECDB332320F926008F6CBE /* SPFilmTimeView.swift in Sources */,
 				9EAD4BB322C9E347007D7BB3 /* SPVideoSelectEditVC.swift in Sources */,
 				9E3E165A22FD7D0E00BF48E9 /* SPPhotoSplicingSeven.swift in Sources */,
 				9E3E165C22FD7F6800BF48E9 /* SPPhotoSplicingSix.swift in Sources */,
@@ -843,6 +861,8 @@
 				9E07234F22D9770000E5068A /* SPPhotoSplicingNine.swift in Sources */,
 				9EAD4BA422C74973007D7BB3 /* SPVideoCollectionCell.swift in Sources */,
 				9EAD4BA222C74973007D7BB3 /* SPVideoScheduleView.swift in Sources */,
+				9EECDB3523226104008F6CBE /* SPVideoSplicingVC.swift in Sources */,
+				9EECDB392323555D008F6CBE /* SPNavItemBtnView.swift in Sources */,
 				9E2D90A3225C849600299C15 /* SPPhotoEditVC.swift in Sources */,
 				9ECE7C0E2227B80300FE6BCD /* SPPublicHeader.swift in Sources */,
 				9E464ACD22BCC7D400F2E6DE /* SPLayoutView.swift in Sources */,

@@ -166,7 +166,8 @@ extension SPVideoRootVC {
     }
     /// 点击拼接
     fileprivate func sp_clickSplicing(){
-        
+        let vc = SPVideoSplicingSelectVC()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     /// 点击编辑
     fileprivate func sp_clickEdit(){

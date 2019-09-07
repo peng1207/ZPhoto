@@ -15,10 +15,10 @@ typealias SPCameraBtnClickBlock = (_ type : SPButtonClickType)->Void
 
 class SPCameraBtnView:  UIView{
     
-    fileprivate lazy var backBtn : UIButton = {
+    fileprivate lazy var layoutBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
-        btn.setImage(UIImage(named: "back"), for: UIControl.State.normal)
-        btn.addTarget(self, action: #selector(sp_clickBack), for: UIControl.Event.touchUpInside)
+        btn.setImage(UIImage(named: "public_layout"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_clickLayout), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate lazy var cameraBtn : UIButton = {
@@ -57,7 +57,7 @@ class SPCameraBtnView:  UIView{
     }
     /// 添加UI
     fileprivate func sp_setupUI(){
-        self.addSubview(self.backBtn)
+        self.addSubview(self.layoutBtn)
         self.addSubview(self.cameraBtn)
         self.addSubview(self.changeDevBtn)
         if !SP_IS_IPAD {
@@ -69,7 +69,7 @@ class SPCameraBtnView:  UIView{
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
-        self.backBtn.snp.makeConstraints { (maker) in
+        self.layoutBtn.snp.makeConstraints { (maker) in
             maker.width.equalTo(40)
             maker.height.equalTo(40)
             maker.left.equalTo(self.snp.left).offset(12)
@@ -79,11 +79,11 @@ class SPCameraBtnView:  UIView{
         self.cameraBtn.snp.makeConstraints { (maker) in
             maker.centerX.equalTo(self.snp.centerX).offset(0)
             maker.width.height.equalTo(40)
-            maker.centerY.equalTo(self.backBtn.snp.centerY).offset(0)
+            maker.centerY.equalTo(self.layoutBtn.snp.centerY).offset(0)
         }
         self.filterBtn.snp.makeConstraints { (maker) in
            maker.left.equalTo(self.cameraBtn.snp.left).multipliedBy(0.5)
-            maker.centerY.equalTo(self.backBtn.snp.centerY).offset(0)
+            maker.centerY.equalTo(self.layoutBtn.snp.centerY).offset(0)
             maker.width.height.equalTo(40)
         }
         self.changeDevBtn.snp.makeConstraints { (maker) in
@@ -104,9 +104,9 @@ class SPCameraBtnView:  UIView{
     }
 }
 extension SPCameraBtnView {
-    /// 点击返回
-    @objc fileprivate func sp_clickBack(){
-        sp_dealComplete(type: .cance)
+    /// 点击布局
+    @objc fileprivate func sp_clickLayout(){
+        sp_dealComplete(type: .layout)
     }
     /// 点击拍照
     @objc fileprivate func sp_clickTakePhoto(){

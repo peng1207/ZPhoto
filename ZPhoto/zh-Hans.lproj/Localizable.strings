@@ -53,4 +53,16 @@
 "TEXT_COLOR" = "颜色";
 "FONT_NAME" = "字体";
 "FONT_SIZE" = "大小";
-
+"TIME" = "时长";
+"ANIMATION" = "动画";
+"OTHER" = "其他";
+"FONTSIZE" = "字体大小";
+"PICDURATION" = "照片时长";
+"ANIMATIONDURATION" = "动画时长";
+"ANIMATION_NONE" = "无动画";
+"ANIMATION_FADEOUT" = "淡出";
+"ANIMATION_PUSH" = "推出";
+"ANIMATION_COVER" = "覆盖";
+"ANIMATION_TOBOOK" = "拉";
+"ANIMATION_HOLE" = "洞";
+"CHOOSE_VIDEO" = "选择视频";
