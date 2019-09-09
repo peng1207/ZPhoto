@@ -52,7 +52,7 @@ class SPSetVC: SPBaseVC {
         self.tableView.dataSource = self
         self.tableView.rowHeight = 44
 //        self.tableView.separatorStyle = .none
-        self.tableView.backgroundColor = self.view.backgroundColor
+        self.tableView.backgroundColor = UIColor.clear
         let view = UIView()
         view.frame = CGRect(x: 0, y: 0, width: sp_screenWidth(), height: 0)
         self.tableView.tableFooterView = view

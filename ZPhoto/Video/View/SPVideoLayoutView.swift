@@ -39,7 +39,6 @@ class SPVideoLayoutView:  UIView{
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.backgroundColor = UIColor.clear
-        self.collectionView.alwaysBounceVertical = true
         self.collectionView.register(SPVideoLayoutCollectCell.self, forCellWithReuseIdentifier: self.cellID)
         self.collectionView.showsVerticalScrollIndicator = false
         self.addSubview(self.collectionView)
@@ -77,6 +76,7 @@ extension SPVideoLayoutView : UICollectionViewDelegate ,UICollectionViewDataSour
             block(self.dataArray[indexPath.row])
         }
     }
+ 
 }
 
 class SPVideoLayoutCollectCell: UICollectionViewCell {

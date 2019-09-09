@@ -105,17 +105,10 @@ extension SPVideoUpendVC {
     }
     
     @objc fileprivate func sp_clickSave(){
-        let alertVC = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "SAVE_VIDEO_MSG"), preferredStyle: UIAlertController.Style.alert)
-        alertVC.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "SAVE"), style: UIAlertAction.Style.default, handler: { [weak self](action) in
-            let path = sp_getString(string: self?.videoPlayView.videoModel?.url?.path)
-            if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(path){
-                UISaveVideoAtPathToSavedPhotosAlbum(path, self, #selector(self!.sp_video(path:error:contextInfo:)), nil)
-            }
-        }))
-        alertVC.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel, handler: { (action) in
-            
-        }))
-        self.present(alertVC, animated: true, completion: nil)
+        let path = sp_getString(string: self.videoPlayView.videoModel?.url?.path)
+        if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(path){
+            UISaveVideoAtPathToSavedPhotosAlbum(path, self, #selector(sp_video(path:error:contextInfo:)), nil)
+        }
     }
     @objc func sp_video(path : String?,error : NSError?,contextInfo : Any?){
         

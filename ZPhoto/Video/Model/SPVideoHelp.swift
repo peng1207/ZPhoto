@@ -60,6 +60,7 @@ class SPVideoHelp: NSObject {
     /**< 对录制好的视频处理  */
     class func recordForDeal(asset:AVAsset,outputPath:String,complete : @escaping ExportSuccess)-> Void{
         let componsition = AVMutableComposition()
+       
         let videoTrack = componsition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: CMPersistentTrackID())
        
         let videoAsset = asset.tracks(withMediaType: AVMediaType.video)[0]
@@ -166,7 +167,7 @@ class SPVideoHelp: NSObject {
        
     }
     /**< 根据assesst和time 获取对应的图片 */
-    class func thumbnailImageTo(assesst: AVAsset,time : CMTime) -> UIImage?{
+    class func sp_thumbnailImage(assesst: AVAsset,time : CMTime) -> UIImage?{
         var thumbnailImage : UIImage? = nil
         let assetImageGenerator = AVAssetImageGenerator(asset: assesst)
         assetImageGenerator.appliesPreferredTrackTransform = true
@@ -174,7 +175,6 @@ class SPVideoHelp: NSObject {
         assetImageGenerator.requestedTimeToleranceBefore = CMTime.zero
         assetImageGenerator.apertureMode = AVAssetImageGenerator.ApertureMode.encodedPixels
         do {
-            
             let thumbnailImageRef = try assetImageGenerator.copyCGImage(at: time, actualTime: nil)
             thumbnailImage = UIImage(cgImage: thumbnailImageRef)
             return thumbnailImage
@@ -184,12 +184,12 @@ class SPVideoHelp: NSObject {
         }
     }
     /**< 获取视频文件 转为 */
-    class func videoFile() -> [SPVideoModel]? {
+    class func sp_videoFile() -> [SPVideoModel]? {
         var videoArray = [SPVideoModel]()
         let fileArray = sp_getfile(forDirectory: kVideoDirectory)
         for file in fileArray! {
             let path = "\(kVideoDirectory)/\(file)"
-            let model = getVideoModel(path: path)
+            let model = sp_getVideoModel(path: path)
             if  (model.asset != nil) {
                 videoArray.append(model)
             }else{
@@ -201,7 +201,7 @@ class SPVideoHelp: NSObject {
     /*
      获取videomodel
      */
-    class func getVideoModel(path:String) -> SPVideoModel{
+    class func sp_getVideoModel(path:String) -> SPVideoModel{
         let model = SPVideoModel();
         model.url = URL(fileURLWithPath: path)
         return model
@@ -211,9 +211,9 @@ class SPVideoHelp: NSObject {
     /**
      删除视频文件
      */
-    class func remove(videoUrl:URL) -> Void{
+    class func sp_remove(videoUrl:URL) -> Void{
         remove(fileUrl: videoUrl)
-        sendNotification(notificationName: kVideoChangeNotification)
+        sp_send(notificationName: kVideoChangeNotification)
     }
     /**
      删除文件
@@ -222,39 +222,11 @@ class SPVideoHelp: NSObject {
         try!  FileManager.default.removeItem(at: fileUrl)
     }
     /**< 发送通知 */
-    class func sendNotification(notificationName:String) {
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: notificationName), object: nil)
-    }
-    /**< 根据AVAsset 获取图片数组(默认为每一秒 若传入小于等于0 则为0.01)*/
-    class func images(asset:AVAsset?,second:Float64 = 1.0) -> [UIImage]! {
-        var secondDurr = second
-        if secondDurr <= 0 {
-            secondDurr = 0.01
-        }
-        // 获取视频秒数
-        let assetSecond = CMTimeGetSeconds(asset!.duration)
-        // 开始秒数
-        var startSecond = 0.00
-        var imageArray = [UIImage]()
-        while  startSecond <= assetSecond {
-            let thumbnailImage = self.thumbnailImageTo(assesst: asset!, time: CMTimeMakeWithSeconds(startSecond, preferredTimescale: 60))
-            if let image = thumbnailImage {
-                imageArray.append(image)
-            }
-            if startSecond < assetSecond {
-                startSecond = startSecond + secondDurr
-                if startSecond > assetSecond {
-                    startSecond = assetSecond
-                }
-            }else{
-                startSecond = startSecond + secondDurr
-            }
-            
-        }
-        return imageArray
+    class func sp_send(notificationName:String) {
+         NotificationCenter.default.post(name: NSNotification.Name(rawValue: notificationName), object: nil)
     }
     /**< 剪切视频 timeRange 剪切的位置  */
-    class func shear(asset:AVAsset,timeRange: CMTimeRange,completionHandler:@escaping (_ outUrl:URL)->Void) ->  Void{
+    class func sp_shear(asset:AVAsset,timeRange: CMTimeRange,completionHandler:@escaping (_ outUrl:URL)->Void) ->  Void{
         let compostion  = AVMutableComposition()
         let videoTrack = compostion.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: CMPersistentTrackID())
         let audioTrack = compostion.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: CMPersistentTrackID())
@@ -286,7 +258,7 @@ class SPVideoHelp: NSObject {
     ///
     /// - Parameter asset: 视频
     /// - Returns: 音\视频流数据
-    class func sp_getVideoBuffer(asset : AVAsset?) ->(videoBuffers : [CMSampleBuffer]?,audioBuffers : [CMSampleBuffer]?){
+    class func sp_videoBuffer(asset : AVAsset?) ->(videoBuffers : [CMSampleBuffer]?,audioBuffers : [CMSampleBuffer]?){
         guard let videoAsset = asset else {
             return (nil,nil)
         }
@@ -344,7 +316,7 @@ class SPVideoHelp: NSObject {
             return
         }
         sp_sync {
-            let data = sp_getVideoBuffer(asset: videoAsset)
+            let data = sp_videoBuffer(asset: videoAsset)
             let samples = data.videoBuffers
 //            let audioSamples = data.audioBuffers
             if sp_count(array:  samples) > 0 {
@@ -426,8 +398,5 @@ class SPVideoHelp: NSObject {
                 sp_dealVideoUnpend(asset: nil, url: "", complete: complete)
             }
         }
-       
-        
-       
     }
 }

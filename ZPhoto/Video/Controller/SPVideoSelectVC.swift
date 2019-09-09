@@ -41,7 +41,7 @@ class SPVideoSelectVC: SPBaseVC {
     }
     fileprivate func sp_setupData(){
         sp_sync {
-            let array = SPVideoHelp.videoFile()
+            let array = SPVideoHelp.sp_videoFile()
             sp_mainQueue {
                 self.dataArray = array
                 self.collectionView.reloadData()
@@ -57,7 +57,7 @@ class SPVideoSelectVC: SPBaseVC {
         self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
-        self.collectionView.backgroundColor = self.view.backgroundColor
+        self.collectionView.backgroundColor = UIColor.clear
         self.collectionView.alwaysBounceVertical = true
         self.collectionView.register(SPVideoSelectCollectionCell.self, forCellWithReuseIdentifier: self.cellID)
         self.collectionView.showsVerticalScrollIndicator = false

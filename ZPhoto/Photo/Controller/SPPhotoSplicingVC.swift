@@ -45,6 +45,7 @@ class SPPhotoSplicingVC: SPBaseVC {
     
     fileprivate lazy var toolView : SPPhotoToolView = {
         let view = SPPhotoToolView()
+        view.canShowSelect = false
         view.backgroundColor = sp_getMianColor()
         view.dataArray = [
             SPToolModel.sp_init(type: .layout)
@@ -52,6 +53,7 @@ class SPPhotoSplicingVC: SPBaseVC {
             ,SPToolModel.sp_init(type: .frame)
             ,SPToolModel.sp_init(type: .zoom)
             ,SPToolModel.sp_init(type: .text)
+            ,SPToolModel.sp_init(type: .edit)
 //            ,SPToolModel.sp_init(type: .filter)
         ]
         view.selectBlock = { [weak self](type) in
@@ -158,6 +160,11 @@ class SPPhotoSplicingVC: SPBaseVC {
         guard let type = self.selectType else {
             return
         }
+        guard sp_count(array: self.dataArray) > 0 else {
+            self.navigationController?.popViewController(animated: true)
+            return
+        }
+        
         
         var index = 0
         for model in self.dataArray {
@@ -232,7 +239,6 @@ class SPPhotoSplicingVC: SPBaseVC {
             maker.left.right.equalTo(self.view).offset(0)
             maker.centerY.equalTo(self.view.snp.centerY).offset(-30)
             maker.height.equalTo(self.conetentView.snp.width).multipliedBy(self.ratio)
-            
         }
     }
     deinit {
@@ -283,6 +289,9 @@ extension SPPhotoSplicingVC {
         case .text:
             sp_allHidden(otherView: self.textView)
             sp_dealText()
+        case .edit:
+            sp_allHidden(otherView: nil)
+            sp_dealEdit()
         default:
             sp_log(message: "没有")
         }
@@ -349,6 +358,20 @@ extension SPPhotoSplicingVC {
         }
         self.tmpEditTextView = view
         view.sp_edit()
+    }
+    fileprivate func sp_dealEdit(){
+        let dragVC = SPDragVC()
+        dragVC.dataArray = self.dataArray
+        dragVC.complete = { [weak self] (array) in
+            if let list : [SPPhotoModel] = array as? [SPPhotoModel] {
+                if sp_count(array: list) != sp_count(array: self?.dataArray){
+                    self?.sp_getData()
+                }
+                self?.dataArray = list
+                self?.sp_setupData()
+            }
+        }
+        self.navigationController?.pushViewController(dragVC, animated: true)
     }
     /// 弹出键盘可以编辑
     fileprivate func sp_showKeyboard(){

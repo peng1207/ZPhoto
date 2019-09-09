@@ -69,11 +69,11 @@ extension SPVideoCollectionCell{
         }
         deleteBtn.snp.makeConstraints { (maker) in
             maker.top.equalTo(self.contentView).offset(5)
-            maker.right.equalTo(self.contentView).offset(-5)
+            maker.left.equalTo(self.contentView).offset(5)
             maker.size.equalTo(CGSize(width: 30, height: 30))
         }
         shareBtn.snp.makeConstraints { (maker) in
-            maker.left.equalTo(self.contentView).offset(5)
+            maker.right.equalTo(self.contentView).offset(-5)
             maker.top.equalTo(self.contentView).offset(5)
             maker.size.equalTo(CGSize(width: 30, height: 30))
         }

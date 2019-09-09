@@ -23,8 +23,9 @@ class SPFilmVC: SPBaseVC {
     }()
     fileprivate lazy var toolView : SPPhotoToolView = {
         let view = SPPhotoToolView()
+        view.canShowSelect = false
         view.backgroundColor = sp_getMianColor()
-        view.dataArray = [SPToolModel.sp_init(type: .animation),SPToolModel.sp_init(type: .time),SPToolModel.sp_init(type: .zoom)]
+        view.dataArray = [SPToolModel.sp_init(type: .animation),SPToolModel.sp_init(type: .time),SPToolModel.sp_init(type: .zoom),SPToolModel.sp_init(type: .edit)]
         view.selectBlock = { [weak self] (type) in
             self?.sp_deal(toolType: type)
         }
@@ -54,7 +55,6 @@ class SPFilmVC: SPBaseVC {
         sp_asyncAfter(time: 0.1) {
             self.sp_setupFilm()
         }
-      
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -143,9 +143,16 @@ extension SPFilmVC {
         }
     }
     fileprivate func sp_setupFilm(play : Bool = false){
+        guard sp_count(array: self.dataArray) > 0 else {
+            self.navigationController?.popViewController(animated: true)
+            return 
+        }
+        
         guard let list = self.dataArray else {
             return
         }
+        
+        
         var imgList = [UIImage]()
         for model in list {
             if let img = model.img{
@@ -191,6 +198,8 @@ extension SPFilmVC {
             sp_dealTime()
         case .zoom:
             sp_dealZoom()
+        case .edit:
+            sp_dealEdit()
         default:
             sp_log(message: "")
         }
@@ -289,6 +298,15 @@ extension SPFilmVC {
         default:
             sp_log(message: "")
         }
+    }
+    fileprivate func sp_dealEdit(){
+        let dragVC = SPDragVC()
+        dragVC.dataArray = self.dataArray
+        dragVC.complete = { [weak self] (array )in
+            self?.dataArray = array as? [SPPhotoModel]
+            self?.sp_setupFilm()
+        }
+        self.navigationController?.pushViewController(dragVC, animated: true)
     }
 }
 

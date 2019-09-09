@@ -17,15 +17,18 @@ class SPLongGraphVC: SPBaseVC {
         view.backgroundColor = UIColor.white
         return view
     }()
+    /// 工具栏
     fileprivate lazy var toolView : SPPhotoToolView = {
         let view = SPPhotoToolView()
+        view.canShowSelect = false
         view.backgroundColor = sp_getMianColor()
-        view.dataArray = [SPToolModel.sp_init(type: .layout),SPToolModel.sp_init(type: .background),SPToolModel.sp_init(type: .frame),SPToolModel.sp_init(type: .text),SPToolModel.sp_init(type: .filter)]
+        view.dataArray = [SPToolModel.sp_init(type: .layout),SPToolModel.sp_init(type: .background),SPToolModel.sp_init(type: .frame),SPToolModel.sp_init(type: .text),SPToolModel.sp_init(type: .filter),SPToolModel.sp_init(type: .edit)]
         view.selectBlock = { [weak self](type) in
             self?.sp_deal(toolType: type)
         }
         return view
     }()
+    /// 布局
     fileprivate lazy var layoutView : SPLongGraphLayoutView = {
         let view = SPLongGraphLayoutView()
         view.backgroundColor = sp_getMianColor()
@@ -35,6 +38,7 @@ class SPLongGraphVC: SPBaseVC {
         view.isHidden = true
         return view
     }()
+    /// 背景
     fileprivate lazy var bgView : SPBackgroundView = {
         let view = SPBackgroundView()
         view.backgroundColor = sp_getMianColor()
@@ -44,6 +48,7 @@ class SPLongGraphVC: SPBaseVC {
         }
         return view
     }()
+    /// 边框
     fileprivate lazy var frameView : SPPhotoFrameView = {
         let view = SPPhotoFrameView()
         view.backgroundColor = sp_getMianColor()
@@ -56,6 +61,7 @@ class SPLongGraphVC: SPBaseVC {
         }
         return view
     }()
+    /// 滤镜
     fileprivate lazy var filterView : SPFilterView = {
         let view =  SPFilterView()
         view.isHidden = true
@@ -66,6 +72,7 @@ class SPLongGraphVC: SPBaseVC {
         view.sp_cornerRadius(radius: filterViewWidth / 2.0)
         return view
     }()
+    /// 输入文本
     fileprivate lazy var textView : SPTextView = {
         let view = SPTextView()
         view.showKeyboardBlock = { [weak self] in
@@ -93,6 +100,7 @@ class SPLongGraphVC: SPBaseVC {
     fileprivate let filterViewWidth :  CGFloat = 60
     fileprivate var marginSpace : CGFloat = 2
     fileprivate var padding : CGFloat = 2
+    fileprivate var selectFilterModel : SPFilterModel?
     fileprivate var tmpEditTextView : SPTextEditView?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,8 +129,19 @@ class SPLongGraphVC: SPBaseVC {
         }))
         self.present(alertController, animated: true, completion: nil)
     }
+  
     /// 赋值
-    fileprivate func sp_setupData(){
+    ///
+    /// - Parameters:
+    ///   - isAll: 是否全部图片更改滤镜
+    ///   - filterIndex: 更改某个图片的滤镜 当isAll为false 时 这个值才有效
+    ///   - changeImg: 是否更改imageview的图片
+    ///   - updateFrame: 是否更新imageview的frame
+    fileprivate func sp_setupData(isAll : Bool = true, filterIndex : NSInteger = 0,changeImg : Bool = false,updateFrame : Bool = true){
+        guard sp_count(array: self.dataArray) > 0 else {
+            self.navigationController?.popViewController(animated: true)
+            return
+        }
         let direction : SPDirection = self.layoutView.direction
         if sp_count(array: self.dataArray) > 0 {
             var tmpView : UIView?
@@ -138,39 +157,60 @@ class SPLongGraphVC: SPBaseVC {
                     imgView.image = model.img
                     self.scrollView.addSubview(imgView)
                 }
-               
                 imgView.tag = imageViewTag + index
-               
-                var size : CGSize = CGSize.zero
-                if let s = model.img?.size {
-                    size = s
-                }
-                imgView.snp.remakeConstraints { (maker) in
-                    if direction == .vertical {
-                        maker.width.equalTo(self.scrollView.snp.width).offset(-marginSpace * 2.0 )
-                        maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
-                        maker.left.equalTo(self.scrollView).offset(marginSpace)
-                        if index == sp_count(array: self.dataArray) - 1 {
-                            maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-marginSpace)
+                let tag = imgView.tag
+                if let image = model.img, changeImg == true{
+                    var ciImg : CIImage?
+                    if let filter = self.selectFilterModel?.filter {
+                        if isAll {
+                            filter.setDefaults()
+                            filter.setValue(CIImage(image: image), forKey: kCIInputImageKey)
+                            ciImg = filter.outputImage
+                        }else if tag == filterIndex {
+                            filter.setDefaults()
+                            filter.setValue(CIImage(image: image), forKey: kCIInputImageKey)
+                            ciImg = filter.outputImage
                         }
-                        if let v = tmpView{
-                            maker.top.equalTo(v.snp.bottom).offset(padding)
-                        }else{
-                            maker.top.equalTo(self.scrollView.snp.top).offset(marginSpace)
+                        if let ci = ciImg {
+                            imgView.image =  UIImage(ciImage: ci)
                         }
-                        maker.height.equalTo(imgView.snp.width).multipliedBy(size.height / size.width)
                     }else{
-                        maker.height.equalTo(self.scrollView.snp.height).offset(-marginSpace * 2.0 )
-                        maker.centerY.equalTo(self.scrollView.snp.centerY).offset(0)
-                        maker.top.equalTo(self.scrollView).offset(marginSpace)
-                        if let v = tmpView {
-                            maker.left.equalTo(v.snp.right).offset(padding)
+                        imgView.image = image
+                    }
+                }
+              
+                if updateFrame {
+                    var size : CGSize = CGSize.zero
+                    if let s = model.img?.size {
+                        size = s
+                    }
+                    imgView.snp.remakeConstraints { (maker) in
+                        if direction == .vertical {
+                            maker.width.equalTo(self.scrollView.snp.width).offset(-marginSpace * 2.0 )
+                            maker.centerX.equalTo(self.scrollView.snp.centerX).offset(0)
+                            maker.left.equalTo(self.scrollView).offset(marginSpace)
+                            if index == sp_count(array: self.dataArray) - 1 {
+                                maker.bottom.equalTo(self.scrollView.snp.bottom).offset(-marginSpace)
+                            }
+                            if let v = tmpView{
+                                maker.top.equalTo(v.snp.bottom).offset(padding)
+                            }else{
+                                maker.top.equalTo(self.scrollView.snp.top).offset(marginSpace)
+                            }
+                            maker.height.equalTo(imgView.snp.width).multipliedBy(size.height / size.width)
                         }else{
-                            maker.left.equalTo(self.scrollView.snp.left).offset(marginSpace)
-                        }
-                        maker.width.equalTo(imgView.snp.height).multipliedBy(size.width / size.height)
-                        if index == sp_count(array: self.dataArray) - 1 {
-                            maker.right.equalTo(self.scrollView.snp.right).offset(-marginSpace)
+                            maker.height.equalTo(self.scrollView.snp.height).offset(-marginSpace * 2.0 )
+                            maker.centerY.equalTo(self.scrollView.snp.centerY).offset(0)
+                            maker.top.equalTo(self.scrollView).offset(marginSpace)
+                            if let v = tmpView {
+                                maker.left.equalTo(v.snp.right).offset(padding)
+                            }else{
+                                maker.left.equalTo(self.scrollView.snp.left).offset(marginSpace)
+                            }
+                            maker.width.equalTo(imgView.snp.height).multipliedBy(size.width / size.height)
+                            if index == sp_count(array: self.dataArray) - 1 {
+                                maker.right.equalTo(self.scrollView.snp.right).offset(-marginSpace)
+                            }
                         }
                     }
                 }
@@ -264,7 +304,6 @@ extension SPLongGraphVC{
         if let image = UIImage.sp_image(view: self.scrollView) {
               SPShare.sp_share(imgs: [image], vc: self)
         }
-      
     }
     @objc func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer)
     {
@@ -302,6 +341,9 @@ extension SPLongGraphVC{
         case .text:
             sp_allHidden(otherView: self.textView)
             sp_dealText()
+        case .edit:
+            sp_allHidden(otherView: nil)
+            sp_dealEdit()
         default:
              sp_log(message: "")
         }
@@ -353,6 +395,17 @@ extension SPLongGraphVC{
         self.tmpEditTextView = view
         view.sp_edit()
     }
+    fileprivate func sp_dealEdit(){
+        let dragVC = SPDragVC()
+        dragVC.dataArray = self.dataArray
+        dragVC.complete = { [weak self] (array) in
+            if let list : [SPPhotoModel] = array as? [SPPhotoModel]{
+                self?.dataArray = list
+                self?.sp_setupData(isAll: true, filterIndex: 0, changeImg: true)
+            }
+        }
+        self.navigationController?.pushViewController(dragVC, animated: true)
+    }
     /// 处理scrollview的背景颜色或背景图片
     ///
     /// - Parameters:
@@ -382,36 +435,8 @@ extension SPLongGraphVC{
     ///   - isAll: 是否全部的图片
     ///   - index: 不是全部图片是哪个图片
     fileprivate func sp_deal(img filterModel : SPFilterModel,isAll : Bool, index : NSInteger){
-        self.scrollView.subviews.forEach { (view) in
-            if let imageView = view as? UIImageView {
-                let tag = imageView.tag
-                let index = tag - imageViewTag
-                if index >= 0 , index < sp_count(array: self.dataArray){
-                    let model = self.dataArray?[tag - imageViewTag]
-                    if let image = model?.img {
-                        var ciImg : CIImage?
-                        if let filter = filterModel.filter {
-                            if isAll {
-                                filter.setDefaults()
-                                filter.setValue(CIImage(image: image), forKey: kCIInputImageKey)
-                                ciImg = filter.outputImage
-                            }else if tag == index {
-                                filter.setDefaults()
-                                filter.setValue(CIImage(image: image), forKey: kCIInputImageKey)
-                                ciImg = filter.outputImage
-                            }
-                            if let ci = ciImg {
-                                imageView.image =  UIImage(ciImage: ci)
-                            }
-                        }else{
-                            imageView.image = image
-                        }
-                        
-                       
-                    }
-                }
-            }
-        }
+        self.selectFilterModel = filterModel
+        sp_setupData(isAll: true, filterIndex: index + imageViewTag, changeImg: true,updateFrame: false)
     }
     
     /// 处理工具view是否隐藏

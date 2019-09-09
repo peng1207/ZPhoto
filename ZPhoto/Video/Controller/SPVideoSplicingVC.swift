@@ -8,13 +8,38 @@
 
 import Foundation
 import SnapKit
+import SPCommonLibrary
 /// 视频拼接
 class SPVideoSplicingVC: SPBaseVC {
     var selectArray : [SPVideoModel]?
-    
+    fileprivate lazy var toolView : SPPhotoToolView = {
+        let view = SPPhotoToolView()
+        view.canShowSelect = false
+        view.dataArray = [SPToolModel.sp_init(type: .layout),SPToolModel.sp_init(type: .edit)]
+        view.selectBlock = { [weak self] (type) in
+            self?.sp_deal(toolType: type)
+        }
+        return view
+    }()
+    fileprivate lazy var videoPlayView : SPVideoPlayView = {
+        let view = SPVideoPlayView()
+        return view
+    }()
+    fileprivate lazy var rightItemView : SPNavItemBtnView = {
+        let view = SPNavItemBtnView()
+        view.frame = CGRect(x: 0, y: 0, width: 80, height: 44)
+      
+        view.clickBlock = { [weak self] (type) in
+            self?.sp_deal(btnType: type)
+        }
+        return view
+    }()
+    fileprivate var videoModel : SPVideoModel?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        self.videoModel = self.selectArray?.first
+        sp_setupData()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -30,6 +55,9 @@ class SPVideoSplicingVC: SPBaseVC {
     }
     /// 创建UI
     override func sp_setupUI() {
+        self.view.addSubview(self.videoPlayView)
+        self.view.addSubview(self.toolView)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.rightItemView)
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -38,9 +66,87 @@ class SPVideoSplicingVC: SPBaseVC {
     }
     /// 添加约束
     fileprivate func sp_addConstraint(){
-        
+        self.videoPlayView.snp.makeConstraints { (maker) in
+            maker.left.right.top.equalTo(self.view).offset(0)
+            maker.bottom.equalTo(self.toolView.snp.top).offset(0)
+        }
+        self.toolView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.equalTo(70)
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+            }
+        }
     }
     deinit {
         
     }
+}
+extension SPVideoSplicingVC {
+    fileprivate func sp_deal(toolType : SPToolType){
+        switch toolType {
+        case .layout:
+            sp_dealLayout()
+        case .edit:
+            sp_dealEdit()
+        default:
+            sp_log(message: "")
+        }
+    }
+    fileprivate func sp_dealLayout(){
+        
+    }
+    fileprivate func sp_dealEdit(){
+        let dragVC = SPDragVC()
+        dragVC.dataArray = self.selectArray
+        dragVC.complete = { [weak self] (array) in
+            if let list : [SPVideoModel] = array as? [SPVideoModel]{
+                self?.selectArray = list
+            }
+        }
+        self.navigationController?.pushViewController(dragVC, animated: true)
+    }
+    fileprivate func sp_setupData(){
+        self.videoPlayView.videoModel = self.videoModel
+    }
+    fileprivate func sp_deal(btnType : SPButtonClickType){
+        switch btnType {
+        case .save:
+            sp_save()
+        case .share:
+            sp_share()
+        default:
+            sp_log(message: "")
+        }
+    }
+    fileprivate func sp_save(){
+        if let path = self.videoModel?.url?.path {
+            if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(path){
+                UISaveVideoAtPathToSavedPhotosAlbum(path, self, #selector(sp_video(path:error:contextInfo:)), nil)
+            }
+        }
+    }
+    @objc func sp_video(path : String?,error : NSError?,contextInfo : Any?){
+        
+        if let e = error as NSError?
+        {
+            print(e)
+        }
+        else
+        {
+            let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "SAVE_SUCCESS"), preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "OK"), style: UIAlertAction.Style.default, handler: { (action) in
+                
+            }))
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    fileprivate func sp_share(){
+        if let url = self.videoModel?.url {
+            SPShare.sp_share(videoUrls: [url], vc: self)
+        }
+    }
+    
 }

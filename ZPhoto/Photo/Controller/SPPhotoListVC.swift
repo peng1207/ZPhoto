@@ -77,11 +77,11 @@ class SPPhotoListVC: SPBaseVC {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 2
         layout.minimumInteritemSpacing = 2
-        layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 2, bottom: 5, right: 2)
         self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
-        self.collectionView.backgroundColor = self.view.backgroundColor
+        self.collectionView.backgroundColor = UIColor.clear
         self.collectionView.alwaysBounceVertical = true
         self.collectionView.register(SPPhotoListCollectionCell.self, forCellWithReuseIdentifier: cellID)
         self.collectionView.showsVerticalScrollIndicator = false
@@ -177,7 +177,7 @@ extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,U
         }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = NSInteger( (collectionView.frame.size.width - 6.0) / 4.0)
+        let width = NSInteger( (collectionView.frame.size.width - 6.0 - 4.0) / 4.0)
         return CGSize(width: width, height: width)
     }
 }

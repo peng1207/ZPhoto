@@ -32,9 +32,10 @@ import SPCommonLibrary
         let label = UILabel()
         label.text = SPLanguageChange.sp_getString(key: "NO_VIDEO_TIP")
         label.numberOfLines = 0;
-        label.font =  sp_fontSize(fontSize: 14)
+        label.font =  sp_fontSize(fontSize: 15)
         label.isHidden = true
         label.textAlignment = .center
+        label.textColor = UIColor.white
         return label
     }()
     
@@ -44,11 +45,7 @@ import SPCommonLibrary
         self.videoData()
         self.sendNotification()
     }
-//    /// 点击返回
-//    override func sp_clickBack(){
-//        super.p
-////        self.dismiss(animated: true, completion: nil)
-//    }
+ 
 }
 // MARK: -- UI
 extension SPVideoListVC {
@@ -64,14 +61,14 @@ extension SPVideoListVC {
         self.videoCollectionView.delegate = self
         self.videoCollectionView.dataSource = self
         self.videoCollectionView.register(SPVideoCollectionCell.self, forCellWithReuseIdentifier: identify)
-        self.videoCollectionView.backgroundColor =  self.view.backgroundColor
+        self.videoCollectionView.backgroundColor = UIColor.clear
         self.addConstraintToView()
     }
     /**< 创建导航栏上控件 */
     fileprivate func setupNavUI(){
  
         let addButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        addButton.addTarget(self, action: #selector(clickAdd), for: .touchUpInside)
+        addButton.addTarget(self, action: #selector(sp_add), for: .touchUpInside)
     
         addButton.setImage(UIImage(named: "add_white"), for: UIControl.State.normal)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: addButton)
@@ -81,11 +78,6 @@ extension SPVideoListVC {
         self.videoCollectionView.snp.makeConstraints { (maker) in
             maker.left.top.right.equalTo(self.view).offset(0)
             maker.bottom.equalTo(self.view.snp.bottom).offset(0)
-//            if #available(iOS 11.0, *) {
-//                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
-//            } else {
-//                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
-//            }
         }
         self.noDataView.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.view).offset(20)
@@ -98,13 +90,13 @@ extension SPVideoListVC {
 // MARK: -- action
 extension SPVideoListVC {
   
-    @objc fileprivate func clickAdd(){
+    @objc fileprivate func sp_add(){
         self.present(SPRecordVideoVC(), animated: true, completion: nil)
     }
     /**
      点击删除
      */
-    fileprivate func clickDetete(videoModel:SPVideoModel?){
+    fileprivate func sp_detete(videoModel:SPVideoModel?){
         guard let model = videoModel else {
             return
         }
@@ -156,8 +148,8 @@ extension SPVideoListVC : UICollectionViewDelegate,UICollectionViewDataSource {
               cell.videoModel = self.videoDataArray?[indexPath.row]
         }
         cell.clickComplete = {
-            [unowned self]  (videoModel:SPVideoModel?) in
-            self.clickDetete(videoModel: videoModel)
+            [weak self]  (videoModel:SPVideoModel?) in
+            self?.sp_detete(videoModel: videoModel)
         }
         cell.shareComplete = { [weak self] (videoModel:SPVideoModel?) in
             self?.sp_clickShare(videoModel: videoModel)
@@ -170,9 +162,6 @@ extension SPVideoListVC : UICollectionViewDelegate,UICollectionViewDataSource {
             let videoPlayVC = SPVideoPlayVC()
             videoPlayVC.videoModel = videoModel
             self.present(videoPlayVC, animated: true, completion: nil)
-//            let upendVC = SPVideoUpendVC()
-//            upendVC.videoModel = videoModel
-//            self.navigationController?.pushViewController(upendVC, animated: true)
         }
     }
 }
@@ -181,7 +170,7 @@ extension SPVideoListVC {
     /**< 获取视频数据  */
     @objc fileprivate func videoData(){
         sp_sync {
-            let array = SPVideoHelp.videoFile()
+            let array = SPVideoHelp.sp_videoFile()
             sp_mainQueue {
                 self.videoDataArray = array
                 self.reloadData()

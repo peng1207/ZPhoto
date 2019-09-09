@@ -27,7 +27,10 @@ class SPPhotoToolView:  UIView{
         }
     }
     var selectBlock : SPPhotoToolComplete?
+    /// 是否平分 按数组的进行平分
     var isAverage : Bool = false
+    /// 是否展示选中的图片
+    var canShowSelect : Bool = true
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.sp_setupUI()
@@ -76,7 +79,7 @@ extension SPPhotoToolView : UICollectionViewDelegate , UICollectionViewDataSourc
         let cell : SPSplicingToolCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellID, for: indexPath) as! SPSplicingToolCollectionCell
         if indexPath.row < sp_count(array:  self.dataArray) {
             if let model = self.dataArray?[indexPath.row] {
-                if let select = self.selectType , select == model.type {
+                if canShowSelect == true, let select = self.selectType , select == model.type {
                     cell.isSelect = true
                 }else{
                     cell.isSelect = false

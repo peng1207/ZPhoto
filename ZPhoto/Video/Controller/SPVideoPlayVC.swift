@@ -14,58 +14,73 @@ import SPCommonLibrary
 class SPVideoPlayVC : SPBaseVC {
     var videoModel : SPVideoModel?
     
-    lazy var videoPlayView : SPVideoPlayView? = {
+    fileprivate lazy var videoPlayView : SPVideoPlayView = {
         let playView = SPVideoPlayView()
         return playView
     }()
-    lazy fileprivate var closeBtn : UIButton = {
+    fileprivate lazy var closeBtn : UIButton = {
         let button = UIButton(type: .custom)
         button.setBackgroundImage(UIImage(named: "delete"), for: .normal)
         button.frame = CGRect(x: 10, y: sp_statusBarHeight(), width: 30, height: 30)
-        button.clipsToBounds = true 
+        button.clipsToBounds = true
+        button.addTarget(self, action: #selector(sp_close), for: UIControl.Event.touchUpInside)
         return button
     }()
-    
+    fileprivate lazy var shareBtn : UIButton = {
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "share"), for: UIControl.State.normal)
+        btn.addTarget(self, action: #selector(sp_share), for: UIControl.Event.touchUpInside)
+        return btn
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupUI()
+         sp_setupUI()
+        sp_setupData()
     }
+    fileprivate func sp_setupData(){
+        self.videoPlayView.videoModel = self.videoModel
+    }
+    override func sp_setupUI() {
+        
+        self.view.addSubview(self.videoPlayView)
+        self.view.addSubview(self.closeBtn)
+        self.view.addSubview(self.shareBtn)
+        sp_addConstraint()
+    }
+    fileprivate func sp_addConstraint(){
+        self.videoPlayView.snp.makeConstraints({ (maker) in
+            maker.left.right.top.bottom.equalTo(self.view).offset(0)
+        })
+        self.closeBtn.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.view).offset(10)
+            maker.top.equalTo(self.view).offset(sp_statusBarHeight() + 7)
+            maker.width.height.equalTo(30)
+        }
+        self.shareBtn.snp.makeConstraints { (maker) in
+            maker.right.equalTo(self.view).offset(-10)
+            maker.width.height.top.equalTo(self.closeBtn).offset(0)
+        }
+    }
+    
     deinit {
         self.removeAllView()
     }
     fileprivate func removeAllView(){
-        videoPlayView?.stopTime()
-         videoPlayView = nil
+        videoPlayView.stopTime()
     }
 }
-// MARK: -- UI
-extension SPVideoPlayVC {
-    /**< 创建UI */
-    fileprivate func setupUI(){
-        self.setupPlayer()
-        self.setupCloseBtn()
-    }
-    /**< 创建视频播放器 */
-   private func setupPlayer(){
-    
-        self.view.addSubview(self.videoPlayView!)
-        self.videoPlayView?.snp.makeConstraints({ (maker) in
-            maker.top.left.right.equalTo(self.view).offset(0)
-              maker.bottom.equalTo(self.view).offset(0);
-        })
-        self.videoPlayView?.videoModel = videoModel
-    }
-    private func setupCloseBtn(){
-        self.view.addSubview(closeBtn)
-        closeBtn.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
-    }
-}
+
 // MARK: -- action
 extension SPVideoPlayVC{
-    @objc func closeAction(){
+    @objc fileprivate func sp_close(){
         self.dismiss(animated: true) {
               self.removeAllView()
+        }
+    }
+    @objc fileprivate func sp_share(){
+        if let url = self.videoModel?.url {
+            SPShare.sp_share(videoUrls: [url], vc: self)
         }
     }
 }
