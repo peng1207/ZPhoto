@@ -230,7 +230,7 @@ extension SPPhotoListVC {
     }
     fileprivate func sp_maxNumTips(){
         let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: "\(SPLanguageChange.sp_getString(key: "MAXSELECT"))\(sp_getString(string: self.selectMaxCount))\(SPLanguageChange.sp_getString(key: "PICTURES"))", preferredStyle: UIAlertController.Style.alert)
-        alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel, handler: { (action) in
+        alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "KNOW"), style: UIAlertAction.Style.cancel, handler: { (action) in
             
         }))
         self.present(alertController, animated: true, completion: nil)

@@ -67,3 +67,5 @@
 "ANIMATION_TOBOOK" = "PULL";
 "ANIMATION_HOLE" = "hole";
 "CHOOSE_VIDEO" = "Choose Video";
+"Exceed_MAX_NUM" = "Over the maximum quantity";
+"KNOW" = "know";

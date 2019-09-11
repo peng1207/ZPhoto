@@ -38,7 +38,7 @@ class SPPhotoSplicingHelp {
     ///   - tyep: 类型
     ///   - value: 参数
     /// - Returns: 大小和间距
-    class func sp_frameAndSpace(tyep : SPSPlicingType,value : SPPhotoSplicingStruct)->SPPhotoSplicingLayout{
+    class func sp_frameAndSpace(tyep : SPPhotoSPlicingType,value : SPPhotoSplicingStruct)->SPPhotoSplicingLayout{
         var retureValue : SPPhotoSplicingLayout = (CGRect.zero,(0,0,0,0))
         switch tyep {
         case .nine(let t):
@@ -77,7 +77,7 @@ class SPPhotoSplicingHelp {
     ///
     /// - Parameter count: 数量
     /// - Returns: 布局
-    class func sp_getSplicingLayout(count : Int) ->[SPSPlicingType]{
+    class func sp_getSplicingLayout(count : Int) ->[SPPhotoSPlicingType]{
         if count == 9 {
             return [.nine(nineType: .one),.nine(nineType: .two),.nine(nineType: .three),.nine(nineType: .four),.nine(nineType: .five),.nine(nineType: .six),.nine(nineType: .seven),.nine(nineType: .eight),.nine(nineType: .nine),.nine(nineType: .ten),.nine(nineType: .eleven)]
         }else if count == 8 {
@@ -101,7 +101,7 @@ class SPPhotoSplicingHelp {
     }
     class func sp_getLayoutType(index : Int,
                                 count : Int,
-                                type:SPSPlicingType) -> SPPictureLayoutType{
+                                type:SPPhotoSPlicingType) -> SPPictureLayoutType{
         var layoutType : SPPictureLayoutType = .rectangle
         switch type {
         case .nine(let t):
@@ -115,7 +115,7 @@ class SPPhotoSplicingHelp {
     }
     private class func sp_nineLayoutType(index : Int,
                                          count : Int,
-                                         type:SPSPlicingType.NineType) -> SPPictureLayoutType{
+                                         type:SPPhotoSPlicingType.NineType) -> SPPictureLayoutType{
         var layoutType : SPPictureLayoutType = .rectangle
         switch type {
         case .one:

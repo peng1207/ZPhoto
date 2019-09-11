@@ -9,7 +9,7 @@
 import Foundation
 
 /// 日期格式
-enum SP_TimeFormat: String {
+enum SPTimeFormat: String {
     ///  年月日 时分秒
     case default_time   = "yyyy-MM-dd HH:mm:ss"
     ///  年月日 时分 （取后两位 年）
@@ -187,8 +187,8 @@ enum SPPictureLayoutType  {
     case gear(type:Gear)
     
 }
-
-enum SPSPlicingType {
+/// 图片拼接类型
+enum SPPhotoSPlicingType {
     case one(tyep : SPPictureLayoutType)
     
     enum TwoType {
@@ -200,6 +200,7 @@ enum SPSPlicingType {
         case six
         case seven
     }
+    /// 两张图片拼接
     case two(type : TwoType)
     enum ThreeType {
         case one
@@ -210,6 +211,7 @@ enum SPSPlicingType {
         case six
   
     }
+     /// 三张图片拼接
     case three(type : ThreeType)
     enum FourType {
         case one
@@ -231,6 +233,7 @@ enum SPSPlicingType {
         case seventeen
         case eighteen
     }
+     /// 四张图片拼接
     case four(type : FourType)
     enum FiveType {
         case one
@@ -252,6 +255,7 @@ enum SPSPlicingType {
         case seventeen
         case eighteen
     }
+     /// 五张图片拼接
     case five(type : FiveType)
     enum SixType {
         case one
@@ -267,6 +271,7 @@ enum SPSPlicingType {
         case eleven
         case twelve
     }
+     /// 六张图片拼接
     case six(type : SixType)
     enum SevenType {
         case one
@@ -279,6 +284,7 @@ enum SPSPlicingType {
         case eight
          
     }
+     /// 七张图片拼接
     case seven(tyep : SevenType)
     enum EightType {
         case one
@@ -294,7 +300,7 @@ enum SPSPlicingType {
         case eleven
         case twelve
     }
-    
+    /// 八张图片拼接
     case eight(type : EightType)
     
     enum NineType {
@@ -310,6 +316,7 @@ enum SPSPlicingType {
         case ten
         case eleven
     }
+     /// 九张图片拼接
     case nine(nineType:NineType)
 }
 /// 方向
@@ -336,6 +343,7 @@ enum SPAnimationType {
     /// 打洞
     case hole
 }
+///  拍照或者录制 布局类型
 enum SPVideoLayoutType {
     /// 没有布局
     case none
@@ -347,4 +355,19 @@ enum SPVideoLayoutType {
     case sextant
     /// 九等分
     case nineEqualparts
+}
+/// 视频拼接类型
+enum SPVideoSplicingType {
+    case none
+    case two_vertical
+    case two_cover
+    case three_top
+    case three_bottom
+    case four
+    case five
+    case six
+    case six_pyramid
+    case seven
+    case eight
+    case nine
 }

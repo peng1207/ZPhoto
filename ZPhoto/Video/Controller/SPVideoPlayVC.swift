@@ -64,9 +64,9 @@ class SPVideoPlayVC : SPBaseVC {
     }
     
     deinit {
-        self.removeAllView()
+        self.sp_removeAllView()
     }
-    fileprivate func removeAllView(){
+     func sp_removeAllView(){
         videoPlayView.stopTime()
     }
 }
@@ -75,7 +75,7 @@ class SPVideoPlayVC : SPBaseVC {
 extension SPVideoPlayVC{
     @objc fileprivate func sp_close(){
         self.dismiss(animated: true) {
-              self.removeAllView()
+              self.sp_removeAllView()
         }
     }
     @objc fileprivate func sp_share(){

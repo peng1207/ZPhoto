@@ -13,13 +13,13 @@ import SPCommonLibrary
 
 class SPPhotoSplicingNine {
     
-    class func sp_frameAndSpace(type:SPSPlicingType.NineType,value : SPPhotoSplicingStruct)->SPPhotoSplicingLayout{
+    class func sp_frameAndSpace(type:SPPhotoSPlicingType.NineType,value : SPPhotoSplicingStruct)->SPPhotoSplicingLayout{
         let frame = sp_frame(type: type, value: value)
         let space = sp_space(type: type, value: value)
         return (frame,space)
     }
     
-    private class func sp_frame(type : SPSPlicingType.NineType,value : SPPhotoSplicingStruct)->CGRect{
+    private class func sp_frame(type : SPPhotoSPlicingType.NineType,value : SPPhotoSplicingStruct)->CGRect{
         var frame = CGRect.zero
         let width = value.width
         let height = value.height
@@ -272,7 +272,7 @@ class SPPhotoSplicingNine {
         }
         return frame
     }
-    private class func sp_space(type : SPSPlicingType.NineType,value : SPPhotoSplicingStruct)->SPSpace{
+    private class func sp_space(type : SPPhotoSPlicingType.NineType,value : SPPhotoSplicingStruct)->SPSpace{
         var left : CGFloat = 0
         var top : CGFloat = 0
         var right : CGFloat = 0

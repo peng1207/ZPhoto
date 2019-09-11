@@ -15,18 +15,17 @@ class  SPVideoEditVC : SPBaseVC {
         let view = SPVideoScheduleView()
         return view
     }()
-    lazy fileprivate var filter : CIFilter! = {
-        return CIFilter.photoEffectNoir()
-    }()
+  
     lazy fileprivate var  showImage : UIImageView = {
         return UIImageView()
     }()
     
     var videoModel : SPVideoModel?
-    
+    fileprivate var valueData : SPVideoSampleBuffer!
     override func viewDidLoad() {
         super.viewDidLoad()
         sp_setupUI()
+        sp_setupData()
     }
     /// 添加UI
     override func sp_setupUI(){
@@ -59,5 +58,8 @@ extension SPVideoEditVC {
         let videoPalyVC = SPVideoPlayVC()
         videoPalyVC.videoModel = videoModel
         self.navigationController?.pushViewController(videoPalyVC, animated: true)
+    }
+    fileprivate func sp_setupData(){
+//        self.valueData = SPVideoHelp.sp_videoBuffer(asset: self.videoModel?.asset, isReadAudio: false)
     }
 }

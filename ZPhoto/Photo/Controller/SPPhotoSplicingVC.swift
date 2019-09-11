@@ -13,9 +13,9 @@ import SPCommonLibrary
 /// 拼接
 class SPPhotoSplicingVC: SPBaseVC {
     var dataArray : [SPPhotoModel]!
-    fileprivate var typeList : [SPSPlicingType]!
+    fileprivate var typeList : [SPPhotoSPlicingType]!
     fileprivate var colorList : [UIColor] = SPPhotoSplicingHelp.sp_getDefaultColor()
-    fileprivate var selectType : SPSPlicingType?
+    fileprivate var selectType : SPPhotoSPlicingType?
     fileprivate lazy var saveBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "SAVE"), for: UIControl.State.normal)
@@ -250,7 +250,7 @@ extension SPPhotoSplicingVC {
     /// 处理选择的布局类型
     ///
     /// - Parameter type: 类型
-    fileprivate func sp_deal(type : SPSPlicingType){
+    fileprivate func sp_deal(type : SPPhotoSPlicingType){
         self.selectType = type
         sp_setupData()
     }

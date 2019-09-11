@@ -44,6 +44,7 @@ class SPVideoUpendVC: SPBaseVC {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+         self.videoPlayView.stopTime()
   
     }
     override func viewDidDisappear(_ animated: Bool) {

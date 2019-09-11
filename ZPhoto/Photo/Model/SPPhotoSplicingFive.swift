@@ -11,12 +11,12 @@ import UIKit
 import SPCommonLibrary
 
 class  SPPhotoSplicingFive {
-    class func sp_frameAndSpace(type:SPSPlicingType.FiveType,value : SPPhotoSplicingStruct)->SPPhotoSplicingLayout{
+    class func sp_frameAndSpace(type:SPPhotoSPlicingType.FiveType,value : SPPhotoSplicingStruct)->SPPhotoSplicingLayout{
         let frame = sp_frame(type: type, value: value)
         let space = sp_space(type: type, value: value)
         return (frame,space)
     }
-    private class func sp_frame(type : SPSPlicingType.FiveType,value : SPPhotoSplicingStruct)->CGRect{
+    private class func sp_frame(type : SPPhotoSPlicingType.FiveType,value : SPPhotoSplicingStruct)->CGRect{
         var x : CGFloat = 0
         var y :  CGFloat = 0
         var w : CGFloat = 0
@@ -437,7 +437,7 @@ class  SPPhotoSplicingFive {
           return CGRect(x: x, y: y, width: w, height: h)
     }
     //MARK: - space
-    private class func sp_space(type : SPSPlicingType.FiveType,value : SPPhotoSplicingStruct)->SPSpace{
+    private class func sp_space(type : SPPhotoSPlicingType.FiveType,value : SPPhotoSplicingStruct)->SPSpace{
         var left : CGFloat = 0
         var top : CGFloat = 0
         var right : CGFloat = 0

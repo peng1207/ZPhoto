@@ -11,13 +11,13 @@ import UIKit
 import SnapKit
 import SPCommonLibrary
 
-typealias SPLayoutSelectComplete = (_ type :SPSPlicingType)->Void
+typealias SPLayoutSelectComplete = (_ type :SPPhotoSPlicingType)->Void
 
 class SPLayoutView:  UIView{
     
     fileprivate var collectionView : UICollectionView!
     fileprivate let cellID = "layoutCellID"
-    fileprivate var typeList : [SPSPlicingType]?
+    fileprivate var typeList : [SPPhotoSPlicingType]?
     fileprivate var totalCount : Int = 0
     fileprivate lazy var closeBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
@@ -34,7 +34,7 @@ class SPLayoutView:  UIView{
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func sp_update(typeList : [SPSPlicingType]? , count : Int ){
+    func sp_update(typeList : [SPPhotoSPlicingType]? , count : Int ){
         self.typeList = typeList
         self.totalCount = count
         self.collectionView.reloadData()
@@ -105,7 +105,7 @@ extension SPLayoutView : UICollectionViewDelegate ,UICollectionViewDataSource,UI
             }
         }
     }
-    fileprivate func sp_dealSelect(type : SPSPlicingType){
+    fileprivate func sp_dealSelect(type : SPPhotoSPlicingType){
         guard let block = self.selectBlock else {
             return
         }
@@ -115,7 +115,7 @@ extension SPLayoutView : UICollectionViewDelegate ,UICollectionViewDataSource,UI
 
 class SPLayoutCollectionCell: UICollectionViewCell {
     
-    var type : SPSPlicingType?
+    var type : SPPhotoSPlicingType?
     var count : Int = 0
     fileprivate let LayoutTag = 100
     override init(frame: CGRect) {

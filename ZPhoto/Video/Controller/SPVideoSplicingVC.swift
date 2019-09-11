@@ -9,13 +9,18 @@
 import Foundation
 import SnapKit
 import SPCommonLibrary
+import AVFoundation
 /// 视频拼接
 class SPVideoSplicingVC: SPBaseVC {
     var selectArray : [SPVideoModel]?
+   
     fileprivate lazy var toolView : SPPhotoToolView = {
         let view = SPPhotoToolView()
         view.canShowSelect = false
-        view.dataArray = [SPToolModel.sp_init(type: .layout),SPToolModel.sp_init(type: .edit)]
+        view.dataArray = [
+//            SPToolModel.sp_init(type: .layout),
+            SPToolModel.sp_init(type: .edit)
+        ]
         view.selectBlock = { [weak self] (type) in
             self?.sp_deal(toolType: type)
         }
@@ -35,11 +40,13 @@ class SPVideoSplicingVC: SPBaseVC {
         return view
     }()
     fileprivate var videoModel : SPVideoModel?
+    fileprivate var type : SPVideoSplicingType = .nine
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
-        self.videoModel = self.selectArray?.first
-        sp_setupData()
+        sp_asyncAfter(time: 0.1) {
+            self.sp_setupSplicing()
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -49,6 +56,7 @@ class SPVideoSplicingVC: SPBaseVC {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+         self.videoPlayView.stopTime()
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -85,6 +93,29 @@ class SPVideoSplicingVC: SPBaseVC {
     }
 }
 extension SPVideoSplicingVC {
+    
+    /// 获取拼接的数据
+    fileprivate func sp_setupSplicing(){
+        SPVideoSplicingHelp.sp_splicing(videoModelList: self.selectArray, type: self.type, outputPath: "\(kVideoTempDirectory)/temp.mp4") { [weak self](asset, filePath) in
+            self?.sp_deal(splicingComplete: asset, filePath: filePath)
+        }
+    }
+    /// 处理拼接后的数据
+    ///
+    /// - Parameters:
+    ///   - asset: 视频数据
+    ///   - filePath: 保存路径
+    fileprivate func sp_deal(splicingComplete asset :AVAsset? ,filePath : String){
+        if asset != nil {
+            self.videoModel = SPVideoModel()
+            self.videoModel?.url = URL(fileURLWithPath: filePath)
+            if self.videoModel?.asset == nil {
+                self.videoModel?.asset = asset
+            }
+            sp_setupData()
+        }
+    }
+    
     fileprivate func sp_deal(toolType : SPToolType){
         switch toolType {
         case .layout:
@@ -104,12 +135,15 @@ extension SPVideoSplicingVC {
         dragVC.complete = { [weak self] (array) in
             if let list : [SPVideoModel] = array as? [SPVideoModel]{
                 self?.selectArray = list
+                self?.sp_setupSplicing()
             }
         }
         self.navigationController?.pushViewController(dragVC, animated: true)
     }
     fileprivate func sp_setupData(){
-        self.videoPlayView.videoModel = self.videoModel
+        sp_mainQueue {
+            self.videoPlayView.videoModel = self.videoModel
+        }
     }
     fileprivate func sp_deal(btnType : SPButtonClickType){
         switch btnType {

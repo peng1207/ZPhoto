@@ -11,7 +11,7 @@ import UIKit
 import SnapKit
 import SPCommonLibrary
 
-class SPPhotoSelectView:  UIView{
+class SPSelectView:  UIView{
     
     fileprivate lazy var numLabel : UILabel = {
         let label = UILabel()
@@ -28,7 +28,7 @@ class SPPhotoSelectView:  UIView{
         btn.addTarget(self, action: #selector(sp_clickClear), for: UIControl.Event.touchUpInside)
         return btn
     }()
-    var dataArray : [SPPhotoModel] = [SPPhotoModel]()
+    var dataArray : [Any] = [Any]()
     fileprivate var collectionView : UICollectionView!
     fileprivate let cellID = "SPPhotoSplicingSelectCollectionCellID"
     var clearBlock : SPBtnComplete?
@@ -89,7 +89,7 @@ class SPPhotoSelectView:  UIView{
         
     }
 }
-extension SPPhotoSelectView : UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+extension SPSelectView : UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sp_count(array:  self.dataArray) > 0 ? 1 : 0
     }
@@ -120,7 +120,7 @@ extension SPPhotoSelectView : UICollectionViewDelegate,UICollectionViewDataSourc
     }
 }
 
-extension SPPhotoSelectView {
+extension SPSelectView {
     
     fileprivate func sp_dealDelete(index: Int){
         if let block = self.indexBlock {
@@ -143,7 +143,9 @@ extension SPPhotoSelectView {
     ///
     /// - Parameter index: 位置
     fileprivate func sp_remove(index:Int){
-        self.dataArray.sp_remove(of: index)
+        if index < sp_count(array: self.dataArray){
+            self.dataArray.remove(at: index)
+        }
         self.collectionView.reloadData()
         sp_dealNum()
     }
@@ -151,7 +153,7 @@ extension SPPhotoSelectView {
     /// 添加数据
     ///
     /// - Parameter model: 数据源
-    func sp_add(model : SPPhotoModel){
+    func sp_add(model : Any){
         self.dataArray.append(model)
         self.collectionView.reloadData()
         sp_asyncAfter(time: 0.2) {
@@ -181,7 +183,7 @@ fileprivate class SPPhotoSplicingSelectCollectionCell: UICollectionViewCell {
         btn.addTarget(self, action: #selector(sp_clickDelete), for: UIControl.Event.touchUpInside)
         return btn
     }()
-    var model : SPPhotoModel? {
+    var model : Any? {
         didSet{
             self.sp_setupData()
         }
@@ -197,7 +199,14 @@ fileprivate class SPPhotoSplicingSelectCollectionCell: UICollectionViewCell {
     }
     /// 赋值
     fileprivate func sp_setupData(){
-              self.iconImgView.image = self.model?.img
+        if  let m = self.model as? SPPhotoModel {
+             self.iconImgView.image = m.img
+        }else if let m = self.model as? SPVideoModel{
+            self.iconImgView.image = m.thumbnailImage
+        }else{
+            self.iconImgView.image = nil
+        }
+       
     }
     @objc func sp_clickDelete(){
         guard let block = self.indexBlock else {

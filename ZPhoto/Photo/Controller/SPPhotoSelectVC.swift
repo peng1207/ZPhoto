@@ -33,8 +33,8 @@ class SPPhotoSelectVC: SPBaseVC {
         return vc
     }()
     
-    fileprivate lazy var selectView : SPPhotoSelectView = {
-        let view = SPPhotoSelectView()
+    fileprivate lazy var selectView : SPSelectView = {
+        let view = SPSelectView()
         view.clearBlock = { [weak self] in
            self?.sp_clearAll()
         }
@@ -124,7 +124,10 @@ extension SPPhotoSelectVC : CAAnimationDelegate{
     /// 清除所有选中的
     func sp_clearAll(){
         for model in self.selectView.dataArray {
-             self.sp_addImgAnimation(img: model.img ,point: self.photoListVC.sp_getCellPoint(model: model),isDow: false)
+            if let m = model as? SPPhotoModel{
+                self.sp_addImgAnimation(img: m.img ,point: self.photoListVC.sp_getCellPoint(model: m),isDow: false)
+            }
+           
         }
         self.photoListVC.sp_clearSelect()
     }
@@ -133,8 +136,9 @@ extension SPPhotoSelectVC : CAAnimationDelegate{
     /// - Parameter index: 位置
     func sp_removeIndex(index : Int){
         if index < self.selectView.dataArray.count {
-            let model = self.selectView.dataArray[index]
-            sp_addImgAnimation(img: model.img,point: self.photoListVC.sp_getCellPoint(model: model), isDow: false)
+            if  let model = self.selectView.dataArray[index] as? SPPhotoModel{
+                  sp_addImgAnimation(img: model.img,point: self.photoListVC.sp_getCellPoint(model: model), isDow: false)
+            }
         }
           self.photoListVC.sp_removeSelect(index: index)
         
@@ -204,15 +208,15 @@ extension SPPhotoSelectVC : CAAnimationDelegate{
             switch self.pushVCType {
             case .splicing:
                 let vc = SPPhotoSplicingVC()
-                vc.dataArray = self.selectView.dataArray
+                vc.dataArray = self.selectView.dataArray as? [SPPhotoModel]
                 self.navigationController?.pushViewController(vc, animated: true)
             case .longGraph:
                 let vc = SPLongGraphVC()
-                vc.dataArray = self.selectView.dataArray
+                vc.dataArray = self.selectView.dataArray as? [SPPhotoModel]
                 self.navigationController?.pushViewController(vc, animated: true)
             case .film:
                 let vc = SPFilmVC()
-                vc.dataArray = self.selectView.dataArray
+                vc.dataArray = self.selectView.dataArray as? [SPPhotoModel]
                 self.navigationController?.pushViewController(vc, animated: true)
             default:
                 sp_log(message: "")

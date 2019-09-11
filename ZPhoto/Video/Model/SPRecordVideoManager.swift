@@ -317,7 +317,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 //                FileManager.remove(path: self.filePath)
             }else{
                 let asset = AVAsset(url: URL(fileURLWithPath: (self?.filePath)!))
-                SPVideoHelp.recordForDeal(asset: asset, outputPath: "\(kVideoDirectory)/\(SPVideoHelp.getVideoName())") { (newAsset ,url) in
+                SPVideoHelp.sp_recordForDeal(asset: asset, outputPath: "\(kVideoDirectory)/\(SPVideoHelp.getVideoName())") { (newAsset ,url) in
                     SPVideoHelp.sp_send(notificationName: kVideoChangeNotification)
                 }
             }

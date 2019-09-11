@@ -24,19 +24,7 @@ class SPVideoPlayView : UIView{
     }()
     var videoModel : SPVideoModel? {
         didSet{
-            self.sp_removeObserver()
-            videoPlayerItem = AVPlayerItem(asset: (videoModel?.asset)!)
-            videoPlayer = AVPlayer(playerItem: videoPlayerItem)
-            let layer = self.layer as! AVPlayerLayer
-            layer.player = videoPlayer
-            layer.videoGravity = AVLayerVideoGravity.resize
-            
-            let second = CMTimeGetSeconds((videoModel?.asset?.duration)!)
-            sp_log(message: "second  \(second)")
-            buttonView?.timeLabel.text = formatPlayTime(seconds: second)
-            buttonView?.progressView.maximumValue = Float(second)
-            self.addVideoObserver()
-            self.addAction()
+            self.sp_setupData()
         }
     }
     override init(frame: CGRect) {
@@ -110,17 +98,39 @@ extension SPVideoPlayView {
         if (self.videoPlayer != nil) {
             let seconds  = silder.value
             let targetTime : CMTime = CMTimeMakeWithSeconds(Float64(seconds), preferredTimescale: (self.videoPlayer?.currentTime().timescale)!)
-            videoPlayer?.seek(to: targetTime, completionHandler: { [weak self] (finish : Bool) in
-                if self?.videoPlayer?.rate == 0{
-                    self?.videoPlayer?.play()
-                }
-                self?.buttonView?.playButton.isSelected = true
-                self?.canRun = true
-            })
+            sp_seek(time: targetTime)
         }
-       
+ 
+    }
+    fileprivate func sp_setupData(){
+        self.sp_removeObserver()
+        if let asset = videoModel?.asset {
+            videoPlayerItem = AVPlayerItem(asset: asset)
+            videoPlayer = AVPlayer(playerItem: videoPlayerItem)
+            let layer = self.layer as! AVPlayerLayer
+            layer.player = videoPlayer
+            layer.videoGravity = AVLayerVideoGravity.resize
+            
+            let second = CMTimeGetSeconds(asset.duration)
+            sp_log(message: "second  \(second)")
+            buttonView?.timeLabel.text = formatPlayTime(seconds: second)
+            buttonView?.progressView.maximumValue = Float(second)
+            self.addVideoObserver()
+            self.addAction()
+        }
+    }
+    func sp_seek(time : CMTime){
+        guard let player = self.videoPlayer else {
+            return
+        }
         
-        
+        player.seek(to: time, completionHandler: { [weak self] (finish : Bool) in
+            if self?.videoPlayer?.rate == 0{
+                self?.videoPlayer?.play()
+            }
+            self?.buttonView?.playButton.isSelected = true
+            self?.canRun = true
+        })
     }
 }
 // MARK: -- 私有方法

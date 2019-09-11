@@ -66,3 +66,5 @@
 "ANIMATION_TOBOOK" = "拉";
 "ANIMATION_HOLE" = "洞";
 "CHOOSE_VIDEO" = "选择视频";
+"Exceed_MAX_NUM" = "超过最大数量";
+"KNOW" = "知道";

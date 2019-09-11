@@ -19,8 +19,18 @@ class SPVideoSplicingSelectVC: SPBaseVC {
         }
         return vc
     }()
-    fileprivate var selectArray : [SPVideoModel] = [SPVideoModel]()
-    
+    fileprivate lazy var selectView : SPSelectView = {
+        let view = SPSelectView()
+        view.clearBlock = { [weak self] in
+           self?.sp_clearAll()
+        }
+        view.indexBlock = { [weak self](index) in
+            self?.sp_removeIndex(index: index)
+        }
+        view.selectMaxCount = selectMaxCount
+        return view
+    }()
+    var selectMaxCount : Int = 9
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -43,6 +53,8 @@ class SPVideoSplicingSelectVC: SPBaseVC {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: SPLanguageChange.sp_getString(key: "NEXT"), style: UIBarButtonItem.Style.done, target: self, action: #selector(sp_clickNext))
         self.view.addSubview(self.selectVC.view)
         self.addChild(self.selectVC)
+        self.view.addSubview(self.safeView)
+        self.view.addSubview(self.selectView)
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -53,11 +65,21 @@ class SPVideoSplicingSelectVC: SPBaseVC {
     fileprivate func sp_addConstraint(){
         self.selectVC.view.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self.view).offset(0)
+            maker.bottom.equalTo(self.selectView.snp.top).offset(0)
+        }
+        self.selectView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.equalTo(100)
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
             } else {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
+        }
+        self.safeView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.bottom.equalTo(self.view).offset(0)
+            maker.top.equalTo(self.selectView.snp.top).offset(0)
         }
     }
     deinit {
@@ -67,18 +89,38 @@ class SPVideoSplicingSelectVC: SPBaseVC {
 extension SPVideoSplicingSelectVC{
     
     fileprivate func sp_dealSelect(model : SPVideoModel?){
+        if sp_count(array: self.selectView.dataArray) >= self.selectMaxCount {
+            sp_showMaxNumTip()
+            return
+        }
         guard let m = model else {
             return
         }
-        self.selectArray.append(m)
-        self.selectVC.selectArray = self.selectArray
+        self.selectView.sp_add(model: m)
+        self.selectVC.selectArray = self.selectView.dataArray as? [SPVideoModel]
+    }
+    fileprivate func sp_showMaxNumTip(){
+        let alertController  = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "Exceed_MAX_NUM"), preferredStyle: UIAlertController.Style.alert)
+        alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "KNOW"), style: UIAlertAction.Style.default, handler: { (action) in
+            
+        }))
+        self.present(alertController, animated: true, completion: nil)
     }
     @objc fileprivate func sp_clickNext(){
-        if self.selectArray.count > 0 {
+        if sp_count(array: self.selectVC.selectArray) > 0 {
             let vc = SPVideoSplicingVC()
-            vc.selectArray = self.selectArray
+            vc.selectArray = self.selectVC.selectArray
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
-    
+    fileprivate func sp_clearAll(){
+        self.selectVC.selectArray = nil 
+    }
+    fileprivate func sp_removeIndex(index : Int){
+        var list = self.selectVC.selectArray
+        if  index < sp_count(array: list) {
+            list?.remove(at: index)
+            self.selectVC.selectArray = list
+        }
+    }
 }

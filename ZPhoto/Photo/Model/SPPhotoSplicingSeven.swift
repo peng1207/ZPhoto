@@ -11,12 +11,12 @@ import UIKit
 import SPCommonLibrary
 
 class  SPPhotoSplicingSeven {
-    class func sp_frameAndSpace(type:SPSPlicingType.SevenType,value : SPPhotoSplicingStruct)->SPPhotoSplicingLayout{
+    class func sp_frameAndSpace(type:SPPhotoSPlicingType.SevenType,value : SPPhotoSplicingStruct)->SPPhotoSplicingLayout{
         let frame = sp_frame(type: type, value: value)
         let space = sp_space(type: type, value: value)
         return (frame,space)
     }
-    private class func sp_frame(type : SPSPlicingType.SevenType,value : SPPhotoSplicingStruct)->CGRect{
+    private class func sp_frame(type : SPPhotoSPlicingType.SevenType,value : SPPhotoSplicingStruct)->CGRect{
         var x : CGFloat = 0
         var y :  CGFloat = 0
         var w : CGFloat = 0
@@ -283,7 +283,7 @@ class  SPPhotoSplicingSeven {
         
     }
     //MARK: - space
-    private class func sp_space(type : SPSPlicingType.SevenType,value : SPPhotoSplicingStruct)->SPSpace{
+    private class func sp_space(type : SPPhotoSPlicingType.SevenType,value : SPPhotoSplicingStruct)->SPSpace{
         var left : CGFloat = 0
         var top : CGFloat = 0
         var right : CGFloat = 0
