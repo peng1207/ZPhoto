@@ -250,7 +250,7 @@ extension SPRecordVideoRootVC {
     }
    @objc fileprivate func sp_cance(){
         self.videoManager.sp_cance()
-        self.videoManager.sp_flashOff()
+    
         self.disMissVC()
         self.recordVideoView.canceTimer()
     }

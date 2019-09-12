@@ -100,6 +100,7 @@
 		9EECDB4123261DF8008F6CBE /* SPVideoSplicingHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EECDB4023261DF8008F6CBE /* SPVideoSplicingHelp.swift */; };
 		9EECDB442328858B008F6CBE /* SPSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EECDB432328858B008F6CBE /* SPSelectView.swift */; };
 		9EECDB542329E39D008F6CBE /* SPVideoSplicingLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EECDB532329E39D008F6CBE /* SPVideoSplicingLayoutView.swift */; };
+		9EECDB56232A4F5E008F6CBE /* SPCameraHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EECDB55232A4F5E008F6CBE /* SPCameraHelp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -228,6 +229,7 @@
 		9EECDB4023261DF8008F6CBE /* SPVideoSplicingHelp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoSplicingHelp.swift; sourceTree = "<group>"; };
 		9EECDB432328858B008F6CBE /* SPSelectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPSelectView.swift; sourceTree = "<group>"; };
 		9EECDB532329E39D008F6CBE /* SPVideoSplicingLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoSplicingLayoutView.swift; sourceTree = "<group>"; };
+		9EECDB55232A4F5E008F6CBE /* SPCameraHelp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCameraHelp.swift; sourceTree = "<group>"; };
 		A48F6C5FB7358C64CE5D01E2 /* Pods-ZPhoto-ZPhotoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.release.xcconfig"; sourceTree = "<group>"; };
 		C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhoto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -337,6 +339,7 @@
 				9E3E166122FD7F8200BF48E9 /* SPPhotoSplicingThree.swift */,
 				9E3E166322FD7F8900BF48E9 /* SPPhotoSplicingTwo.swift */,
 				9EA44337231DF64900B4E1FE /* SPFilmManager.swift */,
+				9EECDB55232A4F5E008F6CBE /* SPCameraHelp.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -823,6 +826,7 @@
 				9E2D90A2225C849600299C15 /* SPPhotoSplicingVC.swift in Sources */,
 				9E7B1BCA23040A2E00146422 /* SPLongGraphVC.swift in Sources */,
 				9E6A5027228AAD520021D17F /* SPTmpVC.swift in Sources */,
+				9EECDB56232A4F5E008F6CBE /* SPCameraHelp.swift in Sources */,
 				9ECE7C182227B80300FE6BCD /* SPVideoPreviewLayerView.swift in Sources */,
 				9E2D90A5225C849600299C15 /* SPPhotoListVC.swift in Sources */,
 				9E7168A61F659B8400BB7C01 /* SPFilterModel.swift in Sources */,

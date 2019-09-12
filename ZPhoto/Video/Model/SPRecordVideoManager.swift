@@ -356,28 +356,12 @@ extension SPRecordVideoManager{
     }
     /// 放大
     func sp_zoomIn(scale : CGFloat = 1.0){
-        
-        if let zoomFactor = self.currentDevice?.videoZoomFactor{
-            sp_log(message: "\(zoomFactor)")
-            if zoomFactor < maxZoomActore {
-                let newZoomFactor = min(zoomFactor + scale, maxZoomActore)
-                self.sp_changeDeviceProperty(propertyBlock: {  [weak self]()  in
-                    self?.currentDevice?.videoZoomFactor = newZoomFactor
-                })
-            }
-        }
+        SPCameraHelp.sp_zoomIn(device: self.currentDevice, scale: scale)
+     
     }
     //缩小
     func sp_zoomOut(scale : CGFloat = 1.0) {
-        if let zoomFactor = currentDevice?.videoZoomFactor {
-            sp_log(message: "\(zoomFactor)")
-            if zoomFactor > minZoomActore {
-                let newZoomFactor = max(zoomFactor - scale, minZoomActore)
-                self.sp_changeDeviceProperty(propertyBlock: { [weak self]()  in
-                    self?.currentDevice?.videoZoomFactor = newZoomFactor
-                })
-            }
-        }
+        SPCameraHelp.sp_zoomOut(device: self.currentDevice, scale: scale)
     }
     // MARK: -- 闪光灯设置
     /// 闪光灯设置
@@ -388,63 +372,8 @@ extension SPRecordVideoManager{
         if SP_IS_IPAD {
             return
         }
-        
-        if self.currentDevice?.position == AVCaptureDevice.Position.front {
-            return
-        }
-        
-        if self.currentDevice?.torchMode == AVCaptureDevice.TorchMode.off {
-            sp_flashOn()
-        }else{
-            sp_flashOff()
-        }
+        SPCameraHelp.sp_flash(device: self.currentDevice)
     }
-    /// 打开闪光灯
-    func sp_flashOn(){
-        if SP_IS_IPAD {
-            return
-        }
-        if !(self.currentDevice?.hasFlash)! {
-            return
-        }
-        if  !(self.currentDevice?.hasTorch)! {
-            return
-        }
-        self.sp_changeDeviceProperty(propertyBlock: { [weak self]() in
-            if self?.currentDevice?.torchMode == AVCaptureDevice.TorchMode.off {
-                self?.currentDevice?.torchMode = AVCaptureDevice.TorchMode.on
-            }
-            if self?.currentDevice?.flashMode == AVCaptureDevice.FlashMode.off {
-                self?.currentDevice?.flashMode = AVCaptureDevice.FlashMode.on
-            }
-            
-        })
-    }
-    /// 关闭闪光灯
-    func sp_flashOff(){
-        if SP_IS_IPAD {
-            return
-        }
-        if self.currentDevice == nil {
-            return
-        }
-        if !(self.currentDevice?.hasFlash)! {
-            return
-        }
-        if  !(self.currentDevice?.hasTorch)! {
-            return
-        }
-        self.sp_changeDeviceProperty(propertyBlock: { [weak self]() in
-            if self?.currentDevice?.torchMode == AVCaptureDevice.TorchMode.on {
-                self?.currentDevice?.torchMode = AVCaptureDevice.TorchMode.off
-            }
-            if self?.currentDevice?.flashMode == AVCaptureDevice.FlashMode.on {
-                self?.currentDevice?.flashMode = AVCaptureDevice.FlashMode.off
-            }
-        })
-        
-    }
-    
     // MARK: -- 私有方法
     /**< 改变属性操作 */
     fileprivate func sp_changeDeviceProperty(propertyBlock:PropertyChangeBlock?){
@@ -463,6 +392,7 @@ extension SPRecordVideoManager{
     
     /// 点击取消
     func sp_cance(){
+        SPCameraHelp.sp_flashOff(device: self.currentDevice)
         if let  assetWriter = assetWriter{
             videoWriterInput = nil
             audioWriterInput = nil
@@ -472,6 +402,7 @@ extension SPRecordVideoManager{
         }
         self.assetWriter = nil
         self.captureSession.stopRunning()
+        
     }
   
     /// 打印文件输入的状态

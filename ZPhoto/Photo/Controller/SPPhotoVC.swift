@@ -132,7 +132,7 @@ fileprivate class SPPhotoRootVC: SPBaseVC {
     fileprivate func sp_addConstraint(){
         self.cameraBtn.snp.makeConstraints { (maker) in
             maker.centerX.equalTo(self.view.snp.centerX).offset(0)
-            maker.centerY.equalTo(self.view.snp.centerY).offset(0)
+            maker.centerY.equalTo(self.view.snp.centerY).offset(-40)
             maker.width.equalTo(80)
             maker.height.equalTo(80)
         }
