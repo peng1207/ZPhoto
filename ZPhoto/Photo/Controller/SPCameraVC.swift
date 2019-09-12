@@ -48,7 +48,7 @@ fileprivate class SPCameraRootVC: SPBaseVC {
     fileprivate lazy var btnView : SPCameraBtnView = {
         let view = SPCameraBtnView()
         view.clickBlock = { [weak self] (type)in
-            self?.sp_dealBtnClick(type: type)
+            self?.sp_deal(buttontype: type)
         }
         return view
     }()
@@ -82,10 +82,12 @@ fileprivate class SPCameraRootVC: SPBaseVC {
     fileprivate var filterRightConstraint : Constraint!
     fileprivate let filterViewWidth :  CGFloat = 60
     fileprivate let kCameraManagerKVOKey = "noFilterCIImage"
+    fileprivate var lastScale : CGFloat = 1.00
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
         sp_initCamera()
+        sp_addGesture()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -160,8 +162,8 @@ fileprivate extension SPCameraRootVC{
     /// 处理按钮点击类型
     ///
     /// - Parameter type: 类型
-    func sp_dealBtnClick(type:SPButtonClickType){
-        switch type {
+    func sp_deal(buttontype:SPButtonClickType){
+        switch buttontype {
         case .cance:
             sp_log(message: "点击返回")
             sp_back()
@@ -253,4 +255,24 @@ fileprivate extension SPCameraRootVC{
         }
     }
     
+    func sp_addGesture(){
+        self.view.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(sp_pinchAction(sender:))))
+    }
+    @objc func sp_pinchAction(sender : UIPinchGestureRecognizer) {
+        if sender.state == UIGestureRecognizer.State.ended {
+            lastScale = 1.0
+            return
+        }
+        let scale = 1.0 - (lastScale - sender.scale)
+        if lastScale >= sender.scale {
+            sp_log(message: "缩小")
+            self.cameraManmager.sp_zoomOut(scale: 0.1)
+        }else{
+            sp_log(message: "放大")
+            self.cameraManmager.sp_zoomIn(scale:0.1)
+        }
+        sp_log(message: "\(scale)----\(lastScale)----\(sender.velocity)")
+        lastScale = sender.scale
+        
+    }
 }

@@ -23,7 +23,7 @@ let kVideoTempDirectory = "\(kTmpPath)/video"
 
 /* 帧数
  */
-let framesPerSecond : Int32 = 30
+let framesPerSecond : Int32 = 15
 /// 按钮点击回调
 typealias SPBtnComplete = ()->Void
 typealias SPBtnTypeComplete = (_ type : SPButtonClickType)->Void

@@ -14,9 +14,10 @@ import SPCommonLibrary
 // MARK: -- 进度view  主要用来切割视频的
 class SPVideoScheduleView : UIView {
     fileprivate let maxSpace : CGFloat = 20.00
+    var videoAsset : AVAsset?
     var imageList : [UIImage]?{
         didSet{
-            
+            self.collectionView.reloadData()
         }
     }
     // 左边拖动的view
@@ -33,6 +34,7 @@ class SPVideoScheduleView : UIView {
         view.isUserInteractionEnabled = true
         return view
     }()
+    fileprivate var collectionView : UICollectionView!
     // 左边拖动后显示遮盖view
    lazy var leftShowView : UIView! = { return SPVideoScheduleView.getView() }()
     //  右边拖动后显示遮盖view
@@ -41,8 +43,9 @@ class SPVideoScheduleView : UIView {
     var leftPanGuest : UIPanGestureRecognizer!
     // 右边拖动的手势
     var rightPanGues : UIPanGestureRecognizer!
-    var leftConstraint:Constraint?
-    var rightConstraint:Constraint?
+    fileprivate var leftConstraint:Constraint?
+    fileprivate var rightConstraint:Constraint?
+    fileprivate let cellID = "VideoSheduleCellID"
     var lastright_X : CGFloat = 0.00
     var lastleft_X : CGFloat = 0.00
     override init(frame: CGRect) {
@@ -66,6 +69,18 @@ class SPVideoScheduleView : UIView {
 extension SPVideoScheduleView {
     /**< 创建UI  */
     fileprivate func setupUI(){
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
+        self.collectionView.backgroundColor = self.backgroundColor
+//        self.collectionView.alwaysBounceVertical = true
+        self.collectionView.register(SPVideoScheduleCell.self, forCellWithReuseIdentifier: self.cellID)
+        self.collectionView.showsVerticalScrollIndicator = false
+        self.addSubview(self.collectionView)
         self.addSubview(self.leftPanView)
         self.addSubview(self.rightPanView)
         self.addSubview(self.leftShowView)
@@ -73,6 +88,9 @@ extension SPVideoScheduleView {
         self.addConstraintView()
     }
     private func addConstraintView(){
+        self.collectionView.snp.makeConstraints { (maker) in
+            maker.left.right.top.bottom.equalTo(self).offset(0)
+        }
         self.leftPanView.snp.makeConstraints { (make) in
             make.top.equalTo(self).offset(1)
             make.bottom.equalTo(self).offset(0)
@@ -142,4 +160,55 @@ extension SPVideoScheduleView {
     }
     
 }
+extension SPVideoScheduleView : UICollectionViewDelegate ,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return sp_count(array: self.imageList) > 0 ? 1 : 0
+    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return sp_count(array: self.imageList)
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell : SPVideoScheduleCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellID, for: indexPath) as! SPVideoScheduleCell
+        if indexPath.row < sp_count(array: self.imageList) {
+            cell.iconImgView.image = self.imageList?[indexPath.row]
+        }
+        return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let w = collectionView.frame.size.width / CGFloat(sp_count(array: self.imageList))
+        return CGSize(width: w, height: collectionView.frame.size.height)
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.row < sp_count(array: self.imageList) {
+            
+        }
+    }
+}
 
+class SPVideoScheduleCell: UICollectionViewCell {
+    lazy var iconImgView : UIImageView = {
+        let view = UIImageView()
+        return view
+    }()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.sp_setupUI()
+    }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    /// 添加UI
+    fileprivate func sp_setupUI(){
+        self.contentView.addSubview(self.iconImgView)
+        self.sp_addConstraint()
+    }
+    /// 添加约束
+    fileprivate func sp_addConstraint(){
+        self.iconImgView.snp.makeConstraints { (maker) in
+            maker.left.right.top.bottom.equalTo(self.contentView).offset(0)
+        }
+    }
+    deinit {
+        
+    }
+}

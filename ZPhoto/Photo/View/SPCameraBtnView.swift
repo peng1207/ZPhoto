@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 import SnapKit
 import SPCommonLibrary
-/// 按钮点击回调
-typealias SPCameraBtnClickBlock = (_ type : SPButtonClickType)->Void
 
 class SPCameraBtnView:  UIView{
     
@@ -46,7 +44,7 @@ class SPCameraBtnView:  UIView{
         btn.addTarget(self, action: #selector(sp_clickChangeDev), for: UIControl.Event.touchUpInside)
         return btn
     }()
-    var clickBlock : SPCameraBtnClickBlock?
+    var clickBlock : SPBtnTypeComplete?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

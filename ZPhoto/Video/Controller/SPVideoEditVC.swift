@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import AVFoundation
+import SPCommonLibrary
 
 class  SPVideoEditVC : SPBaseVC {
     lazy fileprivate var scheduleView : SPVideoScheduleView = {
@@ -24,7 +25,7 @@ class  SPVideoEditVC : SPBaseVC {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setImage(UIImage(named: "VideoStop"), for: .normal)
         btn.setImage(UIImage(named: "VideoPlay"), for: .selected)
-        
+        btn.isHidden = true
         btn.addTarget(self, action: #selector(sp_play), for: UIControl.Event.touchUpInside)
         return btn
     }()
@@ -75,10 +76,17 @@ extension SPVideoEditVC {
         self.navigationController?.pushViewController(videoPalyVC, animated: true)
     }
     fileprivate func sp_setupData(){
-        self.valueData = SPVideoHelp.sp_videoBuffer(asset: self.videoModel?.asset )
+        sp_sync {
+            self.valueData = SPVideoHelp.sp_videoBuffer(asset: self.videoModel?.asset )
+            sp_mainQueue {
+                sp_log(message: "开始刷新")
+                self.scheduleView.videoAsset = self.videoModel?.asset
+            }
+        }
     }
     fileprivate func sp_setupVideo(){
         self.videoPlayerView.videoModel = self.videoModel
+        self.playBtn.isHidden = false
     }
     @objc fileprivate func sp_play(){
         self.videoPlayerView.playAction()

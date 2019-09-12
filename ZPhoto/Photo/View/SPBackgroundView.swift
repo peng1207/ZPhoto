@@ -108,7 +108,7 @@ extension SPBackgroundView : UICollectionViewDelegate ,UICollectionViewDataSourc
         if indexPath.row < sp_count(array:  self.dataList) {
             let colorHX =  self.dataList[indexPath.row]
             sp_dealComplete(color: SPColorForHexString(hex: colorHX),image: nil)
-            sp_log(message: colorHX)
+//            sp_log(message: colorHX)
         }
     }
 }

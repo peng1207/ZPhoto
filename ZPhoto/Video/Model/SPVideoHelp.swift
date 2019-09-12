@@ -15,7 +15,7 @@ import SPCommonLibrary
 typealias SPExportSuccess = (_ assert : AVAsset?,_ url : String)-> Void
 let kVideoChangeNotification : String = "VideoChangeNotification"
 /// 获取视频中音频视频的帧数据
-typealias SPVideoSampleBuffer = (videoBuffers : [CMSampleBuffer]?,audioBuffers : [CMSampleBuffer]?,imgs : [CMTime]?)
+typealias SPVideoSampleBuffer = (videoBuffers : [CMSampleBuffer]?,audioBuffers : [CMSampleBuffer]?,timeList : [CMTime]?)
 class SPVideoHelp: NSObject {
   
     // 获取视频的名称
@@ -266,7 +266,7 @@ class SPVideoHelp: NSObject {
         }catch _ {
             
         }
-        videoTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
+//        videoTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
         
         FileManager.sp_directory(createPath: kVideoTempDirectory)
         
@@ -349,7 +349,7 @@ class SPVideoHelp: NSObject {
         }
         sp_sync {
             let data = sp_videoBuffer(asset: videoAsset)
-             let timeList = data.imgs
+             let timeList = data.timeList
             if sp_count(array:  timeList) > 0 {
                 let  filePath : String = "\(kVideoTempDirectory)/temp.mp4"
                 FileManager.sp_directory(createPath:kVideoTempDirectory)

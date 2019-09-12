@@ -63,7 +63,7 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
     fileprivate lazy var backBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setImage(UIImage(named: "back"), for: UIControl.State.normal)
-        btn.addTarget(self, action: #selector(clickCance), for: UIControl.Event.touchUpInside)
+        btn.addTarget(self, action: #selector(sp_cance), for: UIControl.Event.touchUpInside)
         return btn
     }()
     fileprivate lazy var layoutView : SPVideoLayoutView = {
@@ -88,25 +88,22 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupVideoManager()
-        self.setupUI()
-        self.addActionToButton()
-        self.addPinchGeusture()
+        self.sp_setupVideoManager()
+        self.sp_setupUI()
+        self.sp_addAction()
+        self.sp_addGeusture()
         // Do any additional setup after loading the view.
     }
-    /*
-     设置videoManager
-     */
-    fileprivate func setupVideoManager(){
-        self.videoManager.setup(noCameraAuthBlock: { [weak self] () in
+    /// 设置videoManager
+    fileprivate func sp_setupVideoManager(){
+        self.videoManager.sp_complete(noCameraAuthBlock: { [weak self] () in
             self?.dealNOCameraAuthAction()
         }, noMicrophoneBlock: { [weak self] () in
             self?.dealNOMicrophoneAuthAction()
         })
-        
         self.videoManager.videoLayer = self.preView.layer as? AVCaptureVideoPreviewLayer
         self.videoManager.addObserver(self, forKeyPath: kVideoManagerKVOKey, options: .new, context: nil)
-        self.videoManager.setupRecord()
+        self.videoManager.sp_initRecord()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -121,6 +118,18 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
     override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         self.dealOrientation(toInterfaceOrientation: toInterfaceOrientation)
     }
+    // 创建UI
+   override func sp_setupUI (){
+        
+        self.view.addSubview(self.preView)
+        self.preView.backgroundColor = UIColor.black
+        self.view .addSubview(self.recordVideoView)
+        self.view.addSubview(self.filterView)
+        self.view.addSubview(self.layoutView)
+        self.view.addSubview(self.backBtn)
+        self.sp_addConstraint()
+    }
+    
     deinit {
         sp_log(message: "销毁对象")
         videoManager.removeObserver(self, forKeyPath: kVideoManagerKVOKey)
@@ -137,19 +146,9 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
 // MARK: -- UI 
 extension SPRecordVideoRootVC {
     
-    // 创建UI
-    func setupUI (){
-        
-        self.view.addSubview(self.preView)
-        self.preView.backgroundColor = UIColor.black
-        self.view .addSubview(self.recordVideoView)
-        self.view.addSubview(self.filterView)
-        self.view.addSubview(self.layoutView)
-        self.view.addSubview(self.backBtn)
-        self.addConstraintToView()
-    }
+ 
     /**< 添加约束到view  */
-    private func addConstraintToView(){
+    private func sp_addConstraint(){
         self.preView.snp.makeConstraints { (maker) in
             maker.left.right.bottom.top.equalTo(self.view).offset(0);
         }
@@ -186,20 +185,20 @@ extension SPRecordVideoRootVC {
 // MARK: -- 处理事件
 extension SPRecordVideoRootVC {
     // 添加事件到按钮
-    fileprivate func addActionToButton(){
+    fileprivate func sp_addAction(){
         self.recordVideoView.buttonClickBlock = { [weak self](clickType : SPButtonClickType,button:UIButton) in
-            self?.dealButtonClickAction(clickType: clickType, button: button)
+            self?.sp_deal(clickType: clickType, button: button)
         }
         self.filterView.collectSelectComplete = { [weak self](model : SPFilterModel)  in
                 self?.videoManager.filter = model.filter
         }
     }
     // 添加缩放手势
-    fileprivate func addPinchGeusture(){
-        pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(sender:)))
+    fileprivate func sp_addGeusture(){
+        pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(sp_pinchAction(sender:)))
         self.view.addGestureRecognizer(pinchGesture)
     }
-    @objc fileprivate func pinchAction(sender : UIPinchGestureRecognizer) {
+    @objc fileprivate func sp_pinchAction(sender : UIPinchGestureRecognizer) {
         if sender.state == UIGestureRecognizer.State.ended {
             lastScale = 1.0
             return
@@ -219,11 +218,11 @@ extension SPRecordVideoRootVC {
     /*
       处理按钮点击事件的
      */
-    fileprivate func dealButtonClickAction(clickType : SPButtonClickType,button:UIButton){
+    fileprivate func sp_deal(clickType : SPButtonClickType,button:UIButton){
         switch clickType {
         case .cance:
             sp_log(message: "点击取消")
-           self.clickCance()
+           self.sp_cance()
         case .done:
             if button.isSelected {
                 sp_log(message: "点击结束")
@@ -239,9 +238,9 @@ extension SPRecordVideoRootVC {
             self.videoManager.sp_flashlight()
         case .change:
             sp_log(message: "点击切换镜头")
-            self.videoManager.sp_changeVideoDevice()
+            self.videoManager.sp_changeCamera()
         case .filter:
-            self.clickFilterAction();
+            self.sp_filterAction();
              sp_log(message: "点击滤镜 ")
         case .layout:
             self.layoutView.isHidden = !self.layoutView.isHidden
@@ -249,7 +248,7 @@ extension SPRecordVideoRootVC {
             sp_log(message: "其他没有定义")
         }
     }
-   @objc fileprivate func clickCance(){
+   @objc fileprivate func sp_cance(){
         self.videoManager.sp_cance()
         self.videoManager.sp_flashOff()
         self.disMissVC()
@@ -274,19 +273,19 @@ extension SPRecordVideoRootVC {
     /*
       点击滤镜按钮事件
      */
-    fileprivate func clickFilterAction(){
+    @objc fileprivate func sp_filterAction(){
         if(self.filterView.isHidden){
             self.filterRightConstraint?.update(offset: 0)
         }else{
             self.filterRightConstraint?.update(offset: -filterViewWidth)
         }
         self.filterView.isHidden = !self.filterView.isHidden
-        self.changeFilterData()
+        self.sp_changeFilterData()
     }
     /*
      改变滤镜图片的数据
      */
-    fileprivate func changeFilterData(){
+    fileprivate func sp_changeFilterData(){
         sp_mainQueue {
             if (self.filterView.isHidden == false){
                 sp_sync {
@@ -304,7 +303,7 @@ extension SPRecordVideoRootVC {
      */
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == kVideoManagerKVOKey {
-            self.changeFilterData()
+            self.sp_changeFilterData()
         }
     }
     /*
@@ -499,7 +498,6 @@ class SPRecordVideoBtnView: UIView {
                 maker.right.equalTo(self.snp.right).offset(-12)
             }
         }
-        
         self.filterButton.snp.makeConstraints { (maker) in
             maker.left.equalTo(self.recordButton.snp.left).multipliedBy(0.5)
             maker.height.equalTo(self.layoutButton.snp.height)

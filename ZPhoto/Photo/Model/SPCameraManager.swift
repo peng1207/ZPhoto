@@ -15,7 +15,7 @@ import SPCommonLibrary
 class SPCameraManager : NSObject {
     //捕获会话。它是input和output的桥梁。它协调着intput到output的数据传输
     fileprivate let captureSession = AVCaptureSession()
-    //    fileprivate let devices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
+    /// 获取摄像头设备
     fileprivate let devices = { () -> [AVCaptureDevice] in
         if SP_VERSION_10_UP{
             let deviceDiscovery = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.back)
@@ -24,21 +24,35 @@ class SPCameraManager : NSObject {
             return AVCaptureDevice.devices(for: AVMediaType.video)
         }
     }()
+    /// 展示layer
     var videoLayer : AVCaptureVideoPreviewLayer? {
         didSet{
             videoLayer?.videoGravity = AVLayerVideoGravity.resize
         }
     }
+    /// 当前摄像头设备
     fileprivate var currentDevice : AVCaptureDevice?
-    fileprivate var output:  AVCaptureVideoDataOutput! /// 图像流输出
-    let videoDataOutputQueue :DispatchQueue = DispatchQueue(label: "com.hsp.videoDataOutputQueue")
+    /// 图像流输出
+    fileprivate var output:  AVCaptureVideoDataOutput!
+    /// 视频线程
+    fileprivate let videoDataOutputQueue :DispatchQueue = DispatchQueue(label: "com.hsp.videoDataOutputQueue")
+    /// 没有滤镜的图片
     @objc dynamic  var noFilterCIImage : CIImage?
+    /// 处理滤镜之后展示的图片
     var showOutputCGImage : CGImage?
+    /// 滤镜
     var filter : CIFilter?
+    /// 人脸遮盖的图片
     var faceCoverImg : UIImage?
-    var cameraAuth : Bool = false  // 有没摄像头权限
+    /// 有没摄像头权限
+    var cameraAuth : Bool = false
+    /// image 的布局
     var videoLayoutType : SPVideoLayoutType = .none
-    lazy var ciContext: CIContext = {
+    // 放大最大的倍数
+    fileprivate let maxZoomActore :CGFloat = 5.00
+    /// 缩放最小的倍数
+    fileprivate let minZoomActore : CGFloat = 1.00
+    fileprivate lazy var ciContext: CIContext = {
         let eaglContext = EAGLContext(api: EAGLRenderingAPI.openGLES2)
         let options = [CIContextOption.workingColorSpace : NSNull()]
         return CIContext(eaglContext: eaglContext!, options: options)
@@ -47,8 +61,8 @@ class SPCameraManager : NSObject {
     func sp_initCamera(){
        sp_checkAuth()
     }
+    /// 检查相机权限
     fileprivate func sp_checkAuth(){
-       
         SPAuthorizatio.sp_isCamera { [weak self](success) in
              self?.cameraAuth = success
             if success {
@@ -59,12 +73,11 @@ class SPCameraManager : NSObject {
             }
         }
     }
+    /// 设置摄像头
     fileprivate func sp_setupCamera(){
         sp_initCaptureInput(postion: .back)
         self.captureSession.startRunning()
     }
-    
-    
     /// 初始化输入的设备
     ///
     /// - Parameter postion: 摄像头位置
@@ -85,7 +98,11 @@ class SPCameraManager : NSObject {
             self.output = AVCaptureVideoDataOutput()
             self.output.alwaysDiscardsLateVideoFrames = true
             self.output.setSampleBufferDelegate(self, queue: self.videoDataOutputQueue)
-
+            /// 开启防抖
+            let videoConnect = self.output.connection(with: .video)
+            if let device = self.currentDevice, device.activeFormat.isVideoStabilizationModeSupported(AVCaptureVideoStabilizationMode.cinematic){
+                videoConnect?.preferredVideoStabilizationMode = .cinematic
+            }
             if self.captureSession.canAddOutput(self.output){
                 self.captureSession.addOutput(self.output)
             }
@@ -141,24 +158,26 @@ extension SPCameraManager:AVCaptureVideoDataOutputSampleBufferDelegate{
                 return
             }
             var outputImage : CIImage? = nil
-            let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
-            outputImage = CIImage(cvPixelBuffer: imageBuffer)
-            var noFilterOutputImage  : CIImage? = outputImage
-            noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
-            self.noFilterCIImage =  CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
-           // 滤镜
-            if self.filter != nil , let ciImg = outputImage{
-                self.filter?.setValue(ciImg, forKey: kCIInputImageKey)
-                outputImage = self.filter?.outputImage
+            if output == self.output{
+                let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
+                outputImage = CIImage(cvPixelBuffer: imageBuffer)
+                var noFilterOutputImage  : CIImage? = outputImage
+                noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
+                self.noFilterCIImage =  CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
+                // 滤镜
+                if self.filter != nil , let ciImg = outputImage{
+                    self.filter?.setValue(ciImg, forKey: kCIInputImageKey)
+                    outputImage = self.filter?.outputImage
+                }
+                // 执行判断人脸 然后增加头像上去
+                outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg:self.faceCoverImg)
+                // 视频帧布局
+                outputImage = UIImage.sp_video(layoutType: self.videoLayoutType, outputImg: outputImage)
+                // 旋转图片
+                outputImage =  UIImage.sp_picRotating(imgae: outputImage)
             }
-            // 执行判断人脸 然后增加头像上去
-            outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg:self.faceCoverImg)
-            // 视频帧布局
-            outputImage = UIImage.sp_video(layoutType: self.videoLayoutType, outputImg: outputImage)
-            
             if let oImg = outputImage {
-                outputImage =  UIImage.sp_picRotating(imgae: oImg)
-                let cgImage = self.ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
+                let cgImage = self.ciContext.createCGImage(oImg, from: oImg.extent)
                 sp_mainQueue {
                     self.videoLayer?.contents = cgImage
                     self.showOutputCGImage = cgImage
@@ -271,5 +290,31 @@ extension SPCameraManager {
     func sp_cane(){
         sp_flashOff()
         sp_stop()
+    }
+    /// 放大
+    func sp_zoomIn(scale : CGFloat = 1.0){
+        
+        if let zoomFactor = self.currentDevice?.videoZoomFactor{
+            sp_log(message: "\(zoomFactor)")
+            if zoomFactor < maxZoomActore {
+                let newZoomFactor = min(zoomFactor + scale, maxZoomActore)
+                self.sp_changeDeviceProperty {[weak self]()  in
+                   self?.currentDevice?.videoZoomFactor = newZoomFactor
+                }
+           
+            }
+        }
+    }
+    /// 缩小
+    func sp_zoomOut(scale : CGFloat = 1.0) {
+        if let zoomFactor = currentDevice?.videoZoomFactor {
+            sp_log(message: "\(zoomFactor)")
+            if zoomFactor > minZoomActore {
+                let newZoomFactor = max(zoomFactor - scale, minZoomActore)
+                self.sp_changeDeviceProperty {[weak self]()  in
+                    self?.currentDevice?.videoZoomFactor = newZoomFactor
+                }
+            }
+        }
     }
 }

@@ -19,8 +19,8 @@ typealias NOAuthBlock = () ->Void
 class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate{
     //视频捕获会话。它是input和output的桥梁。它协调着intput到output的数据传输
     fileprivate let captureSession = AVCaptureSession()
-    
-     fileprivate let devices = { () -> [AVCaptureDevice] in
+    /// 摄像头数组
+    fileprivate let devices = { () -> [AVCaptureDevice] in
         if SP_VERSION_10_UP == false{
             return AVCaptureDevice.devices(for: AVMediaType.video)
         }else{
@@ -28,75 +28,89 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             return (deviceDiscovery.devices)
         }
     }()
-    
+    /// 当前摄像头
     fileprivate var currentDevice : AVCaptureDevice?
     //音频输入设备
     fileprivate let audioDevice = AVCaptureDevice.default(for: AVMediaType.audio)
-    
-    // 视频源的出口
-    var videoOutput : AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
- 
-    //  音频源的出口
-    var  audioOutput : AVCaptureAudioDataOutput = AVCaptureAudioDataOutput()
+    /// 视频源的出口
+    fileprivate var videoOutput : AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
+    ///  音频源的出口
+    fileprivate var audioOutput : AVCaptureAudioDataOutput = AVCaptureAudioDataOutput()
  
     var videoLayer : AVCaptureVideoPreviewLayer? {
         didSet{
             videoLayer?.videoGravity = AVLayerVideoGravity.resize
         }
     }
- 
+    /// 没有相机权限的回调
    fileprivate var noCameraAuthBlock : NOAuthBlock?
+    /// 没有麦克风的权限
     fileprivate var noMicrophoneBlock : NOAuthBlock?
     // 放大最大的倍数
-    var maxZoomActore :CGFloat = 5.00
-    var minZoomActore : CGFloat = 1.00
-   
+    fileprivate let maxZoomActore :CGFloat = 5.00
+    /// 缩放最小的倍数
+    fileprivate let minZoomActore : CGFloat = 1.00
+
     // 开始录制
-    var startRecording : Bool = false
-    var isFirstVideo : Bool = false
-    var assetWriter: AVAssetWriter?
-    var videoWriterInput: AVAssetWriterInput?
-    var audioWriterInput: AVAssetWriterInput?
-    var videoWriterPixelbufferInput : AVAssetWriterInputPixelBufferAdaptor?
-    var currentVideoDimensions: CMVideoDimensions?
-    var lastSampleTime : CMTime?
-    let  filePath : String = "\(kVideoTempDirectory)/temp.mp4"
+    fileprivate var startRecording : Bool = false
+    /// 是否首帧是视频帧
+    fileprivate var isFirstVideo : Bool = false
+    fileprivate var assetWriter: AVAssetWriter?
+    /// 视频写入
+    fileprivate var videoWriterInput: AVAssetWriterInput?
+    /// 音频写入
+    fileprivate var audioWriterInput: AVAssetWriterInput?
+    /// 视频写入
+    fileprivate var videoWriterPixelbufferInput : AVAssetWriterInputPixelBufferAdaptor?
+    /// 最后时间
+    fileprivate var lastSampleTime : CMTime?
+    /// 音频文件
+    fileprivate let  filePath : String = "\(kVideoTempDirectory)/temp.mp4"
+    /// 滤镜
     var filter : CIFilter?
-    @objc dynamic  var noFilterCIImage : CIImage?
-    var cameraAuth : Bool = false  // 有没摄像头权限
+    /// 没有加滤镜的图片
+    @objc dynamic var noFilterCIImage : CIImage?
+    ///  有没摄像头权限
+    var cameraAuth : Bool = false
+    /// image 的布局
     var videoLayoutType : SPVideoLayoutType = .none
+    /// 人脸的遮盖image
     var faceCoverImg : UIImage?
-    let videoDataOutputQueue :DispatchQueue = DispatchQueue(label: "com.hsp.videoDataOutputQueue")
-    
-    let audioDataOutputQueue : DispatchQueue = DispatchQueue(label: "com.hsp.audioDataOutputQueue")
+    /// 视频输出线程
+    fileprivate let videoDataOutputQueue :DispatchQueue = DispatchQueue(label: "com.hsp.videoDataOutputQueue")
+    /// 音频输入线程
+    fileprivate let audioDataOutputQueue : DispatchQueue = DispatchQueue(label: "com.hsp.audioDataOutputQueue")
     // 写入音频参数
-    let audioSetting: [String: AnyObject] = [
+    fileprivate let audioSetting: [String: AnyObject] = [
         AVFormatIDKey: NSNumber(value: kAudioFormatMPEG4AAC),
         AVNumberOfChannelsKey: 1 as AnyObject,
         AVSampleRateKey: 22050 as AnyObject
     ]
-    lazy var ciContext: CIContext = {
+   fileprivate lazy var ciContext: CIContext = {
         let eaglContext = EAGLContext(api: EAGLRenderingAPI.openGLES2)
         let options = [CIContextOption.workingColorSpace : NSNull()]
         return CIContext(eaglContext: eaglContext!, options: options)
     }()
+    /// 视频的大小
+    fileprivate var videoSize : CGSize = sp_screenPixels()
     override init() {
         super.init()
     }
     // 设置视频的初始化
-    func setupRecord(){
+    func sp_initRecord(){
         SPAuthorizatio.sp_isCamera{ (authorized) in
             self.cameraAuth = authorized
             if authorized{
                 // 有权限
-                self.isRecordAuth()
+                self.sp_isRecordAuth()
             }else{
                 // 没有权限
-                self.noAuthorizedComplete(noAuthBlock: self.noCameraAuthBlock)
+                self.sp_noAuthorizedComplete(noAuthBlock: self.noCameraAuthBlock)
             }
         }
     }
-    func setup(noCameraAuthBlock:NOAuthBlock?,noMicrophoneBlock:NOAuthBlock?){
+    /// 添加回调
+    func sp_complete(noCameraAuthBlock:NOAuthBlock?,noMicrophoneBlock:NOAuthBlock?){
         self.noCameraAuthBlock = noCameraAuthBlock
         self.noMicrophoneBlock = noMicrophoneBlock
     }
@@ -104,26 +118,25 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     /*
      判断麦克风权限
      */
-    fileprivate func isRecordAuth(){
+    fileprivate func sp_isRecordAuth(){
         SPAuthorizatio.sp_isRecord { (authorized) in
-             self.setupInit()
+             self.sp_init()
             if authorized == false {
-                self.noAuthorizedComplete(noAuthBlock: self.noMicrophoneBlock)
+                self.sp_noAuthorizedComplete(noAuthBlock: self.noMicrophoneBlock)
             }
         }
     }
-    
     /*
      初始化组件
      */
-    fileprivate func setupInit(){
-        self.setCaptureInpunt(postion: .back)
+    fileprivate func sp_init(){
+        self.sp_captureInpunt(postion: .back)
         self.captureSession.startRunning()
     }
     /*
      没有权限时的回调
      */
-    fileprivate func noAuthorizedComplete(noAuthBlock :NOAuthBlock?){
+    fileprivate func sp_noAuthorizedComplete(noAuthBlock :NOAuthBlock?){
         guard let complete = noAuthBlock else {
             return
         }
@@ -138,8 +151,12 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     fileprivate func sp_pixeSize()->CGSize{
         return sp_screenPixels()
     }
-    fileprivate func setCaptureInpunt(postion : AVCaptureDevice.Position){
-        self.getVideoDevice(postion: postion)
+    
+    /// 设置输入输出设备类型
+    ///
+    /// - Parameter postion: 前摄像头还是后摄像头
+    fileprivate func sp_captureInpunt(postion : AVCaptureDevice.Position){
+        self.sp_videoDevice(postion: postion)
         guard self.currentDevice != nil else {
             return
         }
@@ -156,7 +173,8 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             self.captureSession.addInput(audioInput!)
         }
      
-        self.changeDeviceProperty {
+        self.sp_changeDeviceProperty {
+            
             self.currentDevice?.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: framesPerSecond)
             self.currentDevice?.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: framesPerSecond)
         }
@@ -168,6 +186,12 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             videoOutput.alwaysDiscardsLateVideoFrames = true
             videoOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
             audioOutput.setSampleBufferDelegate(self, queue: audioDataOutputQueue)
+            /// 开启防抖
+            let videoConnect = videoOutput.connection(with: .video)
+            if let device = self.currentDevice, device.activeFormat.isVideoStabilizationModeSupported(AVCaptureVideoStabilizationMode.cinematic){
+                videoConnect?.preferredVideoStabilizationMode = .cinematic
+            }
+            
             if self.captureSession.canAddOutput(videoOutput){
                 self.captureSession.addOutput(videoOutput)
             }
@@ -178,9 +202,8 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         }
         self.captureSession.commitConfiguration()
     }
-    
-    // 获取当前的摄像头
-    fileprivate func getVideoDevice(postion : AVCaptureDevice.Position) {
+    /// 获取摄像头
+    fileprivate func sp_videoDevice(postion : AVCaptureDevice.Position) {
         var videoDevice : AVCaptureDevice?
         
         if SP_VERSION_10_UP {
@@ -196,6 +219,14 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             self.currentDevice = currDevice
         }
     }
+    deinit {
+        sp_log(message: "销毁对象 ")
+        self.sp_cance()
+    }
+    
+}
+//MARK: - action
+extension SPRecordVideoManager{
     // 开始录制
     func sp_startRecord(){
         guard cameraAuth else {
@@ -203,55 +234,40 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         }
         
         sp_mainQueue {
-            self.setupAssertWrirer()
+            self.sp_setupAssertWrirer()
             self.isFirstVideo = false
             self.startRecording = true
             self.assetWriter?.startWriting()
             self.assetWriter?.startSession(atSourceTime: self.lastSampleTime!)
         }
     }
-    /**< 初始化writer  */
-    fileprivate func setupAssertWrirer(){
+    /**< 初始化writer 文件输入  */
+    fileprivate func sp_setupAssertWrirer(){
         FileManager.sp_directory(createPath: kVideoTempDirectory)
         do {
             if FileManager.default.fileExists(atPath: filePath) {
                 FileManager.remove(path: filePath)
                 sp_log(message: "file is exist ")
             }
+            self.videoSize = sp_pixeSize()
+            let size = self.videoSize
             
-            let size = sp_pixeSize()
             assetWriter = try AVAssetWriter(url:  URL(fileURLWithPath: filePath), fileType: AVFileType.mp4)
             let videoOutputSettings : [String : Any]
-//            // //写入视频大小
-//            let numPixels = size.width * size.height
-            //每像素比特
-//            var bitsPerPixel : CGFloat = 11.4
-//            if numPixels < 640 * 480 {
-//                bitsPerPixel = 4.05
-//            }
-//
-//            let bitsPerSecond = bitsPerPixel * numPixels
-//            let compressionProperties = [AVVideoAverageBitRateKey : bitsPerSecond,
-////                                         AVVideoExpectedSourceFrameRateKey : 15,
-//                                         AVVideoMaxKeyFrameIntervalKey : framesPerSecond,
-////                                         AVVideoProfileLevelKey : AVVideoProfileLevelH264BaselineAutoLevel
-//                ] as [String : Any]
             
             if #available(iOS 11.0, *) {
                 videoOutputSettings = [AVVideoCodecKey : AVVideoCodecHEVC,
                                        AVVideoWidthKey : size.width,
                                        AVVideoHeightKey : size.height,
-//                                       AVVideoCompressionPropertiesKey : compressionProperties
-                        ]
+                ]
             } else {
                 // Fallback on earlier versions
                 videoOutputSettings = [AVVideoCodecKey : AVVideoCodecH264,
                                        AVVideoWidthKey : size.width,
                                        AVVideoHeightKey : size.height,
-//                                       AVVideoCompressionPropertiesKey : compressionProperties
-                    ]
+                ]
             }
-     
+            
             var videoFormat : CMFormatDescription? = nil
             if #available(iOS 11.0, *) {
                 CMVideoFormatDescriptionCreate(allocator: kCFAllocatorDefault, codecType: kCMVideoCodecType_HEVC, width: Int32(size.width), height: Int32(size.height), extensions: nil, formatDescriptionOut: &videoFormat)
@@ -261,7 +277,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             
             videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoOutputSettings)
             videoWriterInput?.expectsMediaDataInRealTime = true
-//            videoWriterInput?.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
+            //            videoWriterInput?.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
             
             let sourcePixelBufferAttributesDictionary = [
                 String(kCVPixelBufferPixelFormatTypeKey) : Int(sp_getCVPixelFormatType()),
@@ -271,7 +287,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 ] as [String : Any]
             
             videoWriterPixelbufferInput = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoWriterInput!, sourcePixelBufferAttributes: sourcePixelBufferAttributesDictionary)
-        
+            
             if (assetWriter?.canAdd(videoWriterInput!))! {
                 assetWriter?.add(videoWriterInput!)
             }else {
@@ -284,7 +300,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             }else{
                 sp_log(message: "is no add audioWriterInput")
             }
-            self.logWriterStatus()
+            self.sp_logWriterStatus()
             sp_log(message: "setupAssertWrirer end ")
         }catch {
             sp_log(message: "writer is catch \(error)")
@@ -310,32 +326,26 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             if self?.assetWriter?.error != nil{
                 //                FileManager.remove(path: self.filePath)
             }else{
-                
-//                do {
-//                     try FileManager.default.copyItem(atPath: sp_getString(string: self?.filePath), toPath: "\(kVideoDirectory)/\(SPVideoHelp.getVideoName())")
-//                      SPVideoHelp.sp_send(notificationName: kVideoChangeNotification)
-//                }catch _{
-//
-//                }
-               
-                let asset = AVAsset(url: URL(fileURLWithPath: (self?.filePath)!))
-                SPVideoHelp.sp_recordForDeal(asset: asset, outputPath: "\(kVideoDirectory)/\(SPVideoHelp.getVideoName())") { (newAsset ,url) in
+                do {
+                    try FileManager.default.copyItem(atPath: sp_getString(string: self?.filePath), toPath: "\(kVideoDirectory)/\(SPVideoHelp.getVideoName())")
                     SPVideoHelp.sp_send(notificationName: kVideoChangeNotification)
+                }catch _{
+                    
                 }
             }
             self?.assetWriter = nil
         })
     }
-    // 切换镜头
-    func sp_changeVideoDevice(){
+    /// 切换摄像头
+    func sp_changeCamera(){
         guard cameraAuth else {
             return
         }
         let postion = currentDevice?.position
-        self.setCaptureInpunt(postion: postion == .back ? .front : .back)
+        self.sp_captureInpunt(postion: postion == .back ? .front : .back)
         self.sp_changeCameraAnimate()
     }
-    // 切换镜头的动画
+    /// 切换镜头的动画
     fileprivate func sp_changeCameraAnimate(){
         let changeAnimate = CATransition()
         changeAnimate.delegate = self
@@ -344,19 +354,14 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         changeAnimate.subtype = CATransitionSubtype.fromRight
         videoLayer?.add(changeAnimate, forKey: "changeAnimate")
     }
-    func animationDidStart(_ anim: CAAnimation) {
-        
-    }
-    // 放大
+    /// 放大
     func sp_zoomIn(scale : CGFloat = 1.0){
         
         if let zoomFactor = self.currentDevice?.videoZoomFactor{
             sp_log(message: "\(zoomFactor)")
             if zoomFactor < maxZoomActore {
                 let newZoomFactor = min(zoomFactor + scale, maxZoomActore)
-                self.changeDeviceProperty(propertyBlock: {  [weak self]()  in
-                    // 平滑放大
-                    //                    self?.currentDevice?.ramp(toVideoZoomFactor: newZoomFactor, withRate: 2.0)
+                self.sp_changeDeviceProperty(propertyBlock: {  [weak self]()  in
                     self?.currentDevice?.videoZoomFactor = newZoomFactor
                 })
             }
@@ -368,15 +373,14 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             sp_log(message: "\(zoomFactor)")
             if zoomFactor > minZoomActore {
                 let newZoomFactor = max(zoomFactor - scale, minZoomActore)
-                self.changeDeviceProperty(propertyBlock: { [weak self]()  in
-                    // 平滑放大
-                    //                    self?.currentDevice?.ramp(toVideoZoomFactor: newZoomFactor, withRate: 2.0)
+                self.sp_changeDeviceProperty(propertyBlock: { [weak self]()  in
                     self?.currentDevice?.videoZoomFactor = newZoomFactor
                 })
             }
         }
     }
     // MARK: -- 闪光灯设置
+    /// 闪光灯设置
     func sp_flashlight(){
         guard cameraAuth else {
             return
@@ -388,16 +392,14 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         if self.currentDevice?.position == AVCaptureDevice.Position.front {
             return
         }
-
+        
         if self.currentDevice?.torchMode == AVCaptureDevice.TorchMode.off {
-           sp_flashOn()
+            sp_flashOn()
         }else{
-           sp_flashOff()
+            sp_flashOff()
         }
     }
-    /*
-     打开闪光灯
-     */
+    /// 打开闪光灯
     func sp_flashOn(){
         if SP_IS_IPAD {
             return
@@ -408,7 +410,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         if  !(self.currentDevice?.hasTorch)! {
             return
         }
-        self.changeDeviceProperty(propertyBlock: { [weak self]() in
+        self.sp_changeDeviceProperty(propertyBlock: { [weak self]() in
             if self?.currentDevice?.torchMode == AVCaptureDevice.TorchMode.off {
                 self?.currentDevice?.torchMode = AVCaptureDevice.TorchMode.on
             }
@@ -418,9 +420,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             
         })
     }
-    /*
-     关闭闪光灯
-     */
+    /// 关闭闪光灯
     func sp_flashOff(){
         if SP_IS_IPAD {
             return
@@ -434,7 +434,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
         if  !(self.currentDevice?.hasTorch)! {
             return
         }
-        self.changeDeviceProperty(propertyBlock: { [weak self]() in
+        self.sp_changeDeviceProperty(propertyBlock: { [weak self]() in
             if self?.currentDevice?.torchMode == AVCaptureDevice.TorchMode.on {
                 self?.currentDevice?.torchMode = AVCaptureDevice.TorchMode.off
             }
@@ -447,7 +447,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     
     // MARK: -- 私有方法
     /**< 改变属性操作 */
-    fileprivate func changeDeviceProperty(propertyBlock:PropertyChangeBlock?){
+    fileprivate func sp_changeDeviceProperty(propertyBlock:PropertyChangeBlock?){
         do {
             // 锁定设备
             try self.currentDevice?.lockForConfiguration()
@@ -460,78 +460,8 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             
         }
     }
-    // MARK: -- delegate
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        autoreleasepool {
-            
-            if !CMSampleBufferDataIsReady(sampleBuffer) {
-                return
-            }
-            
-            let currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
-            self.lastSampleTime = currentSampleTime
-            var outputImage : CIImage? = nil
-            if output == self.videoOutput{
-                let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
-                outputImage = CIImage(cvPixelBuffer: imageBuffer)
-               
-                var noFilterOutputImage  : CIImage? = outputImage
-                noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
-                self.noFilterCIImage = CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
-                if self.filter != nil , let ciImg = outputImage{
-                    self.filter?.setValue(ciImg, forKey: kCIInputImageKey)
-                    outputImage = self.filter?.outputImage
-                }
-                // 执行判断人脸 然后增加头像上去
-                outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg: self.faceCoverImg)
-                /// 布局
-                outputImage = UIImage.sp_video(layoutType: self.videoLayoutType, outputImg: outputImage)
-                outputImage =  UIImage.sp_picRotating(imgae: outputImage)
-            }
-            
-            if startRecording == true && self.assetWriter != nil{
-                if output == self.videoOutput {
-                    self.isFirstVideo = true
-                    // 写入图像
-                    let newPixelbuffer = UIImage.sp_pixelBuffer(fromImage: UIImage.convertCIImageToCGImage(ciImage: outputImage!), pixelBufferPool: self.videoWriterPixelbufferInput?.pixelBufferPool,pixelFormatType: sp_getCVPixelFormatType(),pixelSize: sp_pixeSize())
-                    self.writerVideo(toPixelBuffer: newPixelbuffer, time: currentSampleTime)
-                }
-                // 必须第一帧为视频流后才能加入音频
-                if (output == self.audioOutput && self.isFirstVideo){
-                    // 音频
-                    self.writerAudio(didOutputSampleBuffer: sampleBuffer)
-                }
-            }
-            if outputImage != nil {
-               
-                let cgImage = self.ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
-                sp_mainQueue {
-                    self.videoLayer?.contents = cgImage
-                }
-            }
-        }
-    }
     
-    /**< 写入视频文件 */
-    fileprivate func writerVideo(toPixelBuffer pixelBuffer:CVPixelBuffer?, time :CMTime? ){
-        if self.startRecording == true,self.assetWriter != nil ,self.assetWriter?.status == .writing,self.videoWriterPixelbufferInput != nil , (self.videoWriterPixelbufferInput?.assetWriterInput.isReadyForMoreMediaData)! , pixelBuffer != nil , time != nil {
-//            sp_log(message: pixelBuffer)
-            let success = self.videoWriterPixelbufferInput?.append(pixelBuffer!, withPresentationTime: time!)
-            if success == false{
-                sp_log(message: "video append failur is \(String(describing: self.assetWriter?.error.debugDescription))")
-            }
-        }
-    }
-    /**< 写入音频文件 */
-    fileprivate func writerAudio(didOutputSampleBuffer sampleBuffer: CMSampleBuffer?){
-        if startRecording == true ,self.assetWriter != nil ,self.assetWriter?.status == .writing,sampleBuffer != nil , audioWriterInput != nil ,(audioWriterInput?.isReadyForMoreMediaData)!  {
-            let success = audioWriterInput?.append(sampleBuffer!)
-            if success == false{
-                sp_log(message: "audio append is failure \(String(describing: assetWriter?.error.debugDescription))")
-            }
-        }
-    }
-    /**< 点击取消  */
+    /// 点击取消
     func sp_cance(){
         if let  assetWriter = assetWriter{
             videoWriterInput = nil
@@ -541,13 +471,11 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             }
         }
         self.assetWriter = nil
+        self.captureSession.stopRunning()
     }
-    deinit {
-        sp_log(message: "销毁对象 ")
-        self.sp_cance()
-    }
-    /**< 打印 writerStatus */
-    fileprivate func logWriterStatus(){
+  
+    /// 打印文件输入的状态
+    fileprivate func sp_logWriterStatus(){
         switch self.assetWriter?.status {
         case .none:
             sp_log(message: "none")
@@ -563,5 +491,74 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             sp_log(message: "cancelled")
         }
     }
-    
+}
+//MARK: - delegate
+extension SPRecordVideoManager {
+    // MARK: -- delegate
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        autoreleasepool {
+            
+            if !CMSampleBufferDataIsReady(sampleBuffer) {
+                return
+            }
+            
+            let currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
+            self.lastSampleTime = currentSampleTime
+            var outputImage : CIImage? = nil
+            if output == self.videoOutput{
+                let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
+                outputImage = CIImage(cvPixelBuffer: imageBuffer)
+                var noFilterOutputImage  : CIImage? = outputImage
+                noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
+                self.noFilterCIImage = CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
+                if self.filter != nil , let ciImg = outputImage{
+                    self.filter?.setValue(ciImg, forKey: kCIInputImageKey)
+                    outputImage = self.filter?.outputImage
+                }
+                // 执行判断人脸 然后增加头像上去
+                outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg: self.faceCoverImg)
+                /// 布局
+                outputImage = UIImage.sp_video(layoutType: self.videoLayoutType, outputImg: outputImage)
+                /// 旋转图片
+                outputImage =  UIImage.sp_picRotating(imgae: outputImage)
+            }
+            if startRecording == true && self.assetWriter != nil{
+                if output == self.videoOutput {
+                    self.isFirstVideo = true
+                    // 写入图像
+                    let newPixelbuffer = UIImage.sp_pixelBuffer(fromImage: UIImage.convertCIImageToCGImage(ciImage: outputImage!), pixelBufferPool: self.videoWriterPixelbufferInput?.pixelBufferPool,pixelFormatType: sp_getCVPixelFormatType(),pixelSize: self.videoSize)
+                    self.writerVideo(toPixelBuffer: newPixelbuffer, time: currentSampleTime)
+                }
+                // 必须第一帧为视频流后才能加入音频
+                if (output == self.audioOutput && self.isFirstVideo){
+                    // 音频
+                    self.writerAudio(didOutputSampleBuffer: sampleBuffer)
+                }
+            }
+            if outputImage != nil {
+                let cgImage = self.ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
+                sp_mainQueue {
+                    self.videoLayer?.contents = cgImage
+                }
+            }
+        }
+    }
+    /// 写入视频帧数据
+    fileprivate func writerVideo(toPixelBuffer pixelBuffer:CVPixelBuffer?, time :CMTime? ){
+        if self.startRecording == true,self.assetWriter != nil ,self.assetWriter?.status == .writing,self.videoWriterPixelbufferInput != nil , (self.videoWriterPixelbufferInput?.assetWriterInput.isReadyForMoreMediaData)! , pixelBuffer != nil , time != nil {
+            let success = self.videoWriterPixelbufferInput?.append(pixelBuffer!, withPresentationTime: time!)
+            if success == false{
+                sp_log(message: "video append failur is \(String(describing: self.assetWriter?.error.debugDescription))")
+            }
+        }
+    }
+    /// 写入音频帧数据
+    fileprivate func writerAudio(didOutputSampleBuffer sampleBuffer: CMSampleBuffer?){
+        if startRecording == true ,self.assetWriter != nil ,self.assetWriter?.status == .writing,sampleBuffer != nil , audioWriterInput != nil ,(audioWriterInput?.isReadyForMoreMediaData)!  {
+            let success = audioWriterInput?.append(sampleBuffer!)
+            if success == false{
+                sp_log(message: "audio append is failure \(String(describing: assetWriter?.error.debugDescription))")
+            }
+        }
+    }
 }

@@ -131,6 +131,7 @@ class SPSplicingToolCollectionCell: UICollectionViewCell {
         label.font =  sp_fontSize(fontSize:  12)
         label.textColor = SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue)
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     var model : SPToolModel? {
