@@ -15,7 +15,7 @@ import SPCommonLibrary
 typealias SPExportSuccess = (_ assert : AVAsset?,_ url : String)-> Void
 let kVideoChangeNotification : String = "VideoChangeNotification"
 /// 获取视频中音频视频的帧数据
-typealias SPVideoSampleBuffer = (videoBuffers : [CMSampleBuffer]?,audioBuffers : [CMSampleBuffer]?)
+typealias SPVideoSampleBuffer = (videoBuffers : [CMSampleBuffer]?,audioBuffers : [CMSampleBuffer]?,imgs : [CMTime]?)
 class SPVideoHelp: NSObject {
   
     // 获取视频的名称
@@ -51,7 +51,6 @@ class SPVideoHelp: NSObject {
             insertTime = CMTimeAdd(insertTime, asset.duration)
         }
         // 旋转视图图像，防止90度颠倒
-        firstTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
         let videoPath = URL(fileURLWithPath: outputPath)
         let exporter = AVAssetExportSession(asset: compostition, presetName: AVAssetExportPresetHighestQuality)!
         exporter.outputURL = videoPath
@@ -98,7 +97,6 @@ class SPVideoHelp: NSObject {
         }catch _{
             
         }
-        videoTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
         let videoPath = URL(fileURLWithPath: outputPath)
         let exporter = AVAssetExportSession(asset: componsition, presetName: AVAssetExportPresetHighestQuality)!
         exporter.outputURL = videoPath
@@ -169,7 +167,6 @@ class SPVideoHelp: NSObject {
         }catch _{
             
         }
-//        videoTrack!.preferredTransform = CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
         let videoPath = URL(fileURLWithPath: outputPath)
         let exporter = AVAssetExportSession(asset: compostion, presetName: AVAssetExportPresetHighestQuality)!
         exporter.outputURL = videoPath
@@ -287,15 +284,15 @@ class SPVideoHelp: NSObject {
     ///
     /// - Parameter asset: 视频
     /// - Returns: 音\视频流数据
-    class func sp_videoBuffer(asset : AVAsset?,isReadAudio : Bool = false) ->SPVideoSampleBuffer{
+    class func sp_videoBuffer(asset : AVAsset?,isReadAudio : Bool = false,isVideoSample : Bool = false) ->SPVideoSampleBuffer{
         guard let videoAsset = asset else {
-            return (nil,nil)
+            return (nil,nil,nil)
         }
         let asserReader = try! AVAssetReader(asset: videoAsset)
         let videoTrack = videoAsset.tracks(withMediaType: AVMediaType.video).first
         let audioTrack = videoAsset.tracks(withMediaType: AVMediaType.audio).first
         if videoTrack == nil {
-            return (nil, nil)
+            return (nil, nil,nil)
         }
         let outputSettings :[String:Any] =  [kCVPixelBufferPixelFormatTypeKey as String : Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
         let trackOutput = AVAssetReaderTrackOutput(track: videoTrack!, outputSettings: outputSettings)
@@ -319,12 +316,18 @@ class SPVideoHelp: NSObject {
        
         
         var samples: [CMSampleBuffer] = []
+        var imgList = [CMTime]()
         while let sample = trackOutput.copyNextSampleBuffer() {
-            samples.append(sample)
+            autoreleasepool {
+                if isVideoSample {
+                    samples.append(sample)
+                }
+                imgList.append(CMSampleBufferGetPresentationTimeStamp(sample))
+            }
         }
         sp_log(message: "读取结束")
         asserReader.cancelReading()
-        return (samples,audioSamples)
+        return (samples,audioSamples,imgList)
     }
     private class func sp_dealVideoUnpend(asset:AVAsset?,url : String,complete : SPExportSuccess? = nil){
         guard let block = complete else {
@@ -346,9 +349,8 @@ class SPVideoHelp: NSObject {
         }
         sp_sync {
             let data = sp_videoBuffer(asset: videoAsset)
-            let samples = data.videoBuffers
-//            let audioSamples = data.audioBuffers
-            if sp_count(array:  samples) > 0 {
+             let timeList = data.imgs
+            if sp_count(array:  timeList) > 0 {
                 let  filePath : String = "\(kVideoTempDirectory)/temp.mp4"
                 FileManager.sp_directory(createPath:kVideoTempDirectory)
                 if FileManager.default.fileExists(atPath: filePath) {
@@ -377,7 +379,6 @@ class SPVideoHelp: NSObject {
                     }
                     let videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoOutputSettings, sourceFormatHint: (videoTrack?.formatDescriptions.last as! CMFormatDescription))
                     videoWriterInput.expectsMediaDataInRealTime = false
-                    videoWriterInput.transform = videoTrack!.preferredTransform
                     let sourcePixelBufferAttributesDictionary = [
                         String(kCVPixelBufferPixelFormatTypeKey) : kCVPixelFormatType_32BGRA,
                         String(kCVPixelBufferWidthKey) : size.width,
@@ -386,44 +387,37 @@ class SPVideoHelp: NSObject {
                         ] as [String : Any]
                     
                     let videoWriterPixelbufferInput = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoWriterInput, sourcePixelBufferAttributes: sourcePixelBufferAttributesDictionary)
-                    assetWriter.add(videoWriterInput)
- 
-                    assetWriter.startWriting()
-                    
-                    let startTime = CMSampleBufferGetPresentationTimeStamp(samples!.first!)
-                    assetWriter.startSession(atSourceTime: startTime)
-                  
-                    
-                    
-                    let group = DispatchGroup()
-                
-                    group.enter()
-                    sp_log(message: "开始转换 倒放")
-                    for i in 0..<sp_count(array:  samples){
-                        if let samplesBuffer = samples?[i] {
-                            let time = CMSampleBufferGetPresentationTimeStamp(samplesBuffer)
-                            let dataBuffer = samples?[sp_count(array:  samples) - i - 1]
-                            
-                            if  let imageBufferRef = CMSampleBufferGetImageBuffer(dataBuffer!){
-                                while !videoWriterInput.isReadyForMoreMediaData{
-                                    Thread.sleep(forTimeInterval: 0.1)
-                                }
-                                videoWriterPixelbufferInput.append(imageBufferRef, withPresentationTime: time)
-                            }
-                        }
+                    if assetWriter.canAdd(videoWriterInput){
+                        assetWriter.add(videoWriterInput)
                     }
+
+                    assetWriter.startWriting()
+                    assetWriter.startSession(atSourceTime: CMTime.zero)
+                    sp_log(message: "开始转换 倒放")
+                    for i in 0..<sp_count(array:  timeList){
+                        autoreleasepool(invoking: {
+                            if let time = timeList?[i],let lastTime = timeList?[sp_count(array: timeList) - i - 1]{
+                                if   let img =  sp_thumbnailImage(assesst: videoAsset, time: lastTime) {
+                                    if let ciImg = img.cgImage {
+                                        if let imageBuffer = UIImage.sp_pixelBuffer(fromImage: ciImg, pixelBufferPool: nil, pixelFormatType: kCVPixelFormatType_32BGRA, pixelSize: size) {
+                                            while !videoWriterInput.isReadyForMoreMediaData{
+                                                Thread.sleep(forTimeInterval: 0.1)
+                                            }
+                                            videoWriterPixelbufferInput.append(imageBuffer, withPresentationTime: time)
+                                        }
+                                    }
+                                }
+                            }
+                        })
+                    }
+            
                     sp_log(message: "结束转换 倒放")
-                    group.leave()
-                    
-                    group.notify(queue: .main, execute: {
-                        videoWriterInput.markAsFinished()
-                        assetWriter.finishWriting {
-                            let newAssert = AVAsset(url: URL(fileURLWithPath: filePath))
-                            sp_log(message: "视频倒放转换成功 \(newAssert)")
-                            sp_dealVideoUnpend(asset: newAssert, url: filePath, complete: complete)
-                        }
-                    })
-                   
+                    videoWriterInput.markAsFinished()
+                    assetWriter.finishWriting {
+                        let newAssert = AVAsset(url: URL(fileURLWithPath: filePath))
+                        sp_log(message: "视频倒放转换成功 \(newAssert)")
+                        sp_dealVideoUnpend(asset: newAssert, url: filePath, complete: complete)
+                    }
                 }else{
                     sp_dealVideoUnpend(asset: nil, url: "", complete: complete)
                 }

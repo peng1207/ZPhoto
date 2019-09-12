@@ -18,7 +18,7 @@ class SPVideoSplicingVC: SPBaseVC {
         let view = SPPhotoToolView()
         view.canShowSelect = false
         view.dataArray = [
-//            SPToolModel.sp_init(type: .layout),
+            SPToolModel.sp_init(type: .layout),
             SPToolModel.sp_init(type: .edit)
         ]
         view.selectBlock = { [weak self] (type) in
@@ -28,6 +28,7 @@ class SPVideoSplicingVC: SPBaseVC {
     }()
     fileprivate lazy var videoPlayView : SPVideoPlayView = {
         let view = SPVideoPlayView()
+        view.isHidden = true
         return view
     }()
     fileprivate lazy var rightItemView : SPNavItemBtnView = {
@@ -37,13 +38,24 @@ class SPVideoSplicingVC: SPBaseVC {
         view.clickBlock = { [weak self] (type) in
             self?.sp_deal(btnType: type)
         }
+        view.isHidden = true
+        return view
+    }()
+    fileprivate lazy var layoutView : SPVideoSplicingLayoutView = {
+        let view = SPVideoSplicingLayoutView()
+        view.selectBlock = { [weak self] (index) in
+            self?.sp_deal(index: index)
+        }
+        view.isHidden = true
         return view
     }()
     fileprivate var videoModel : SPVideoModel?
-    fileprivate var type : SPVideoSplicingType = .nine
+    fileprivate var type : SPVideoSplicingType = .none
+    fileprivate var layoutList :  [SPVideoSplicingType]!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
+        sp_setupLayoutList()
         sp_asyncAfter(time: 0.1) {
             self.sp_setupSplicing()
         }
@@ -64,8 +76,10 @@ class SPVideoSplicingVC: SPBaseVC {
     /// 创建UI
     override func sp_setupUI() {
         self.view.addSubview(self.videoPlayView)
+         self.view.addSubview(self.layoutView)
         self.view.addSubview(self.toolView)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.rightItemView)
+        self.navigationItem.title = SPLanguageChange.sp_getString(key: "SPLICING")
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -78,6 +92,7 @@ class SPVideoSplicingVC: SPBaseVC {
             maker.left.right.top.equalTo(self.view).offset(0)
             maker.bottom.equalTo(self.toolView.snp.top).offset(0)
         }
+       
         self.toolView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
             maker.height.equalTo(70)
@@ -86,6 +101,11 @@ class SPVideoSplicingVC: SPBaseVC {
             } else {
                 maker.bottom.equalTo(self.view.snp.bottom).offset(0)
             }
+        }
+        self.layoutView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.equalTo(60)
+            maker.bottom.equalTo(self.toolView.snp.top).offset(0)
         }
     }
     deinit {
@@ -127,14 +147,20 @@ extension SPVideoSplicingVC {
         }
     }
     fileprivate func sp_dealLayout(){
-        
+        self.layoutView.isHidden = !self.layoutView.isHidden
     }
     fileprivate func sp_dealEdit(){
         let dragVC = SPDragVC()
         dragVC.dataArray = self.selectArray
         dragVC.complete = { [weak self] (array) in
             if let list : [SPVideoModel] = array as? [SPVideoModel]{
-                self?.selectArray = list
+                if list.count != sp_count(array: self?.selectArray){
+                    self?.selectArray = list
+                    self?.sp_setupLayoutList()
+                }else{
+                     self?.selectArray = list
+                }
+               
                 self?.sp_setupSplicing()
             }
         }
@@ -142,6 +168,10 @@ extension SPVideoSplicingVC {
     }
     fileprivate func sp_setupData(){
         sp_mainQueue {
+            if self.videoModel != nil{
+                self.videoPlayView.isHidden = false
+                self.rightItemView.isHidden = false
+            }
             self.videoPlayView.videoModel = self.videoModel
         }
     }
@@ -182,5 +212,16 @@ extension SPVideoSplicingVC {
             SPShare.sp_share(videoUrls: [url], vc: self)
         }
     }
-    
+    fileprivate func sp_setupLayoutList(){
+        self.layoutList = SPVideoSplicingHelp.sp_layoutList(count: sp_count(array: self.selectArray))
+        let frameList = SPVideoSplicingHelp.sp_frames(layoutList: layoutList)
+        self.layoutView.dataArray = frameList
+    }
+    fileprivate func sp_deal(index : Int){
+        if  index < sp_count(array: self.layoutList) {
+            self.type = self.layoutList[index]
+            self.layoutView.isHidden = true
+           sp_setupSplicing()
+        }
+    }
 }

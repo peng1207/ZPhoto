@@ -54,6 +54,7 @@ class SPVideoUpendVC: SPBaseVC {
     override func sp_setupUI() {
         self.view.addSubview(self.videoPlayView)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.rightItemView)
+        self.navigationItem.title = SPLanguageChange.sp_getString(key: "INVERSION")
         self.sp_addConstraint()
     }
     /// 处理有没数据

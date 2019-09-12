@@ -55,6 +55,7 @@ class SPVideoSplicingSelectVC: SPBaseVC {
         self.addChild(self.selectVC)
         self.view.addSubview(self.safeView)
         self.view.addSubview(self.selectView)
+        self.safeView.backgroundColor = self.selectView.backgroundColor
         self.sp_addConstraint()
     }
     /// 处理有没数据

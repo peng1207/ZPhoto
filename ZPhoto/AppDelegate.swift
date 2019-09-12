@@ -41,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            sp_log(message: sp_getShuangSeQiu())
 //        }
 //
-//        var price : CGFloat = 10
+//        var price : CGFloat = 9.3
 //        for _ in 0..<10 {
 //            price = price + price * 0.1
 //        }

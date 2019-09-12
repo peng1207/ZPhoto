@@ -50,11 +50,7 @@ class SPVideoUpendIndexVC: SPBaseVC {
     fileprivate func sp_addConstraint(){
         self.selectVC.view.snp.makeConstraints { (maker) in
             maker.left.right.top.equalTo(self.view).offset(0)
-            if #available(iOS 11.0, *) {
-                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
-            } else {
-                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
-            }
+            maker.bottom.equalTo(self.view).offset(0)
         }
     }
     deinit {

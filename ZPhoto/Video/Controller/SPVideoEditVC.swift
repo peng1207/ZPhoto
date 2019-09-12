@@ -15,28 +15,43 @@ class  SPVideoEditVC : SPBaseVC {
         let view = SPVideoScheduleView()
         return view
     }()
-  
-    lazy fileprivate var  showImage : UIImageView = {
-        return UIImageView()
+    fileprivate lazy var videoPlayerView : SPVideoPlayView  = {
+        let view = SPVideoPlayView()
+        view.buttonView.isHidden = true
+        return view
     }()
-    
+    fileprivate lazy var playBtn : UIButton = {
+        let btn = UIButton(type: UIButton.ButtonType.custom)
+        btn.setImage(UIImage(named: "VideoStop"), for: .normal)
+        btn.setImage(UIImage(named: "VideoPlay"), for: .selected)
+        
+        btn.addTarget(self, action: #selector(sp_play), for: UIControl.Event.touchUpInside)
+        return btn
+    }()
     var videoModel : SPVideoModel?
     fileprivate var valueData : SPVideoSampleBuffer!
     override func viewDidLoad() {
         super.viewDidLoad()
         sp_setupUI()
+        sp_setupVideo()
         sp_setupData()
     }
     /// 添加UI
     override func sp_setupUI(){
-        self.view.addSubview(self.showImage)
+        self.view.addSubview(self.videoPlayerView)
         self.view.addSubview(self.scheduleView)
+        self.videoPlayerView.addSubview(self.playBtn)
         self.sp_addConstraint()
     }
     fileprivate func sp_addConstraint(){
-        self.showImage.snp.makeConstraints { (maker) in
-            maker.left.top.right.equalTo(self.view).offset(0)
+        self.videoPlayerView.snp.makeConstraints { (maker) in
+            maker.left.right.top.equalTo(self.view).offset(0)
             maker.bottom.equalTo(self.scheduleView.snp.top).offset(0)
+        }
+        self.playBtn.snp.makeConstraints { (maker) in
+            maker.width.height.equalTo(40)
+            maker.centerX.equalTo(self.videoPlayerView).offset(0)
+            maker.centerY.equalTo(self.videoPlayerView).offset(0)
         }
         self.scheduleView.snp.makeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
@@ -60,6 +75,13 @@ extension SPVideoEditVC {
         self.navigationController?.pushViewController(videoPalyVC, animated: true)
     }
     fileprivate func sp_setupData(){
-//        self.valueData = SPVideoHelp.sp_videoBuffer(asset: self.videoModel?.asset, isReadAudio: false)
+        self.valueData = SPVideoHelp.sp_videoBuffer(asset: self.videoModel?.asset )
+    }
+    fileprivate func sp_setupVideo(){
+        self.videoPlayerView.videoModel = self.videoModel
+    }
+    @objc fileprivate func sp_play(){
+        self.videoPlayerView.playAction()
+        self.playBtn.isSelected = !self.playBtn.isSelected
     }
 }

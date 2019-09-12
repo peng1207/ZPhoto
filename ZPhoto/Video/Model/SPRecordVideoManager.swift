@@ -35,12 +35,10 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
     
     // 视频源的出口
     var videoOutput : AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
-    //是视频源的控制中心
-    var videoConnection: AVCaptureConnection?
+ 
     //  音频源的出口
     var  audioOutput : AVCaptureAudioDataOutput = AVCaptureAudioDataOutput()
-    //音频源的控制中心
-    var audioConnection: AVCaptureConnection?
+ 
     var videoLayer : AVCaptureVideoPreviewLayer? {
         didSet{
             videoLayer?.videoGravity = AVLayerVideoGravity.resize
@@ -169,18 +167,14 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             
             videoOutput.alwaysDiscardsLateVideoFrames = true
             videoOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
-            
             audioOutput.setSampleBufferDelegate(self, queue: audioDataOutputQueue)
-            
             if self.captureSession.canAddOutput(videoOutput){
                 self.captureSession.addOutput(videoOutput)
             }
-            videoConnection = videoOutput.connection(with: AVMediaType.video)
-            
+ 
             if self.captureSession.canAddOutput(audioOutput) {
                 self.captureSession.addOutput(audioOutput)
             }
-            audioConnection = audioOutput.connection(with: AVMediaType.audio)
         }
         self.captureSession.commitConfiguration()
     }
@@ -229,32 +223,32 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             assetWriter = try AVAssetWriter(url:  URL(fileURLWithPath: filePath), fileType: AVFileType.mp4)
             let videoOutputSettings : [String : Any]
 //            // //写入视频大小
-            let numPixels = size.width * size.height
+//            let numPixels = size.width * size.height
             //每像素比特
-            var bitsPerPixel : CGFloat = 11.4
-            if numPixels < 640 * 480 {
-                bitsPerPixel = 4.05
-            }
-            
-            let bitsPerSecond = bitsPerPixel * numPixels
-            let compressionProperties = [AVVideoAverageBitRateKey : bitsPerSecond,
-//                                         AVVideoExpectedSourceFrameRateKey : 15,
-                                         AVVideoMaxKeyFrameIntervalKey : framesPerSecond,
-//                                         AVVideoProfileLevelKey : AVVideoProfileLevelH264BaselineAutoLevel
-                ] as [String : Any]
+//            var bitsPerPixel : CGFloat = 11.4
+//            if numPixels < 640 * 480 {
+//                bitsPerPixel = 4.05
+//            }
+//
+//            let bitsPerSecond = bitsPerPixel * numPixels
+//            let compressionProperties = [AVVideoAverageBitRateKey : bitsPerSecond,
+////                                         AVVideoExpectedSourceFrameRateKey : 15,
+//                                         AVVideoMaxKeyFrameIntervalKey : framesPerSecond,
+////                                         AVVideoProfileLevelKey : AVVideoProfileLevelH264BaselineAutoLevel
+//                ] as [String : Any]
             
             if #available(iOS 11.0, *) {
                 videoOutputSettings = [AVVideoCodecKey : AVVideoCodecHEVC,
                                        AVVideoWidthKey : size.width,
                                        AVVideoHeightKey : size.height,
-                                       AVVideoCompressionPropertiesKey : compressionProperties
+//                                       AVVideoCompressionPropertiesKey : compressionProperties
                         ]
             } else {
                 // Fallback on earlier versions
                 videoOutputSettings = [AVVideoCodecKey : AVVideoCodecH264,
                                        AVVideoWidthKey : size.width,
                                        AVVideoHeightKey : size.height,
-                                       AVVideoCompressionPropertiesKey : compressionProperties
+//                                       AVVideoCompressionPropertiesKey : compressionProperties
                     ]
             }
      
@@ -267,7 +261,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             
             videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoOutputSettings)
             videoWriterInput?.expectsMediaDataInRealTime = true
-            videoWriterInput?.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
+//            videoWriterInput?.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
             
             let sourcePixelBufferAttributesDictionary = [
                 String(kCVPixelBufferPixelFormatTypeKey) : Int(sp_getCVPixelFormatType()),
@@ -316,6 +310,14 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
             if self?.assetWriter?.error != nil{
                 //                FileManager.remove(path: self.filePath)
             }else{
+                
+//                do {
+//                     try FileManager.default.copyItem(atPath: sp_getString(string: self?.filePath), toPath: "\(kVideoDirectory)/\(SPVideoHelp.getVideoName())")
+//                      SPVideoHelp.sp_send(notificationName: kVideoChangeNotification)
+//                }catch _{
+//
+//                }
+               
                 let asset = AVAsset(url: URL(fileURLWithPath: (self?.filePath)!))
                 SPVideoHelp.sp_recordForDeal(asset: asset, outputPath: "\(kVideoDirectory)/\(SPVideoHelp.getVideoName())") { (newAsset ,url) in
                     SPVideoHelp.sp_send(notificationName: kVideoChangeNotification)
@@ -484,7 +486,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg: self.faceCoverImg)
                 /// 布局
                 outputImage = UIImage.sp_video(layoutType: self.videoLayoutType, outputImg: outputImage)
-                
+                outputImage =  UIImage.sp_picRotating(imgae: outputImage)
             }
             
             if startRecording == true && self.assetWriter != nil{
@@ -501,7 +503,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
                 }
             }
             if outputImage != nil {
-                outputImage =  UIImage.sp_picRotating(imgae: outputImage)
+               
                 let cgImage = self.ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
                 sp_mainQueue {
                     self.videoLayer?.contents = cgImage

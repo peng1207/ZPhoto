@@ -14,7 +14,11 @@ import SPCommonLibrary
 // MARK: -- 进度view  主要用来切割视频的
 class SPVideoScheduleView : UIView {
     fileprivate let maxSpace : CGFloat = 20.00
-    var assert : AVAsset?
+    var imageList : [UIImage]?{
+        didSet{
+            
+        }
+    }
     // 左边拖动的view
     lazy var leftPanView : UIImageView! = {
         let view = UIImageView()
@@ -70,12 +74,13 @@ extension SPVideoScheduleView {
     }
     private func addConstraintView(){
         self.leftPanView.snp.makeConstraints { (make) in
-            make.top.bottom.equalTo(self).offset(0)
+            make.top.equalTo(self).offset(1)
+            make.bottom.equalTo(self).offset(0)
             self.leftConstraint = make.left.equalTo(self).offset(5).constraint
             make.width.equalTo(12)
         }
         self.rightPanView.snp.makeConstraints { (make) in
-            make.top.bottom.equalTo(self).offset(0)
+            make.top.bottom.equalTo(self.leftPanView).offset(0)
             make.width.equalTo(self.leftPanView.snp.width).offset(0);
             self.rightConstraint = make.right.equalTo(self.snp.right).offset(-5).constraint
         }

@@ -18,7 +18,7 @@ class SPVideoPlayView : UIView{
     //定时器
     fileprivate var link : CADisplayLink?
     fileprivate var canRun : Bool = false
-    lazy fileprivate var buttonView :SPVideoPlayButtonView? = {
+    lazy var buttonView :SPVideoPlayButtonView = {
         let button = SPVideoPlayButtonView()
         return button
     }()
@@ -48,8 +48,8 @@ class SPVideoPlayView : UIView{
  extension SPVideoPlayView {
     /**< 创建UI */
     fileprivate func setupUI(){
-        self.addSubview(buttonView!)
-        buttonView?.snp.makeConstraints({ (maker) in
+        self.addSubview(buttonView)
+        buttonView.snp.makeConstraints({ (maker) in
             maker.left.right.equalTo(self).offset(0)
             maker.height.equalTo(40)
             
@@ -66,22 +66,22 @@ class SPVideoPlayView : UIView{
 extension SPVideoPlayView {
     /**< 添加事件 */
     fileprivate func addAction(){
-        buttonView?.playButton.addTarget(self, action: #selector(playAction), for: UIControl.Event.touchUpInside)
-        buttonView?.progressView.addTarget(self, action: #selector(change(silder:)), for: UIControl.Event.valueChanged)
-        buttonView?.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControl.Event.touchUpInside)
-        buttonView?.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControl.Event.touchCancel)
-         buttonView?.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControl.Event.touchUpOutside)
+        buttonView.playButton.addTarget(self, action: #selector(playAction), for: UIControl.Event.touchUpInside)
+        buttonView.progressView.addTarget(self, action: #selector(change(silder:)), for: UIControl.Event.valueChanged)
+        buttonView.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControl.Event.touchUpInside)
+        buttonView.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControl.Event.touchCancel)
+         buttonView.progressView.addTarget(self, action: #selector(changeEnd(silder:)), for: UIControl.Event.touchUpOutside)
     }
     /**< 播放按钮点击事件  */
     @objc func playAction(){
-        if (buttonView?.playButton.isSelected)! {
+        if buttonView.playButton.isSelected {
             videoPlayer?.pause()
             canRun = false
         }else {
             videoPlayer?.play()
             canRun = true
         }
-        buttonView?.playButton.isSelected = !(buttonView?.playButton.isSelected)!
+        buttonView.playButton.isSelected = !buttonView.playButton.isSelected
     }
     /**< 滑块值改变的方法 */
     @objc fileprivate func change(silder:UISlider) {
@@ -113,8 +113,8 @@ extension SPVideoPlayView {
             
             let second = CMTimeGetSeconds(asset.duration)
             sp_log(message: "second  \(second)")
-            buttonView?.timeLabel.text = formatPlayTime(seconds: second)
-            buttonView?.progressView.maximumValue = Float(second)
+            buttonView.timeLabel.text = formatPlayTime(seconds: second)
+            buttonView.progressView.maximumValue = Float(second)
             self.addVideoObserver()
             self.addAction()
         }
@@ -128,7 +128,7 @@ extension SPVideoPlayView {
             if self?.videoPlayer?.rate == 0{
                 self?.videoPlayer?.play()
             }
-            self?.buttonView?.playButton.isSelected = true
+            self?.buttonView.playButton.isSelected = true
             self?.canRun = true
         })
     }
@@ -153,7 +153,7 @@ extension SPVideoPlayView{
     @objc fileprivate func update(){
         if canRun {
             let currentTime = CMTimeGetSeconds((self.videoPlayerItem?.currentTime())!)
-            self.buttonView?.progressView.setValue(Float(currentTime), animated: false)
+            self.buttonView.progressView.setValue(Float(currentTime), animated: false)
         }
     }
     /**< 停止定时器  */
@@ -180,8 +180,8 @@ extension SPVideoPlayView {
     /**< 播放结束的通知 */
     @objc func playerDidReachEnd(){
         videoPlayer?.seek(to: CMTime.zero, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
-        buttonView?.progressView.setValue(0, animated: true)
-        buttonView?.playButton.isSelected = false
+        buttonView.progressView.setValue(0, animated: true)
+        buttonView.playButton.isSelected = false
     }
     /**< 添加观察者  */
     func addVideoObserver(){
