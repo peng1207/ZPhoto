@@ -9,3 +9,4 @@ CFBundleName = "ZPhoto";
 NSCameraUsageDescription = "Use camera to record video or take pictures, record the beautiful moment with camera. If you don't allow it, you can't use it.";
 NSMicrophoneUsageDescription = "Get your voice or nearby sound source and save the wonderful sound. If you don't allow it, you can't use it.";
 NSPhotoLibraryUsageDescription = "If you want to get pictures or videos in your album, you want to save your videos or pictures to your albums.";
+NSPhotoLibraryAddUsageDescription = "If you want to save the picture in the album, you can't save the picture in the album if you don't agree.";
