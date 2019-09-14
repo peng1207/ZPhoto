@@ -1,0 +1,6 @@
+framework module Pods_ZPhotoTests {
+  umbrella header "Pods-ZPhotoTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -15,24 +15,43 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>2.0.0</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string></string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.huangshp.ZPhoto</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>1.0.0.3</string>
+	<string>2019091401</string>
+	<key>LSApplicationCategoryType</key>
+	<string>NSPhotoLibraryAddUsageDescription</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>用摄像头来录制视频或用来拍照，用摄像头记录美好的瞬间.若不允许无法使用哦</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>获取您的声音或附近的音源,保存美妙的音.若不允许无法使用哦</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>想要把图片保存到相册中，若不同意无法把图片保存到相册中</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>想获取您相册中的图片或视频，想把视频或图片保存到您的相册中.若不允许无法使用哦</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
 </dict>
 </plist>

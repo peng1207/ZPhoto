@@ -9,13 +9,15 @@
 import Foundation
 import CoreImage
 import UIKit
-
+import SPCommonLibrary
 class SPFilterModel : NSObject {
     var filter : CIFilter?
    
     var outputImage : CIImage? {
         didSet{
-            showImage = UIImage(ciImage: outputImage!)
+            if let o = outputImage {
+                 showImage = UIImage(ciImage:o)
+            }
         }
     }
     var showImage : UIImage?
@@ -28,7 +30,11 @@ class SPFilterModel : NSObject {
         didSet{
             if let f = filter {
                 f.setValue(inputImage, forKey: kCIInputImageKey)
-                outputImage = f.outputImage
+                if let _ = f.outputImage{
+                      outputImage = f.outputImage
+                }else{
+                    outputImage = inputImage
+                }
             }else{
                 outputImage = inputImage
             }
@@ -41,33 +47,60 @@ class SPFilterModel : NSObject {
     fileprivate func setupFilter(){
        
         switch filteEnum {
-        case  .EffectInstant:
+        case  .effectInstant?:
             filter = CIFilter.photoEffectInstant()
-        case .EffectNoir:
+        case .effectNoir?:
             filter = CIFilter.photoEffectNoir()
-        case .EffectTonal:
+        case .effectTonal?:
             filter = CIFilter.photoEffectTonal()
-        case .EffectTransfer:
+        case .effectTransfer?:
             filter = CIFilter.photoEffectTransfer()
-        case .EffectMono:
+        case .effectMono?:
             filter = CIFilter.photoEffectMono()
-        case .EffectFade:
+        case .effectFade?:
             filter = CIFilter.photoEffectFade()
-        case .EffectProcess:
+        case .effectProcess?:
             filter = CIFilter.photoEffectProcess()
-        case .EffectChrome:
+        case .effectChrome?:
             filter = CIFilter.photoEffectChrome()
-        case .HueAdjust:
+        case .hueAdjust?:
             filter = CIFilter.photoHueAdjust()
-        case .VignetteEffect:
+        case .vignetteEffect?:
             filter = CIFilter.photoVignetteEffect()
-        case .SRGBToneCurveToLinear:
+        case .sRGBToneCurveToLinear?:
             filter = CIFilter.photoSRGBToneCurveToLinear()
+        case .sepiaTone?:
+            filter = CIFilter.photoCISepiaTone()
+        case .vortexDistortion?:
+            filter = CIFilter.vortexDistortion()
+        case .bumpDistortion?:
+            filter = CIFilter.bumpDistortion()
+        case .bumpDistortionLinear?:
+            filter = CIFilter.bumpDistortionLinear()
+        case .cameraCalibrationLensCorrection?:
+            filter = CIFilter.cameraCalibrationLensCorrection()
+        case .circleSplashDistortion?:
+            filter = CIFilter.circleSplashDistortion()
+        case .gaussianGradient?:
+            filter = CIFilter.gaussianGradient()
+        case .colorMap?:
+            filter = CIFilter.colorMap()
+        case .circularWrap?:
+            filter = CIFilter.circularWrap()
+        case .perspectiveTransform?:
+            filter = CIFilter.perspectiveTransform()
+        case .straightenFilter?:
+            filter = CIFilter.straightenFilter()
+        case .lineOverlay?:
+            filter = CIFilter.lineOverlay()
+        case .edges?:
+            filter = CIFilter.edges()
         case .none:
             filter = nil
         case .some(_):
             filter = nil
         }
+    
     }
     
 }

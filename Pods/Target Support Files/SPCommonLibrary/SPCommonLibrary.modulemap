@@ -1,0 +1,6 @@
+framework module SPCommonLibrary {
+  umbrella header "SPCommonLibrary-umbrella.h"
+
+  export *
+  module * { export * }
+}
