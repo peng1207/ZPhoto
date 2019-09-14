@@ -8,7 +8,7 @@
 
 import Foundation
 import AVFoundation
-
+import UIKit
 class SPCameraHelp {
 
     /// 放大
@@ -114,5 +114,23 @@ class SPCameraHelp {
         }catch _ {
             
         }
+    }
+    
+    class func sp_deal(videoImg ciImg : CIImage? , filter : CIFilter?,faceCoverImg : UIImage?, videoLayoutType : SPVideoLayoutType = .none)->CIImage?{
+        var newOutputImg : CIImage? = ciImg
+        if let f = filter, let newCIImg = newOutputImg{
+            f.setValue(newCIImg, forKey: kCIInputImageKey)
+            newOutputImg = f.outputImage
+        }
+        if let newCIImg = newOutputImg {
+            newOutputImg = CIFilter.photoautoAdjust(inputImage: newCIImg)
+        }
+        //执行判断人脸 然后增加头像上去
+        newOutputImg = UIImage.sp_detectFace(inputImg: newOutputImg, coverImg: faceCoverImg)
+        // 视频帧布局
+        newOutputImg = UIImage.sp_video(layoutType: videoLayoutType, outputImg: newOutputImg)
+        // 旋转图片
+        newOutputImg = UIImage.sp_picRotating(imgae: newOutputImg)
+        return newOutputImg
     }
 }

@@ -442,16 +442,7 @@ extension SPRecordVideoManager {
                 var noFilterOutputImage  : CIImage? = outputImage
                 noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
                 self.noFilterCIImage = CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
-                if self.filter != nil , let ciImg = outputImage{
-                    self.filter?.setValue(ciImg, forKey: kCIInputImageKey)
-                    outputImage = self.filter?.outputImage
-                }
-                // 执行判断人脸 然后增加头像上去
-                outputImage = UIImage.sp_detectFace(inputImg: outputImage!, coverImg: self.faceCoverImg)
-                /// 布局
-                outputImage = UIImage.sp_video(layoutType: self.videoLayoutType, outputImg: outputImage)
-                /// 旋转图片
-                outputImage =  UIImage.sp_picRotating(imgae: outputImage)
+                outputImage = SPCameraHelp.sp_deal(videoImg: outputImage, filter: self.filter, faceCoverImg: self.faceCoverImg, videoLayoutType: self.videoLayoutType)
             }
             if startRecording == true && self.assetWriter != nil{
                 if output == self.videoOutput {
