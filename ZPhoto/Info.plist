@@ -28,7 +28,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2019091401</string>
+	<string>2019091402</string>
 	<key>LSApplicationCategoryType</key>
 	<string>NSPhotoLibraryAddUsageDescription</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -41,6 +41,8 @@
 	<string>想要把图片保存到相册中，若不同意无法把图片保存到相册中</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>想获取您相册中的图片或视频，想把视频或图片保存到您的相册中.若不允许无法使用哦</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>需要将您的语音转成文字，若不允许，无法转换</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
