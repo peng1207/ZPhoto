@@ -81,7 +81,6 @@ class SPLongGraphVC: SPBaseVC {
         view.toolView.btnBlock = { [weak self] (type ) in
             self?.sp_deal(btnType: type)
         }
-//        view.backgroundColor = sp_getMianColor()
         view.isHidden = true
         return view
     }()

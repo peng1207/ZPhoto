@@ -98,6 +98,7 @@ class SPCameraManager : NSObject {
             self.output = AVCaptureVideoDataOutput()
             self.output.alwaysDiscardsLateVideoFrames = true
             self.output.setSampleBufferDelegate(self, queue: self.videoDataOutputQueue)
+            
             /// 开启防抖
             let videoConnect = self.output.connection(with: .video)
             if let device = self.currentDevice, device.activeFormat.isVideoStabilizationModeSupported(AVCaptureVideoStabilizationMode.cinematic){
@@ -207,17 +208,17 @@ extension SPCameraManager {
     func sp_stop(){
         self.captureSession.stopRunning()
     }
-    
-    // MARK: -- 闪光灯设置
-    /// 点击闪光灯
-    func sp_flashlight(){
+    /// 闪光灯设置
+    ///
+    /// - Returns:  是否打开闪关灯 true 打开 false 没有打开
+    func sp_flashlight()->Bool{
         guard cameraAuth else {
-            return
+            return false
         }
         if SP_IS_IPAD {
-            return
+            return false
         }
-        SPCameraHelp.sp_flash(device: self.currentDevice)
+        return SPCameraHelp.sp_flash(device: self.currentDevice)
     }
     
     /// 取消

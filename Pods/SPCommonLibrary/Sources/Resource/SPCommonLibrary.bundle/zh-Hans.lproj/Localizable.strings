@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  SPCommonLibrary
+
+  Created by 黄树鹏 on 2019/8/15.
+  
+*/
+"sdk_cance" = "取消";
+"sdk_done" = "完成";
+"sdk_album" = "相册";
+"sdk_max_num" = "超过最大数";
+"sdk_tips" = "提示";

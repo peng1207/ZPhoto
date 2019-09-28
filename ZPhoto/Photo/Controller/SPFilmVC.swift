@@ -219,7 +219,7 @@ extension SPFilmVC {
             self?.sp_deal(animationType: .cover, animationTypes: nil)
         }))
         actionSheetVC.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "ANIMATION_TOBOOK"), style: UIAlertAction.Style.default, handler: { [weak self](action) in
-            self?.sp_deal(animationType: .toBook, animationTypes: nil)
+            self?.sp_deal(animationType: .pull, animationTypes: nil)
         }))
         actionSheetVC.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "ANIMATION_HOLE"), style: UIAlertAction.Style.default, handler: { [weak self](action) in
             self?.sp_deal(animationType: .hole, animationTypes: nil)

@@ -23,7 +23,7 @@ class SPFilterModel : NSObject {
     var showImage : UIImage?
     var filteEnum : SPFilterPhoto!{
         didSet{
-            setupFilter()
+            sp_setupFilter()
         }
     }
     var inputImage : CIImage? {
@@ -36,15 +36,18 @@ class SPFilterModel : NSObject {
                     outputImage = inputImage
                 }
             }else{
-                outputImage = inputImage
+                sp_dealNoFilter()
             }
         }
     }
-
+    private func sp_dealNoFilter(){
+        outputImage = inputImage
+        
+    }
     /**
      创建滤镜类
      */
-    fileprivate func setupFilter(){
+    fileprivate func sp_setupFilter(){
        
         switch filteEnum {
         case  .effectInstant?:
@@ -95,6 +98,8 @@ class SPFilterModel : NSObject {
             filter = CIFilter.lineOverlay()
         case .edges?:
             filter = CIFilter.edges()
+        case .gaussianBlur?:
+            filter = CIFilter.gaussianBlur()
         case .none:
             filter = nil
         case .some(_):

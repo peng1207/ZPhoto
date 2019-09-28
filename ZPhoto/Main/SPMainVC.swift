@@ -98,15 +98,20 @@ class SPMainVC: SPBaseVC {
 //MARK: - action
 extension SPMainVC {
     @objc fileprivate func sp_clickVideo(){
-        self.present(SPVideoVC(), animated: true, completion: nil)
+        let videoVC = SPVideoVC()
+        videoVC.modalPresentationStyle = .fullScreen
+        self.present(videoVC, animated: true, completion: nil)
     }
     @objc fileprivate func sp_clickPhoto(){
-        self.present(SPPhotoVC(), animated: true, completion: nil)
+        let photoVC = SPPhotoVC()
+        photoVC.modalPresentationStyle = .fullScreen
+        self.present(photoVC, animated: true, completion: nil)
     }
     @objc fileprivate func sp_clickSet(){
 //        let tempVC  = SPTmpVC()
 //        self.present(tempVC, animated: true, completion: nil)
         let setNavVC = SPBaseNavVC(rootViewController: SPSetVC())
+        setNavVC.modalPresentationStyle = .fullScreen
         self.present(setNavVC, animated: true, completion: nil)
     }
 }

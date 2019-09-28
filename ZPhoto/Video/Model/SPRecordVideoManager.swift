@@ -363,16 +363,17 @@ extension SPRecordVideoManager{
     func sp_zoomOut(scale : CGFloat = 1.0) {
         SPCameraHelp.sp_zoomOut(device: self.currentDevice, scale: scale)
     }
-    // MARK: -- 闪光灯设置
     /// 闪光灯设置
-    func sp_flashlight(){
+    ///
+    /// - Returns: 是否打开闪关灯 true 打开 false 没有打开
+    func sp_flashlight()->Bool{
         guard cameraAuth else {
-            return
+            return false
         }
         if SP_IS_IPAD {
-            return
+            return false
         }
-        SPCameraHelp.sp_flash(device: self.currentDevice)
+        return SPCameraHelp.sp_flash(device: self.currentDevice)
     }
     // MARK: -- 私有方法
     /**< 改变属性操作 */

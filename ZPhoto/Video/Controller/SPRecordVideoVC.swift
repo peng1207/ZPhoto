@@ -234,8 +234,7 @@ extension SPRecordVideoRootVC {
             button.isSelected = !button.isSelected
         case .flash:
             sp_log(message: "点击闪光灯")
-            button.isSelected = !button.isSelected
-            self.videoManager.sp_flashlight()
+            button.isSelected =  self.videoManager.sp_flashlight()
         case .change:
             sp_log(message: "点击切换镜头")
             self.videoManager.sp_changeCamera()

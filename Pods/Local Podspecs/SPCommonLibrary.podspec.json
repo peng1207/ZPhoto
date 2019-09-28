@@ -1,6 +1,6 @@
 {
   "name": "SPCommonLibrary",
-  "version": "0.0.1.23",
+  "version": "0.0.1.28",
   "summary": "公共库 提供基础的功能，对第三方请求的封装功能，增加分享功能",
   "description": "功能有",
   "homepage": "https://github.com/peng1207/SPCommonLibrary",
@@ -14,7 +14,7 @@
   "swift_versions": "4.2",
   "source": {
     "git": "https://github.com/peng1207/SPCommonLibrary.git",
-    "tag": "0.0.1.23"
+    "tag": "0.0.1.28"
   },
   "dependencies": {
     "SnapKit": [
@@ -43,17 +43,7 @@
       "source_files": "Sources/Share/*.swift"
     },
     {
-      "name": "Clip",
-      "source_files": "Sources/Clip/**/*",
-      "resources": "Sources/Resource/*.bundle",
-      "dependencies": {
-        "SPCommonLibrary/Public": [
-
-        ]
-      }
-    },
-    {
-      "name": "ImagePicker",
+      "name": "ImageManager",
       "source_files": "Sources/ImagePicker/**/*",
       "dependencies": {
         "SPCommonLibrary/Public": [
@@ -61,6 +51,15 @@
         ]
       },
       "resources": "Sources/Resource/*.bundle"
+    },
+    {
+      "name": "Recording",
+      "source_files": "Sources/Recording/**/*",
+      "dependencies": {
+        "SPCommonLibrary/Public": [
+
+        ]
+      }
     }
   ],
   "swift_version": "4.2"

@@ -36,6 +36,11 @@ class SPBaseVC : UIViewController{
  extension  SPBaseVC{
     
     fileprivate func setupBase(){
+        if #available(iOS 13.0, *) {
+            self.overrideUserInterfaceStyle = .light
+        } else {
+            // Fallback on earlier versions
+        }
         // UI适配
         self.edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
         self.view.backgroundColor = SPColorForHexString(hex: SPHexColor.color_eeeeee.rawValue)

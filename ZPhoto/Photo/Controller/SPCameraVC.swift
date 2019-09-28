@@ -243,7 +243,12 @@ fileprivate extension SPCameraRootVC{
     }
     /// 点击闪光灯
     func sp_clickFlash(){
-        self.cameraManmager.sp_flashlight()
+        if self.cameraManmager.sp_flashlight() {
+            self.btnView.sp_deal(btnType: .flash, isSelect: true)
+        }else{
+            self.btnView.sp_deal(btnType: .flash, isSelect: false)
+        }
+       
     }
     /// 更改前后摄像头
     func sp_clickChangeDev(){

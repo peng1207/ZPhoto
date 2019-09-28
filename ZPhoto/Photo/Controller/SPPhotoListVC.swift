@@ -187,6 +187,7 @@ extension SPPhotoListVC {
             let imageVC = SPImagePickerVC(maxSelectNum: self.selectMaxCount > 0 ? self.selectMaxCount - sp_count(array: self.selectArray) : 1) { [weak self](images, assets) in
                 self?.sp_dealAddOther(images: images)
             }
+            imageVC.modalPresentationStyle = .fullScreen
             self.present(imageVC, animated: true, completion: nil)
         }else{
             sp_maxNumTips()

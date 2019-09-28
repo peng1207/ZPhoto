@@ -37,21 +37,24 @@ class SPClipToolView:  UIView{
     }()
     fileprivate lazy var rotateBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
-        if let bundle = Bundle(identifier: "org.cocoapods.SPCommonLibrary"){
-             btn.setImage(UIImage(named: "public_rotate", in: bundle, compatibleWith: nil), for: UIControl.State.normal)
-        }else{
-            btn.setImage(UIImage(named: "public_rotate"), for: UIControl.State.normal)
-        }
+      
+        btn.setImage(  Bundle.sp_getImg(name: "public_rotate@2x"), for: UIControl.State.normal)
+//        if let bundle = Bundle(identifier: "org.cocoapods.SPCommonLibrary"){
+//             btn.setImage(UIImage(named: "public_rotate", in: bundle, compatibleWith: nil), for: UIControl.State.normal)
+//        }else{
+//            btn.setImage(UIImage(named: "public_rotate"), for: UIControl.State.normal)
+//        }
         btn.addTarget(self, action: #selector(sp_clickRotate), for: UIControl.Event.touchUpInside)
         return btn
     }()
     lazy var zoomBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
-        if let bundle = Bundle(identifier: "org.cocoapods.SPCommonLibrary"){
-            btn.setImage(UIImage(named: "public_zoom", in: bundle, compatibleWith: nil), for: UIControl.State.normal)
-        }else{
-              btn.setImage(UIImage(named: "public_zoom"), for: UIControl.State.normal)
-        }
+        btn.setImage(Bundle.sp_getImg(name: "public_zoom@2x"), for: UIControl.State.normal)
+//        if let bundle = Bundle(identifier: "org.cocoapods.SPCommonLibrary"){
+//            btn.setImage(UIImage(named: "public_zoom", in: bundle, compatibleWith: nil), for: UIControl.State.normal)
+//        }else{
+//              btn.setImage(UIImage(named: "public_zoom"), for: UIControl.State.normal)
+//        }
       
         btn.addTarget(self, action: #selector(sp_clickZoom), for: UIControl.Event.touchUpInside)
         return btn

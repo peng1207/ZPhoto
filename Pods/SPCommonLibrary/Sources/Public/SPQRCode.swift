@@ -107,7 +107,7 @@ public class SPQRCode {
     public class func sp_add(bgImg : UIImage,image:UIImage,minHueAngle:Float,maxHueAngle:Float) -> UIImage?{
         let cubeMap = createCubeMap(minHueAngle, maxHueAngle)
         let data = NSData(bytesNoCopy: cubeMap.data, length: Int(cubeMap.length), freeWhenDone: true)
-        
+
         if let colorCubeFilter = CIFilter(name: "CIColorCube") {
             colorCubeFilter.setValue(cubeMap.dimension, forKey: "inputCubeDimension")
             colorCubeFilter.setValue(data, forKey: "inputCubeData")

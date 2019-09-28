@@ -338,8 +338,8 @@ enum SPAnimationType {
     case push
     /// 覆盖
     case cover
-    /// 翻书
-    case toBook
+    /// 拉
+    case pull
     /// 打洞
     case hole
 }

@@ -195,7 +195,7 @@ class SPFilmManager {
             switch animationType {
             case .push:
                 newImg = sp_push(image: currImg, nextImg: nextImg, size: size, index: i, space: size.width / CGFloat(animationCount))
-            case .toBook:
+            case .pull:
                 newImg = sp_toBook(image: currImg, nextImg: nextImg, index: i,size: size)
             case .fadeOut:
                 newImg = sp_fadeOut(image: currImg, nextImg: nextImg, index: i)
