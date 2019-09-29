@@ -85,6 +85,8 @@ public enum SPButtonClickType : Int {
     case share
     /// 保存
     case save
+    /// 文字
+    case text
 }
 
 ///  图片布局类型

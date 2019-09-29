@@ -39,11 +39,24 @@ class SPPhotoEditVC: SPBaseVC {
         }
         return view
     }()
+    /// 输入文本
+    fileprivate lazy var textView : SPTextView = {
+        let view = SPTextView()
+        view.showKeyboardBlock = { [weak self] in
+            self?.sp_showKeyboard()
+        }
+        view.toolView.btnBlock = { [weak self] (type ) in
+            self?.sp_dealBtnClick(type: type)
+        }
+        view.isHidden = true
+        return view
+    }()
     lazy fileprivate var videoData : SPRecordVideoData! = {
         return SPRecordVideoData()
     }()
     fileprivate let filterViewWidth :  CGFloat = 60
     fileprivate var filterRightConstraint : Constraint!
+    fileprivate var tmpEditTextView : SPTextEditView?
     var photoModel : SPPhotoModel?
     
     override func viewDidLoad() {
@@ -81,7 +94,6 @@ class SPPhotoEditVC: SPBaseVC {
             maker.top.equalTo(self.scrollView)
             maker.left.equalTo(self.scrollView)
             maker.centerX.equalTo(self.scrollView).offset(0)
-//            maker.bottom.equalTo(self.scrollView.snp.bottom).offset(0)
         }
         self.scrollView.contentSize = CGSize(width: 0, height: imgH)
     }
@@ -96,6 +108,7 @@ class SPPhotoEditVC: SPBaseVC {
         self.scrollView.addSubview(self.iconImgView)
         self.view.addSubview(self.editView)
         self.view.addSubview(self.filterView)
+        self.view.addSubview(self.textView)
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -127,6 +140,15 @@ class SPPhotoEditVC: SPBaseVC {
             maker.height.equalTo(self.view.snp.height).multipliedBy(0.5)
             maker.centerY.equalTo(self.view.snp.centerY).offset(0)
             maker.width.equalTo(filterViewWidth)
+        }
+        self.textView.snp.makeConstraints { (maker) in
+            maker.left.right.equalTo(self.view).offset(0)
+            maker.height.greaterThanOrEqualTo(0)
+            if #available(iOS 11.0, *) {
+                maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
+            } else {
+                maker.bottom.equalTo(self.view.snp.bottom).offset(0)
+            }
         }
     }
     deinit {
@@ -163,23 +185,53 @@ extension SPPhotoEditVC {
             sp_clickShear()
         case .filter:
             sp_clickFilter()
+        case .close:
+            self.tmpEditTextView?.removeFromSuperview()
+            self.sp_dealEditText()
+        case .text:
+            sp_clickText()
+        case .select:
+            self.tmpEditTextView?.sp_isBoard(isShow: false)
+            self.sp_dealEditText()
         default:
             sp_log(message: "点击没有定义的")
         }
     }
+    /// 点击完成
     fileprivate func sp_clickFinish(){
-        
+        guard let filePath = self.photoModel?.filePath else {
+            return
+        }
+        FileManager.remove(path: filePath)
+        guard let img = self.iconImgView.image else {
+            return
+        }
+        guard let imgData = img.jpegData(compressionQuality: 1.0) else {
+            return 
+        }
+        do {
+            try imgData.write(to: URL(fileURLWithPath: filePath), options: Data.WritingOptions.atomic)
+            NotificationCenter.default.post(name: NSNotification.Name(K_NEWIMAGE_NOTIFICATION), object: nil)
+            sp_clickBack()
+        }catch {
+            sp_log(message: "写入缓存数据失败")
+        }
     }
+ 
+    /// 点击裁剪
     fileprivate func sp_clickShear(){
         let clipVC = SPClipImgVC()
         clipVC.originalImg = self.iconImgView.image
         clipVC.clipBlock = { [weak self] (image , isCance ) in
             if !isCance {
                 self?.sp_setupData(image: image)
+                self?.editView.sp_finsihBtn(isEnabled: true)
             }
         }
+        clipVC.modalPresentationStyle = .fullScreen
         self.present(clipVC, animated: true, completion: nil)
     }
+    /// 点击滤镜
     fileprivate func sp_clickFilter(){
         if(self.filterView.isHidden){
             self.filterRightConstraint.update(offset: 0)
@@ -187,6 +239,7 @@ extension SPPhotoEditVC {
             self.filterRightConstraint.update(offset: -filterViewWidth)
         }
         self.filterView.isHidden = !self.filterView.isHidden
+        self.textView.isHidden = true
         sp_changeFilterData()
     }
     /*
@@ -210,6 +263,42 @@ extension SPPhotoEditVC {
             return
         }
         self.iconImgView.image = filterModel.showImage
+        self.editView.sp_finsihBtn(isEnabled: true)
+    }
+    fileprivate func sp_clickText(){
+        self.textView.isHidden = !self.textView.isHidden
+        self.filterView.isHidden = true
+         self.filterRightConstraint.update(offset: -filterViewWidth)
+        self.textView.toolView.toolView.selectType = .edit
+        sp_addEditTextView()
     }
     
+    fileprivate func sp_addEditTextView(){
+        let view = SPTextEditView()
+        view.clickBlock = { [weak self] (type) in
+            self?.sp_dealBtnClick(type: type)
+        }
+        self.scrollView.addSubview(view)
+        view.snp.makeConstraints { (maker) in
+            maker.left.equalTo(100)
+            maker.width.greaterThanOrEqualTo(0)
+            maker.height.greaterThanOrEqualTo(0)
+            maker.top.equalTo(self.scrollView).offset(100)
+        }
+        self.tmpEditTextView = view
+        view.sp_edit()
+    }
+    /// 弹出键盘可以编辑
+    fileprivate func sp_showKeyboard(){
+        guard let view = self.tmpEditTextView else {
+            return
+        }
+        view.sp_edit()
+    }
+    /// 处理编辑文本框 隐藏键盘和临时view设置为nil
+      fileprivate func sp_dealEditText(){
+          self.tmpEditTextView?.sp_noEdit()
+          self.tmpEditTextView = nil
+          self.textView.isHidden = true
+      }
 }

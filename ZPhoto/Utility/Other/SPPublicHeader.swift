@@ -16,10 +16,12 @@ let kCachesPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDire
 /// 获取Tmp目录路径
 let kTmpPath = NSTemporaryDirectory()
 
-// 保存视频的位置目录
+/// 保存视频的位置目录
 let kVideoDirectory = "\(kDocumentsPath)/video"
-// 保存视频的临时位置目录
+/// 保存视频的临时位置目录
 let kVideoTempDirectory = "\(kTmpPath)/video"
+/// 有新图片的通知
+let K_NEWIMAGE_NOTIFICATION = "NEWIMAGE_NOTIFICATION"
 
 /* 帧数
  */

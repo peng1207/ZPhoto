@@ -78,7 +78,7 @@ class SPPhotoSelectVC: SPBaseVC {
         self.view.addSubview(self.safeView)
         self.view.addSubview(self.selectView)
         self.safeView.backgroundColor = self.selectView.backgroundColor
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.nextBtn)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: SPLanguageChange.sp_getString(key: "NEXT"), style: UIBarButtonItem.Style.done, target: self, action: #selector(sp_clickNext))
         self.sp_addConstraint()
     }
     /// 处理有没数据

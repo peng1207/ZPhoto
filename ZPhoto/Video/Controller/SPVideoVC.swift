@@ -160,7 +160,9 @@ fileprivate class SPVideoRootVC: SPBaseVC {
 extension SPVideoRootVC {
     /// 点击录制
     @objc fileprivate func sp_clickRecord(){
-        self.present(SPRecordVideoVC(), animated: true, completion: nil)
+        let recordVC = SPRecordVideoVC()
+        recordVC.modalPresentationStyle = .fullScreen
+        self.present(recordVC, animated: true, completion: nil)
     }
     fileprivate func sp_clickFile(){
         let vc = SPVideoListVC()

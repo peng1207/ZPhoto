@@ -91,7 +91,9 @@ extension SPVideoListVC {
 extension SPVideoListVC {
   
     @objc fileprivate func sp_add(){
-        self.present(SPRecordVideoVC(), animated: true, completion: nil)
+        let recordVC = SPRecordVideoVC()
+        recordVC.modalPresentationStyle = .fullScreen
+        self.present(recordVC, animated: true, completion: nil)
     }
     /**
      点击删除
@@ -161,6 +163,7 @@ extension SPVideoListVC : UICollectionViewDelegate,UICollectionViewDataSource {
             let videoModel = self.videoDataArray?[indexPath.row]
             let videoPlayVC = SPVideoPlayVC()
             videoPlayVC.videoModel = videoModel
+            videoPlayVC.modalPresentationStyle = .fullScreen
             self.present(videoPlayVC, animated: true, completion: nil)
         }
     }

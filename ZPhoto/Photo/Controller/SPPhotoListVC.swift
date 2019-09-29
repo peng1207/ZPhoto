@@ -48,6 +48,7 @@ class SPPhotoListVC: SPBaseVC {
         super.viewDidLoad()
         self.sp_setupUI()
         sp_setupData()
+        sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -68,7 +69,6 @@ class SPPhotoListVC: SPBaseVC {
             sp_mainQueue {
                  self.collectionView.reloadData()
             }
-           
         }
        
     }
@@ -118,7 +118,7 @@ class SPPhotoListVC: SPBaseVC {
         }
     }
     deinit {
-        
+        NotificationCenter.default.removeObserver(self)
     }
 }
 extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
@@ -387,4 +387,16 @@ extension SPPhotoListVC {
             self.editView.sp_dealBtn(isEnabled: false)
         }
     }
+}
+
+extension SPPhotoListVC {
+    
+    fileprivate func sp_addNotification(){
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_imgNotification), name: NSNotification.Name(K_NEWIMAGE_NOTIFICATION), object: nil)
+    }
+    
+    @objc fileprivate func sp_imgNotification(){
+        sp_setupData()
+    }
+  
 }

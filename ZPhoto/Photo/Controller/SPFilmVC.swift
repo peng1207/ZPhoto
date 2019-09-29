@@ -10,6 +10,7 @@ import Foundation
 import SnapKit
 import SPCommonLibrary
 import AVFoundation
+
 /// 影片
 class SPFilmVC: SPBaseVC {
      var dataArray : [SPPhotoModel]?
@@ -162,11 +163,13 @@ extension SPFilmVC {
         guard imgList.count > 0 else {
             return
         }
+        SPShowToast.sp_showAnimation(text: SPLanguageChange.sp_getString(key: "LOADING"), view: self.view)
         let  filePath : String = "\(kVideoTempDirectory)/temp.mp4"
         FileManager.sp_directory(createPath:kVideoTempDirectory)
         if FileManager.default.fileExists(atPath: filePath) {
             FileManager.remove(path: filePath)
         }
+      
         SPFilmManager.sp_video(images: imgList, filePath: filePath, filmStruct:self.filmStruct) { [weak self](isSuccess, path) in
             self?.sp_deal(filmComplete: isSuccess, filePath: path,play: play)
         }
@@ -189,6 +192,7 @@ extension SPFilmVC {
                 self.videoPlayView.videoModel = nil
             }
         }
+        SPShowToast.sp_hideAnimation(view: self.view)
     }
     fileprivate func sp_deal(toolType : SPToolType){
         switch toolType {

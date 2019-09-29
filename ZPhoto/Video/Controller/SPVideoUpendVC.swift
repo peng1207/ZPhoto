@@ -74,6 +74,7 @@ class SPVideoUpendVC: SPBaseVC {
 extension SPVideoUpendVC {
     
     fileprivate func sp_setupData(){
+        SPShowToast.sp_showAnimation(text: SPLanguageChange.sp_getString(key: "LOADING"), view: self.view)
         SPVideoHelp.sp_videoUnpend(asset: self.videoModel?.asset) { [weak self](asset, url) in
                 self?.sp_dealSuccess(asset: asset, url: url)
         }
@@ -89,6 +90,7 @@ extension SPVideoUpendVC {
             self.videoPlayView.isHidden = true
             self.rightItemView.isHidden = true
         }
+        SPShowToast.sp_hideAnimation(view: self.view)
     }
     fileprivate func sp_deal(btnType : SPButtonClickType){
         switch btnType {

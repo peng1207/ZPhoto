@@ -16,7 +16,7 @@ target 'ZPhoto' do
 #  pod 'SPCommonLibrary/Request'
 #    pod 'SPCommonLibrary'
   pod 'SPCommonLibrary', :path => "/Users/huangshupeng/Documents/git/SPCommonLibrary"
-
+   pod 'MBProgressHUD', '~> 1.1.0'
 #    pod 'Firebase/AdMob'
     #pod 'va', '~> 0.10.1'
   target 'ZPhotoTests' do

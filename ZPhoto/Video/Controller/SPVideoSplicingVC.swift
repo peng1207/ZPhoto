@@ -116,6 +116,7 @@ extension SPVideoSplicingVC {
     
     /// 获取拼接的数据
     fileprivate func sp_setupSplicing(){
+        SPShowToast.sp_showAnimation(text: SPLanguageChange.sp_getString(key: "LOADING"), view: self.view)
         SPVideoSplicingHelp.sp_splicing(videoModelList: self.selectArray, type: self.type, outputPath: "\(kVideoTempDirectory)/temp.mp4") { [weak self](asset, filePath) in
             self?.sp_deal(splicingComplete: asset, filePath: filePath)
         }
@@ -126,6 +127,7 @@ extension SPVideoSplicingVC {
     ///   - asset: 视频数据
     ///   - filePath: 保存路径
     fileprivate func sp_deal(splicingComplete asset :AVAsset? ,filePath : String){
+       
         if asset != nil {
             self.videoModel = SPVideoModel()
             self.videoModel?.url = URL(fileURLWithPath: filePath)
@@ -133,6 +135,9 @@ extension SPVideoSplicingVC {
                 self.videoModel?.asset = asset
             }
             sp_setupData()
+        }
+        sp_mainQueue {
+            SPShowToast.sp_hideAnimation(view: self.view)
         }
     }
     

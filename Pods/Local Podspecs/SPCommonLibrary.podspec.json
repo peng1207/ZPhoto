@@ -60,6 +60,15 @@
 
         ]
       }
+    },
+    {
+      "name": "CodeManager",
+      "source_files": "Sources/CodeManager/**/*",
+      "dependencies": {
+        "SPCommonLibrary/Public": [
+
+        ]
+      }
     }
   ],
   "swift_version": "4.2"

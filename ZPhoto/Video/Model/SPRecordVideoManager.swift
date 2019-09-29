@@ -277,7 +277,7 @@ extension SPRecordVideoManager{
             
             videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoOutputSettings)
             videoWriterInput?.expectsMediaDataInRealTime = true
-            //            videoWriterInput?.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
+//            videoWriterInput?.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
             
             let sourcePixelBufferAttributesDictionary = [
                 String(kCVPixelBufferPixelFormatTypeKey) : Int(sp_getCVPixelFormatType()),

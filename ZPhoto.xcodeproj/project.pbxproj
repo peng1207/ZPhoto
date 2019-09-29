@@ -101,6 +101,7 @@
 		9EECDB442328858B008F6CBE /* SPSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EECDB432328858B008F6CBE /* SPSelectView.swift */; };
 		9EECDB542329E39D008F6CBE /* SPVideoSplicingLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EECDB532329E39D008F6CBE /* SPVideoSplicingLayoutView.swift */; };
 		9EECDB56232A4F5E008F6CBE /* SPCameraHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EECDB55232A4F5E008F6CBE /* SPCameraHelp.swift */; };
+		9EEE51772340464500AEEE7A /* SPShowToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEE51762340464500AEEE7A /* SPShowToast.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -230,6 +231,7 @@
 		9EECDB432328858B008F6CBE /* SPSelectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPSelectView.swift; sourceTree = "<group>"; };
 		9EECDB532329E39D008F6CBE /* SPVideoSplicingLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoSplicingLayoutView.swift; sourceTree = "<group>"; };
 		9EECDB55232A4F5E008F6CBE /* SPCameraHelp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCameraHelp.swift; sourceTree = "<group>"; };
+		9EEE51762340464500AEEE7A /* SPShowToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPShowToast.swift; sourceTree = "<group>"; };
 		A48F6C5FB7358C64CE5D01E2 /* Pods-ZPhoto-ZPhotoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto-ZPhotoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto-ZPhotoTests/Pods-ZPhoto-ZPhotoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A85288069D2AB5B5DEA771C3 /* Pods-ZPhoto.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZPhoto.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZPhoto/Pods-ZPhoto.release.xcconfig"; sourceTree = "<group>"; };
 		C3DC2C47179960654978B376 /* Pods_ZPhoto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZPhoto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -581,6 +583,7 @@
 				9ECE7C052227B80300FE6BCD /* SPVideoPreviewLayerView.swift */,
 				9EECDB382323555D008F6CBE /* SPNavItemBtnView.swift */,
 				9EECDB3E23239666008F6CBE /* SPDragCollectionCell.swift */,
+				9EEE51762340464500AEEE7A /* SPShowToast.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -773,12 +776,14 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ZPhoto/Pods-ZPhoto-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/SPCommonLibrary/SPCommonLibrary.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SPCommonLibrary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
@@ -875,6 +880,7 @@
 				9E464ACF22C063E700F2E6DE /* SPPhotoSplicingHelp.swift in Sources */,
 				9EAD4B9D22C74973007D7BB3 /* SPVideoEditVC.swift in Sources */,
 				9E3E165E22FD7F7300BF48E9 /* SPPhotoSplicingFive.swift in Sources */,
+				9EEE51772340464500AEEE7A /* SPShowToast.swift in Sources */,
 				9E3E165822FD4C5300BF48E9 /* SPPhotoSplicingEight.swift in Sources */,
 				9E7226701E8972B4001BB9A9 /* AppDelegate.swift in Sources */,
 				9EA4432A2317D00B00B4E1FE /* SPTextView.swift in Sources */,
@@ -1054,10 +1060,12 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 2019092901;
 				DEVELOPMENT_TEAM = 2X8ED8ZMS2;
 				INFOPLIST_FILE = ZPhoto/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.0.1;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangshp.ZPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1076,10 +1084,12 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: shupeng Technology Park Xili private quarters (2X8ED8ZMS2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: shupeng Technology Park Xili private quarters (2X8ED8ZMS2)";
+				CURRENT_PROJECT_VERSION = 2019092901;
 				DEVELOPMENT_TEAM = 2X8ED8ZMS2;
 				INFOPLIST_FILE = ZPhoto/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.0.1;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangshp.ZPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -316,8 +316,8 @@ class SPVideoSplicingHelp {
         var index = 0
         for outputImg in images{
             autoreleasepool {
-                if let ciImg = UIImage.sp_picRotating(imgae: outputImg){
-                    let img = UIImage(ciImage: ciImg)
+//                if let ciImg = UIImage.sp_picRotating(imgae: outputImg){
+                    let img = UIImage(ciImage: outputImg)
                     switch type{
                     case .two_vertical:
                         img.draw(in: CGRect(x: 0, y: size.height / 2.0 * CGFloat(index), width: size.width, height: size.height / 2.0 ))
@@ -394,7 +394,7 @@ class SPVideoSplicingHelp {
                     default:
                         sp_log(message: "")
                     }
-                }
+//                }
             }
             
             index = index + 1

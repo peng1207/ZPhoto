@@ -37,6 +37,8 @@ class SPPhotoListCollectionCell: UICollectionViewCell {
         view.isHidden = true
         return view
     }()
+    /// 是否需要修改图片展示的大小
+    var needUpdateLayout : Bool = false
     var model : SPPhotoModel?{
         didSet{
            sp_setupData()
@@ -68,6 +70,7 @@ class SPPhotoListCollectionCell: UICollectionViewCell {
             self.numLabel.isHidden = true
         }
     }
+   
     fileprivate func sp_dealNum(){
         self.numLabel.text = sp_getString(string: self.num)
     }
@@ -77,10 +80,34 @@ class SPPhotoListCollectionCell: UICollectionViewCell {
             self.iconImgView.image = m.img
             self.iconImgView.isHidden = false
             self.addImgView.isHidden = true
+            sp_dealLayout()
         }else{
             self.iconImgView.image = nil
             self.iconImgView.isHidden = true
            self.addImgView.isHidden = false
+        }
+    }
+    fileprivate func sp_dealLayout(){
+        if self.needUpdateLayout {
+            guard let img = self.iconImgView.image else {
+                return
+            }
+            let w = img.size.width
+            let h = img.size.height
+            let viewW = self.contentView.sp_width()
+            let viewH = viewW / (w / h)
+             
+            self.iconImgView.snp.remakeConstraints { (maker) in
+                maker.left.right.equalTo(self.contentView).offset(0)
+                maker.centerY.equalTo(self.contentView.snp.centerY).offset(0)
+                if viewH > self.contentView.sp_height() {
+                    maker.top.bottom.equalTo(self.contentView).offset(0)
+                }else{
+                    maker.height.equalTo(viewH)
+                }
+            }
+            
+            
         }
     }
     /// 添加UI

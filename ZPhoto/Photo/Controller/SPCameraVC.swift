@@ -10,6 +10,7 @@ import Foundation
 import SnapKit
 import AVFoundation
 import SPCommonLibrary
+import AudioToolbox
 /// 相机
 class SPCameraVC : SPBaseNavVC {
     internal init() {
@@ -83,6 +84,7 @@ fileprivate class SPCameraRootVC: SPBaseVC {
     fileprivate let filterViewWidth :  CGFloat = 60
     fileprivate let kCameraManagerKVOKey = "noFilterCIImage"
     fileprivate var lastScale : CGFloat = 1.00
+    fileprivate var sysID:SystemSoundID = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -155,6 +157,7 @@ fileprivate class SPCameraRootVC: SPBaseVC {
     }
     deinit {
         self.cameraManmager.removeObserver(self, forKeyPath: kCameraManagerKVOKey)
+         AudioServicesDisposeSystemSoundID(sysID)
     }
 }
 fileprivate extension SPCameraRootVC{
@@ -195,13 +198,13 @@ fileprivate extension SPCameraRootVC{
     }
     /// 点击拍照
     func sp_clickCamera(){
+        sp_cameraTip()
         let outputCIImg = self.cameraManmager.showOutputCGImage
         var outputImg : UIImage?
         if let ciImg = outputCIImg {
             outputImg = UIImage(cgImage: ciImg)
         }
         if let img = outputImg {
-            
             let imgData = img.jpegData(compressionQuality: 0.5)
             if let data = imgData {
                 do {
@@ -213,6 +216,17 @@ fileprivate extension SPCameraRootVC{
                 sp_log(message: "转换数据出错")
             }
         }
+    }
+    func sp_cameraTip(){
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+        //获取声音地址
+        let path = "/System/Library/Audio/UISounds/photoShutter.caf"
+        //地址转换
+        let baseURL = NSURL(fileURLWithPath: path)
+        AudioServicesCreateSystemSoundID(baseURL, &sysID)
+        //播放声音
+        AudioServicesPlaySystemSound(sysID)
+
     }
     /// 点击滤镜
     func sp_clickFilter(){

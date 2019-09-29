@@ -165,7 +165,9 @@ extension SPPhotoRootVC {
    
     /// 点击相机
     @objc fileprivate func sp_clickCamera(){
-        self.present(SPCameraVC(), animated: true, completion: nil)
+        let cameraVC = SPCameraVC()
+        cameraVC.modalPresentationStyle = .fullScreen
+        self.present(cameraVC, animated: true, completion: nil)
     }
     fileprivate func sp_clickFile(){
         let vc = SPPhotoListVC()
