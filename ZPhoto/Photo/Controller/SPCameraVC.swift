@@ -217,6 +217,7 @@ fileprivate extension SPCameraRootVC{
             }
         }
     }
+    ///  点击拍照的提示音和振动
     func sp_cameraTip(){
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
         //获取声音地址
@@ -238,11 +239,8 @@ fileprivate extension SPCameraRootVC{
         self.filterView.isHidden = !self.filterView.isHidden
         sp_changeFilterData()
     }
-    /*
-     改变滤镜图片的数据
-     */
+    /// 改变滤镜图片的数据
     func sp_changeFilterData(){
-      
         sp_mainQueue {
             if (self.filterView.isHidden == false){
                 sp_sync {
@@ -273,10 +271,12 @@ fileprivate extension SPCameraRootVC{
                 sp_changeFilterData()
         }
     }
-    
+    /// 添加手势
     func sp_addGesture(){
         self.view.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(sp_pinchAction(sender:))))
     }
+    /// 缩放手势
+    /// - Parameter sender: 手势
     @objc func sp_pinchAction(sender : UIPinchGestureRecognizer) {
         if sender.state == UIGestureRecognizer.State.ended {
             lastScale = 1.0

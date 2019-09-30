@@ -160,10 +160,11 @@ extension SPPhotoBrowseVC {
 }
 
 extension SPPhotoBrowseVC {
+    /// 添加通知
     fileprivate func sp_addNotification(){
         NotificationCenter.default.addObserver(self, selector: #selector(sp_imgNotification), name: NSNotification.Name(K_NEWIMAGE_NOTIFICATION), object: nil)
     }
-    
+    /// 图片变化通知
     @objc fileprivate func sp_imgNotification(){
         sp_sync {
             self.dataArray = SPPhotoHelp.sp_getPhototList()

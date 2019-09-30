@@ -9,8 +9,9 @@
 import Foundation
 import SnapKit
 import SPCommonLibrary
+/// 视频选择回调
 typealias SPVideoSelectComplete = (_ model : SPVideoModel?)->Void
-
+/// 选择视频
 class SPVideoSelectVC: SPBaseVC {
     
     fileprivate var collectionView : UICollectionView!

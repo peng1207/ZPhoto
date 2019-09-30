@@ -294,16 +294,22 @@ class SPLongGraphVC: SPBaseVC {
 }
 extension SPLongGraphVC{
     
+    /// 保存
     @objc fileprivate func sp_clickSave(){
         if let image = UIImage.sp_image(view: self.scrollView) {
             UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
         }
     }
+    /// 分享
     fileprivate func sp_clickShare(){
         if let image = UIImage.sp_image(view: self.scrollView) {
               SPShare.sp_share(imgs: [image], vc: self)
         }
     }
+    /// 图片保存到相册中回调
+    /// - Parameter image: 图片
+    /// - Parameter error: 错误码
+    /// - Parameter contextInfo: 描述
     @objc func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer)
     {
         if let e = error as NSError?
@@ -319,7 +325,7 @@ extension SPLongGraphVC{
             self.present(alertController, animated: true, completion: nil)
         }
     }
-    /// 处理不同类型的事件
+    /// 处理工具栏类型的事件
     ///
     /// - Parameter toolType: 类型
     fileprivate func sp_deal(toolType : SPToolType){
@@ -394,6 +400,7 @@ extension SPLongGraphVC{
         self.tmpEditTextView = view
         view.sp_edit()
     }
+    /// 处理所有图片的编辑
     fileprivate func sp_dealEdit(){
         let dragVC = SPDragVC()
         dragVC.dataArray = self.dataArray

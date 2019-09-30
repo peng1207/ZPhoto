@@ -182,6 +182,7 @@ extension SPPhotoListVC : UICollectionViewDelegate ,UICollectionViewDataSource,U
     }
 }
 extension SPPhotoListVC {
+    /// 跳到相册图片选择
     fileprivate func sp_pushSelectImg(){
         if sp_count(array:  self.selectArray) < self.selectMaxCount || self.selectMaxCount == 0{
             let imageVC = SPImagePickerVC(maxSelectNum: self.selectMaxCount > 0 ? self.selectMaxCount - sp_count(array: self.selectArray) : 1) { [weak self](images, assets) in
@@ -194,6 +195,8 @@ extension SPPhotoListVC {
         }
       
     }
+    /// 处理从相册中选择的图片
+    /// - Parameter images: 图片数组
     fileprivate func sp_dealAddOther(images : [UIImage]?){
         if self.pushEditVC {
             if let list = images {
@@ -229,6 +232,7 @@ extension SPPhotoListVC {
             self.sp_maxNumTips()
         }
     }
+    /// 超过最大的提示语
     fileprivate func sp_maxNumTips(){
         let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: "\(SPLanguageChange.sp_getString(key: "MAXSELECT"))\(sp_getString(string: self.selectMaxCount))\(SPLanguageChange.sp_getString(key: "PICTURES"))", preferredStyle: UIAlertController.Style.alert)
         alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "KNOW"), style: UIAlertAction.Style.cancel, handler: { (action) in
@@ -272,7 +276,7 @@ extension SPPhotoListVC {
         }
         return point
     }
-    
+    /// 点击选择
     @objc fileprivate func sp_clickChoise(){
         self.choiceBtn.isSelected = !self.choiceBtn.isSelected;
         self.isEdit = !self.isEdit
@@ -320,6 +324,9 @@ extension SPPhotoListVC {
         self.collectionView.reloadData()
         sp_dealBtnEnabled()
     }
+    /// 删除图片动画
+    /// - Parameter img: 图片
+    /// - Parameter startPoint: 点击位置
     fileprivate func sp_removeImgAnimation(img : UIImage?,startPoint : CGPoint){
         guard let image = img else {
             return
@@ -364,9 +371,6 @@ extension SPPhotoListVC {
             imgLayer.removeFromSuperlayer()
         }
     }
-    
-    
-    
     /// 处理编辑view是否显示
     fileprivate func sp_dealEditView(){
         if self.choiceBtn.isSelected {
@@ -390,11 +394,11 @@ extension SPPhotoListVC {
 }
 
 extension SPPhotoListVC {
-    
+    /// 添加通知
     fileprivate func sp_addNotification(){
         NotificationCenter.default.addObserver(self, selector: #selector(sp_imgNotification), name: NSNotification.Name(K_NEWIMAGE_NOTIFICATION), object: nil)
     }
-    
+    /// 图片变化通知
     @objc fileprivate func sp_imgNotification(){
         sp_setupData()
     }

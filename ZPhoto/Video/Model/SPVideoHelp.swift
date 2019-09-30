@@ -50,7 +50,6 @@ class SPVideoHelp: NSObject {
             }
             insertTime = CMTimeAdd(insertTime, asset.duration)
         }
-        // 旋转视图图像，防止90度颠倒
         let videoPath = URL(fileURLWithPath: outputPath)
         let exporter = AVAssetExportSession(asset: compostition, presetName: AVAssetExportPresetHighestQuality)!
         exporter.outputURL = videoPath
@@ -123,30 +122,24 @@ class SPVideoHelp: NSObject {
  
         let videoDuration = videoAsset.timeRange.duration
         let videoStart = videoAsset.timeRange.start
-      
-        let audioCurrentTrack = asset.tracks(withMediaType: .audio).first
         
-        
-        
-        if audioCurrentTrack != nil   {
+        if let inputTrack = asset.tracks(withMediaType: .audio).first {
             let audioTrack = compostion.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: CMPersistentTrackID())
-            if let inputTrack = audioCurrentTrack {
-                var audioDuration = inputTrack.timeRange.duration
-                var audioStart = inputTrack.timeRange.start
-                if CMTimeGetSeconds(videoAsset.timeRange.duration) < CMTimeGetSeconds(inputTrack.timeRange.duration) {
-                    audioDuration = videoDuration
-                    audioStart = videoStart
-                }
-                do {
-                    try audioTrack!.insertTimeRange(CMTimeRangeMake(start: audioStart, duration: audioDuration), of: inputTrack, at: CMTime.zero)
-                } catch _{
-                    
-                }
+            var audioDuration = inputTrack.timeRange.duration
+            var audioStart = inputTrack.timeRange.start
+            if CMTimeGetSeconds(videoAsset.timeRange.duration) < CMTimeGetSeconds(inputTrack.timeRange.duration) {
+                audioDuration = videoDuration
+                audioStart = videoStart
+            }
+            do {
+                try audioTrack!.insertTimeRange(CMTimeRangeMake(start: audioStart, duration: audioDuration), of: inputTrack, at: CMTime.zero)
+            } catch _{
+                
             }
         }
-        for asset in audioAssets {
-            let audioInputTrack = asset.tracks(withMediaType: .audio).first
-            if let inputTrack = audioInputTrack {
+        /// 将多个音频插入视频中
+        for audioAsset in audioAssets {
+            if let inputTrack = audioAsset.tracks(withMediaType: .audio).first {
                 let audioCompositionTrack = compostion.addMutableTrack(withMediaType: .audio, preferredTrackID: CMPersistentTrackID())
                 var audioDuration = inputTrack.timeRange.duration
                 var audioStart = inputTrack.timeRange.start
@@ -313,21 +306,20 @@ class SPVideoHelp: NSObject {
                 }
             }
         }
-       
-        
+
         var samples: [CMSampleBuffer] = []
-        var imgList = [CMTime]()
+        var videoTimeList = [CMTime]()
         while let sample = trackOutput.copyNextSampleBuffer() {
             autoreleasepool {
                 if isVideoSample {
                     samples.append(sample)
                 }
-                imgList.append(CMSampleBufferGetPresentationTimeStamp(sample))
+                videoTimeList.append(CMSampleBufferGetPresentationTimeStamp(sample))
             }
         }
         sp_log(message: "读取结束")
         asserReader.cancelReading()
-        return (samples,audioSamples,imgList)
+        return (samples,audioSamples,videoTimeList)
     }
     private class func sp_dealVideoUnpend(asset:AVAsset?,url : String,complete : SPExportSuccess? = nil){
         guard let block = complete else {

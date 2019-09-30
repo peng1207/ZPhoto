@@ -227,7 +227,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
 }
 //MARK: - action
 extension SPRecordVideoManager{
-    // 开始录制
+    /// 开始录制
     func sp_startRecord(){
         guard cameraAuth else {
             return
@@ -306,8 +306,7 @@ extension SPRecordVideoManager{
             sp_log(message: "writer is catch \(error)")
         }
     }
-    
-    // 停止录制
+    /// 停止录制
     func sp_stopRecord(){
         guard cameraAuth else {
             return
@@ -355,11 +354,13 @@ extension SPRecordVideoManager{
         videoLayer?.add(changeAnimate, forKey: "changeAnimate")
     }
     /// 放大
+    /// - Parameter scale:  放大的倍距
     func sp_zoomIn(scale : CGFloat = 1.0){
         SPCameraHelp.sp_zoomIn(device: self.currentDevice, scale: scale)
      
     }
-    //缩小
+    /// 缩小
+    /// - Parameter scale: 缩小的倍距
     func sp_zoomOut(scale : CGFloat = 1.0) {
         SPCameraHelp.sp_zoomOut(device: self.currentDevice, scale: scale)
     }
@@ -375,7 +376,6 @@ extension SPRecordVideoManager{
         }
         return SPCameraHelp.sp_flash(device: self.currentDevice)
     }
-    // MARK: -- 私有方法
     /**< 改变属性操作 */
     fileprivate func sp_changeDeviceProperty(propertyBlock:PropertyChangeBlock?){
         do {
@@ -390,7 +390,6 @@ extension SPRecordVideoManager{
             
         }
     }
-    
     /// 点击取消
     func sp_cance(){
         SPCameraHelp.sp_flashOff(device: self.currentDevice)
@@ -405,7 +404,6 @@ extension SPRecordVideoManager{
         self.captureSession.stopRunning()
         
     }
-  
     /// 打印文件输入的状态
     fileprivate func sp_logWriterStatus(){
         switch self.assetWriter?.status {

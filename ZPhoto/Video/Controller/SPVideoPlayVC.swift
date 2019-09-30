@@ -73,11 +73,13 @@ class SPVideoPlayVC : SPBaseVC {
 
 // MARK: -- action
 extension SPVideoPlayVC{
+    /// 点击关闭当前页面
     @objc fileprivate func sp_close(){
         self.dismiss(animated: true) {
               self.sp_removeAllView()
         }
     }
+    /// 点击分享视频
     @objc fileprivate func sp_share(){
         if let url = self.videoModel?.url {
             SPShare.sp_share(videoUrls: [url], vc: self)

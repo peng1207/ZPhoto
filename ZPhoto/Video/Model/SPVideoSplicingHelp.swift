@@ -43,6 +43,8 @@ class SPVideoSplicingHelp {
             sp_videoSplicing(videoAssets: assetList, outputPath: outputPath, type: type, complete: complete)
         }
     }
+    /// 获取大小
+    /// - Parameter layoutList: 布局列表
     class func sp_frames(layoutList : [SPVideoSplicingType]) -> [[CGRect]]{
         var list = [[CGRect]]()
         for type in layoutList {

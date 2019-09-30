@@ -89,6 +89,8 @@ class SPVideoSplicingSelectVC: SPBaseVC {
 }
 extension SPVideoSplicingSelectVC{
     
+    /// 处理选择视频
+    /// - Parameter model: 视频model
     fileprivate func sp_dealSelect(model : SPVideoModel?){
         if sp_count(array: self.selectView.dataArray) >= self.selectMaxCount {
             sp_showMaxNumTip()
@@ -100,6 +102,7 @@ extension SPVideoSplicingSelectVC{
         self.selectView.sp_add(model: m)
         self.selectVC.selectArray = self.selectView.dataArray as? [SPVideoModel]
     }
+    /// 展示选择最大的提示
     fileprivate func sp_showMaxNumTip(){
         let alertController  = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "Exceed_MAX_NUM"), preferredStyle: UIAlertController.Style.alert)
         alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "KNOW"), style: UIAlertAction.Style.default, handler: { (action) in
@@ -107,6 +110,7 @@ extension SPVideoSplicingSelectVC{
         }))
         self.present(alertController, animated: true, completion: nil)
     }
+    /// 点击下一步
     @objc fileprivate func sp_clickNext(){
         if sp_count(array: self.selectVC.selectArray) > 0 {
             let vc = SPVideoSplicingVC()
@@ -114,9 +118,12 @@ extension SPVideoSplicingSelectVC{
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
+    /// 清除所有
     fileprivate func sp_clearAll(){
         self.selectVC.selectArray = nil 
     }
+    /// 移除某一个
+    /// - Parameter index: 位置
     fileprivate func sp_removeIndex(index : Int){
         var list = self.selectVC.selectArray
         if  index < sp_count(array: list) {

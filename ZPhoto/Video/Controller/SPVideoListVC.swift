@@ -89,7 +89,8 @@ extension SPVideoListVC {
 }
 // MARK: -- action
 extension SPVideoListVC {
-  
+    
+    /// 点击录制
     @objc fileprivate func sp_add(){
         let recordVC = SPRecordVideoVC()
         recordVC.modalPresentationStyle = .fullScreen
@@ -111,6 +112,8 @@ extension SPVideoListVC {
         }))
         self.present(alert, animated: true, completion: nil)
     }
+    /// 点击分享
+    /// - Parameter videoModel: 分享的视频model
     fileprivate func sp_clickShare(videoModel:SPVideoModel?){
         guard let model = videoModel else {
             return
@@ -180,9 +183,7 @@ extension SPVideoListVC {
             }
         }
     }
-    /*
-     刷新数据
-     */
+    /// 刷新数据
     fileprivate func reloadData(){
         sp_mainQueue {
             self.videoCollectionView.reloadData()

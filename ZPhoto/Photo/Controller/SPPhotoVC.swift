@@ -9,7 +9,7 @@
 import Foundation
 import SnapKit
 import SPCommonLibrary
-
+/// 图片主入口
 class SPPhotoVC: SPBaseNavVC {
   
     internal init() {
@@ -50,7 +50,6 @@ fileprivate class SPPhotoRootVC: SPBaseVC {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setImage(UIImage(named: "add_white"), for: UIControl.State.normal)
         btn.addTarget(self, action: #selector(sp_clickCamera), for: UIControl.Event.touchUpInside)
-//        btn.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         btn.sp_cornerRadius(radius: 40)
         btn.backgroundColor = sp_getMianColor()
         return btn
@@ -87,7 +86,7 @@ fileprivate class SPPhotoRootVC: SPBaseVC {
         view.corners = .left
         view.titleLabel.text = SPLanguageChange.sp_getString(key: "LONG_GRAPH")
         view.clickBlock = { [weak self] in
-            self?.sp_clickEdit()
+            self?.sp_clickLongGraph()
         }
         return view
     }()
@@ -161,14 +160,13 @@ fileprivate class SPPhotoRootVC: SPBaseVC {
     }
 }
 extension SPPhotoRootVC {
-    
-   
     /// 点击相机
     @objc fileprivate func sp_clickCamera(){
         let cameraVC = SPCameraVC()
         cameraVC.modalPresentationStyle = .fullScreen
         self.present(cameraVC, animated: true, completion: nil)
     }
+    /// 点击文件
     fileprivate func sp_clickFile(){
         let vc = SPPhotoListVC()
         vc.selectMaxCount = 1
@@ -176,17 +174,20 @@ extension SPPhotoRootVC {
         vc.pushEditVC = true
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    /// 点击拼接
     fileprivate func sp_clickSplicing(){
         let vc = SPPhotoSelectVC()
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    /// 点击影片
     fileprivate func sp_clickGif(){
         let vc = SPPhotoSelectVC()
         vc.pushVCType = .film
         vc.selectMaxCount = 12
         self.navigationController?.pushViewController(vc, animated: true)
     }
-    fileprivate func sp_clickEdit(){
+    /// 点击长图
+    fileprivate func sp_clickLongGraph(){
         let vc = SPPhotoSelectVC()
         vc.pushVCType = .longGraph
         self.navigationController?.pushViewController(vc, animated: true)

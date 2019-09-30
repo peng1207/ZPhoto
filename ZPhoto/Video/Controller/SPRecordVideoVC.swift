@@ -10,10 +10,10 @@ import UIKit
 import SnapKit
 import AVFoundation
 import SPCommonLibrary
-
-// 按钮点击事件回调
+///按钮点击事件回调
 typealias ButtonClickBlock =  (_ clickType:SPButtonClickType,_ button:UIButton) ->Void
 
+///  录制视频
 class SPRecordVideoVC: SPBaseNavVC {
     
     internal init() {
@@ -99,7 +99,7 @@ fileprivate class SPRecordVideoRootVC: SPBaseVC {
         self.videoManager.sp_complete(noCameraAuthBlock: { [weak self] () in
             self?.dealNOCameraAuthAction()
         }, noMicrophoneBlock: { [weak self] () in
-            self?.dealNOMicrophoneAuthAction()
+            self?.sp_dealNOMicrophoneAuthAction()
         })
         self.videoManager.videoLayer = self.preView.layer as? AVCaptureVideoPreviewLayer
         self.videoManager.addObserver(self, forKeyPath: kVideoManagerKVOKey, options: .new, context: nil)
@@ -198,6 +198,8 @@ extension SPRecordVideoRootVC {
         pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(sp_pinchAction(sender:)))
         self.view.addGestureRecognizer(pinchGesture)
     }
+    /// 缩放手势
+    /// - Parameter sender: 手势
     @objc fileprivate func sp_pinchAction(sender : UIPinchGestureRecognizer) {
         if sender.state == UIGestureRecognizer.State.ended {
             lastScale = 1.0
@@ -215,9 +217,9 @@ extension SPRecordVideoRootVC {
         lastScale = sender.scale
         
     }
-    /*
-      处理按钮点击事件的
-     */
+    /// 处理按钮点击事件的
+    /// - Parameter clickType: 按钮类型
+    /// - Parameter button: 按钮
     fileprivate func sp_deal(clickType : SPButtonClickType,button:UIButton){
         switch clickType {
         case .cance:
@@ -247,14 +249,15 @@ extension SPRecordVideoRootVC {
             sp_log(message: "其他没有定义")
         }
     }
+    /// 点击取消
    @objc fileprivate func sp_cance(){
         self.videoManager.sp_cance()
     
         self.disMissVC()
-        self.recordVideoView.canceTimer()
+        self.recordVideoView.sp_canceTimer()
     }
-    
-    /**< 处理屏幕旋转后视频的方向  */
+    /// 处理屏幕旋转后视频的方向
+    /// - Parameter toInterfaceOrientation: 方向
     fileprivate func dealOrientation(toInterfaceOrientation: UIInterfaceOrientation){
         switch toInterfaceOrientation {
         case .landscapeLeft:
@@ -269,9 +272,7 @@ extension SPRecordVideoRootVC {
             
         }
     }
-    /*
-      点击滤镜按钮事件
-     */
+    /// 点击滤镜按钮事件
     @objc fileprivate func sp_filterAction(){
         if(self.filterView.isHidden){
             self.filterRightConstraint?.update(offset: 0)
@@ -281,9 +282,7 @@ extension SPRecordVideoRootVC {
         self.filterView.isHidden = !self.filterView.isHidden
         self.sp_changeFilterData()
     }
-    /*
-     改变滤镜图片的数据
-     */
+    /// 改变滤镜图片的数据
     fileprivate func sp_changeFilterData(){
         sp_mainQueue {
             if (self.filterView.isHidden == false){
@@ -297,17 +296,13 @@ extension SPRecordVideoRootVC {
             }
         }
     }
-    /*
-     监听图片改变的
-     */
+    /// 监听图片改变的
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == kVideoManagerKVOKey {
             self.sp_changeFilterData()
         }
     }
-    /*
-     处理没有摄像头权限的事件
-     */
+    /// 处理没有摄像头权限的事件
     fileprivate func dealNOCameraAuthAction(){
         let alert = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "NO_CAMERA_AUTH_TIPS"), preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel, handler: {(action ) in
@@ -319,10 +314,8 @@ extension SPRecordVideoRootVC {
         }))
         self.present(alert, animated: true, completion: nil)
     }
-    /*
-     处理没有麦克风的事件
-     */
-    fileprivate func dealNOMicrophoneAuthAction(){
+    /// 处理没有麦克风的事件
+    fileprivate func sp_dealNOMicrophoneAuthAction(){
         let alert = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "NO_MICROPHONE_AUTH_TIPS"), preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "CANCE"), style: UIAlertAction.Style.cancel, handler: nil))
         alert.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "GO_TO_SET"), style: UIAlertAction.Style.default, handler: { (action) in
@@ -337,6 +330,8 @@ extension SPRecordVideoRootVC {
     fileprivate func disMissVC (){
         self.dismiss(animated: true, completion: nil)
     }
+    /// 处理视频的布局
+    /// - Parameter videoLayoutType: 视频布局
     fileprivate func sp_deal(videoLayoutType : SPVideoLayoutType){
         self.videoManager.videoLayoutType = videoLayoutType
     }
@@ -395,14 +390,14 @@ class SPRecordVideoBtnView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setupUI()
-        self.addActionToButton()
+        self.sp_addAction()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     deinit{
-        self.canceTimer()
+        self.sp_canceTimer()
     }
     
     fileprivate func setupUI(){
@@ -417,8 +412,8 @@ class SPRecordVideoBtnView: UIView {
         self.addConstraintToView()
         
     }
-    // 设置定时器
-    fileprivate func setupTimer (){
+    ///  设置定时器
+    fileprivate func sp_setupTimer (){
         var i = 0;
         sourceTimer = timer({
             sp_mainQueue {
@@ -427,52 +422,54 @@ class SPRecordVideoBtnView: UIView {
             i = i + 1
         })
     }
-    // 取消定时器
-    fileprivate func canceTimer(){
+    /// 取消定时器
+    fileprivate func sp_canceTimer(){
         if let timer = sourceTimer {
             timer.cancel()
             sourceTimer  = nil
             timeLabel.text = "00:00"
         }
     }
-    
-    // 添加按钮点击事件
-    fileprivate func addActionToButton (){
-        layoutButton.addTarget(self, action: #selector(clickLayoutAction), for: .touchUpInside)
-        recordButton.addTarget(self, action: #selector(clickDoneAction), for: .touchUpInside)
+    /// 添加按钮点击事件
+    fileprivate func sp_addAction(){
+        layoutButton.addTarget(self, action: #selector(sp_clickLayout), for: .touchUpInside)
+        recordButton.addTarget(self, action: #selector(sp_clickDone), for: .touchUpInside)
         if !SP_IS_IPAD {
-         flashLampButton.addTarget(self, action: #selector(clickOpenAction), for: .touchUpInside)
+         flashLampButton.addTarget(self, action: #selector(sp_clickOpen), for: .touchUpInside)
         }
-        changeButton.addTarget(self, action: #selector(clickChangeAction), for: .touchUpInside)
-        filterButton.addTarget(self, action: #selector(clickFilterAction), for: .touchUpInside)
+        changeButton.addTarget(self, action: #selector(sp_clickChange), for: .touchUpInside)
+        filterButton.addTarget(self, action: #selector(sp_clickFilter), for: .touchUpInside)
     }
-    // 点击取消
-    @objc func clickLayoutAction(){
-        self.dealAction(clickType: .layout, button: layoutButton)
+    /// 点击取消
+    @objc func sp_clickLayout(){
+        self.sp_deal(clickType: .layout, button: layoutButton)
     }
-    // 点击完成
-    @objc func clickDoneAction(){
-        self.dealAction(clickType: .done, button: recordButton)
+    /// 点击完成
+    @objc func sp_clickDone(){
+        self.sp_deal(clickType: .done, button: recordButton)
         if recordButton.isSelected{
-            self.setupTimer()
+            self.sp_setupTimer()
         }else{
-            self.canceTimer()
+            self.sp_canceTimer()
         }
     }
-    // 点击 闪光灯
-    @objc func clickOpenAction(){
-        self.dealAction(clickType: .flash, button: flashLampButton)
+    /// 点击 闪光灯
+    @objc func sp_clickOpen(){
+        self.sp_deal(clickType: .flash, button: flashLampButton)
     }
-    // 点击切换
-    @objc func  clickChangeAction(){
-        self.dealAction(clickType: .change, button: changeButton)
+    /// 点击切换
+    @objc func  sp_clickChange(){
+        self.sp_deal(clickType: .change, button: changeButton)
     }
-    // 点击滤镜
-    @objc func clickFilterAction(){
-        self.dealAction(clickType: .filter, button: filterButton)
+    /// 点击滤镜
+    @objc func sp_clickFilter(){
+        self.sp_deal(clickType: .filter, button: filterButton)
     }
     
-    func dealAction(clickType:SPButtonClickType,button : UIButton) {
+    /// 处理按钮点击事件
+    /// - Parameter clickType: 点击事件类型
+    /// - Parameter button: 按钮
+    func sp_deal(clickType:SPButtonClickType,button : UIButton) {
         buttonClickBlock?(clickType,button)
     }
     

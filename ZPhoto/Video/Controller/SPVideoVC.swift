@@ -164,6 +164,7 @@ extension SPVideoRootVC {
         recordVC.modalPresentationStyle = .fullScreen
         self.present(recordVC, animated: true, completion: nil)
     }
+    /// 点击文件
     fileprivate func sp_clickFile(){
         let vc = SPVideoListVC()
         self.navigationController?.pushViewController(vc, animated: true)

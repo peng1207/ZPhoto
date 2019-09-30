@@ -35,7 +35,7 @@ class SPPhotoEditVC: SPBaseVC {
     fileprivate lazy var editView : SPPhotoEditToolView = {
         let view = SPPhotoEditToolView()
         view.clickBlock = { [weak self](type)in
-            self?.sp_dealBtnClick(type: type)
+            self?.sp_deal(btnType: type)
         }
         return view
     }()
@@ -46,7 +46,7 @@ class SPPhotoEditVC: SPBaseVC {
             self?.sp_showKeyboard()
         }
         view.toolView.btnBlock = { [weak self] (type ) in
-            self?.sp_dealBtnClick(type: type)
+            self?.sp_deal(btnType: type)
         }
         view.isHidden = true
         return view
@@ -159,24 +159,26 @@ extension SPPhotoEditVC : UIScrollViewDelegate{
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.iconImgView
     }
-//    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-//        let delta_x = scrollView.bounds.size.width > scrollView.contentSize.width ? (scrollView.bounds.size.width-scrollView.contentSize.width)/2 : 0;
-//
-//        let delta_y = scrollView.bounds.size.height > scrollView.contentSize.height ? (scrollView.bounds.size.height - scrollView.contentSize.height)/2 : 0;
-//
-//        //让imageView一直居中
-//
-//        //实时修改imageView的center属性 保持其居中
-//
-//        self.iconImgView.center = CGPoint(x: scrollView.contentSize.width/2 + delta_x, y: scrollView.contentSize.height/2 + delta_y)
-//        sp_log(message: self.iconImgView.frame)
-//    }
+    //    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+    //        let delta_x = scrollView.bounds.size.width > scrollView.contentSize.width ? (scrollView.bounds.size.width-scrollView.contentSize.width)/2 : 0;
+    //
+    //        let delta_y = scrollView.bounds.size.height > scrollView.contentSize.height ? (scrollView.bounds.size.height - scrollView.contentSize.height)/2 : 0;
+    //
+    //        //让imageView一直居中
+    //
+    //        //实时修改imageView的center属性 保持其居中
+    //
+    //        self.iconImgView.center = CGPoint(x: scrollView.contentSize.width/2 + delta_x, y: scrollView.contentSize.height/2 + delta_y)
+    //        sp_log(message: self.iconImgView.frame)
+    //    }
     
 }
 
 extension SPPhotoEditVC {
-    fileprivate func sp_dealBtnClick(type : SPButtonClickType){
-        switch type {
+    /// 处理按钮点击事件
+    /// - Parameter btnType: 事件类型
+    fileprivate func sp_deal(btnType : SPButtonClickType){
+        switch btnType {
         case .cance:
             sp_clickBack()
         case .done:
@@ -217,7 +219,7 @@ extension SPPhotoEditVC {
             sp_log(message: "写入缓存数据失败")
         }
     }
- 
+    
     /// 点击裁剪
     fileprivate func sp_clickShear(){
         let clipVC = SPClipImgVC()
@@ -242,9 +244,7 @@ extension SPPhotoEditVC {
         self.textView.isHidden = true
         sp_changeFilterData()
     }
-    /*
-     改变滤镜图片的数据
-     */
+    /// 改变滤镜图片的数据
     func sp_changeFilterData(){
         sp_sync {
             if (self.filterView.isHidden == false){
@@ -258,6 +258,8 @@ extension SPPhotoEditVC {
             }
         }
     }
+    /// 处理选择滤镜后的回调
+    /// - Parameter model: 滤镜model
     fileprivate func sp_dealFilter(model : SPFilterModel?){
         guard let filterModel = model else {
             return
@@ -265,18 +267,19 @@ extension SPPhotoEditVC {
         self.iconImgView.image = filterModel.showImage
         self.editView.sp_finsihBtn(isEnabled: true)
     }
+    /// 点击下一步
     fileprivate func sp_clickText(){
         self.textView.isHidden = !self.textView.isHidden
         self.filterView.isHidden = true
-         self.filterRightConstraint.update(offset: -filterViewWidth)
+        self.filterRightConstraint.update(offset: -filterViewWidth)
         self.textView.toolView.toolView.selectType = .edit
         sp_addEditTextView()
     }
-    
+    /// 增加编辑文字框
     fileprivate func sp_addEditTextView(){
         let view = SPTextEditView()
         view.clickBlock = { [weak self] (type) in
-            self?.sp_dealBtnClick(type: type)
+            self?.sp_deal(btnType: type)
         }
         self.scrollView.addSubview(view)
         view.snp.makeConstraints { (maker) in
@@ -296,9 +299,9 @@ extension SPPhotoEditVC {
         view.sp_edit()
     }
     /// 处理编辑文本框 隐藏键盘和临时view设置为nil
-      fileprivate func sp_dealEditText(){
-          self.tmpEditTextView?.sp_noEdit()
-          self.tmpEditTextView = nil
-          self.textView.isHidden = true
-      }
+    fileprivate func sp_dealEditText(){
+        self.tmpEditTextView?.sp_noEdit()
+        self.tmpEditTextView = nil
+        self.textView.isHidden = true
+    }
 }
