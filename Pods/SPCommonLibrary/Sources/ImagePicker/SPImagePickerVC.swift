@@ -8,15 +8,17 @@
 import Foundation
 import UIKit
 import SnapKit
-
+/// 选择图片回调
 public typealias SPImagePickerComplete = (_ images : [UIImage]? , _ assets : [Any]?)->Void
-
+/// 选择图片 入口
 public class SPImagePickerVC : UINavigationController{
     
- 
     override public var preferredStatusBarStyle: UIStatusBarStyle{
         return .lightContent
     }
+    /// 初始化
+    /// - Parameter maxSelectNum: 最大选择的数量
+    /// - Parameter complete: 选择后的回调
     public init(maxSelectNum : Int,complete : SPImagePickerComplete?){
         let albumVC = SPAlbumVC()
         albumVC.maxSelectNum = maxSelectNum

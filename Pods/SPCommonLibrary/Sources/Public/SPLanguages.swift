@@ -13,12 +13,9 @@ open class SPLanguageChange {
     
     public static let shareInstance = SPLanguageChange()
     fileprivate var bundle : Bundle?
-     
-    fileprivate let def = UserDefaults.standard
     fileprivate var isChinese : Bool = false
-    /*
-     获取国际化对应的文字
-     */
+    /// 获取国际化对应的文字
+    /// - Parameter key: 文字对应key
     public class func sp_getString(key:String) -> String{
         let bundle = SPLanguageChange.shareInstance.bundle
         if let b = bundle {
@@ -35,11 +32,7 @@ open class SPLanguageChange {
         }
         return key
     }
- 
-    
-    /*
-     初始化语言
-     */
+    /// 初始化语言
     public func sp_initLanguage(){
         var string : String = ""
         if let s = Locale.preferredLanguages.first{
@@ -74,6 +67,7 @@ open class SPLanguageChange {
        
         bundle = Bundle(path: path!)
     }
+    /// 是否为中文
     public class func sp_chinese()->Bool {
         let bundle = SPLanguageChange.shareInstance.bundle
         if bundle == nil {

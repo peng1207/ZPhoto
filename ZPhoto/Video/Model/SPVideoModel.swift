@@ -30,6 +30,10 @@ class SPVideoModel : NSObject{
         asset = nil
     }
     private func sp_dealAsset(){
+        guard asset != nil else {
+            return
+        }
+        
         let second = CMTimeGetSeconds(asset!.duration)
         if second <= 0 || asset == nil{
             asset = nil

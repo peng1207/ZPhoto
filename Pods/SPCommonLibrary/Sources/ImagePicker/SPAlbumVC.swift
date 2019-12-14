@@ -9,14 +9,14 @@ import Foundation
 import SnapKit
 import UIKit
 import Photos
+/// 相簿图片结构体
 struct SPImageAlbumItem {
     /// 相簿名称
     var title : String?
     /// 相簿内的资源
     var fetchResult:PHFetchResult<PHAsset>
 }
-
-
+/// 相簿列表
 class SPAlbumVC: UIViewController{
     var itemArray : [SPImageAlbumItem] = [SPImageAlbumItem]()
     fileprivate let imageManager : PHCachingImageManager = PHCachingImageManager()
@@ -88,6 +88,8 @@ class SPAlbumVC: UIViewController{
 }
 extension SPAlbumVC {
     
+    /// 跳到图片列表
+    /// - Parameter albumItem: 当前的相簿
     fileprivate func sp_pushListVC(albumItem : SPImageAlbumItem?){
         let listVC = SPImagePickerListVC()
         listVC.maxSelectNum = self.maxSelectNum
@@ -95,9 +97,11 @@ extension SPAlbumVC {
         listVC.selectComplete = self.selectComplete
         self.navigationController?.pushViewController(listVC, animated: true)
     }
+    /// 点击取消
     @objc fileprivate func sp_clickCance(){
         self.dismiss(animated: true, completion: nil)
     }
+    /// 获取相簿图片数据
     fileprivate func sp_getPhotos(){
         SPAuthorizatio.sp_isPhoto { [weak self](auth) in
             if auth {
@@ -130,7 +134,7 @@ extension SPAlbumVC {
         }
     }
     
-    //转化处理获取到的相簿
+    ///转化处理获取到的相簿
     private func sp_convertCollection(collection:PHFetchResult<PHAssetCollection>){
         for i in 0..<collection.count{
             //获取出但前相簿内的图片

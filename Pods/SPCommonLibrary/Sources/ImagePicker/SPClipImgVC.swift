@@ -8,13 +8,16 @@
 import Foundation
 import SnapKit
 import UIKit
+/// 裁剪图片回调
 public typealias SPClipImgComplete = (_ image : UIImage?, _ isCance : Bool)->Void
-
+/// 裁剪类型
 public enum SPClipImgType {
+    /// 正方形
     case square
+    /// 其他
     case other
 }
-
+/// 裁剪图片VC
 public class SPClipImgVC: UIViewController {
     
     fileprivate lazy var iconImgView : UIImageView = {

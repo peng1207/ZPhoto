@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import SnapKit
+/// 图片cell 
 class SPImagePickerListCollectionCell: UICollectionViewCell {
     lazy var iconImgView : UIImageView = {
         let view = UIImageView()

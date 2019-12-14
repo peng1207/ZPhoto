@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+/// 分享管理类
 public class SPShare {
     
     /// 调用系统分享图片

@@ -11,11 +11,12 @@ import UIKit
 
 extension Bundle{
     
+    /// 获取bundle
     static var libraryBundle : Bundle {
-       
         let library = Bundle(path:Bundle(for: SPImagePickerVC.self).path(forResource: "SPCommonLibrary", ofType: "bundle")!)
         return library!
     }
+    /// 获取bundle里的图片
     class func sp_getImg(name : String)->UIImage?{
         
         if  let path = self.libraryBundle.path(forResource: name, ofType: "png") {

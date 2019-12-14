@@ -8,15 +8,20 @@
 import Foundation
 import UIKit
 import SnapKit
-/// 类型
+/// 按钮类型
 enum SPClipType {
+    /// 取消
     case cance
+    /// 完成
     case done
+    /// 旋转
     case rotate
+    ///  放大
     case zoom
 }
+/// 点击按钮类型回调
 typealias SPClipTypeComplete = (_ type : SPClipType)->Void
-
+/// 裁剪图片 工具view
 class SPClipToolView:  UIView{
     fileprivate lazy var canceBtn : UIButton = {
        

@@ -13,7 +13,7 @@ import Speech
 /// 是否有权限回调 auth true 有权限  false 没有权限
 public typealias AuthorizedBlock = (_ auth : Bool) -> Void
 
-// 权限表
+/// 权限管理
 open class SPAuthorizatio{
     
     /// 相机权限
@@ -25,7 +25,7 @@ open class SPAuthorizatio{
         }
         
         let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
-        if authStatus == .notDetermined {
+        if  authStatus == .notDetermined {
             // 第一次授权
             AVCaptureDevice.requestAccess(for: AVMediaType.video) { (grant) in
                 authoriedComplete(grant)

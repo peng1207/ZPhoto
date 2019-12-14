@@ -135,4 +135,22 @@ class SPCameraHelp {
         newOutputImg = UIImage.sp_picRotating(imgae: newOutputImg)
         return newOutputImg
     }
+    /// 处理视频流获取CIImage
+    /// - Parameter sampleBuffer: 视频流
+    /// - Parameter context: context
+    class func sp_deal(sampleBuffer: CMSampleBuffer, context: CIContext)->(CIImage?,CIImage?){
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return (nil,nil)
+        }
+        var outputImage : CIImage? = nil
+        outputImage = CIImage(cvImageBuffer: imageBuffer)
+        var noFilterOutputImage = outputImage
+        noFilterOutputImage = UIImage.sp_picRotating(imgae: noFilterOutputImage)
+        if let noFilterImg = noFilterOutputImage ,let cgImg =  context.createCGImage(noFilterImg, from: noFilterImg.extent) {
+            // 不是滤镜
+            noFilterOutputImage = CIImage(cgImage:cgImg)
+        }
+        return (noFilterOutputImage,outputImage)
+    }
 }
+

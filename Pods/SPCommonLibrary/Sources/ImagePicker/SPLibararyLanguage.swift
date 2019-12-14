@@ -7,10 +7,13 @@
 //
 
 import Foundation
+/// 框架中的国际化
 class SPLibararyLanguage {
     public static let shareInstance = SPLibararyLanguage()
     fileprivate var libraryBundle : Bundle?
     fileprivate var isChinese : Bool = false
+    /// 获取国际化的文字
+    /// - Parameter key: 文字对应key
     class func sp_library(key : String) -> String{
         var bundle = SPLibararyLanguage.shareInstance.libraryBundle
         if let b = bundle {
@@ -26,10 +29,7 @@ class SPLibararyLanguage {
         }
         return key
     }
-    
-    /*
-     初始化语言
-     */
+    /// 初始化语言
     public func sp_initLanguage(){
         var string : String = ""
         if let s = Locale.preferredLanguages.first{

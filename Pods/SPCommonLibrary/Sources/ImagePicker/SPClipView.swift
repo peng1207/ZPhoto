@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import SnapKit
+/// 裁剪图片view 
 class SPClipView : UIView{
     
     fileprivate lazy var topLeftView : UIView = {
@@ -398,7 +399,7 @@ extension SPClipView {
         sp_updateLayout(frame: newFrame)
         self.lastPoint = point
     }
-    
+    /// 当前view的移动手势
     @objc fileprivate func sp_panGest(panGest: UIPanGestureRecognizer){
         let point = panGest.translation(in: self)
         if panGest.state == UIGestureRecognizer.State.began {
@@ -443,6 +444,8 @@ extension SPClipView {
         }
         return block()
     }
+    /// 更新当前view的位置 大小
+    /// - Parameter frame: 位置大小
     fileprivate func sp_updateLayout(frame : CGRect){
         if self.superview != nil {
             self.snp.remakeConstraints { (maker) in

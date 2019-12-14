@@ -227,7 +227,7 @@ fileprivate extension SPCameraRootVC{
         AudioServicesCreateSystemSoundID(baseURL, &sysID)
         //播放声音
         AudioServicesPlaySystemSound(sysID)
-
+    
     }
     /// 点击滤镜
     func sp_clickFilter(){

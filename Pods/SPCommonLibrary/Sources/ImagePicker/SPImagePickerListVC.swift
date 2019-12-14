@@ -9,6 +9,7 @@ import Foundation
 import SnapKit
 import UIKit
 import Photos
+/// 图片列表
 class SPImagePickerListVC: UIViewController {
     fileprivate var collectionView : UICollectionView!
     fileprivate let cellID = "imagePickerListCellID"
@@ -114,6 +115,7 @@ extension SPImagePickerListVC : UICollectionViewDelegate ,UICollectionViewDataSo
 }
 
 extension SPImagePickerListVC {
+    /// 点击完成
     @objc fileprivate func sp_clickDone(){
         var imageList = [UIImage]()
         let group = DispatchGroup()
@@ -141,12 +143,16 @@ extension SPImagePickerListVC {
             }
         }
     }
+    /// 处理回调
+    /// - Parameter images: 选择图片数据
     fileprivate func sp_dealComplete(images : [UIImage]?){
         guard let block = self.selectComplete else {
             return
         }
         block(images,self.selectArray)
     }
+    /// 处理选择的图片
+    /// - Parameter asset: 图片asset
     fileprivate func sp_dealSelect(asset : PHAsset){
         if self.maxSelectNum > 0 , sp_count(array: self.selectArray) == self.maxSelectNum , self.selectArray.contains(asset) == false{
              // 选择的图片的等于最大的数量
@@ -166,6 +172,7 @@ extension SPImagePickerListVC {
             sp_clickDone()
         }
     }
+    /// 处理标题
     fileprivate func sp_dealTitle(){
         if self.maxSelectNum > 0 {
               self.navigationItem.title = sp_getString(string: albumItem?.title) + "(\(sp_count(array: self.selectArray))/\(maxSelectNum))"

@@ -43,7 +43,7 @@ public func sp_screenHeight()->CGFloat{
 public func sp_scale(value : CGFloat) -> CGFloat{
     return value / UIScreen.main.scale
 }
-// 获取屏幕分辨率
+/// 获取屏幕分辨率
 public func sp_screenPixels() -> CGSize {
     if let size = UIScreen.main.currentMode?.size {
         return CGSize(width: size.width , height: size.height)
@@ -64,14 +64,26 @@ public func sp_log<T>(message : T,file : String = #file,methodName: String = #fu
     print("\(fileName).\(methodName)[\(lineNumber)]\(Date().timeIntervalSince1970):\(message)")
     #endif
 }
-/// 多线程
+/// 异步多线程
 ///
 /// - Parameters:
 ///   - queueName:  线程名字
 ///   - complete: 回调
-public func sp_sync(queueName : String? = "com.queue.defauleQueue" ,complete : ()->Void){
+public func sp_sync(queueName : String? = "com.queue.defauleQueue" ,complete : @escaping()->Void){
     let queue = DispatchQueue(label: queueName!)
 //    let queue = DispatchQueue(label: sp_getString(string: queueName), qos: DispatchQoS.utility, attributes: .concurrent)
+    // 异步
+    queue.async {
+         complete()
+    }
+}
+/// 同步多线程
+/// - Parameters:
+///   - queueName: 线程名字
+///   - complete: 回调
+public func sp_synchro(queueName : String? = "com.queue.synchroQueue" ,complete : @escaping()->Void){
+    let queue = DispatchQueue(label: queueName!)
+     // 同步
     queue.sync {
         complete()
     }
@@ -298,8 +310,7 @@ public func sp_appLogoImg()->UIImage?{
    
     return nil
 }
-
-
+/// 获取最顶层的控制器ViewController
 public func sp_topVC()->UIViewController?{
     var resultVC : UIViewController?
     resultVC = sp_nextTopVC(vc: UIApplication.shared.keyWindow?.rootViewController)
@@ -309,6 +320,7 @@ public func sp_topVC()->UIViewController?{
     
     return resultVC
 }
+/// 获取下个顶层的VC
 private func sp_nextTopVC(vc : UIViewController?)->UIViewController?{
     guard let viewController = vc else {
         return nil
