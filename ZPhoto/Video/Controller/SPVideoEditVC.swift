@@ -70,7 +70,9 @@ class  SPVideoEditVC : SPBaseVC {
 }
 // MARK: -- action
 extension SPVideoEditVC {
-    func  playVideo(videoModel:SPVideoModel){
+    /// 播放视频
+    /// - Parameter videoModel: 视频model
+   fileprivate func  sp_playVideo(videoModel:SPVideoModel){
         let videoPalyVC = SPVideoPlayVC()
         videoPalyVC.videoModel = videoModel
         self.navigationController?.pushViewController(videoPalyVC, animated: true)

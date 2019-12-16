@@ -12,15 +12,6 @@ import SPCommonLibrary
 /// 浏览图片的控制器
 class SPPhotoBrowseVC: SPBaseVC {
      fileprivate var collectionView : UICollectionView!
-    fileprivate lazy var editBtn : UIButton = {
-        let btn = UIButton(type: UIButton.ButtonType.custom)
-        btn.setTitle("编辑", for: UIControl.State.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue), for: UIControl.State.normal)
-        btn.titleLabel?.font = sp_fontSize(fontSize:  15)
-        btn.addTarget(self, action: #selector(sp_clickEdit), for: UIControl.Event.touchUpInside)
-        btn.frame = CGRect(x: 0, y: 0, width: 50, height: 30)
-        return btn
-    }()
     var dataArray : [SPPhotoModel]?
     fileprivate let cellID = "SPPhotoBrowseCellID"
     var selectModel : SPPhotoModel?
@@ -29,6 +20,7 @@ class SPPhotoBrowseVC: SPBaseVC {
         super.viewDidLoad()
         self.sp_setupUI()
         sp_setupData()
+        sp_addNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -76,7 +68,11 @@ class SPPhotoBrowseVC: SPBaseVC {
         self.collectionView.register(SPPhotoListCollectionCell.self, forCellWithReuseIdentifier: self.cellID)
         self.collectionView.showsVerticalScrollIndicator = false
         self.view.addSubview(self.collectionView)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.editBtn)
+        self.navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(title: SPLanguageChange.sp_getString(key: "SAVE"), style: UIBarButtonItem.Style.done, target: self, action: #selector(sp_clickSave)),
+            UIBarButtonItem(title: SPLanguageChange.sp_getString(key: "EDIT"), style: UIBarButtonItem.Style.done, target: self, action: #selector(sp_clickEdit))
+        ]
+ 
         self.sp_addConstraint()
     }
     /// 处理有没数据
@@ -95,7 +91,7 @@ class SPPhotoBrowseVC: SPBaseVC {
         }
     }
     deinit {
-        
+        NotificationCenter.default.removeObserver(self)
     }
 }
 extension SPPhotoBrowseVC : UICollectionViewDelegate ,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
@@ -107,6 +103,7 @@ extension SPPhotoBrowseVC : UICollectionViewDelegate ,UICollectionViewDataSource
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell : SPPhotoListCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellID, for: indexPath) as! SPPhotoListCollectionCell
+        cell.needUpdateLayout = true
         if indexPath.row < sp_count(array:  self.dataArray) {
             cell.model = self.dataArray?[indexPath.row]
         }
@@ -135,8 +132,46 @@ extension SPPhotoBrowseVC {
             vc.photoModel = model
             self.navigationController?.pushViewController(vc, animated: false)
         }
-        
+    }
+    @objc fileprivate func sp_clickSave(){
+        let index = Int(self.collectionView.contentOffset.x / self.collectionView.frame.size.width)
+        if index < sp_count(array:  self.dataArray) {
+            let model = self.dataArray?[index]
+            if let img = model?.img{
+                  UIImageWriteToSavedPhotosAlbum(img, self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
+            }
+        }
+    }
+    @objc func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer)
+       {
+           if let e = error as NSError?
+           {
+               print(e)
+           }
+           else
+           {
+             let alertController = UIAlertController(title: SPLanguageChange.sp_getString(key: "TIPS"), message: SPLanguageChange.sp_getString(key: "SAVE_SUCCESS"), preferredStyle: UIAlertController.Style.alert)
+               alertController.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "OK"), style: UIAlertAction.Style.default, handler: { (action) in
+                   
+               }))
+               self.present(alertController, animated: true, completion: nil)
+           }
+       }
+}
 
+extension SPPhotoBrowseVC {
+    /// 添加通知
+    fileprivate func sp_addNotification(){
+        NotificationCenter.default.addObserver(self, selector: #selector(sp_imgNotification), name: NSNotification.Name(K_NEWIMAGE_NOTIFICATION), object: nil)
+    }
+    /// 图片变化通知
+    @objc fileprivate func sp_imgNotification(){
+        sp_sync {
+            self.dataArray = SPPhotoHelp.sp_getPhototList()
+            sp_mainQueue {
+                self.collectionView.reloadData()
+            }
+        }
     }
     
 }

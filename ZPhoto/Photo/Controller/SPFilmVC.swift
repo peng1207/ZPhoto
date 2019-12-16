@@ -10,6 +10,7 @@ import Foundation
 import SnapKit
 import SPCommonLibrary
 import AVFoundation
+
 /// 影片
 class SPFilmVC: SPBaseVC {
      var dataArray : [SPPhotoModel]?
@@ -113,12 +114,13 @@ class SPFilmVC: SPBaseVC {
     }
 }
 extension SPFilmVC {
+    /// 点击分享
     @objc fileprivate func sp_clickShare(){
         if let videoModel = self.videoPlayView.videoModel,let videoUrl = videoModel.url{
             SPShare.sp_share(videoUrls: [videoUrl], vc: self)
         }
     }
-    
+    /// 点击保存到相册
     @objc fileprivate func sp_clickSave(){
         if let videoModel = self.videoPlayView.videoModel {
             let path = sp_getString(string: videoModel.url?.path)
@@ -127,6 +129,10 @@ extension SPFilmVC {
             }
         }
     }
+    /// 保存到相册的回调
+    /// - Parameter path: 路径
+    /// - Parameter error: 错误码
+    /// - Parameter contextInfo: 描述
     @objc func sp_video(path : String?,error : NSError?,contextInfo : Any?){
         
         if let e = error as NSError?
@@ -142,6 +148,8 @@ extension SPFilmVC {
             self.present(alertController, animated: true, completion: nil)
         }
     }
+    /// 获取影片数据
+    /// - Parameter play: 是否播放
     fileprivate func sp_setupFilm(play : Bool = false){
         guard sp_count(array: self.dataArray) > 0 else {
             self.navigationController?.popViewController(animated: true)
@@ -162,15 +170,21 @@ extension SPFilmVC {
         guard imgList.count > 0 else {
             return
         }
+        SPShowToast.sp_showAnimation(text: SPLanguageChange.sp_getString(key: "LOADING"), view: self.view)
         let  filePath : String = "\(kVideoTempDirectory)/temp.mp4"
         FileManager.sp_directory(createPath:kVideoTempDirectory)
         if FileManager.default.fileExists(atPath: filePath) {
             FileManager.remove(path: filePath)
         }
+      
         SPFilmManager.sp_video(images: imgList, filePath: filePath, filmStruct:self.filmStruct) { [weak self](isSuccess, path) in
             self?.sp_deal(filmComplete: isSuccess, filePath: path,play: play)
         }
     }
+    /// 处理获取影片数据回调
+    /// - Parameter isSucces: 是否成功
+    /// - Parameter filePath: 文件路径
+    /// - Parameter play: 是否播放
     fileprivate func sp_deal(filmComplete isSucces : Bool , filePath : String?,play : Bool = false){
         if isSucces {
             let videoModel = SPVideoModel()
@@ -189,7 +203,10 @@ extension SPFilmVC {
                 self.videoPlayView.videoModel = nil
             }
         }
+        SPShowToast.sp_hideAnimation(view: self.view)
     }
+    /// 处理点击工具栏事件
+    /// - Parameter toolType: 事件
     fileprivate func sp_deal(toolType : SPToolType){
         switch toolType {
         case .animation:
@@ -204,6 +221,7 @@ extension SPFilmVC {
             sp_log(message: "")
         }
     }
+    /// 展示影片的动画
     fileprivate func sp_dealAnimation(){
         let actionSheetVC = UIAlertController(title: SPLanguageChange.sp_getString(key: "ANIMATION"), message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         actionSheetVC.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "ANIMATION_NONE"), style: UIAlertAction.Style.default, handler: { [weak self](action) in
@@ -219,7 +237,7 @@ extension SPFilmVC {
             self?.sp_deal(animationType: .cover, animationTypes: nil)
         }))
         actionSheetVC.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "ANIMATION_TOBOOK"), style: UIAlertAction.Style.default, handler: { [weak self](action) in
-            self?.sp_deal(animationType: .toBook, animationTypes: nil)
+            self?.sp_deal(animationType: .pull, animationTypes: nil)
         }))
         actionSheetVC.addAction(UIAlertAction(title: SPLanguageChange.sp_getString(key: "ANIMATION_HOLE"), style: UIAlertAction.Style.default, handler: { [weak self](action) in
             self?.sp_deal(animationType: .hole, animationTypes: nil)
@@ -229,10 +247,12 @@ extension SPFilmVC {
         }))
         self.present(actionSheetVC, animated: true, completion: nil)
     }
+    /// 处理影片时间
     fileprivate func sp_dealTime(){
         self.timeView.sp_update(picTime: self.filmStruct.picDuration, animationTimer: self.filmStruct.animationDuratione)
         self.timeView.isHidden = !self.timeView.isHidden
     }
+    /// 处理影片的宽高比
     fileprivate func sp_dealZoom(){
         let actionSheetVC = UIAlertController(title: SPLanguageChange.sp_getString(key: "ZOOM"), message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         actionSheetVC.addAction(UIAlertAction(title: "1:1", style: UIAlertAction.Style.default, handler: { [weak self](action) in
@@ -268,10 +288,14 @@ extension SPFilmVC {
         }))
         self.present(actionSheetVC, animated: true, completion: nil)
     }
+    /// 更新影片的宽高比
+    /// - Parameter ration: 宽高比
     fileprivate func sp_update(film ration : CGFloat){
         self.filmStruct.ratio = ration
         sp_setupFilm(play: true)
     }
+    /// 更新view的高宽比
+    /// - Parameter ratio: 高宽比
     fileprivate func sp_update(ratio : CGFloat){
         self.videoPlayView.snp.remakeConstraints { (maker) in
             maker.left.right.equalTo(self.view).offset(0)
@@ -279,16 +303,24 @@ extension SPFilmVC {
             maker.height.equalTo(self.videoPlayView.snp.width).multipliedBy(ratio)
         }
     }
+    /// 处理获取影片时间
+    /// - Parameter picTime: 每张图片展示时间
+    /// - Parameter animationTime: 动画时间
     fileprivate func sp_deal(picTime : TimeInterval,animationTime : TimeInterval){
         self.filmStruct.picDuration = picTime
         self.filmStruct.animationDuratione = animationTime
        sp_setupFilm(play: true)
     }
+    /// 处理选择影片动画
+    /// - Parameter animationType: 动画类型
+    /// - Parameter animationTypes: 动画类型数组
     fileprivate func sp_deal(animationType : SPAnimationType, animationTypes : [SPAnimationType]?){
         self.filmStruct.animationType = animationType
         self.filmStruct.animationTypes = animationTypes
         sp_setupFilm(play: true)
     }
+    /// 处理点击按钮事件类型
+    /// - Parameter btnType: 事件类型
     fileprivate func sp_deal(btnType : SPButtonClickType){
         switch btnType {
         case .save:
@@ -299,6 +331,7 @@ extension SPFilmVC {
             sp_log(message: "")
         }
     }
+    /// 点击编辑
     fileprivate func sp_dealEdit(){
         let dragVC = SPDragVC()
         dragVC.dataArray = self.dataArray

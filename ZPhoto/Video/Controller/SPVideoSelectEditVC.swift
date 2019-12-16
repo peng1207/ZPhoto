@@ -55,6 +55,8 @@ class SPVideoSelectEditVC: SPBaseVC {
 }
 extension SPVideoSelectEditVC{
     
+    /// 处理选择到视频文件
+    /// - Parameter model: 视频model
     fileprivate func sp_dealSelect(model : SPVideoModel?){
         let editVC = SPVideoEditVC()
         editVC.videoModel = model

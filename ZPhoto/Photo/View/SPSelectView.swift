@@ -23,7 +23,7 @@ class SPSelectView:  UIView{
     fileprivate lazy var clearBtn : UIButton = {
         let btn = UIButton(type: UIButton.ButtonType.custom)
         btn.setTitle(SPLanguageChange.sp_getString(key: "CLEARSELECT"), for: UIControl.State.normal)
-        btn.setTitleColor(SPColorForHexString(hex: SPHexColor.color_b31f3f.rawValue), for: UIControl.State.normal)
+        btn.setTitleColor(SPColorForHexString(hex: SPHexColor.color_ffffff.rawValue), for: UIControl.State.normal)
         btn.titleLabel?.font = sp_fontSize(fontSize:  17)
         btn.addTarget(self, action: #selector(sp_clickClear), for: UIControl.Event.touchUpInside)
         return btn

@@ -19,23 +19,35 @@ class SPVideoModel : NSObject{
     }
     var asset : AVAsset? {
         didSet{
-            let second = CMTimeGetSeconds(asset!.duration)
-            if second <= 0 || asset == nil{
-                asset = nil
-            }else{
-                thumbnailImage = SPVideoHelp.sp_thumbnailImage(assesst: asset!, time: CMTimeMakeWithSeconds(0.00, preferredTimescale: framesPerSecond))
-                self.second = second
-                if thumbnailImage == nil {
-                    thumbnailImage = sp_appLaunchImg()
-                }
-            }
+           self.sp_dealAsset()
         }
     }
     var thumbnailImage : UIImage?
     var second : Float64?
+    var size : CGSize = CGSize.zero
     override init() {
        url = nil
         asset = nil
+    }
+    private func sp_dealAsset(){
+        guard asset != nil else {
+            return
+        }
+        
+        let second = CMTimeGetSeconds(asset!.duration)
+        if second <= 0 || asset == nil{
+            asset = nil
+        }else{
+            thumbnailImage = SPVideoHelp.sp_thumbnailImage(assesst: asset!, time: CMTimeMakeWithSeconds(0.00, preferredTimescale: framesPerSecond))
+            if let videoTrack =  asset?.tracks(withMediaType: .video).first{
+                self.size = videoTrack.naturalSize
+            }
+            sp_log(message: "video size is \(self.size)")
+            self.second = second
+            if thumbnailImage == nil {
+                thumbnailImage = sp_appLaunchImg()
+            }
+        }
     }
     deinit {
         

@@ -10,6 +10,7 @@ import Foundation
 import SnapKit
 import AVFoundation
 import SPCommonLibrary
+import AudioToolbox
 /// 相机
 class SPCameraVC : SPBaseNavVC {
     internal init() {
@@ -83,6 +84,7 @@ fileprivate class SPCameraRootVC: SPBaseVC {
     fileprivate let filterViewWidth :  CGFloat = 60
     fileprivate let kCameraManagerKVOKey = "noFilterCIImage"
     fileprivate var lastScale : CGFloat = 1.00
+    fileprivate var sysID:SystemSoundID = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sp_setupUI()
@@ -155,6 +157,7 @@ fileprivate class SPCameraRootVC: SPBaseVC {
     }
     deinit {
         self.cameraManmager.removeObserver(self, forKeyPath: kCameraManagerKVOKey)
+         AudioServicesDisposeSystemSoundID(sysID)
     }
 }
 fileprivate extension SPCameraRootVC{
@@ -195,13 +198,13 @@ fileprivate extension SPCameraRootVC{
     }
     /// 点击拍照
     func sp_clickCamera(){
+        sp_cameraTip()
         let outputCIImg = self.cameraManmager.showOutputCGImage
         var outputImg : UIImage?
         if let ciImg = outputCIImg {
             outputImg = UIImage(cgImage: ciImg)
         }
         if let img = outputImg {
-            
             let imgData = img.jpegData(compressionQuality: 0.5)
             if let data = imgData {
                 do {
@@ -214,6 +217,18 @@ fileprivate extension SPCameraRootVC{
             }
         }
     }
+    ///  点击拍照的提示音和振动
+    func sp_cameraTip(){
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+        //获取声音地址
+        let path = "/System/Library/Audio/UISounds/photoShutter.caf"
+        //地址转换
+        let baseURL = NSURL(fileURLWithPath: path)
+        AudioServicesCreateSystemSoundID(baseURL, &sysID)
+        //播放声音
+        AudioServicesPlaySystemSound(sysID)
+    
+    }
     /// 点击滤镜
     func sp_clickFilter(){
         if(self.filterView.isHidden){
@@ -224,11 +239,8 @@ fileprivate extension SPCameraRootVC{
         self.filterView.isHidden = !self.filterView.isHidden
         sp_changeFilterData()
     }
-    /*
-     改变滤镜图片的数据
-     */
+    /// 改变滤镜图片的数据
     func sp_changeFilterData(){
-      
         sp_mainQueue {
             if (self.filterView.isHidden == false){
                 sp_sync {
@@ -243,7 +255,12 @@ fileprivate extension SPCameraRootVC{
     }
     /// 点击闪光灯
     func sp_clickFlash(){
-        self.cameraManmager.sp_flashlight()
+        if self.cameraManmager.sp_flashlight() {
+            self.btnView.sp_deal(btnType: .flash, isSelect: true)
+        }else{
+            self.btnView.sp_deal(btnType: .flash, isSelect: false)
+        }
+       
     }
     /// 更改前后摄像头
     func sp_clickChangeDev(){
@@ -254,10 +271,12 @@ fileprivate extension SPCameraRootVC{
                 sp_changeFilterData()
         }
     }
-    
+    /// 添加手势
     func sp_addGesture(){
         self.view.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(sp_pinchAction(sender:))))
     }
+    /// 缩放手势
+    /// - Parameter sender: 手势
     @objc func sp_pinchAction(sender : UIPinchGestureRecognizer) {
         if sender.state == UIGestureRecognizer.State.ended {
             lastScale = 1.0

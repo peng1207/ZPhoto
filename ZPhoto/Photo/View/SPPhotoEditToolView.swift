@@ -64,6 +64,7 @@ class SPPhotoEditToolView:  UIView{
         self.addSubview(self.canceBtn)
         self.addSubview(self.finishBtn)
         self.addSubview(self.shearBtn)
+        self.addSubview(self.textBtn)
         self.addSubview(self.filterBtn)
         self.sp_addConstraint()
     }
@@ -80,12 +81,17 @@ class SPPhotoEditToolView:  UIView{
         self.shearBtn.snp.makeConstraints { (maker) in
             maker.top.bottom.equalTo(self).offset(0)
             maker.width.equalTo(self.shearBtn.snp.height).offset(0)
-            maker.right.equalTo(self.snp.centerX).offset(-30)
+            maker.right.equalTo(self.textBtn.snp.left).offset(-30)
+        }
+        self.textBtn.snp.makeConstraints { (maker) in
+             maker.top.bottom.equalTo(self).offset(0)
+            maker.centerX.equalTo(self.snp.centerX).offset(0)
+            maker.width.equalTo(self.textBtn.snp.height).offset(0)
         }
         self.filterBtn.snp.makeConstraints { (maker) in
             maker.top.bottom.equalTo(self).offset(0)
             maker.width.equalTo(self.filterBtn.snp.height).offset(0)
-            maker.left.equalTo(self.snp.centerX).offset(30)
+            maker.left.equalTo(self.textBtn.snp.right).offset(30)
         }
     }
     deinit {
@@ -107,7 +113,7 @@ extension SPPhotoEditToolView{
         sp_dealBtnClick(type: .filter)
     }
     @objc fileprivate func sp_clickText(){
-        
+        sp_dealBtnClick(type: .text)
     }
     fileprivate func sp_dealBtnClick(type : SPButtonClickType){
         guard let block = self.clickBlock else {
@@ -115,5 +121,10 @@ extension SPPhotoEditToolView{
         }
         block(type)
         
+    }
+    /// 设置完成按钮是否可以点击
+    /// - Parameter isEnabled: 是否可以点击
+    func sp_finsihBtn(isEnabled : Bool){
+        self.finishBtn.isEnabled = isEnabled
     }
 }

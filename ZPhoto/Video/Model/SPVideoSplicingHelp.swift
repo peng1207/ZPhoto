@@ -43,6 +43,8 @@ class SPVideoSplicingHelp {
             sp_videoSplicing(videoAssets: assetList, outputPath: outputPath, type: type, complete: complete)
         }
     }
+    /// 获取大小
+    /// - Parameter layoutList: 布局列表
     class func sp_frames(layoutList : [SPVideoSplicingType]) -> [[CGRect]]{
         var list = [[CGRect]]()
         for type in layoutList {
@@ -316,8 +318,8 @@ class SPVideoSplicingHelp {
         var index = 0
         for outputImg in images{
             autoreleasepool {
-                if let ciImg = UIImage.sp_picRotating(imgae: outputImg){
-                    let img = UIImage(ciImage: ciImg)
+//                if let ciImg = UIImage.sp_picRotating(imgae: outputImg){
+                    let img = UIImage(ciImage: outputImg)
                     switch type{
                     case .two_vertical:
                         img.draw(in: CGRect(x: 0, y: size.height / 2.0 * CGFloat(index), width: size.width, height: size.height / 2.0 ))
@@ -394,7 +396,7 @@ class SPVideoSplicingHelp {
                     default:
                         sp_log(message: "")
                     }
-                }
+//                }
             }
             
             index = index + 1

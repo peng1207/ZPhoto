@@ -116,6 +116,7 @@ extension SPVideoSplicingVC {
     
     /// 获取拼接的数据
     fileprivate func sp_setupSplicing(){
+        SPShowToast.sp_showAnimation(text: SPLanguageChange.sp_getString(key: "LOADING"), view: self.view)
         SPVideoSplicingHelp.sp_splicing(videoModelList: self.selectArray, type: self.type, outputPath: "\(kVideoTempDirectory)/temp.mp4") { [weak self](asset, filePath) in
             self?.sp_deal(splicingComplete: asset, filePath: filePath)
         }
@@ -126,6 +127,7 @@ extension SPVideoSplicingVC {
     ///   - asset: 视频数据
     ///   - filePath: 保存路径
     fileprivate func sp_deal(splicingComplete asset :AVAsset? ,filePath : String){
+       
         if asset != nil {
             self.videoModel = SPVideoModel()
             self.videoModel?.url = URL(fileURLWithPath: filePath)
@@ -134,8 +136,13 @@ extension SPVideoSplicingVC {
             }
             sp_setupData()
         }
+        sp_mainQueue {
+            SPShowToast.sp_hideAnimation(view: self.view)
+        }
     }
     
+    /// 处理工具点击类型
+    /// - Parameter toolType: 类型
     fileprivate func sp_deal(toolType : SPToolType){
         switch toolType {
         case .layout:
@@ -146,9 +153,11 @@ extension SPVideoSplicingVC {
             sp_log(message: "")
         }
     }
+    /// 处理点击布局
     fileprivate func sp_dealLayout(){
         self.layoutView.isHidden = !self.layoutView.isHidden
     }
+    /// 处理点击编辑
     fileprivate func sp_dealEdit(){
         let dragVC = SPDragVC()
         dragVC.dataArray = self.selectArray
@@ -166,6 +175,7 @@ extension SPVideoSplicingVC {
         }
         self.navigationController?.pushViewController(dragVC, animated: true)
     }
+    /// 设置数据
     fileprivate func sp_setupData(){
         sp_mainQueue {
             if self.videoModel != nil{
@@ -175,6 +185,8 @@ extension SPVideoSplicingVC {
             self.videoPlayView.videoModel = self.videoModel
         }
     }
+    /// 处理按钮点击事件
+    /// - Parameter btnType: 事件类型
     fileprivate func sp_deal(btnType : SPButtonClickType){
         switch btnType {
         case .save:
@@ -185,6 +197,7 @@ extension SPVideoSplicingVC {
             sp_log(message: "")
         }
     }
+    /// 保存
     fileprivate func sp_save(){
         if let path = self.videoModel?.url?.path {
             if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(path){
@@ -192,6 +205,10 @@ extension SPVideoSplicingVC {
             }
         }
     }
+    /// 保存视频的回调
+    /// - Parameter path: 路径
+    /// - Parameter error: 错误码
+    /// - Parameter contextInfo: 描述
     @objc func sp_video(path : String?,error : NSError?,contextInfo : Any?){
         
         if let e = error as NSError?
@@ -207,16 +224,20 @@ extension SPVideoSplicingVC {
             self.present(alertController, animated: true, completion: nil)
         }
     }
+    /// 分享
     fileprivate func sp_share(){
         if let url = self.videoModel?.url {
             SPShare.sp_share(videoUrls: [url], vc: self)
         }
     }
+    /// 获取布局的数据
     fileprivate func sp_setupLayoutList(){
         self.layoutList = SPVideoSplicingHelp.sp_layoutList(count: sp_count(array: self.selectArray))
         let frameList = SPVideoSplicingHelp.sp_frames(layoutList: layoutList)
         self.layoutView.dataArray = frameList
     }
+    /// 处理点击布局数组位置
+    /// - Parameter index: 位置
     fileprivate func sp_deal(index : Int){
         if  index < sp_count(array: self.layoutList) {
             self.type = self.layoutList[index]

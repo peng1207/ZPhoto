@@ -43,9 +43,13 @@ public func sp_screenHeight()->CGFloat{
 public func sp_scale(value : CGFloat) -> CGFloat{
     return value / UIScreen.main.scale
 }
-// 获取屏幕分辨率
+/// 获取屏幕分辨率
 public func sp_screenPixels() -> CGSize {
-    return (UIScreen.main.currentMode?.size)!
+    if let size = UIScreen.main.currentMode?.size {
+        return CGSize(width: size.width , height: size.height)
+    }else{
+         return CGSize.zero
+    }
 }
 /// 打印
 ///
@@ -60,13 +64,26 @@ public func sp_log<T>(message : T,file : String = #file,methodName: String = #fu
     print("\(fileName).\(methodName)[\(lineNumber)]\(Date().timeIntervalSince1970):\(message)")
     #endif
 }
-/// 多线程
+/// 异步多线程
 ///
 /// - Parameters:
 ///   - queueName:  线程名字
 ///   - complete: 回调
-public func sp_sync(queueName : String? = "com.queue.defauleQueue" ,complete : ()->Void){
+public func sp_sync(queueName : String? = "com.queue.defauleQueue" ,complete : @escaping()->Void){
     let queue = DispatchQueue(label: queueName!)
+//    let queue = DispatchQueue(label: sp_getString(string: queueName), qos: DispatchQoS.utility, attributes: .concurrent)
+    // 异步
+    queue.async {
+         complete()
+    }
+}
+/// 同步多线程
+/// - Parameters:
+///   - queueName: 线程名字
+///   - complete: 回调
+public func sp_synchro(queueName : String? = "com.queue.synchroQueue" ,complete : @escaping()->Void){
+    let queue = DispatchQueue(label: queueName!)
+     // 同步
     queue.sync {
         complete()
     }
@@ -78,7 +95,6 @@ public func sp_mainQueue (comlete:@escaping ()->Void){
     DispatchQueue.main.async {
         comlete()
     }
-    
 }
 /// 执行延迟操作
 ///
@@ -293,4 +309,26 @@ public func sp_appLogoImg()->UIImage?{
     
    
     return nil
+}
+/// 获取最顶层的控制器ViewController
+public func sp_topVC()->UIViewController?{
+    var resultVC : UIViewController?
+    resultVC = sp_nextTopVC(vc: UIApplication.shared.keyWindow?.rootViewController)
+    while ((resultVC?.presentedViewController) != nil) {
+        resultVC = sp_nextTopVC(vc: resultVC?.presentedViewController)
+    }
+    
+    return resultVC
+}
+/// 获取下个顶层的VC
+private func sp_nextTopVC(vc : UIViewController?)->UIViewController?{
+    guard let viewController = vc else {
+        return nil
+    }
+    if let navVC : UINavigationController = viewController as? UINavigationController {
+        return sp_nextTopVC(vc: navVC.topViewController)
+    }else if let tabVC : UITabBarController = viewController as? UITabBarController {
+       return sp_nextTopVC(vc: tabVC.selectedViewController)
+    }
+      return viewController
 }

@@ -45,66 +45,61 @@ class SPCameraHelp {
             }
         }
     }
-    /// 点击或关闭闪光灯
+    ///   闪光灯设置
     ///
     /// - Parameter device: 当前摄像头设备
-    class func sp_flash(device : AVCaptureDevice?){
+    /// - Returns: 闪光灯 打开或失败 true 打开 false 关闭
+    class func sp_flash(device : AVCaptureDevice?)->Bool{
         guard let currentDevice = device else {
-            return
+            return false
         }
         if currentDevice.position == AVCaptureDevice.Position.front {
-            return
+            return false
         }
         if currentDevice.torchMode == AVCaptureDevice.TorchMode.off {
-            sp_flashOn(device: currentDevice)
+          return sp_flashOn(device: currentDevice)
         }else{
-            sp_flashOff(device: currentDevice)
+           return sp_flashOff(device: currentDevice)
         }
     }
-    /// 打开闪光灯
+    ///   打开闪光灯
     ///
     /// - Parameter device: 当前摄像头设备
-    class func sp_flashOn(device : AVCaptureDevice?){
+    /// - Returns: 打开闪光灯
+    class func sp_flashOn(device : AVCaptureDevice?)->Bool{
         guard let currentDevice = device else {
-            return
-        }
-        if !currentDevice.hasFlash {
-            return
+            return false
         }
         if !currentDevice.hasTorch {
-            return
+            return false
         }
         sp_changeDeviceProperty(device: currentDevice) {
             if currentDevice.torchMode ==  AVCaptureDevice.TorchMode.off {
                 currentDevice.torchMode =  AVCaptureDevice.TorchMode.on
             }
-            if currentDevice.flashMode == AVCaptureDevice.FlashMode.off {
-                currentDevice.flashMode = AVCaptureDevice.FlashMode.on
-            }
+        }
+        return true
+    }
+    /// 关闭闪关灯
+    ///
+    /// - Parameter device: 当前摄像头
+    /// - Returns: false 关闭闪关灯
+    class func sp_flashOff(device : AVCaptureDevice?)->Bool{
+        guard let currentDevice = device else {
+            return false
+        }
+ 
+        if !currentDevice.hasTorch {
+            return false
         }
         
-    }
-    /// 关闭闪光灯
-    ///
-    /// - Parameter device: 当前摄像头设备
-    class func sp_flashOff(device : AVCaptureDevice?){
-        guard let currentDevice = device else {
-            return
-        }
-        if !currentDevice.hasFlash {
-            return
-        }
-        if !currentDevice.hasTorch {
-            return
-        }
         sp_changeDeviceProperty(device: currentDevice) {
             if currentDevice.torchMode ==  AVCaptureDevice.TorchMode.on {
                 currentDevice.torchMode =  AVCaptureDevice.TorchMode.off
             }
-            if currentDevice.flashMode == AVCaptureDevice.FlashMode.on {
-                currentDevice.flashMode = AVCaptureDevice.FlashMode.off
-            }
+ 
         }
+        return false
     }
     private class func sp_changeDeviceProperty(device : AVCaptureDevice,complete : SPBtnComplete){
         do{
@@ -115,7 +110,14 @@ class SPCameraHelp {
             
         }
     }
-    
+    /// 处理从摄像头获取到的图片进行处理
+    ///
+    /// - Parameters:
+    ///   - ciImg: 摄像头获取到图片
+    ///   - filter: 滤镜
+    ///   - faceCoverImg: 人像遮盖图片
+    ///   - videoLayoutType: 图片布局类型
+    /// - Returns: 图片
     class func sp_deal(videoImg ciImg : CIImage? , filter : CIFilter?,faceCoverImg : UIImage?, videoLayoutType : SPVideoLayoutType = .none)->CIImage?{
         var newOutputImg : CIImage? = ciImg
         if let f = filter, let newCIImg = newOutputImg{
@@ -133,4 +135,22 @@ class SPCameraHelp {
         newOutputImg = UIImage.sp_picRotating(imgae: newOutputImg)
         return newOutputImg
     }
+    /// 处理视频流获取CIImage
+    /// - Parameter sampleBuffer: 视频流
+    /// - Parameter context: context
+    class func sp_deal(sampleBuffer: CMSampleBuffer, context: CIContext)->(CIImage?,CIImage?){
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return (nil,nil)
+        }
+        var outputImage : CIImage? = nil
+        outputImage = CIImage(cvImageBuffer: imageBuffer)
+        var noFilterOutputImage = outputImage
+        noFilterOutputImage = UIImage.sp_picRotating(imgae: noFilterOutputImage)
+        if let noFilterImg = noFilterOutputImage ,let cgImg =  context.createCGImage(noFilterImg, from: noFilterImg.extent) {
+            // 不是滤镜
+            noFilterOutputImage = CIImage(cgImage:cgImg)
+        }
+        return (noFilterOutputImage,outputImage)
+    }
 }
+

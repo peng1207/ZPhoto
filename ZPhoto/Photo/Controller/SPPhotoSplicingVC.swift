@@ -359,6 +359,7 @@ extension SPPhotoSplicingVC {
         self.tmpEditTextView = view
         view.sp_edit()
     }
+    /// 处理编辑
     fileprivate func sp_dealEdit(){
         let dragVC = SPDragVC()
         dragVC.dataArray = self.dataArray
@@ -430,6 +431,7 @@ extension SPPhotoSplicingVC {
             self.textView.isHidden = true
         }
     }
+    /// 分享
     fileprivate func sp_clickShare(){
         if let img = UIImage.sp_image(view: self.conetentView) {
             SPShare.sp_share(imgs: [img], vc: self)
@@ -443,6 +445,10 @@ extension SPPhotoSplicingVC {
             UIImageWriteToSavedPhotosAlbum(i, self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
         }
     }
+    /// 图片保存到相册回调
+    /// - Parameter image: 图片
+    /// - Parameter error: 错误码
+    /// - Parameter contextInfo: 描述
    @objc func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer)
     {
         if let e = error as NSError?

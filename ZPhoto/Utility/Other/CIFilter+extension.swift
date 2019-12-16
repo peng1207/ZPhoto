@@ -57,7 +57,7 @@ extension CIFilter{
     /// 棕色滤镜
     class func photoCISepiaTone()->CIFilter?{
         let f = CIFilter(name: "CISepiaTone")
-        f?.setValue(0.9, forKey: kCIInputIntensityKey)
+        f?.setValue(1.0, forKey: kCIInputIntensityKey)
         return f
     }
     /// 漩涡扭曲
@@ -126,6 +126,14 @@ extension CIFilter{
     class func lineOverlay()->CIFilter?{
         let f = CIFilter(name: "CILineOverlay")
         return f
+    }
+    /// 高斯模糊
+    class func gaussianBlur()->CIFilter?{
+        if   let f = CIFilter(name: "CIGaussianBlur"){
+//             f.setValue(10, forKey: kCIInputRadiusKey)
+            return f
+        }
+        return nil
     }
     /// 自动改善
     class func photoautoAdjust(inputImage:CIImage) -> CIImage {

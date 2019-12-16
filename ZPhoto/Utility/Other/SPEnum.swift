@@ -85,6 +85,8 @@ public enum SPButtonClickType : Int {
     case share
     /// 保存
     case save
+    /// 文字
+    case text
 }
 
 ///  图片布局类型
@@ -338,8 +340,8 @@ enum SPAnimationType {
     case push
     /// 覆盖
     case cover
-    /// 翻书
-    case toBook
+    /// 拉
+    case pull
     /// 打洞
     case hole
 }

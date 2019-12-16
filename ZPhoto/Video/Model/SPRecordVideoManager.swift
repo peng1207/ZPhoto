@@ -227,7 +227,7 @@ class SPRecordVideoManager: NSObject,CAAnimationDelegate,AVCaptureVideoDataOutpu
 }
 //MARK: - action
 extension SPRecordVideoManager{
-    // 开始录制
+    /// 开始录制
     func sp_startRecord(){
         guard cameraAuth else {
             return
@@ -277,7 +277,7 @@ extension SPRecordVideoManager{
             
             videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoOutputSettings)
             videoWriterInput?.expectsMediaDataInRealTime = true
-            //            videoWriterInput?.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
+//            videoWriterInput?.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
             
             let sourcePixelBufferAttributesDictionary = [
                 String(kCVPixelBufferPixelFormatTypeKey) : Int(sp_getCVPixelFormatType()),
@@ -306,8 +306,7 @@ extension SPRecordVideoManager{
             sp_log(message: "writer is catch \(error)")
         }
     }
-    
-    // 停止录制
+    /// 停止录制
     func sp_stopRecord(){
         guard cameraAuth else {
             return
@@ -355,26 +354,28 @@ extension SPRecordVideoManager{
         videoLayer?.add(changeAnimate, forKey: "changeAnimate")
     }
     /// 放大
+    /// - Parameter scale:  放大的倍距
     func sp_zoomIn(scale : CGFloat = 1.0){
         SPCameraHelp.sp_zoomIn(device: self.currentDevice, scale: scale)
      
     }
-    //缩小
+    /// 缩小
+    /// - Parameter scale: 缩小的倍距
     func sp_zoomOut(scale : CGFloat = 1.0) {
         SPCameraHelp.sp_zoomOut(device: self.currentDevice, scale: scale)
     }
-    // MARK: -- 闪光灯设置
     /// 闪光灯设置
-    func sp_flashlight(){
+    ///
+    /// - Returns: 是否打开闪关灯 true 打开 false 没有打开
+    func sp_flashlight()->Bool{
         guard cameraAuth else {
-            return
+            return false
         }
         if SP_IS_IPAD {
-            return
+            return false
         }
-        SPCameraHelp.sp_flash(device: self.currentDevice)
+        return SPCameraHelp.sp_flash(device: self.currentDevice)
     }
-    // MARK: -- 私有方法
     /**< 改变属性操作 */
     fileprivate func sp_changeDeviceProperty(propertyBlock:PropertyChangeBlock?){
         do {
@@ -389,7 +390,6 @@ extension SPRecordVideoManager{
             
         }
     }
-    
     /// 点击取消
     func sp_cance(){
         SPCameraHelp.sp_flashOff(device: self.currentDevice)
@@ -404,7 +404,6 @@ extension SPRecordVideoManager{
         self.captureSession.stopRunning()
         
     }
-  
     /// 打印文件输入的状态
     fileprivate func sp_logWriterStatus(){
         switch self.assetWriter?.status {
@@ -437,11 +436,14 @@ extension SPRecordVideoManager {
             self.lastSampleTime = currentSampleTime
             var outputImage : CIImage? = nil
             if output == self.videoOutput{
-                let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
-                outputImage = CIImage(cvPixelBuffer: imageBuffer)
-                var noFilterOutputImage  : CIImage? = outputImage
-                noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
-                self.noFilterCIImage = CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
+//                let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
+//                outputImage = CIImage(cvPixelBuffer: imageBuffer)
+//                var noFilterOutputImage  : CIImage? = outputImage
+//                noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
+//                self.noFilterCIImage = CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
+                let resultData : (noFilter : CIImage?,outputImg : CIImage?) = SPCameraHelp.sp_deal(sampleBuffer: sampleBuffer, context: self.ciContext)
+                self.noFilterCIImage = resultData.noFilter
+                outputImage = resultData.outputImg
                 outputImage = SPCameraHelp.sp_deal(videoImg: outputImage, filter: self.filter, faceCoverImg: self.faceCoverImg, videoLayoutType: self.videoLayoutType)
             }
             if startRecording == true && self.assetWriter != nil{

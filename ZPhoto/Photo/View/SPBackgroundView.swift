@@ -127,6 +127,7 @@ extension SPBackgroundView {
             let imagePicker = SPImagePickerVC(maxSelectNum: 1) { [weak self](images, data) in
                 self?.sp_dealComplete(color: nil, image: images?.first)
             }
+            imagePicker.modalPresentationStyle = .fullScreen
             topVC.present(imagePicker, animated: true, completion: nil)
         }
     }

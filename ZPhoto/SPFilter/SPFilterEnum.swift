@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: -- 滤镜枚举
 enum  SPFilterPhoto{
-    case effectInstant ,effectNoir,effectTonal,effectTransfer,effectMono,effectFade,effectProcess,effectChrome,hueAdjust,vignetteEffect,sRGBToneCurveToLinear,sepiaTone,vortexDistortion,bumpDistortion,bumpDistortionLinear,cameraCalibrationLensCorrection,circleSplashDistortion,gaussianGradient,colorMap,circularWrap,perspectiveTransform,straightenFilter,edges,lineOverlay
+    case effectInstant ,effectNoir,effectTonal,effectTransfer,effectMono,effectFade,effectProcess,effectChrome,hueAdjust,vignetteEffect,sRGBToneCurveToLinear,sepiaTone,vortexDistortion,bumpDistortion,bumpDistortionLinear,cameraCalibrationLensCorrection,circleSplashDistortion,gaussianGradient,colorMap,circularWrap,perspectiveTransform,straightenFilter,edges,lineOverlay,gaussianBlur,oldMovies
     
     func introduced() -> String {
         switch self {
@@ -38,6 +38,8 @@ enum  SPFilterPhoto{
         case .straightenFilter: return "校正"
         case .edges: return "边缘"
         case .lineOverlay: return "线覆盖图"
+        case .gaussianBlur: return "高斯模糊"
+        case .oldMovies: return "老电影"
         }
         
     }
@@ -62,6 +64,7 @@ extension SPFilterPhoto : EnumeratableEnumType{
             ,.sepiaTone
             ,.straightenFilter
             ,.bumpDistortionLinear
+//            ,.gaussianBlur
 //            ,.circularWrap
 //            ,.perspectiveTransform
         ]

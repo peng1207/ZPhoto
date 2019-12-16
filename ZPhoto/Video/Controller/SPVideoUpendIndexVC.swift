@@ -9,6 +9,7 @@
 import Foundation
 import SnapKit
 import SPCommonLibrary
+/// 倒放视频入口 选择视频
 class SPVideoUpendIndexVC: SPBaseVC {
     
     fileprivate lazy var selectVC : SPVideoSelectVC = {
@@ -60,6 +61,8 @@ class SPVideoUpendIndexVC: SPBaseVC {
 
 extension SPVideoUpendIndexVC{
     
+    /// 处理选择的视频
+    /// - Parameter model: 视频model
     fileprivate func sp_dealSelect(model : SPVideoModel?){
         let upendVC = SPVideoUpendVC()
         upendVC.videoModel = model

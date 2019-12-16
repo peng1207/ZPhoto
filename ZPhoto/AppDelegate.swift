@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let properties = CIFilter.filterNames(inCategory: kCICategoryBuiltIn)
 //        for fileterName : String in properties {
 //            let filter = CIFilter(name: fileterName)
-//            if fileterName == "CIPageCurlWithShadowTransition" {
+//            if fileterName == "CIGaussianBlur" {
 //                // 滤镜的参数
 //                sp_log(message: "滤镜名称----\(fileterName)")
 //                sp_log(message: filter?.attributes)
@@ -41,12 +41,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            sp_log(message: sp_getShuangSeQiu())
 //        }
 //
-//        var price : CGFloat = 9.46
-//        for _ in 0..<10 {
-//            price = price + price * 0.1
-//        }
-//        sp_log(message: price)
-        
+        var price : CGFloat = 8.42
+        for _ in 0..<10 {
+            price = price + price * 0.1
+        }
+        sp_log(message: price)
         // Override point for customization after application launch.
         return true
     }
