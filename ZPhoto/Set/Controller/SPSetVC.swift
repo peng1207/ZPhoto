@@ -42,6 +42,7 @@ class SPSetVC: SPBaseVC {
     func sp_setupData(){
         self.dataArray.append(SPSetModel.sp_init(type: .share))
         self.dataArray.append(SPSetModel.sp_init(type: .score))
+        self.dataArray.append(SPSetModel.sp_init(type: .watermark))
     }
     /// 创建UI
     override func sp_setupUI() {
@@ -98,6 +99,9 @@ extension SPSetVC{
         let urlString = "https://itunes.apple.com/cn/app/id1381058961?action=write-review";
         UIApplication.shared.open(URL(string: urlString)!, options:[UIApplication.OpenExternalURLOptionsKey : Any](), completionHandler: nil)
     }
+    fileprivate func sp_watermark(){
+        
+    }
 }
 
 
@@ -131,6 +135,8 @@ extension SPSetVC : UITableViewDelegate,UITableViewDataSource {
                 sp_clickShare()
             case .score:
                 sp_clickScore()
+            case .watermark:
+                sp_watermark()
             }
         }
     }

@@ -31,6 +31,9 @@ class SPBaseVC : UIViewController{
    @objc func sp_clickBack(){
         self.navigationController?.popViewController(animated: true)
     }
+    deinit {
+        sp_log(message: "销毁")
+    }
 }
 
  extension  SPBaseVC{

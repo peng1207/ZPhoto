@@ -7,10 +7,11 @@
 //
 
 import Foundation
-
+import SPCommonLibrary
 enum SPSetType {
     case share
     case score
+    case watermark
 }
 
 class SPSetModel {
@@ -24,9 +25,11 @@ class SPSetModel {
         model.type = type
         switch type {
         case .share:
-            model.title = "分享APP"
+            model.title = SPLanguageChange.sp_getString(key: "SHARE_APP")
         case .score:
-            model.title = "去评分"
+            model.title = SPLanguageChange.sp_getString(key: "TO_SCORE")
+        case .watermark:
+            model.title = SPLanguageChange.sp_getString(key: "WATERMARK")
         }
         return model
     }

@@ -296,13 +296,14 @@ extension SPLongGraphVC{
     
     /// 保存
     @objc fileprivate func sp_clickSave(){
-        if let image = UIImage.sp_image(view: self.scrollView) {
+        
+        if let image = self.scrollView.sp_image() {
             UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
         }
     }
     /// 分享
     fileprivate func sp_clickShare(){
-        if let image = UIImage.sp_image(view: self.scrollView) {
+        if let image = self.scrollView.sp_image() {
               SPShare.sp_share(imgs: [image], vc: self)
         }
     }

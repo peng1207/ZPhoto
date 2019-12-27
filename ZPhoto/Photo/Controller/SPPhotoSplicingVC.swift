@@ -433,14 +433,15 @@ extension SPPhotoSplicingVC {
     }
     /// 分享
     fileprivate func sp_clickShare(){
-        if let img = UIImage.sp_image(view: self.conetentView) {
+       
+        if let img =  self.conetentView.sp_image() {
             SPShare.sp_share(imgs: [img], vc: self)
         }
     }
     /// 点击保存
     @objc fileprivate func sp_clickSave(){
        
-        let img = UIImage.sp_image(view: self.conetentView)
+        let img = self.conetentView.sp_image()
         if  let i = img {
             UIImageWriteToSavedPhotosAlbum(i, self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
         }

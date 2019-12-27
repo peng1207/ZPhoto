@@ -42,7 +42,7 @@ class SPVideoModel : NSObject{
             if let videoTrack =  asset?.tracks(withMediaType: .video).first{
                 self.size = videoTrack.naturalSize
             }
-            sp_log(message: "video size is \(self.size)")
+//            sp_log(message: "video size is \(self.size)")
             self.second = second
             if thumbnailImage == nil {
                 thumbnailImage = sp_appLaunchImg()

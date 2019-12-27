@@ -295,7 +295,7 @@ class SPVideoHelp: NSObject {
             let trackOutput = AVAssetReaderTrackOutput(track: videoTrack!, outputSettings: outputSettings)
             asserReader.add(trackOutput)
             var audioOutput : AVAssetReaderTrackOutput?
-            if let audio = audioTrack {
+            if let audio = audioTrack , isReadAudio{
                 // 写入音频参数
                 let audioSetting: [String: AnyObject] = [
                     AVFormatIDKey: NSNumber(value: kAudioFormatLinearPCM)
@@ -320,7 +320,9 @@ class SPVideoHelp: NSObject {
                     if isVideoSample {
                         samples.append(sample)
                     }
-                    videoTimeList.append(CMSampleBufferGetPresentationTimeStamp(sample))
+                    let time = CMSampleBufferGetPresentationTimeStamp(sample)
+                    sp_log(message: CMTimeGetSeconds(time))
+                    videoTimeList.append(time)
                 }
             }
             sp_log(message: "读取结束")

@@ -426,8 +426,9 @@ extension SPRecordVideoManager{
 extension SPRecordVideoManager {
     // MARK: -- delegate
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        //        connection.videoOrientation 获取图片的方向
         autoreleasepool {
-            
+           
             if !CMSampleBufferDataIsReady(sampleBuffer) {
                 return
             }
@@ -436,11 +437,6 @@ extension SPRecordVideoManager {
             self.lastSampleTime = currentSampleTime
             var outputImage : CIImage? = nil
             if output == self.videoOutput{
-//                let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
-//                outputImage = CIImage(cvPixelBuffer: imageBuffer)
-//                var noFilterOutputImage  : CIImage? = outputImage
-//                noFilterOutputImage =  UIImage.sp_picRotating(imgae: noFilterOutputImage)
-//                self.noFilterCIImage = CIImage(cgImage:  self.ciContext.createCGImage(noFilterOutputImage!, from: (noFilterOutputImage?.extent)!)!)
                 let resultData : (noFilter : CIImage?,outputImg : CIImage?) = SPCameraHelp.sp_deal(sampleBuffer: sampleBuffer, context: self.ciContext)
                 self.noFilterCIImage = resultData.noFilter
                 outputImage = resultData.outputImg

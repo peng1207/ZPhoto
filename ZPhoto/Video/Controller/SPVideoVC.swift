@@ -78,12 +78,12 @@ fileprivate class SPVideoRootVC: SPBaseVC {
         view.clickBlock = { [weak self] in
             self?.sp_clickEdit()
         }
-        view.isHidden = true
+//        view.isHidden = true
         return view
     }()
     fileprivate lazy var inversionView : SPPentagonView = {
         let view = SPPentagonView()
-        view.corners = .top
+        view.corners = .left
         view.titleLabel.text = SPLanguageChange.sp_getString(key: "INVERSION")
         view.clickBlock = { [weak self] in
             self?.sp_clickInversion()
@@ -116,7 +116,7 @@ fileprivate class SPVideoRootVC: SPBaseVC {
         
         self.view.addSubview(self.fileView)
         self.view.addSubview(self.splicingView)
-//        self.view.addSubview(self.editView)
+        self.view.addSubview(self.editView)
         self.view.addSubview(self.inversionView)
         self.view.addSubview(self.recordBtn)
         self.sp_addConstraint()
@@ -142,14 +142,13 @@ fileprivate class SPVideoRootVC: SPBaseVC {
             maker.width.height.equalTo(self.fileView).offset(0)
             maker.bottom.equalTo(self.fileView.snp.bottom).offset(0)
         }
-//        self.editView.snp.makeConstraints { (maker) in
-//            maker.right.width.height.equalTo(self.fileView).offset(0)
-//            maker.top.equalTo(self.fileView.snp.bottom).offset(20)
-//        }
+        self.editView.snp.makeConstraints { (maker) in
+            maker.right.width.height.equalTo(self.fileView).offset(0)
+            maker.top.equalTo(self.fileView.snp.bottom).offset(20)
+        }
         self.inversionView.snp.makeConstraints { (maker) in
-            maker.width.height.equalTo(self.splicingView).offset(0)
-           maker.top.equalTo(self.recordBtn.snp.bottom).offset(10)
-            maker.centerX.equalTo(self.view.snp.centerX).offset(0)
+            maker.left.width.height.equalTo(self.splicingView).offset(0)
+            maker.top.equalTo(self.editView.snp.top).offset(0)
         }
     }
     
