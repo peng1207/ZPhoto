@@ -432,7 +432,7 @@ extension SPRecordVideoManager {
             if !CMSampleBufferDataIsReady(sampleBuffer) {
                 return
             }
-            
+        
             let currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
             self.lastSampleTime = currentSampleTime
             var outputImage : CIImage? = nil

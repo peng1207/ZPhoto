@@ -61,9 +61,14 @@ class SPTurntableView:  UIView{
         let degress = 360 / CGFloat(sp_count(array: l))
         var current_degress : CGFloat = 0
         for data in l {
-            let view = SPSectorView(frame: CGRect(x: self.sp_width() / 2.0, y: 0, width: sp_width() / 2.0, height: sp_height() / 2.0))
+            let w = sp_width() / 2.0
+            var h = sp_height() / 2.0
+            if degress > 90 {
+                h = 2 * w
+            }
+            let view = SPSectorView(frame: CGRect(x: w, y: 0, width: w, height: h))
             view.backgroundColor = SPColorForHexString(hex: data)
-            view.sp_anchorPoint(anchorpoint: CGPoint(x: 0, y: 1))
+            view.sp_anchorPoint(anchorpoint: CGPoint(x: 0, y: degress > 90 ? 0.5 : 1))
             view.degress = degress
             self.addSubview(view)
             view.rotationAngle = current_degress

@@ -211,6 +211,7 @@
 		9EB9867F22B7216C006791D5 /* SPPhotoEditToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPhotoEditToolView.swift; sourceTree = "<group>"; };
 		9EC66CAA23B215140068011B /* SPSectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSectorView.swift; sourceTree = "<group>"; };
 		9EC66CAE23B30F180068011B /* SPTurntableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPTurntableView.swift; sourceTree = "<group>"; };
+		9EC66CB023B9A87B0068011B /* Index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Index.html; sourceTree = "<group>"; };
 		9ECE7BE9222523CD00FE6BCD /* SPMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMainVC.swift; sourceTree = "<group>"; };
 		9ECE7BF32227B80300FE6BCD /* CIFilter+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CIFilter+extension.swift"; sourceTree = "<group>"; };
 		9ECE7BF42227B80300FE6BCD /* UIImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageManager.swift; sourceTree = "<group>"; };
@@ -463,6 +464,7 @@
 				9E72267B1E8972B4001BB9A9 /* Info.plist */,
 				9E774E07209A0C2C0071493B /* Localizable.strings */,
 				9E774E0F209A147D0071493B /* InfoPlist.strings */,
+				9EC66CB023B9A87B0068011B /* Index.html */,
 			);
 			path = ZPhoto;
 			sourceTree = "<group>";
@@ -781,14 +783,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ZPhoto/Pods-ZPhoto-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/SPCommonLibrary/SPCommonLibrary.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SPCommonLibrary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",

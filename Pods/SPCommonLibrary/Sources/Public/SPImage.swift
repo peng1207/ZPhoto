@@ -8,15 +8,12 @@
 
 import Foundation
 import UIKit
-import SnapKit
+
 public extension UIImage {
-    
     /// 颜色转图片
-    ///
     /// - Parameters:
     ///   - color: 颜色
-    ///   - size: 转换的图片大小
-    /// - Returns: 图片
+    ///   - size: 图片大小
     class func sp_image(color:UIColor,size : CGSize = CGSize(width: 1, height: 1)) ->UIImage?{
         UIGraphicsBeginImageContext(size)
         let context = UIGraphicsGetCurrentContext()
@@ -26,64 +23,60 @@ public extension UIImage {
         UIGraphicsEndImageContext()
         return image
     }
-    /// view转图片
-    ///
-    /// - Parameter view: 需要转换的view
-    /// - Returns: 图片
-    class func sp_image(view : UIView)->UIImage?{
-        let saveFrame = view.frame
-        var saveContentOffset : CGPoint = CGPoint.zero
-        var isScroll = false
-        if view is UIScrollView {
-            isScroll = true
-        }
-        var viewSize : CGRect = view.bounds
-        /// 若view 是scrollview 则生成图片为 contentSize
-        if isScroll , let scrollView = view as? UIScrollView {
-            viewSize = CGRect(origin: CGPoint.zero, size: scrollView.contentSize)
-            if viewSize.size.width == 0 {
-                viewSize = CGRect(origin: CGPoint.zero, size: CGSize(width: view.frame.size.width, height: scrollView.contentSize.height))
-            }
-            if viewSize.size.height == 0 {
-                viewSize = CGRect(origin: CGPoint.zero, size: CGSize(width: viewSize.size.width, height: view.frame.size.height))
-            }
-   
-            saveContentOffset = scrollView.contentOffset
-            scrollView.contentOffset = CGPoint.zero
-            scrollView.frame = CGRect(x: 0, y: 0, width: viewSize.size.width, height:viewSize.size.height)
-            view.snp.remakeConstraints { (maker) in
-                maker.left.top.equalTo(0)
-                maker.width.equalTo(viewSize.size.width)
-                maker.height.equalTo(viewSize.size.height)
-            }
-            UIGraphicsBeginImageContextWithOptions(viewSize.size, false, UIScreen.main.scale)
-          
-        }else{
-            UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, UIScreen.main.scale)
-        }
-        if let context = UIGraphicsGetCurrentContext() {
-            view.layer.render(in: context)
-        }else{
-            view.drawHierarchy(in: viewSize, afterScreenUpdates: true) // 高清截图
-        }
-        let img = UIGraphicsGetImageFromCurrentImageContext()
-        if isScroll {
-            view.frame = saveFrame
-            view.snp.remakeConstraints { (maker) in
-                maker.left.equalTo(saveFrame.origin.x)
-                maker.top.equalTo(saveFrame.origin.y)
-                maker.width.equalTo(saveFrame.size.width)
-                maker.height.equalTo(saveFrame.size.height)
-            }
-            (view as! UIScrollView).contentOffset = saveContentOffset
-        }
-        UIGraphicsEndImageContext()
-        return img
-    }
+//    /// view转图片
+//    /// - Parameter view: 需要转换view
+//    class func sp_image(view : UIView)->UIImage?{
+//        let saveFrame = view.frame
+//        var saveContentOffset : CGPoint = CGPoint.zero
+//        var isScroll = false
+//        if view is UIScrollView {
+//            isScroll = true
+//        }
+//        var viewSize : CGRect = view.bounds
+//        /// 若view 是scrollview 则生成图片为 contentSize
+//        if isScroll , let scrollView = view as? UIScrollView {
+//            viewSize = CGRect(origin: CGPoint.zero, size: scrollView.contentSize)
+//            if viewSize.size.width == 0 {
+//                viewSize = CGRect(origin: CGPoint.zero, size: CGSize(width: view.frame.size.width, height: scrollView.contentSize.height))
+//            }
+//            if viewSize.size.height == 0 {
+//                viewSize = CGRect(origin: CGPoint.zero, size: CGSize(width: viewSize.size.width, height: view.frame.size.height))
+//            }
+//
+//            saveContentOffset = scrollView.contentOffset
+//            scrollView.contentOffset = CGPoint.zero
+//            scrollView.frame = CGRect(x: 0, y: 0, width: viewSize.size.width, height:viewSize.size.height)
+//            view.snp.remakeConstraints { (maker) in
+//                maker.left.top.equalTo(0)
+//                maker.width.equalTo(viewSize.size.width)
+//                maker.height.equalTo(viewSize.size.height)
+//            }
+//            UIGraphicsBeginImageContextWithOptions(viewSize.size, false, UIScreen.main.scale)
+//
+//        }else{
+//            UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, UIScreen.main.scale)
+//        }
+//        if let context = UIGraphicsGetCurrentContext() {
+//            view.layer.render(in: context)
+//        }else{
+//            view.drawHierarchy(in: viewSize, afterScreenUpdates: true) // 高清截图
+//        }
+//        let img = UIGraphicsGetImageFromCurrentImageContext()
+//        if isScroll {
+//            view.frame = saveFrame
+//            view.snp.remakeConstraints { (maker) in
+//                maker.left.equalTo(saveFrame.origin.x)
+//                maker.top.equalTo(saveFrame.origin.y)
+//                maker.width.equalTo(saveFrame.size.width)
+//                maker.height.equalTo(saveFrame.size.height)
+//            }
+//            (view as! UIScrollView).contentOffset = saveContentOffset
+//        }
+//        UIGraphicsEndImageContext()
+//        return img
+//    }
     /// 对视频图片或拍照图片进行处理 防止旋转不对
-    ///
     /// - Parameter imgae: 需要处理的图片
-    /// - Returns: 处理后的图片
     class func sp_picRotating(imgae:CIImage?) -> CIImage? {
         guard let outputImage = imgae else {
             return nil
@@ -104,14 +97,12 @@ public extension UIImage {
         return  outputImage.transformed(by: t)
     }
     /// 给图片添加文字
-    ///
     /// - Parameters:
     ///   - inputImg: 输入图片
     ///   - text: 文字
     ///   - font: 文字大小
     ///   - textColor: 文字颜色
     ///   - point: 添加文字的位置
-    /// - Returns:  添加文字之后的图片
     class func sp_drawText(inputImg:UIImage,text : String, font : UIFont = UIFont.systemFont(ofSize: 14),textColor : UIColor = UIColor.white,point:CGPoint = CGPoint(x: 0, y: 0))->UIImage?{
         
         if text.count > 0 {
@@ -131,14 +122,12 @@ public extension UIImage {
         }
     }
     /// 给图片添加文字
-    ///
     /// - Parameters:
     ///   - inputImg: 输入图片
     ///   - text: 文字
     ///   - font: 文字大小
     ///   - textColor: 文字颜色
     ///   - point: 添加文字的位置
-    /// - Returns:  添加文字之后的图片
     class func sp_drawText(inputImg : CIImage,text : String, font : UIFont = UIFont.systemFont(ofSize: 14),textColor : UIColor = UIColor.white,point:CGPoint = CGPoint(x: 0, y: 0))->CIImage?{
         let image = UIImage(ciImage: inputImg)
         let outputImg = sp_drawText(inputImg: image, text: text, font: font, textColor: textColor,point: point)
@@ -148,14 +137,12 @@ public extension UIImage {
         return  inputImg
     }
     /// 给图片添加文字
-    ///
     /// - Parameters:
     ///   - inputImg: 输入图片
     ///   - text: 文字
     ///   - font: 文字大小
     ///   - textColor: 文字颜色
     ///   - point: 添加文字的位置
-    /// - Returns:  添加文字之后的图片
     class func sp_drawText(inputImg : CGImage,text : String, font : UIFont = UIFont.systemFont(ofSize: 14),textColor : UIColor = UIColor.white,point:CGPoint = CGPoint(x: 0, y: 0))->CGImage?{
         let image = UIImage(cgImage: inputImg)
         let outputImg = sp_drawText(inputImg: image, text: text, font: font, textColor: textColor,point:point)
@@ -165,11 +152,9 @@ public extension UIImage {
         return  inputImg
     }
     /// 生成高清图片
-    ///
     /// - Parameters:
     ///   - image: 需要生成的图片
     ///   - size: 需要生成的大小
-    /// - Returns: 图片 转换不成功则返回传进来的图片
     class func sp_highImg(image : CIImage,size : CGSize) ->UIImage?{
         let integral : CGRect = image.extent.integral
         let proportion : CGFloat = min(size.width / integral.width, size.height / integral.height)
@@ -191,12 +176,10 @@ public extension UIImage {
     }
     
     /// 将 CGImage 转成CVPixelBuffer
-    ///
     /// - Parameters:
     ///   - image: CGImage
     ///   - pixelBufferPool:
     ///   - pixelFormatType: 类型
-    /// - Returns: CVPixelBuffer
     class func sp_pixelBuffer(fromImage image:CGImage,pixelBufferPool:CVPixelBufferPool?,pixelFormatType : OSType = kCVPixelFormatType_32BGRA,pixelSize : CGSize = sp_screenPixels()) -> CVPixelBuffer?{
         let cfnumPointer = UnsafeMutablePointer<UnsafeRawPointer>.allocate(capacity: 1)
         let cfnum = CFNumberCreate(kCFAllocatorDefault, .intType, cfnumPointer)
@@ -238,11 +221,9 @@ public extension UIImage {
     }
     
     /// 图片切圆角
-    ///
     /// - Parameters:
     ///   - size: 图片大小
     ///   - fillColor: 裁切区填充颜色
-    /// - Returns: 圆角图片
     func sp_cornetImg(size : CGSize ,fillColor : UIColor = UIColor.white)->UIImage{
         UIGraphicsBeginImageContextWithOptions(size, true, 0)
         let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
@@ -259,11 +240,9 @@ public extension UIImage {
         return self
     }
     /// 更改图片的颜色
-    ///
     /// - Parameters:
     ///   - tintColor: 颜色
     ///   - blendMode: 类型
-    /// - Returns: 更改后的图片
     func sp_image(tintColor : UIColor,blendMode:CGBlendMode)->UIImage{
         UIGraphicsBeginImageContext(self.size)
         tintColor.setFill()
@@ -281,11 +260,9 @@ public extension UIImage {
         return self
     }
     /// 给图片添加中间icon图片
-    ///
     /// - Parameters:
     ///   - centerImg: 中间icon图片
     ///   - iconSize: 展示在中间icon的大小
-    /// - Returns: 转换后的图片
     func sp_image(centerImg : UIImage?,iconSize:CGSize)->UIImage{
         UIGraphicsBeginImageContext(self.size)
         self.draw(in: CGRect(origin: CGPoint.zero, size: self.size))
@@ -302,9 +279,7 @@ public extension UIImage {
         return self
     }
     /// 获取指定size的图片
-    ///
     /// - Parameter size: 指定的size
-    /// - Returns: 转换后的图片
     func sp_resizeImg(size : CGSize)->UIImage?{
         UIGraphicsBeginImageContext(size)
         self.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
@@ -313,11 +288,9 @@ public extension UIImage {
         return newImg
     }
     /// 压缩图片
-    ///
     /// - Parameters:
     ///   - maxImageLenght: 最大的尺寸
     ///   - maxSizeKB: 最大的大小
-    /// - Returns: 转换后的图片
     func sp_resizeImg(maxImageLenght : CGFloat = 0, maxSizeKB : CGFloat = 1024)->UIImage{
         var maxSize = maxSizeKB
         var maxImgSize = maxImageLenght
@@ -367,14 +340,10 @@ public extension UIImage {
         return self
     }
     /// 获取jpeg的data
-    ///
-    /// - Returns: data
     func sp_jpegData()-> Data?{
         return  self.jpegData(compressionQuality: 1.0)
     }
     /// 图片逆时针旋转90
-    ///
-    /// - Returns: 新的图片
     func sp_roate()->UIImage?{
         if let cgImg = self.cgImage {
             var newOrientation  = UIImage.Orientation.up
@@ -398,9 +367,7 @@ public extension UIImage {
         return self
     }
     /// 裁剪图片
-    ///
     /// - Parameter newFrame: 需要裁剪图片在当前图片的位置
-    /// - Returns: 裁剪后的图片
     func sp_scaled(newFrame : CGRect)-> UIImage{
         if let cgImg = self.cgImage {
             if let newCgImg = cgImg.cropping(to: newFrame) {
@@ -411,8 +378,6 @@ public extension UIImage {
         return self
     }
     /// 对图片裁剪成圆形 居中裁剪
-    ///
-    /// - Returns: 图片
     func sp_circle() -> UIImage?{
         // 取出最短边长
         let shotset = min(self.size.width, self.size.height)
@@ -431,32 +396,6 @@ public extension UIImage {
     }
     
 }
-extension UIView {
-    
-    /**
-     Get the view's screen shot, this function may be called from any thread of your app.
-     
-     - returns: The screen shot's image.
-     */
-    func screenShot() -> UIImage? {
-        
-        guard bounds.size.height > 0 && bounds.size.width > 0 else {
-            return nil
-        }
-        UIGraphicsBeginImageContextWithOptions(bounds.size, true, UIScreen.main.scale)
-        
-        // 之前解决不了的模糊问题就是出在这个方法上
-        //        layer.render(in: UIGraphicsGetCurrentContext()!)
-        
-        
-        // Renders a snapshot of the complete view hierarchy as visible onscreen into the current context.
-        self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)  // 高清截图
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return image
-    }
-}
-
+ 
 
 

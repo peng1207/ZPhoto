@@ -79,7 +79,6 @@ open class SPAuthorizatio{
             return
         }
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
-            
             switch authStatus {
             case .authorized:
                 sp_log(message: "用户授权")

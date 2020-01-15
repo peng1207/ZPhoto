@@ -14,7 +14,7 @@ import SPCommonLibrary
 class SPSectorView:  UIView{
     fileprivate var shapeLayer : CAShapeLayer = CAShapeLayer()
     
-    /// 扇形角度  大于0 小于等于90
+    /// 扇形角度  大于0 小于等于180
     public var degress : CGFloat = 0{
         didSet{
             self.sp_setupPath()
@@ -37,10 +37,14 @@ class SPSectorView:  UIView{
     fileprivate func sp_setupPath(){
         let path = UIBezierPath()
         path.move(to: CGPoint(x: 0, y: 0 ))
-        path.addArc(withCenter:  CGPoint(x: 0, y: sp_height()), radius: sp_height(), startAngle: sp_getRadians(to: -90), endAngle: sp_getRadians(to: degress - 90), clockwise: true)
-        let newPoint = sp_getPoint(to: CGPoint(x: 0, y: sp_height()), radius: sp_height(), degress: degress)
+        var radius = sp_height()
+        if sp_height() != sp_width() {
+            radius = sp_height() / 2.0
+        }
+        path.addArc(withCenter:  CGPoint(x: 0, y: radius), radius: radius, startAngle: sp_getRadians(to: -90), endAngle: sp_getRadians(to: degress - 90), clockwise: true)
+        let newPoint = sp_getPoint(to: CGPoint(x: 0, y: radius), radius: radius, degress: degress)
         path.addLine(to: newPoint)
-        path.addLine(to: CGPoint(x: 0, y: sp_height()))
+        path.addLine(to: CGPoint(x: 0, y: radius))
         path.addLine(to: CGPoint(x: 0, y: 0))
         self.shapeLayer.path = path.cgPath
         self.pointList.append(CGPoint(x: 0, y: 0))
@@ -52,8 +56,6 @@ class SPSectorView:  UIView{
         sp_log(message: self.rotationAngle)
     }
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-     
-//        if pointList != nil {
         if (super.hitTest(point, with: event) == self){
             let isInner = sp_isInnerView(with: point)
             if isInner {
@@ -62,9 +64,6 @@ class SPSectorView:  UIView{
                 return nil
             }
         }
-//        }else{
-//            return super.hitTest(point, with: event)
-//        }
         return nil
     }
     /// 判断点是否在多边形内部（射线法）
@@ -111,8 +110,5 @@ class SPSectorView:  UIView{
     deinit {
         
     }
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        
-    }
+    
 }

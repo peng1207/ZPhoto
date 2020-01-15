@@ -8,38 +8,25 @@
 
 import Foundation
 import UIKit
-/**
- 获取字体对象
- 
- - parameter fontSize: 字体大小
- 
- - returns: font
- */
+/// 获取字体对象
+/// - Parameter fontSize: 字体大小
 public func  sp_fontSize(fontSize: CGFloat) -> UIFont{
     return UIFont.systemFont(ofSize: fontSize)
 }
 /// 获取状态栏高度
-///
-/// - Returns: 高度
 public func sp_statusBarHeight() -> CGFloat{
     return UIApplication.shared.statusBarFrame.height
 }
-/// 获取屏幕的宽度
-///
-/// - Returns: 宽度
+/// 获取屏幕宽度
 public func sp_screenWidth()->CGFloat{
     return UIScreen.main.bounds.size.width
 }
-/// 获取屏幕的高度
-///
-/// - Returns: 高度
+/// 获取屏幕高度
 public func sp_screenHeight()->CGFloat{
     return UIScreen.main.bounds.size.height
 }
-/// 获取根据屏幕比获取对应的数值
-///
-/// - Parameter value:需要转换的
-/// - Returns: 转换后的值
+/// 获取屏幕比对应的数值
+/// - Parameter value: 需要转换的
 public func sp_scale(value : CGFloat) -> CGFloat{
     return value / UIScreen.main.scale
 }
@@ -51,17 +38,16 @@ public func sp_screenPixels() -> CGSize {
          return CGSize.zero
     }
 }
-/// 打印
-///
+/// 自定义打印
 /// - Parameters:
-///   - message: 打印的内容
-///   - file: 文件
-///   - methodName: 方法名（函数）
+///   - message: 内容
+///   - file: 文件名
+///   - methodName: 方法名(函数)
 ///   - lineNumber: 行数
 public func sp_log<T>(message : T,file : String = #file,methodName: String = #function, lineNumber: Int = #line){
     #if DEBUG
     let fileName = (file as NSString).lastPathComponent
-    print("\(fileName).\(methodName)[\(lineNumber)]\(Date().timeIntervalSince1970):\(message)")
+    print("\(Date().description(with: Locale.current)) \(fileName).\(methodName)[\(lineNumber)]:\(message)")
     #endif
 }
 /// 异步多线程
@@ -71,7 +57,6 @@ public func sp_log<T>(message : T,file : String = #file,methodName: String = #fu
 ///   - complete: 回调
 public func sp_sync(queueName : String? = "com.queue.defauleQueue" ,complete : @escaping()->Void){
     let queue = DispatchQueue(label: queueName!)
-//    let queue = DispatchQueue(label: sp_getString(string: queueName), qos: DispatchQoS.utility, attributes: .concurrent)
     // 异步
     queue.async {
          complete()
@@ -117,10 +102,8 @@ public func sp_count(array:Array<Any>?) -> Int{
         return 0
     }
 }
-/// 是否为数组
-///
-/// - Parameter array: 数据
-/// - Returns: 是否
+/// 判断是否为数组
+/// - Parameter array: 数组数据源
 public func sp_isArray(array:Any?) -> Bool {
     if let _ : [Any] = array as? [Any]  {
         return true
@@ -128,10 +111,8 @@ public func sp_isArray(array:Any?) -> Bool {
         return false
     }
 }
-/// 是否为字典
-///
-/// - Parameter dic: 数据
-/// - Returns: 是否
+/// 判断是否为字典
+/// - Parameter dic: 字典数据源
 public func sp_isDic(dic : Any?) -> Bool{
     if let _ : [String : Any] = dic as? [String : Any] {
         return true
@@ -140,9 +121,7 @@ public func sp_isDic(dic : Any?) -> Bool{
     }
 }
 /// 获取字符串
-///
-/// - Parameter string: 字符串
-/// - Returns: 字符串
+/// - Parameter string: 字符串数据源
 public func sp_getString(string:Any?) ->  String{
     if string == nil{
         return ""
@@ -161,15 +140,12 @@ public func sp_getString(string:Any?) ->  String{
     }
     return "\(string ?? "")"
 }
-
 /// 隐藏键盘
 public func sp_hideKeyboard(){
     UIApplication.shared.keyWindow?.endEditing(true)
 }
-/// 字典转json字符串
-///
-/// - Parameter dic: 字典
-/// - Returns: json字符串
+/// 字典对象转换成json字符串
+/// - Parameter dic: 字典数据源
 public func sp_dicValueString(_ dic:[String : Any]) -> String?{
     
     if !JSONSerialization.isValidJSONObject(dic) {
@@ -181,10 +157,8 @@ public func sp_dicValueString(_ dic:[String : Any]) -> String?{
     let str = String(data: data!, encoding: String.Encoding.utf8)
     return str
 }
-/// json字符串转字典
-///
+/// json字符串转字典对象
 /// - Parameter str: json字符串
-/// - Returns: 字典
 public func  sp_stringValueDic(_ str: String) -> [String : Any]?{
     let data = str.data(using: String.Encoding.utf8)
     if let d = data {
@@ -195,9 +169,7 @@ public func  sp_stringValueDic(_ str: String) -> [String : Any]?{
     return nil
 }
 /// json字符串转数组
-///
 /// - Parameter str: json字符串
-/// - Returns: 数组
 public func sp_stringValueArr(_ str : String) -> [Any]?{
     let data = str.data(using: String.Encoding.utf8)
     if let d = data{
@@ -208,10 +180,8 @@ public func sp_stringValueArr(_ str : String) -> [Any]?{
     
     return nil
 }
-/// 将数组转为字符串
-///
-/// - Parameter array: 数组
-/// - Returns: 字符串
+/// 将数组转成json字符串
+/// - Parameter array: 数组对象
 public func sp_arrayValueString(_ array : [Any]) -> String?{
     if !JSONSerialization.isValidJSONObject(array) {
         sp_log(message: "无法解析")
@@ -221,11 +191,8 @@ public func sp_arrayValueString(_ array : [Any]) -> String?{
     let str = String(data: data!, encoding: String.Encoding.utf8)
     return str
 }
-
 /// 获取键盘高度
-///
-/// - Parameter notification: 键盘弹起通知
-/// - Returns: 高度
+/// - Parameter notification: 键盘通知
 public func sp_getKeyBoardheight(notification:Notification)->CGFloat{
     let userinfo: NSDictionary = notification.userInfo! as NSDictionary
     
@@ -244,9 +211,7 @@ public func sp_sysOpen() {
         }
     }
 }
-/// 获取app中LaunchImage
-///
-/// - Returns: 图片
+/// 获取启动图
 public func sp_appLaunchImg()->UIImage?{
     if let delgate = UIApplication.shared.delegate {
         if let window = delgate.window {
@@ -288,9 +253,7 @@ public func sp_appLaunchImg()->UIImage?{
     return nil
     
 }
-/// 获取applogo图片
-///
-/// - Returns: 图片
+/// 获取app logo
 public func sp_appLogoImg()->UIImage?{
     if let infoDic = Bundle.main.infoDictionary {
         if  let iconsDic = infoDic["CFBundleIcons"] as? [String : Any] {
@@ -303,11 +266,8 @@ public func sp_appLogoImg()->UIImage?{
                     }
                 }
             }
-           
         }
     }
-    
-   
     return nil
 }
 /// 获取最顶层的控制器ViewController
@@ -332,3 +292,85 @@ private func sp_nextTopVC(vc : UIViewController?)->UIViewController?{
     }
       return viewController
 }
+
+/// 计算三点之间的弧度
+/// - Parameters:
+///   - p1: 点1
+///   - p2: 点2 (计算角度所在的点)
+///   - p3: 点3
+public func sp_getAngleToPonts(p1 : CGPoint , p2 : CGPoint , p3 : CGPoint)->Double{
+    if (p1.x == p2.x && p2.x == p3.x && p1.x == p3.x) || (p1.y == p2.y && p2.y == p3.y && p1.y == p3.y){
+        return Double(sp_getRadians(to: 180))
+    }
+    
+    if (p1.x == p2.x && p2.y == p3.y) || (p1.y == p2.y && p2.x == p3.x) {
+        return Double(sp_getRadians(to: 90))
+    }
+    
+    let p1_p2_x = abs(p1.x - p2.x)
+    let p1_p2_y = abs(p1.y - p2.y)
+    let p2_p3_x = abs(p2.x - p3.x)
+    let p2_p3_y = abs(p2.y - p3.y)
+    let p1_p3_x = abs(p1.x - p3.x)
+    let p1_p3_y = abs(p1.y - p3.y)
+    
+    let p1_p2_line = sqrt(pow(p1_p2_x, 2) + pow(p1_p2_y, 2))
+    let p2_p3_line = sqrt(pow(p2_p3_x, 2) + pow(p2_p3_y, 2))
+    let p1_p3_line = sqrt(pow(p1_p3_x, 2) + pow(p1_p3_y, 2))
+    let a = pow(p1_p2_line, 2) + pow(p2_p3_line, 2) - pow(p1_p3_line, 2)
+    let b = 2.0 * p1_p2_line * p2_p3_line
+    let r =  Double(acos( a / b ))
+    if r.isNaN {
+        return 0
+    }
+    return r        //弧度值
+}
+/// 根据角度获取弧度
+/// - Parameter degrees: 角度
+public func sp_getRadians(to degrees: CGFloat)->CGFloat{
+    return CGFloat.pi * (degrees / 180.00)
+}
+/// 根据弧度获取角度
+/// - Parameter radians: 弧度
+public func sp_getDegrees(to radians : CGFloat) -> CGFloat{
+    return radians * (180.0 / CGFloat.pi)
+}
+/// 获取一个点的坐标
+/// - Parameters:
+///   - centerPoint: 中心点
+///   - radius: 长度 则中心点到需要计算坐标直线的距离
+///   - degress: 为中心点垂直瞬时偏移的角度
+public func sp_getPoint(to centerPoint : CGPoint , radius : CGFloat, degress : CGFloat)->CGPoint{
+    // 90 到270 之间 y 获取的相加 其它相减
+    // 180 之间 x 相加 否则相减
+    // 直角三角形 已知斜边的长度 和角度
+    // sinA = a / 斜边
+    // tanA = a / 邻边
+    // 角A为斜边与邻边的夹角
+    // a 为角A的对边
+    var calcu_degress = degress
+    if degress <= 90 {
+        calcu_degress = 90 - degress
+    }else if degress <= 180 {
+        calcu_degress = degress - 90
+    }else if degress <= 270 {
+        calcu_degress = 270 - degress
+    }else {
+        calcu_degress = degress - 270
+    }
+    var a : CGFloat = 0
+    var b : CGFloat = 0
+    if degress == 90 ||  degress == 270  {
+        b = radius
+        a = 0
+    }else if degress == 180 || degress == 360 {
+        b = 0
+        a = radius
+    }else {
+        a = radius * sin(sp_getRadians(to: calcu_degress))
+        b = a / tan(sp_getRadians(to: calcu_degress))
+    }
+    let point = CGPoint(x: centerPoint.x + CGFloat((degress <= 180 ? b :-b)), y: centerPoint.y + CGFloat(degress >= 90 && degress <= 270 ? a : -a))
+    return point
+}
+

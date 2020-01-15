@@ -81,10 +81,10 @@ class SPCameraHelp {
         return true
     }
     /// 关闭闪关灯
-    ///
+    ///  @discardableResult 返回参数没有接收不会有警告
     /// - Parameter device: 当前摄像头
     /// - Returns: false 关闭闪关灯
-    class func sp_flashOff(device : AVCaptureDevice?)->Bool{
+    @discardableResult class func sp_flashOff(device : AVCaptureDevice?)->Bool{
         guard let currentDevice = device else {
             return false
         }

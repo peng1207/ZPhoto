@@ -16,10 +16,8 @@ public extension Array where Element: Equatable {
             remove(at: index)
         }
     }
-    /// 获取一个元素存在的次数
-    ///
-    /// - Parameter object: 某个元素
-    /// - Returns: 次数
+    /// 获取一个元素在数组中存在的次数
+    /// - Parameter object: 元素
     func sp_number(of object:Element)->Int{
         var count = 0
         for item in self {

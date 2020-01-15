@@ -53,7 +53,7 @@ class  SPVideoEditVC : SPBaseVC {
         self.view.addSubview(turntableView)
         let list = [SPHexColor.color_00a1fe.rawValue, SPHexColor.color_333333.rawValue,SPHexColor.color_2a96fd.rawValue,SPHexColor.color_01b5da.rawValue,SPHexColor.color_189cdd.rawValue,SPHexColor.color_8e8e8e.rawValue]
         var colorList : [String] = [String]()
-        for i in 0..<24 {
+        for i in 0..<6 {
             colorList.append(list[i % 6])
         }
         turntableView.list = colorList
@@ -78,7 +78,7 @@ class  SPVideoEditVC : SPBaseVC {
         }
     }
     deinit {
-         
+  
     }
 }
 // MARK: -- action

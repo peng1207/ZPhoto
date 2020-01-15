@@ -9,10 +9,10 @@
 import Foundation
 import UIKit
 public extension UIColor{
-    ///  十六进制转颜色
-    ///
-    /// - Parameter hex: 十六进制字符串
-    /// - Returns: 颜色
+    /// 十六进制字符串颜色值转颜色
+    /// - Parameters:
+    ///   - hex: 十六进制字符串颜色值
+    ///   - alpha: 透明度([0,1]) 默认为1
     class func sp_color (hex: String,alpha: CGFloat = 1) -> UIColor {
         var cString: String = hex.uppercased().trimmingCharacters(in:  CharacterSet.whitespacesAndNewlines)
         if (cString.hasPrefix("#")) {
@@ -31,10 +31,10 @@ public extension UIColor{
         return UIColor(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: alpha)
     }
 }
-///  颜色
-///
-/// - Parameter hex: 十六进制
-/// - Returns: 颜色
+/// 十六进制字符串颜色值转颜色
+/// - Parameters:
+///   - hex: 十六进制字符串颜色值
+///   - alpha: 透明度([0,1]) 默认为1
 public func SPColorForHexString(hex: String,alpha: CGFloat = 1) -> UIColor{
     return UIColor.sp_color(hex: hex,alpha: alpha)
 }
